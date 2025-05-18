@@ -43,7 +43,7 @@ import ToggleButton from './components/ToggleButton.vue'
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: center; /* 中央揃え */
 }
 
 .app-header {
