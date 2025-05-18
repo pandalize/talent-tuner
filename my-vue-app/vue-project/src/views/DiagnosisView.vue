@@ -253,7 +253,7 @@ h1 {
   border-radius: 4px;
   cursor: pointer;
   transition: background-color 0.3s;
-  font-size: 0.9rem;
+  font-size: 15px;
 }
 
 .reload-button:hover {
@@ -295,7 +295,7 @@ h1 {
   border-radius: 4px;
   cursor: pointer;
   transition: all 0.3s;
-  font-size: 1rem;
+  font-size: 15px;
   text-align: left;
   width: calc(50% - 1rem);
   max-width: 400px;

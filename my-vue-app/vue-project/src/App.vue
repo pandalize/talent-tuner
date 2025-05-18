@@ -104,7 +104,7 @@ nav a.router-link-active {
   }
   
   h1 {
-    font-size: 1.5rem;
+    font-size: 15px;
   }
   
   nav {

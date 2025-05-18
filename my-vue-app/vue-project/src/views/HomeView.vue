@@ -56,13 +56,13 @@ main {
 }
 
 h2 {
-  color: #2c3e50;
+  color: #000000;
   margin-bottom: 1rem;
   text-align: center;
 }
 
 p {
-  color: #666;
+  color: #000000;
   margin-bottom: 2rem;
   line-height: 1.6;
   text-align: center;
@@ -95,13 +95,13 @@ p {
 }
 
 .card h3 {
-  color: #2c3e50;
+  color: #000000;
   margin-bottom: 0.5rem;
   text-align: center;
 }
 
 .card p {
-  font-size: 0.9rem;
+  font-size: 15px;
   margin-bottom: 1.5rem;
   flex-grow: 1;
 }
@@ -114,7 +114,7 @@ p {
   cursor: pointer;
   transition: background-color 0.3s;
   width: 100%;
-  font-size: 1rem;
+  font-size: 15px;
 }
 
 .diagnosis-button {

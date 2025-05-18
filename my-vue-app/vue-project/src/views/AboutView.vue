@@ -55,12 +55,6 @@
           </div>
         </div> -->
       </div>
-      
-      <div class="config-info">
-        <h3>データの管理について</h3>
-        <p>職業の情報は <code>/diagnostic_config.json</code> ファイルで管理されています。</p>
-        <p>このJSONファイルを編集することで、職業の説明、質問、選択肢、カテゴリーウェイトなどを変更したり、新しい職業を追加したりすることができます。</p>
-      </div>
     </div>
   </div>
 </template>
