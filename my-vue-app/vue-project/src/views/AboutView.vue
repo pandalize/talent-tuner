@@ -38,7 +38,7 @@
           </ul>
         </div>
         
-        <div class="requirements">
+        <!--不要 <div class="requirements">
           <h3>必要なスキルと適性:</h3>
           <div class="category-scores">
             <div 
@@ -53,7 +53,7 @@
               <div class="category-score">{{ weight }}</div>
             </div>
           </div>
-        </div>
+        </div> -->
       </div>
       
       <div class="config-info">
@@ -244,7 +244,7 @@ h1 {
   text-align: center;
   margin-bottom: 1.5rem;
   line-height: 1.6;
-  color: #666;
+  color: #000000;
 }
 
 .profession-selector {
@@ -327,10 +327,10 @@ h1 {
 
 .description-content p {
   text-align: justify;
-  color: #555;
+  color: #000000;
 }
 
-.characteristics, .requirements {
+/* .characteristics, .requirements {
   margin-bottom: 1.5rem;
   padding: 1rem;
   background-color: #f9f9f9;
@@ -343,7 +343,7 @@ h1 {
   font-size: 1.2rem;
   border-left: 3px solid #4CAF50;
   padding-left: 0.5rem;
-}
+} */
 
 .characteristics ul {
   padding-left: 1.5rem;
@@ -352,7 +352,7 @@ h1 {
 .characteristics li {
   margin-bottom: 0.5rem;
   line-height: 1.4;
-  color: #555;
+  color: #000000;
 }
 
 .category-scores {
@@ -370,7 +370,7 @@ h1 {
   text-align: right;
   padding-right: 1rem;
   font-size: 0.9rem;
-  color: #666;
+  color: #000000;
 }
 
 .bar-container {
@@ -392,7 +392,7 @@ h1 {
   text-align: right;
   padding-left: 0.5rem;
   font-size: 0.9rem;
-  color: #666;
+  color: #000000;
   font-weight: bold;
 }
 
@@ -405,7 +405,7 @@ h1 {
 }
 
 .config-info h3 {
-  color: #2c3e50;
+  color: #000000;
   margin-bottom: 1rem;
   text-align: center;
   font-size: 1.2rem;
@@ -415,7 +415,7 @@ h1 {
   text-align: center;
   margin-bottom: 0.8rem;
   line-height: 1.6;
-  color: #555;
+  color: #000000;
 }
 
 .config-info code {

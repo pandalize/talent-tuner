@@ -16,8 +16,8 @@
         
         <div v-if="!showResult">
           <div v-for="question in questions" :key="question.id" class="question-section">
-            <h2>{{ question.id }}:</h2>
-            <p>{{ question.text }}</p>
+            <h2>{{ question.id }}：{{ question.text }}</h2>
+            <!-- <p>{{ question.text }}</p> -->
             <div class="options">
               <button
                 v-for="option in question.options"
@@ -230,14 +230,14 @@ h1 {
 .diagnosis-content > p {
   text-align: center;
   margin-bottom: 2rem;
-  color: #666;
+  color: #000000;
   line-height: 1.6;
 }
 
 .loading-section, .error-section {
   text-align: center;
   padding: 3rem 1rem;
-  color: #666;
+  color: #000000;
 }
 
 .error-section {
@@ -272,7 +272,7 @@ h1 {
 }
 
 .question-section p {
-  color: #666;
+  color: #000000;
   margin-bottom: 1rem;
   word-wrap: break-word;
   overflow-wrap: break-word;
