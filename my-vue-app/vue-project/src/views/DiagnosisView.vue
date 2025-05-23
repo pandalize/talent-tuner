@@ -1,6 +1,5 @@
 <template>
   <div class="diagnosis-container">
-    <h1>日本一ためになるけど日本一失礼な適性診断</h1>
     <div class="diagnosis-content">
       <div v-if="loading" class="loading-section">
         <p>診断データを読み込んでいます...</p>
@@ -12,9 +11,9 @@
       </div>
       
       <template v-else>
-        <p>以下の質問に正直に答えてください。あなたに最適な職業を診断します。</p>
         
         <div v-if="!showResult">
+          <h5>正直に答えてください。最適な職業を診断します。</h5>
           <div v-for="question in questions" :key="question.id" class="question-section">
             <h2>{{ question.id }}：{{ question.text }}</h2>
             <!-- <p>{{ question.text }}</p> -->
@@ -50,12 +49,11 @@
         </div>
         
         <div v-if="showResult" class="result-section">
-          <h2>診断結果</h2>
-          <p>あなたの回答に基づく診断結果は以下の通りです：</p>
+          <h5>診断結果</h5>
+          <p>あなたに合う職業は・・・</p>
           
           <div v-for="(profession, index) in topProfessions" :key="profession.name" class="result-box">
-            <h3>{{ index + 1 }}位: {{ profession.name }}</h3>
-            <p class="score">適性スコア: {{ Math.round(profession.score * 10) / 10 }}</p>
+            <h3>{{ profession.name }}</h3>
             
             <div class="category-scores">
               <h4>カテゴリー別スコア:</h4>
@@ -203,25 +201,26 @@ onMounted(() => {
 .diagnosis-container {
   width: 100%;
   margin: 0 auto;
-  padding: 0;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
-h1 {
-  color: #2c3e50;
-  margin-bottom: 1.5rem;
+.diagnosis-container p{
+  color: #000000;
+  margin-bottom: 2rem;
+  line-height: 1.6;
   text-align: center;
+  font-size: 1.3rem;
 }
 
 .diagnosis-content {
-  width: 100%;
+  width: 95%;
   max-width: 1200px;
-  background-color: #f9f9f9;
+  background-color: white;
   border-radius: 8px;
-  padding: 1.5rem;
+  padding: 2rem;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   box-sizing: border-box;
   overflow-x: hidden; /* 横方向のはみ出しを防止 */
@@ -254,6 +253,7 @@ h1 {
   cursor: pointer;
   transition: background-color 0.3s;
   font-size: 15px;
+  font-family: TsukuARdGothic-Bold;
 }
 
 .reload-button:hover {
@@ -267,7 +267,7 @@ h1 {
 }
 
 .question-section h2 {
-  color: #2c3e50;
+  color: #000000;
   margin-bottom: 0.5rem;
 }
 
@@ -295,7 +295,7 @@ h1 {
   border-radius: 4px;
   cursor: pointer;
   transition: all 0.3s;
-  font-size: 15px;
+  font-size: 17px;
   text-align: left;
   width: calc(50% - 1rem);
   max-width: 400px;
@@ -303,6 +303,7 @@ h1 {
   word-wrap: break-word;
   white-space: normal;
   height: auto;
+  font-family: TsukuARdGothic-Bold;
 }
 
 .options button:hover {
@@ -348,6 +349,7 @@ h1 {
   transition: all 0.3s;
   font-size: 1.1rem;
   min-width: 250px;
+  font-family: TsukuARdGothic-Bold;
 }
 
 .calculate-button:hover {
@@ -357,11 +359,7 @@ h1 {
 }
 
 .result-section {
-  margin-top: 2rem;
-  padding: 1.5rem;
-  background-color: #f0f7ff;
   border-radius: 8px;
-  border-left: 4px solid #4CAF50;
 }
 
 .result-section h2 {
@@ -382,16 +380,13 @@ h1 {
 
 .result-box h3 {
   color: #2c3e50;
+  font-family: ToppanBunkyuMidashiGothicStdN-ExtraBold;
+  font-size: 2.0rem;
+  letter-spacing: 0.3rem;
   margin-bottom: 0.5rem;
-  font-size: 1.3rem;
   border-bottom: 2px solid #4CAF50;
   padding-bottom: 0.5rem;
-}
-
-.score {
-  font-weight: bold;
-  color: #4CAF50;
-  margin-bottom: 1rem;
+  text-align: center;
 }
 
 .category-scores {
@@ -464,6 +459,7 @@ h1 {
   justify-content: center;
   gap: 1rem;
   margin-top: 2rem;
+  font-family: TsukuARdGothic-Bold;
 }
 
 .reset-button, .home-button {
@@ -472,12 +468,15 @@ h1 {
   border-radius: 4px;
   cursor: pointer;
   transition: all 0.3s;
-  font-size: 1rem;
+  font-size: 1.1rem;
+  font-family: TsukuARdGothic-Bold;
 }
 
 .reset-button {
   background-color: #FFC107;
-  color: #5d4037;
+  color: #000000;
+  font-family: TsukuARdGothic-Bold;
+
 }
 
 .reset-button:hover {
@@ -489,6 +488,7 @@ h1 {
 .home-button {
   background-color: #4CAF50;
   color: white;
+  font-family: TsukuARdGothic-Bold;
 }
 
 .home-button:hover {
@@ -497,60 +497,8 @@ h1 {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-/* 小さい画面向け */
-@media (max-width: 480px) {
-  .diagnosis-container {
-    padding: 0.5rem;
-  }
-  
-  .diagnosis-content {
-    padding: 0.8rem;
-  }
-  
-  .options {
-    flex-direction: column;
-    align-items: center;
-    gap: 0.5rem;
-  }
-  
-  .options button {
-    width: 100%;
-    max-width: 100%;
-    margin-bottom: 0.5rem;
-    min-height: 44px; /* タップしやすい最小高さ */
-  }
-  
-  .question-section h2 {
-    font-size: 1.1rem;
-  }
-  
-  .question-section p {
-    font-size: 0.95rem;
-    line-height: 1.4;
-  }
-  
-  .action-buttons {
-    flex-direction: column;
-    gap: 0.8rem;
-  }
-  
-  .reset-button, .home-button {
-    width: 100%;
-  }
-  
-  .category-bar {
-    flex-wrap: wrap;
-  }
-  
-  .category-label {
-    width: 100%;
-    text-align: left;
-    margin-bottom: 0.2rem;
-  }
-}
-
 /* スマートフォン向け */
-@media (min-width: 481px) and (max-width: 768px) {
+@media (max-width: 455px) {
   .diagnosis-container {
     padding: 1rem;
   }
@@ -601,12 +549,7 @@ h1 {
 }
 
 /* タブレット向け */
-@media (min-width: 769px) and (max-width: 1024px) {
-  .diagnosis-content {
-    max-width: 90%;
-    padding: 1.5rem;
-  }
-  
+@media (min-width: 456px) and (max-width: 1024px) {
   .options button {
     width: calc(50% - 1rem);
     max-width: 350px;
@@ -621,17 +564,11 @@ h1 {
   
   .diagnosis-content {
     max-width: 1200px;
-    padding: 1rem;
   }
   
   .options button {
     width: calc(25% - 1rem);
     max-width: 300px;
-  }
-  
-  h1 {
-    font-size: 1.8rem;
-    margin-bottom: 1rem;
   }
   
   .question-section h2 {

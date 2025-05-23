@@ -1,23 +1,29 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from 'vue-router'
-import HelloWorld from './components/HelloWorld.vue'
-import Counter from    './components/Counter.vue'
-import Greeting from './components/Greeting.vue'
-import ColorBox from './components/ColorBox.vue'
-import ToggleButton from './components/ToggleButton.vue'
+// import HelloWorld from './components/HelloWorld.vue'
+// import Counter from    './components/Counter.vue'
+// import Greeting from './components/Greeting.vue'
+// import ColorBox from './components/ColorBox.vue'
+// import ToggleButton from './components/ToggleButton.vue'
 </script>
 
 <template>
   <div id="app">
     <div class="app-header">
-      <h1>My Vue App</h1>
-      
       <!-- ナビゲーション -->
       <nav>
         <RouterLink to="/">ホーム</RouterLink> |
         <RouterLink to="/about">About</RouterLink> |
         <RouterLink to="/diagnosis">診断ページ</RouterLink>
       </nav>
+      <h1>
+        <span>日本一</span>
+        <span class="title1">ため</span>
+        <span>になるけど日本一</span>
+        <span class="title1">失礼</span>
+        <span>な</span>
+        <span class="title1">職業診断</span>
+      </h1>
     </div>
     
     <!-- メインコンテンツ -->
@@ -36,40 +42,46 @@ import ToggleButton from './components/ToggleButton.vue'
 
 <style>
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  padding: 2rem;
+  font-family: TsukuARdGothic-Bold;
   width: 100%;
   min-height: 100vh;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
   align-items: center; /* 中央揃え */
+  padding: 0;
+  background-color: #cef4fe;
 }
 
 .app-header {
   position: relative;
-  background-color: white;
   width: 100%;
+  max-width: 900px;
   z-index: 10;
-  padding-bottom: 1rem;
-  margin-bottom: 1rem;
+  padding: 0.5rem;
 }
 
 h1 {
-  color: #2c3e50;
-  margin-bottom: 1.5rem;
+  color: #000000;
+  margin: 2rem;
   text-align: center;
-  width: 100%;
+  font-weight: bold;
+}
+
+.title1 {
+  font-family: ToppanBunkyuMidashiGothicStdN-ExtraBold;
+  font-size: 50px;
+  display: inline-block; /* これがないと transform が効かない場合あり */
+  transform: rotate(5deg);
 }
 
 nav {
   margin-bottom: 0;
   text-align: center;
   width: 100%;
-  padding: 1rem 0;
-  background-color: #f8f8f8;
+  padding: 0.5rem;
+  background-color: #cef4fe;
   border-radius: 8px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
 .app-content {
@@ -87,29 +99,31 @@ nav a {
   transition: all 0.3s;
 }
 
-nav a:hover {
-  background-color: #e8e8e8;
-}
-
 nav a.router-link-active {
   font-weight: bold;
   color: #42b983;
-  background-color: #f0f7ff;
+}
+
+h5 {
+  color: #000000;
+  margin-bottom: 2rem;
+  text-align: center;
+  font-size: 1.5rem;
 }
 
 /* スマートフォン向け */
-@media (max-width: 768px) {
-  #app {
-    padding: 1rem;
-  }
-  
+@media (max-width: 455px) {
   h1 {
-    font-size: 15px;
+    font-size: 25px;
+  }
+
+  h2 {
+    font-size: 28px
   }
   
   nav {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     align-items: center;
     gap: 0.5rem;
   }
@@ -118,23 +132,18 @@ nav a.router-link-active {
     margin: 0;
     width: 80%;
     text-align: center;
-    padding: 0.5rem 0;
+    padding: 0.3rem 0;
   }
 }
 
 /* タブレット向け */
-@media (min-width: 769px) and (max-width: 1024px) {
-  #app {
-    padding: 1.5rem;
-  }
+@media (min-width: 456px) and (max-width: 1024px) {
+  
 }
 
 /* 大画面向け */
 @media (min-width: 1025px) {
-  #app {
-    max-width: 1400px;
-    margin: 0 auto;
-  }
+  
 }
 
 /* 全体のスタイルリセット */

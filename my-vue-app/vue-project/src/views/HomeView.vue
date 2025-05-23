@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useRouter } from 'vue-router';
-import MyComponent from '../components/MyComponent.vue';
+// import MyComponent from '../components/MyComponent.vue';
 
 const router = useRouter();
 
@@ -15,25 +15,17 @@ function goToDiagnosis() {
 
 <template>
   <main>
-    <div class="home-container">
-      <h2>ホームページへようこそ</h2>
-      <p>このアプリでは、簡単な質問に答えることであなたに最適な職業を診断できます。</p>
-      
+    <div class="home-container">      
       <div class="navigation-cards">
-        <div class="card" @click="goToDiagnosis">
-          <h3>診断を始める</h3>
-          <p>簡単な質問に答えて、あなたに最適な職業を診断します。</p>
-          <button class="card-button diagnosis-button">診断ページへ</button>
+        <div class="card"  @click="goToDiagnosis">
+          <p>診断してみる</p>
         </div>
         
         <div class="card" @click="goToAbout">
-          <h3>職業の説明</h3>
-          <p>各職業の詳細な説明を確認できます。</p>
-          <button class="card-button about-button">Aboutページへ</button>
+          <p>職業の情報を見る</p>
         </div>
       </div>
       
-      <MyComponent />
     </div>
   </main>
 </template>
@@ -50,23 +42,11 @@ main {
 .home-container {
   width: 100%;
   max-width: 1200px;
-  margin: 0 auto;
+  margin-top: 3rem;
   padding: 1rem;
   box-sizing: border-box;
 }
 
-h2 {
-  color: #000000;
-  margin-bottom: 1rem;
-  text-align: center;
-}
-
-p {
-  color: #000000;
-  margin-bottom: 2rem;
-  line-height: 1.6;
-  text-align: center;
-}
 
 .navigation-cards {
   display: flex;
@@ -77,21 +57,18 @@ p {
 
 .card {
   flex: 1;
-  background-color: #f9f9f9;
-  border-radius: 8px;
+  background-color: #fcfece;
+  border-radius: 40px;
   padding: 1.5rem;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   cursor: pointer;
-  transition: transform 0.3s, box-shadow 0.3s;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  min-height: 200px;
-}
+  min-width: 300px;
+  max-width: 400px;
+  transition: all 0.3s;
 
-.card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
 }
 
 .card h3 {
@@ -101,53 +78,35 @@ p {
 }
 
 .card p {
-  font-size: 15px;
-  margin-bottom: 1.5rem;
+  font-size: 30px;
+  margin: 1.5rem;
   flex-grow: 1;
+  text-align: center;
+  color: #000000;
+  line-height: 1.6;
 }
 
-.card-button {
-  padding: 0.6rem 1.2rem;
-  border: none;
-  border-radius: 4px;
-  color: white;
-  cursor: pointer;
-  transition: background-color 0.3s;
-  width: 100%;
-  font-size: 15px;
-}
-
-.diagnosis-button {
-  background-color: #4CAF50;
-}
-
-.diagnosis-button:hover {
-  background-color: #45a049;
-}
-
-.about-button {
-  background-color: #2196F3;
-}
-
-.about-button:hover {
-  background-color: #0b7dda;
+.card:hover {
+  background-color: #fcffa9;
+  transform: translateY(-2px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 /* スマートフォン向け */
-@media (max-width: 768px) {
+@media (max-width: 455px) {
   .navigation-cards {
     flex-direction: column;
-  }
-  
-  .card {
-    min-height: 150px;
+    align-items: center;     /* 横方向の中央揃え */
   }
 }
 
 /* タブレット向け */
-@media (min-width: 769px) and (max-width: 1024px) {
+@media (min-width: 456px) and (max-width: 1024px) {
   .home-container {
     max-width: 90%;
+  }
+  .navigation-cards {
+    justify-content: center;
   }
 }
 
@@ -155,6 +114,9 @@ p {
 @media (min-width: 1025px) {
   .home-container {
     max-width: 1200px;
+  }
+  .navigation-cards {
+    justify-content: center;
   }
 }
 </style>

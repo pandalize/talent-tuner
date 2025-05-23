@@ -1,9 +1,7 @@
 <template>
   <div class="about">
-    <h1>職業情報</h1>
     <div class="about-content">
-      <p>このページでは、診断で表示される職業の詳細な説明を確認できます。</p>
-      <p>以下の職業から選択してください：</p>
+      <h5>診断で表示される職業の詳細な説明を確認できます。</h5>
       
       <div class="profession-selector">
         <button
@@ -218,20 +216,16 @@ onMounted(() => {
   align-items: center;
 }
 
-h1 {
-  color: #2c3e50;
-  margin-bottom: 1.5rem;
-  text-align: center;
-}
 
 .about-content {
-  width: 100%;
+  width: 95%;
   max-width: 1200px;
-  margin: 0 auto;
-  background-color: #f9f9f9;
+  background-color: white;
   border-radius: 8px;
   padding: 2rem;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  box-sizing: border-box;
+  overflow-x: hidden; /* 横方向のはみ出しを防止 */
 }
 
 .about-content p {
@@ -239,6 +233,7 @@ h1 {
   margin-bottom: 1.5rem;
   line-height: 1.6;
   color: #000000;
+  font-size: 1.3rem;
 }
 
 .profession-selector {
@@ -256,7 +251,8 @@ h1 {
   border-radius: 4px;
   cursor: pointer;
   transition: all 0.3s;
-  font-size: 0.9rem;
+  font-size: 1.1rem;
+  font-family: TsukuARdGothic-Bold;
 }
 
 .profession-selector button:hover {
@@ -264,8 +260,8 @@ h1 {
 }
 
 .profession-selector button.active {
-  background-color: #4CAF50;
-  color: white;
+  background-color: #FFC107;
+  color: #000000;
 }
 
 .loading-container, .error-container {
@@ -298,7 +294,7 @@ h1 {
 }
 
 .profession-description {
-  margin: 2rem 0;
+  margin-top: 2rem 0;
   padding: 1.5rem;
   background-color: #fff;
   border-radius: 8px;
@@ -312,6 +308,12 @@ h1 {
   font-size: 1.5rem;
   border-bottom: 2px solid #4CAF50;
   padding-bottom: 0.5rem;
+}
+
+.profession-description h3 {
+  color: #000000;
+  margin-bottom: 1rem;
+  font-size: 1.1rem;
 }
 
 .description-content {
@@ -347,6 +349,7 @@ h1 {
   margin-bottom: 0.5rem;
   line-height: 1.4;
   color: #000000;
+  font-size: 1.1rem;
 }
 
 .category-scores {
@@ -421,7 +424,7 @@ h1 {
 }
 
 /* スマートフォン向け */
-@media (max-width: 768px) {
+@media (max-width: 456px) {
   .about {
     padding: 1rem;
   }
@@ -463,6 +466,10 @@ h1 {
 
 /* タブレット向け */
 @media (min-width: 769px) and (max-width: 1024px) {
+  .about {
+    padding: 1rem;
+  }
+
   .about-content {
     max-width: 90%;
   }
@@ -470,6 +477,10 @@ h1 {
 
 /* 大画面向け */
 @media (min-width: 1025px) {
+  .about {
+    padding: 1rem;
+  }
+
   .about-content {
     max-width: 1200px;
   }
