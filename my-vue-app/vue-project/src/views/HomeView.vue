@@ -17,15 +17,9 @@ function goToDiagnosis() {
   <main>
     <div class="home-container">      
       <div class="navigation-cards">
-        <div class="card"  @click="goToDiagnosis">
-          <p>診断してみる</p>
+        <a href="" class="btn btn-border-shadow btn-border-shadow--radius" @click="goToDiagnosis">診断する</a>
+        <a href="" class="btn btn-border-shadow btn-border-shadow--radius" @click="goToAbout">職業一覧</a>
         </div>
-        
-        <div class="card" @click="goToAbout">
-          <p>職業の情報を見る</p>
-        </div>
-      </div>
-      
     </div>
   </main>
 </template>
@@ -50,46 +44,134 @@ main {
 
 .navigation-cards {
   display: flex;
-  gap: 2rem;
-  margin-bottom: 3rem;
+  gap: 3rem;
+  margin-bottom: 4rem;
   width: 100%;
+  justify-content: center;
+}
+
+*,
+*:before,
+*:after {
+  -webkit-box-sizing: inherit;
+  box-sizing: inherit;
+}
+
+html {
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  font-size: 62.5%;
+}
+
+/* 背景用*/
+.btn,
+a.btn,
+button.btn {
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 1.5;
+  position: relative;
+  display: inline-block;
+  padding: 1rem 4rem;
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  -webkit-transition: all 0.3s;
+  transition: all 0.3s;
+  text-align: center;
+  vertical-align: middle;
+  text-decoration: none;
+  letter-spacing: 0.1em;
+  color: #212529;
+  border-radius: 0.5rem;
+}
+
+a.btn-border-shadow--radius {
+  border-radius: 100vh;
+}
+a.btn-border-shadow {
+  padding: calc(1.5rem - 12px) 3rem 1.5rem;
+
+  background: #e6eaed;
+}
+
+a.btn-border-shadow:before {
+  position: absolute;
+  top: -6px;
+  left: -6px;
+
+  width: 100%;
+  height: 100%;
+
+  content: "";
+  -webkit-transition: all 0.3s ease;
+  transition: all 0.3s ease;
+
+  border: 3px solid #000;
+  border-radius: 0.5rem;
+}
+
+a.btn-border-shadow--radius:before {
+  border-radius: 100vh;
+}
+
+a.btn-border-shadow:hover {
+  padding: calc(1.5rem - 6px) 3rem;
+}
+
+a.btn-border-shadow:hover:before {
+  top: 0;
+  left: 0;
 }
 
 .card {
   flex: 1;
-  background-color: #fcfece;
-  border-radius: 40px;
-  padding: 1.5rem;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  background-color: var(--background-white);
+  border-radius: 50px;
+  padding: 3rem 2rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
   cursor: pointer;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  min-width: 300px;
-  max-width: 400px;
-  transition: all 0.3s;
-
+  justify-content: center;
+  align-items: center;
+  min-width: 280px;
+  max-width: 350px;
+  min-height: 200px;
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
+  position: relative;
+  overflow: hidden;
 }
 
 .card h3 {
-  color: #000000;
+  color: var(--main-color);
   margin-bottom: 0.5rem;
   text-align: center;
+  font-weight: bold;
 }
 
 .card p {
-  font-size: 30px;
-  margin: 1.5rem;
-  flex-grow: 1;
+  font-size: 1.4rem;
+  margin: 0;
   text-align: center;
-  color: #000000;
-  line-height: 1.6;
+  color: var(--text-dark);
+  line-height: 1.4;
+  font-weight: 500;
+  letter-spacing: 0.05em;
 }
 
 .card:hover {
-  background-color: #fcffa9;
-  transform: translateY(-2px);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  background-color: var(--main-color);
+  transform: translateY(-10px);
+  box-shadow: 0 20px 40px rgba(95, 144, 178, 0.3);
+  border-color: var(--main-color);
+}
+
+.card:hover p {
+  color: var(--background-white);
 }
 
 /* スマートフォン向け */

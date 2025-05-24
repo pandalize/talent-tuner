@@ -13,15 +13,15 @@ import { RouterLink, RouterView } from 'vue-router'
       <!-- ナビゲーション -->
       <nav>
         <RouterLink to="/">ホーム</RouterLink> |
-        <RouterLink to="/about">About</RouterLink> |
-        <RouterLink to="/diagnosis">診断ページ</RouterLink>
+        <RouterLink to="/diagnosis">診断ページ</RouterLink> |
+        <RouterLink to="/about">職業一覧</RouterLink>
+
       </nav>
       <h1>
+        <span class="title2">ため職</span><br>
         <span>日本一</span>
-        <span class="title1">ため</span>
-        <span>になるけど日本一</span>
-        <span class="title1">失礼</span>
-        <span>な</span>
+        <span class="title1">ためになる正直な</span>
+        <span>おすすめ</span>
         <span class="title1">職業診断</span>
       </h1>
     </div>
@@ -42,46 +42,71 @@ import { RouterLink, RouterView } from 'vue-router'
 
 <style>
 #app {
-  font-family: TsukuARdGothic-Bold;
+  font-family: 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Yu Gothic', 'Meiryo', sans-serif;
   width: 100%;
   min-height: 100vh;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  align-items: center; /* 中央揃え */
+  align-items: center;
   padding: 0;
-  background-color: #cef4fe;
+  background-color: var(--light-blue);
+  background-image: linear-gradient(135deg, var(--light-blue) 0%, var(--bright-blue) 100%);
 }
 
 .app-header {
   position: relative;
   width: 100%;
-  max-width: 900px;
+  max-width: 1200px;
   z-index: 10;
-  padding: 0.5rem;
+  padding: 2rem 1rem;
+  background-color: transparent;
 }
 
 h1 {
-  color: #000000;
-  margin: 2rem;
+  color: var(--text-dark);
+  margin: 1rem 0 2rem 0;
   text-align: center;
-  font-weight: bold;
+  font-weight: 700;
+  font-size: 2.5rem;
+  letter-spacing: 0.1em;
 }
 
 .title1 {
-  font-family: ToppanBunkyuMidashiGothicStdN-ExtraBold;
-  font-size: 50px;
-  display: inline-block; /* これがないと transform が効かない場合あり */
-  transform: rotate(5deg);
+  font-family: 'Hiragino Sans', sans-serif;
+  font-size: 3rem;
+  display: inline-block;
+  color: orange;
+  -webkit-text-stroke: 2px rgb(61, 61, 61);
+  font-weight: 700;
+  position: relative;
+  margin: 0 0.2rem; 
+}
+
+.title2 {
+  font-family: 'M PLUS Rounded 1c'; /* 修正ここ */
+  font-size: 3.5rem;
+  display: inline-block;
+  color: orange;
+  /* font-style: italic; */
+  text-shadow:3px 4px 3px rgb(51, 51, 53);
+  position: relative;
+  margin: 0 0.2rem;
+}
+
+span {
+  font-size: 2.5rem;
+  font-weight: 700;
 }
 
 nav {
   margin-bottom: 0;
   text-align: center;
   width: 100%;
-  padding: 0.5rem;
-  background-color: #cef4fe;
-  border-radius: 8px;
+  padding: 1rem;
+  background-color: transparent;
+  border-radius: 50px;
+  position: relative;
 }
 
 .app-content {
@@ -91,24 +116,38 @@ nav {
 }
 
 nav a {
-  color: #2c3e50;
+  color: var(--text-medium);
   text-decoration: none;
-  margin: 0 0.8rem;
-  padding: 0.5rem 0.8rem;
-  border-radius: 4px;
-  transition: all 0.3s;
+  margin: 0 1rem;
+  padding: 0.8rem 1.5rem;
+  border-radius: 50px;
+  transition: all 0.3s ease;
+  font-weight: 400;
+  position: relative;
+  font-size: 1rem;
+  border: 1px solid transparent;
 }
 
 nav a.router-link-active {
-  font-weight: bold;
-  color: #42b983;
+  color: var(--background-white);
+  background-color: var(--main-color);
+  border: 1px solid var(--main-color);
+  box-shadow: 0 4px 15px rgba(95, 144, 178, 0.3);
+}
+
+nav a:hover {
+  color: var(--main-color);
+  border: 1px solid var(--main-color);
+  background-color: rgba(95, 144, 178, 0.1);
 }
 
 h5 {
-  color: #000000;
-  margin-bottom: 2rem;
+  color: var(--text-dark);
+  margin-bottom: 3rem;
   text-align: center;
-  font-size: 1.5rem;
+  font-size: 1.8rem;
+  font-weight: 500;
+  letter-spacing: 0.05em;
 }
 
 /* スマートフォン向け */

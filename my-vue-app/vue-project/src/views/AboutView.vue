@@ -1,7 +1,7 @@
 <template>
   <div class="about">
     <div class="about-content">
-      <h5>診断で表示される職業の詳細な説明を確認できます。</h5>
+      <h5>君でもどれかには就ける高収入職業</h5>
       
       <div class="profession-selector">
         <button
@@ -219,20 +219,22 @@ onMounted(() => {
 
 .about-content {
   width: 95%;
-  max-width: 1200px;
-  background-color: white;
-  border-radius: 8px;
-  padding: 2rem;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  max-width: 1000px;
+  background-color: var(--background-white);
+  border-radius: 30px;
+  padding: 3rem;
+  box-shadow: 0 15px 50px rgba(0, 0, 0, 0.08);
   box-sizing: border-box;
-  overflow-x: hidden; /* 横方向のはみ出しを防止 */
+  overflow-x: hidden;
+  border: none;
+  position: relative;
 }
 
 .about-content p {
   text-align: center;
   margin-bottom: 1.5rem;
   line-height: 1.6;
-  color: #000000;
+  color: var(--text-dark);
   font-size: 1.3rem;
 }
 
@@ -245,23 +247,33 @@ onMounted(() => {
 }
 
 .profession-selector button {
-  padding: 0.5rem 1rem;
-  background-color: #e0e0e0;
-  border: none;
-  border-radius: 4px;
+  padding: 0.8rem 1.5rem;
+  background-color: var(--light-pink);
+  border: 2px solid transparent;
+  border-radius: 50px;
   cursor: pointer;
-  transition: all 0.3s;
-  font-size: 1.1rem;
-  font-family: TsukuARdGothic-Bold;
+  transition: all 0.3s ease;
+  font-size: 1rem;
+  font-family: 'Hiragino Sans', sans-serif;
+  color: var(--text-dark);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+  margin: 0.4rem;
+  font-weight: 500;
 }
 
 .profession-selector button:hover {
-  background-color: #d0d0d0;
+  background-color: var(--orange-beige);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(230, 188, 153, 0.3);
+  border-color: var(--orange-beige);
 }
 
 .profession-selector button.active {
-  background-color: #FFC107;
-  color: #000000;
+  background-color: var(--main-color);
+  color: var(--background-white);
+  box-shadow: 0 8px 20px rgba(95, 144, 178, 0.4);
+  border-color: var(--main-color);
+  transform: translateY(-2px);
 }
 
 .loading-container, .error-container {
@@ -295,23 +307,37 @@ onMounted(() => {
 
 .profession-description {
   margin-top: 2rem 0;
-  padding: 1.5rem;
+  padding: 2rem;
   background-color: #fff;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 15px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+  position: relative;
+  overflow: hidden;
+}
+
+.profession-description::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 100px;
+  height: 100px;
+  background: var(--light-blue);
+  opacity: 0.1;
+  border-radius: 0 0 0 100%;
 }
 
 .profession-description h2 {
-  color: #4CAF50;
+  color: var(--main-color);
   margin-bottom: 1rem;
   text-align: center;
   font-size: 1.5rem;
-  border-bottom: 2px solid #4CAF50;
+  border-bottom: 2px solid var(--main-color);
   padding-bottom: 0.5rem;
 }
 
 .profession-description h3 {
-  color: #000000;
+  color: var(--text-dark);
   margin-bottom: 1rem;
   font-size: 1.1rem;
 }
@@ -323,7 +349,7 @@ onMounted(() => {
 
 .description-content p {
   text-align: justify;
-  color: #000000;
+  color: var(--text-dark);
 }
 
 /* .characteristics, .requirements {
@@ -343,13 +369,24 @@ onMounted(() => {
 
 .characteristics ul {
   padding-left: 1.5rem;
+  list-style-type: none;
 }
 
 .characteristics li {
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.8rem;
   line-height: 1.4;
-  color: #000000;
+  color: var(--text-dark);
   font-size: 1.1rem;
+  position: relative;
+  padding-left: 1.5rem;
+}
+
+.characteristics li::before {
+  content: '✓';
+  position: absolute;
+  left: 0;
+  color: var(--main-color);
+  font-weight: bold;
 }
 
 .category-scores {
@@ -367,7 +404,7 @@ onMounted(() => {
   text-align: right;
   padding-right: 1rem;
   font-size: 0.9rem;
-  color: #000000;
+  color: var(--text-dark);
 }
 
 .bar-container {
@@ -380,7 +417,7 @@ onMounted(() => {
 
 .bar-fill {
   height: 100%;
-  background-color: #4CAF50;
+  background-color: var(--main-color);
   transition: width 0.5s ease;
 }
 
@@ -389,20 +426,20 @@ onMounted(() => {
   text-align: right;
   padding-left: 0.5rem;
   font-size: 0.9rem;
-  color: #000000;
+  color: var(--text-dark);
   font-weight: bold;
 }
 
 .config-info {
   margin-top: 2rem;
   padding: 1.5rem;
-  background-color: #e8f5e9;
+  background-color: var(--light-pink);
   border-radius: 8px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .config-info h3 {
-  color: #000000;
+  color: var(--text-dark);
   margin-bottom: 1rem;
   text-align: center;
   font-size: 1.2rem;
@@ -412,7 +449,7 @@ onMounted(() => {
   text-align: center;
   margin-bottom: 0.8rem;
   line-height: 1.6;
-  color: #000000;
+  color: var(--text-dark);
 }
 
 .config-info code {
