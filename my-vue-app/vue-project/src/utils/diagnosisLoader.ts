@@ -112,8 +112,8 @@ export function calculateProfessionScores(
         professionScores[profession].categories[category] = 0;
       }
       
-      // スコアを加算
-      professionScores[profession].categories[category] += 1;
+      // スコアを加算（カテゴリー別スコアにも重みを適用）
+      professionScores[profession].categories[category] += categoryWeight;
       professionScores[profession].score += categoryWeight;
     });
   });

@@ -50,10 +50,24 @@
         
         <div v-if="showResult" class="result-section">
           <h5>診断結果</h5>
+          <div class="result-controls">
+            <label for="topN">表示する職業数:</label>
+            <select id="topN" v-model="displayTopN" @change="updateDisplayedProfessions">
+              <option value="1">上位1位</option>
+              <option value="2">上位2位</option>
+              <option value="3">上位3位</option>
+              <option value="5">上位5位</option>
+            </select>
+          </div>
           <p>あなたに合う職業は・・・</p>
           
-          <div v-for="(profession, index) in topProfessions" :key="profession.name" class="result-box">
+          <div v-for="(profession, index) in displayedProfessions" :key="profession.name" class="result-box">
+            <div class="rank-badge">{{ index + 1 }}位</div>
             <h3>{{ profession.name }}</h3>
+            <div class="total-score">
+              <span class="score-label">総合スコア:</span>
+              <span class="score-value">{{ profession.score.toFixed(1) }}</span>
+            </div>
             
             <div class="category-scores">
               <h4>カテゴリー別スコア:</h4>
@@ -65,9 +79,10 @@
                 >
                   <div class="category-label">{{ getCategoryLabel(category) }}</div>
                   <div class="bar-container">
-                    <div class="bar-fill" :style="{ width: `${(score / getMaxCategoryScore(profession)) * 100}%` }"></div>
+                    <div class="bar-fill" :style="{ width: `${(score / getMaxCategoryScore()) * 100}%` }"></div>
                   </div>
-                  <div class="category-score">{{ score }}</div>
+                  <div class="category-score">{{ score.toFixed(1) }}</div>
+                  <div class="category-weight">(重み: {{ getCategoryWeight(category) }})</div>
                 </div>
               </div>
             </div>
@@ -106,6 +121,8 @@ const error = ref<string | null>(null)
 const answers = ref<Record<string, string>>({})
 const showResult = ref(false)
 const topProfessions = ref<ProfessionScore[]>([])
+const displayTopN = ref(3)
+const displayedProfessions = ref<ProfessionScore[]>([])
 
 // 質問のリスト
 const questions = computed<Question[]>(() => {
@@ -138,17 +155,38 @@ function calculateResult() {
   // 職業スコアを計算
   const scores = calculateProfessionScores(config.value, answers.value)
   
-  // 上位の職業を取得
-  const topN = config.value.threshold.recommend_top_n || 3
-  topProfessions.value = getTopProfessions(scores, topN)
+  // 全ての職業スコアを保存（後で表示数を変更できるように）
+  topProfessions.value = scores
+  
+  // 初期表示数を設定
+  displayTopN.value = config.value.threshold.recommend_top_n || 3
+  updateDisplayedProfessions()
   
   // 結果を表示
   showResult.value = true
 }
 
-// カテゴリーの最大スコアを取得
-function getMaxCategoryScore(profession: ProfessionScore): number {
-  return Math.max(...Object.values(profession.categories), 1)
+// 表示する職業数を更新
+function updateDisplayedProfessions() {
+  displayedProfessions.value = getTopProfessions(topProfessions.value, displayTopN.value)
+}
+
+// 全職業の全カテゴリーの最大スコアを取得
+function getMaxCategoryScore(): number {
+  if (displayedProfessions.value.length === 0) return 1
+  
+  let maxScore = 0
+  displayedProfessions.value.forEach(profession => {
+    Object.values(profession.categories).forEach(score => {
+      if (score > maxScore) maxScore = score
+    })
+  })
+  return maxScore || 1
+}
+
+// カテゴリーの重みを取得
+function getCategoryWeight(category: string): number {
+  return config.value?.category_weights[category] || 1.0
 }
 
 // カテゴリーラベルを取得
@@ -184,6 +222,8 @@ function resetDiagnosis() {
   answers.value = {}
   showResult.value = false
   topProfessions.value = []
+  displayedProfessions.value = []
+  displayTopN.value = 3
 }
 
 // ホームに戻る
@@ -394,6 +434,45 @@ onMounted(() => {
   border-radius: 8px;
 }
 
+.result-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin: 1.5rem 0;
+  padding: 1rem;
+  background-color: var(--light-blue);
+  border-radius: 15px;
+}
+
+.result-controls label {
+  font-weight: 600;
+  color: var(--text-dark);
+  font-size: 1rem;
+}
+
+.result-controls select {
+  padding: 0.5rem 1rem;
+  border: 2px solid var(--main-color);
+  border-radius: 10px;
+  background-color: white;
+  color: var(--text-dark);
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.result-controls select:hover {
+  border-color: var(--bright-blue);
+  box-shadow: 0 2px 8px rgba(95, 144, 178, 0.2);
+}
+
+.result-controls select:focus {
+  outline: none;
+  border-color: var(--bright-blue);
+  box-shadow: 0 0 0 3px rgba(95, 144, 178, 0.1);
+}
+
 .result-section h2 {
   color: #2c3e50;
   margin-bottom: 1rem;
@@ -430,6 +509,36 @@ onMounted(() => {
   border-color: transparent var(--light-blue) transparent transparent;
 }
 
+.rank-badge {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  background: linear-gradient(135deg, var(--main-color), var(--bright-blue));
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-weight: bold;
+  font-size: 1rem;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+  z-index: 2;
+}
+
+.rank-badge:nth-child(1) {
+  background: linear-gradient(135deg, #FFD700, #FFA500);
+}
+
+.result-box:nth-child(1) .rank-badge {
+  background: linear-gradient(135deg, #FFD700, #FFA500);
+}
+
+.result-box:nth-child(2) .rank-badge {
+  background: linear-gradient(135deg, #C0C0C0, #A9A9A9);
+}
+
+.result-box:nth-child(3) .rank-badge {
+  background: linear-gradient(135deg, #CD7F32, #B8860B);
+}
+
 .result-box h3 {
   color: var(--main-color);
   font-family: ToppanBunkyuMidashiGothicStdN-ExtraBold;
@@ -440,6 +549,26 @@ onMounted(() => {
   padding-bottom: 0.5rem;
   text-align: center;
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.total-score {
+  text-align: center;
+  margin: 1rem 0;
+  padding: 0.8rem;
+  background-color: var(--light-blue);
+  border-radius: 10px;
+}
+
+.score-label {
+  font-size: 1rem;
+  color: #666;
+  margin-right: 0.5rem;
+}
+
+.score-value {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: var(--main-color);
 }
 
 .category-scores {
@@ -487,11 +616,19 @@ onMounted(() => {
 }
 
 .category-score {
-  width: 30px;
+  width: 40px;
   text-align: right;
   font-size: 0.9rem;
   color: #666;
   font-weight: bold;
+}
+
+.category-weight {
+  width: 100px;
+  text-align: left;
+  font-size: 0.8rem;
+  color: #999;
+  margin-left: 0.5rem;
 }
 
 .profession-comment {
