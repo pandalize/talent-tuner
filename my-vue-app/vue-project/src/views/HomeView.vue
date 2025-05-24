@@ -17,8 +17,8 @@ function goToDiagnosis() {
   <main>
     <div class="home-container">      
       <div class="navigation-cards">
-        <a href="" class="btn btn-border-shadow btn-border-shadow--radius" @click="goToDiagnosis">診断する</a>
-        <a href="" class="btn btn-border-shadow btn-border-shadow--radius" @click="goToAbout">職業一覧</a>
+        <a class="btn btn-border-shadow btn-border-shadow--radius" @click.prevent="goToDiagnosis">診断する</a>
+        <a class="btn btn-border-shadow btn-border-shadow--radius" @click.prevent="goToAbout">職業一覧</a>
         </div>
     </div>
   </main>
@@ -63,7 +63,6 @@ html {
   font-size: 62.5%;
 }
 
-/* 背景用*/
 .btn,
 a.btn,
 button.btn {
@@ -124,54 +123,6 @@ a.btn-border-shadow:hover {
 a.btn-border-shadow:hover:before {
   top: 0;
   left: 0;
-}
-
-.card {
-  flex: 1;
-  background-color: var(--background-white);
-  border-radius: 50px;
-  padding: 3rem 2rem;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-  cursor: pointer;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  min-width: 280px;
-  max-width: 350px;
-  min-height: 200px;
-  transition: all 0.3s ease;
-  border: 2px solid transparent;
-  position: relative;
-  overflow: hidden;
-}
-
-.card h3 {
-  color: var(--main-color);
-  margin-bottom: 0.5rem;
-  text-align: center;
-  font-weight: bold;
-}
-
-.card p {
-  font-size: 1.4rem;
-  margin: 0;
-  text-align: center;
-  color: var(--text-dark);
-  line-height: 1.4;
-  font-weight: 500;
-  letter-spacing: 0.05em;
-}
-
-.card:hover {
-  background-color: var(--main-color);
-  transform: translateY(-10px);
-  box-shadow: 0 20px 40px rgba(95, 144, 178, 0.3);
-  border-color: var(--main-color);
-}
-
-.card:hover p {
-  color: var(--background-white);
 }
 
 /* スマートフォン向け */
