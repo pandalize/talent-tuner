@@ -50,20 +50,10 @@
         
         <div v-if="showResult" class="result-section">
           <h5>診断結果</h5>
-<<<<<<< HEAD
-          <div class="result-controls">
-            <label for="topN">表示する職業数:</label>
-            <select id="topN" v-model="displayTopN" @change="updateDisplayedProfessions">
-              <option value="1">上位1位</option>
-              <option value="2">上位2位</option>
-              <option value="3">上位3位</option>
-              <option value="5">上位5位</option>
-            </select>
-          </div>
-          <p>あなたに合う職業は・・・</p>
-=======
->>>>>>> 26a20a9 (ボタンの不具合修正)
-          
+
+          <!-- 選択UIを削除し、固定で上位3位を表示 -->
+          <p>あなたにおすすめする職業は・・・</p>
+
           <div v-for="(profession, index) in displayedProfessions" :key="profession.name" class="result-box">
             <div class="rank-badge">{{ index + 1 }}位</div>
             <h3>{{ profession.name }}</h3>
@@ -85,7 +75,6 @@
                     <div class="bar-fill" :style="{ width: `${(score / getMaxCategoryScore()) * 100}%` }"></div>
                   </div>
                   <div class="category-score">{{ score.toFixed(1) }}</div>
-                  <div class="category-weight">(重み: {{ getCategoryWeight(category) }})</div>
                 </div>
               </div>
             </div>
@@ -155,18 +144,12 @@ function selectOption(questionId: string, label: string) {
 function calculateResult() {
   if (!config.value) return
   
-  // 職業スコアを計算
   const scores = calculateProfessionScores(config.value, answers.value)
-  
-  // 全ての職業スコアを保存（後で表示数を変更できるように）
   topProfessions.value = scores
-  
-  // 初期表示数を設定
-  displayTopN.value = config.value.threshold.recommend_top_n || 3
+  displayTopN.value = 3 // 常に3位結果を表示
   updateDisplayedProfessions()
-
-  // 結果を表示
   showResult.value = true
+  window.scrollTo(0, 0) // 結果画面に遷移したときにページ上部へスクロール
 }
 
 // 表示する職業数を更新
@@ -227,6 +210,7 @@ function resetDiagnosis() {
   topProfessions.value = []
   displayedProfessions.value = []
   displayTopN.value = 3
+  window.scrollTo(0, 0) // 診断画面に遷移したときにページ上部へスクロール
 }
 
 // ホームに戻る
@@ -405,7 +389,7 @@ onMounted(() => {
   height: 100%;
   background-color: var(--main-color);
   transition: width 0.3s ease;
-  background-image: linear-gradient(to right, var(--main-color), var(--bright-blue));
+  background-image: linear-gradient(to right, var(--bright-blue), var(--main-color));
   border-radius: 5px;
 }
 
@@ -516,7 +500,6 @@ onMounted(() => {
   position: absolute;
   top: 15px;
   left: 15px;
-  background: linear-gradient(135deg, var(--main-color), var(--bright-blue));
   color: white;
   padding: 0.5rem 1rem;
   border-radius: 20px;
@@ -526,19 +509,16 @@ onMounted(() => {
   z-index: 2;
 }
 
-.rank-badge:nth-child(1) {
+
+.result-box:nth-child(3) .rank-badge {
   background: linear-gradient(135deg, #FFD700, #FFA500);
 }
 
-.result-box:nth-child(1) .rank-badge {
-  background: linear-gradient(135deg, #FFD700, #FFA500);
-}
-
-.result-box:nth-child(2) .rank-badge {
+.result-box:nth-child(4) .rank-badge {
   background: linear-gradient(135deg, #C0C0C0, #A9A9A9);
 }
 
-.result-box:nth-child(3) .rank-badge {
+.result-box:nth-child(5) .rank-badge {
   background: linear-gradient(135deg, #CD7F32, #B8860B);
 }
 
@@ -615,7 +595,7 @@ onMounted(() => {
   height: 100%;
   background-color: var(--main-color);
   transition: width 0.5s ease;
-  background-image: linear-gradient(to right, var(--main-color), var(--bright-blue));
+  background-image: linear-gradient(to right, var(--bright-blue), var(--main-color));
 }
 
 .category-score {
@@ -721,6 +701,7 @@ onMounted(() => {
   .reset-button, .home-button {
     width: 100%;
     max-width: 350px;
+    margin: 0.7rem auto;
   }
   
   .category-bar {
@@ -731,6 +712,18 @@ onMounted(() => {
     width: 100%;
     text-align: left;
     margin-bottom: 0.2rem;
+  }
+
+  .result-box{
+    padding-top: 2.5rem;
+  }
+
+  .result-box h3{
+    font-size: 1.5rem;
+  }
+
+  .rank-badge {
+    top: 10px;
   }
 }
 

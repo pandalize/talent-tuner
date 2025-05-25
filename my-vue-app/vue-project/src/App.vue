@@ -152,12 +152,16 @@ h5 {
 
 /* スマートフォン向け */
 @media (max-width: 455px) {
-  h1 {
-    font-size: 25px;
+  .title1 {
+    font-size: 2.1rem;
   }
 
-  h2 {
-    font-size: 28px
+  .title2 {
+    font-size: 3.2rem;
+  }
+
+  span {
+    font-size: 1.4rem;
   }
   
   nav {
@@ -165,6 +169,34 @@ h5 {
     flex-direction: row;
     align-items: center;
     gap: 0.5rem;
+    padding-bottom: 0;
+  }
+  
+  nav a {
+    margin: 0;
+    width: 80%;
+    text-align: center;
+    padding: 0.3rem 0;
+  }
+
+  .app-header {
+    padding-bottom: 0;
+  }
+
+  h5 {
+    font-size: 1.3rem;
+    margin-bottom: 1.5rem;
+  }
+}
+
+/* タブレット向け */
+@media (min-width: 456px) and (max-width: 1024px) {
+  nav {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.5rem;
+    padding-bottom: 0;
   }
   
   nav a {
@@ -175,15 +207,10 @@ h5 {
   }
 }
 
-/* タブレット向け */
-@media (min-width: 456px) and (max-width: 1024px) {
-  
-}
-
 /* 大画面向け */
 @media (min-width: 1025px) {
-  
 }
+  
 
 /* 全体のスタイルリセット */
 html, body {

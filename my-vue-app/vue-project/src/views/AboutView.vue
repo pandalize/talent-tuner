@@ -471,12 +471,11 @@ onMounted(() => {
   }
   
   .profession-selector {
-    flex-direction: column;
     align-items: center;
   }
   
   .profession-selector button {
-    width: 100%;
+    width: 40%;
     max-width: 300px;
     margin-bottom: 0.5rem;
   }
@@ -499,6 +498,7 @@ onMounted(() => {
   .config-info h3 {
     font-size: 1.1rem;
   }
+
 }
 
 /* タブレット向け */
