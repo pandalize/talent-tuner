@@ -41,7 +41,7 @@ export interface ProfessionScore {
 export async function loadDiagnosticConfig(): Promise<DiagnosticConfig> {
   try {
     // JSONファイルを取得
-    const response = await fetch('/diagnostic_config.json');
+    const response = await fetch('/data/diagnostic_config.json');
     if (!response.ok) {
       throw new Error(`設定ファイルの読み込みに失敗しました: ${response.statusText}`);
     }
