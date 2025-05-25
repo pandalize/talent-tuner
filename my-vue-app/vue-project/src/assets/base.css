@@ -2,7 +2,8 @@
 :root {
   /* 指定されたカラーパレット */
   --main-color: #5F90B2;
-  --light-blue: #AFCEE1;
+  --light-blue: #f2f2f2;
+  --cream: #AFCEE1;
   --bright-blue: #B6EAED;
   --light-pink: #E3CCC4;
   --orange-beige: #F7B674;

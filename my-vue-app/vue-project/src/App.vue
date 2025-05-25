@@ -51,7 +51,7 @@ import { RouterLink, RouterView } from 'vue-router'
   align-items: center;
   padding: 0;
   background-color: var(--light-blue);
-  background-image: linear-gradient(135deg, var(--light-blue) 0%, var(--bright-blue) 100%);
+  /* background-image: linear-gradient(135deg, var(--light-blue) 0%, var(--bright-blue) 100%); */
 }
 
 .app-header {
@@ -59,7 +59,10 @@ import { RouterLink, RouterView } from 'vue-router'
   width: 100%;
   max-width: 1200px;
   z-index: 10;
-  padding: 2rem 1rem;
+  padding-top: 2rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  padding-bottom: 1rem;
   background-color: transparent;
 }
 

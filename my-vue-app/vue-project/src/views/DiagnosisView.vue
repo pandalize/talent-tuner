@@ -1,5 +1,8 @@
 <template>
   <div class="diagnosis-container">
+    <div v-if="!showResult" class="welcome-section">
+      <h5 class="diagnosis-welcome">ため職へようこそ!<br>あなたの「思考スタイル」「行動特性」「対処力」「トレンド感度」などを、<br>8つの心理尺度（行動活性化システム尺度/認知的反省性/規制焦点尺度/ブリーフ・レジリエンス尺度/パブリック・スピーキング不安尺度/コーピング・インベントリー/運動自己効力感尺度/ファッション・インボルブメント尺度）をもとに、<br>短時間の質問で多角的に分析。現在の日本における高収入職業データベースから、<br>あなたに最適なキャリアをランキング形式でおすすめします。</h5>
+    </div>
     <div class="diagnosis-content">
       <div v-if="loading" class="loading-section">
         <p>診断データを読み込んでいます...</p>
@@ -11,9 +14,7 @@
       </div>
       
       <template v-else>
-        
         <div v-if="!showResult">
-          <h5>ため職へようこそ!あなたの「思考スタイル」「行動特性」「対処力」「トレンド感度」などを、8つの心理尺度（行動活性化システム尺度/認知的反省性/規制焦点尺度/ブリーフ・レジリエンス尺度/パブリック・スピーキング不安尺度/コーピング・インベントリー/運動自己効力感尺度/ファッション・インボルブメント尺度）をもとに、短時間の質問で多角的に分析。現在の日本における高収入職業データベースから、あなたに最適なキャリアをランキング形式でおすすめします</h5>
           <div v-for="question in questions" :key="question.id" class="question-section">
             <h2>{{ question.id }}：{{ question.text }}</h2>
             <!-- <p>{{ question.text }}</p> -->
@@ -283,7 +284,7 @@ onMounted(() => {
   transition: all 0.3s ease;
   font-size: 1rem;
   font-family: 'Hiragino Sans', sans-serif;
-  box-shadow: 0 5px 15px rgba(95, 144, 178, 0.3);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
   font-weight: 500;
 }
 
@@ -662,6 +663,24 @@ onMounted(() => {
   transform: translateY(-5px);
   box-shadow: 0 15px 35px rgba(255, 107, 107, 0.4);
 }
+
+
+.diagnosis-welcome {
+  color: #333;
+  width: 90%;
+  max-width: 1000px;
+  margin: 0 auto 2rem;
+  text-align: center;
+  font-size: 1.2rem;
+  line-height: 1.5;
+}
+
+welcome-section {
+  width: 80%;
+  max-width: 1000px;
+  padding: 2rem;
+}
+
 
 /* スマートフォン向け */
 @media (max-width: 455px) {

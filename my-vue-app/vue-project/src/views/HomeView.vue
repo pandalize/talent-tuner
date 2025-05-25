@@ -15,11 +15,16 @@ function goToDiagnosis() {
 
 <template>
   <main>
-    <div class="home-container">      
+    <div class="home-container">
+      <!-- 画像を中央に配置するため新たにコンテナを追加 -->
+      <div class="image-container">
+        <img src="/image/construction.png" alt="Image 1" />
+        <img src="/image/influencer.png" alt="Image 2" />
+      </div>
       <div class="navigation-cards">
         <a class="btn btn-border-shadow btn-border-shadow--radius" @click.prevent="goToDiagnosis">診断する</a>
         <a class="btn btn-border-shadow btn-border-shadow--radius" @click.prevent="goToAbout">職業一覧</a>
-        </div>
+      </div>
     </div>
   </main>
 </template>
@@ -36,11 +41,24 @@ main {
 .home-container {
   width: 100%;
   max-width: 1200px;
-  margin-top: 3rem;
   padding: 1rem;
   box-sizing: border-box;
+  justify-content: center;
 }
 
+/* 新たに追加: 画像コンテナを中央配置 */
+.image-container {
+  display: flex;
+  justify-content: center;
+  /* gap: 2rem; */
+  margin-bottom: 2rem;
+}
+
+.home-container img {
+  width: 20rem;
+  height: auto; /* 変更: 固定の高さから自動サイズに変更し縦横比を維持 */
+  max-width: 50%;
+}
 
 .navigation-cards {
   display: flex;
@@ -93,7 +111,7 @@ a.btn-border-shadow--radius {
 a.btn-border-shadow {
   padding: calc(1.5rem - 12px) 3rem 1.5rem;
 
-  background: #e6eaed;
+  background: var(--cream);
 }
 
 a.btn-border-shadow:before {
@@ -124,6 +142,7 @@ a.btn-border-shadow:hover:before {
   top: 0;
   left: 0;
 }
+
 
 /* スマートフォン向け */
 @media (max-width: 455px) {
