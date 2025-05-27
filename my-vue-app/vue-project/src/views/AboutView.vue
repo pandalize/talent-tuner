@@ -1,14 +1,14 @@
 <template>
   <div class="about">
     <div class="about-content">
-      <h5>君でもどれかには就ける高収入職業</h5>
+      <h1>君でもどれかには就ける高収入職業</h1>
       
       <div class="profession-selector">
         <button
           v-for="profession in professions"
           :key="profession.id"
-          @click="selectedProfession = profession.value"
-          :class="{ active: selectedProfession === profession.value }"
+          @click="selectedProfessionValue = profession.value"
+          :class="{ active: selectedProfessionValue === profession.value }"
         >
           {{ profession.label }}
         </button>
@@ -24,34 +24,19 @@
       </div>
       
       <div v-else class="profession-description">
-        <h2>{{ selectedProfession }}</h2>
+        <h2>{{ selectedProfessionValue }}</h2>
         <div class="description-content">
-          <p>{{ getProfessionComment(selectedProfession) }}</p>
+          <p>{{ getProfessionComment(selectedProfessionValue) }}</p>
         </div>
         
         <div class="characteristics">
           <h3>この職業に向いている人の特徴:</h3>
           <ul>
-            <li v-for="(trait, index) in getProfessionTraits(selectedProfession)" :key="index">{{ trait }}</li>
+            <li v-for="(trait, index) in getProfessionTraits(selectedProfessionValue)" :key="index">
+              {{ trait }}
+            </li>
           </ul>
         </div>
-        
-        <!--不要 <div class="requirements">
-          <h3>必要なスキルと適性:</h3>
-          <div class="category-scores">
-            <div 
-              v-for="(weight, category) in categoryWeights" 
-              :key="category"
-              class="category-bar"
-            >
-              <div class="category-label">{{ getCategoryLabel(category) }}</div>
-              <div class="bar-container">
-                <div class="bar-fill" :style="{ width: `${(weight / getMaxWeight()) * 100}%` }"></div>
-              </div>
-              <div class="category-score">{{ weight }}</div>
-            </div>
-          </div>
-        </div> -->
       </div>
     </div>
   </div>
@@ -59,7 +44,6 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
-import { loadDiagnosticConfig, type DiagnosticConfig } from '../utils/diagnosisLoader';
 
 const professions = [
   { id: 1, label: 'プログラマー', value: 'プログラマー' },
@@ -74,46 +58,21 @@ const professions = [
   { id: 10, label: '難関大進学', value: '難関大進学' }
 ];
 
-const selectedProfession = ref('プログラマー');
-const config = ref<DiagnosticConfig | null>(null);
+const selectedProfessionValue = ref('プログラマー');
 const loading = ref(true);
 const error = ref<string | null>(null);
-const categoryWeights = ref<Record<string, number>>({
-  'skill': 1.0,
-  'motivation': 1.0,
-  'environment': 1.0,
-  'personality': 1.0
-});
 
 // 設定を読み込む
 async function loadProfessionData() {
   try {
     loading.value = true;
     error.value = null;
-    config.value = await loadDiagnosticConfig();
-    categoryWeights.value = config.value.category_weights;
     loading.value = false;
   } catch (err) {
     console.error('設定の読み込みに失敗しました:', err);
     error.value = '職業データの読み込みに失敗しました。もう一度お試しください。';
     loading.value = false;
   }
-}
-
-// カテゴリーラベルを取得
-function getCategoryLabel(category: string): string {
-  const labels: Record<string, string> = {
-    'skill': 'スキル',
-    'motivation': 'モチベーション',
-    'environment': '環境適応',
-    'personality': '性格'
-  };
-  return labels[category] || category;
-}
-
-// 最大ウェイトを取得
-function getMaxWeight(): number {
-  return Math.max(...Object.values(categoryWeights.value), 1);
 }
 
 // 職業に対するコメントを取得
@@ -327,7 +286,7 @@ onMounted(() => {
   border-radius: 0 0 0 100%;
 }
 
-.profession-description h2 {
+h2 {
   color: var(--main-color);
   margin-bottom: 1rem;
   text-align: center;
@@ -336,7 +295,7 @@ onMounted(() => {
   padding-bottom: 0.5rem;
 }
 
-.profession-description h3 {
+h3 {
   color: var(--text-dark);
   margin-bottom: 1rem;
   font-size: 1.1rem;
@@ -351,21 +310,6 @@ onMounted(() => {
   text-align: justify;
   color: var(--text-dark);
 }
-
-/* .characteristics, .requirements {
-  margin-bottom: 1.5rem;
-  padding: 1rem;
-  background-color: #f9f9f9;
-  border-radius: 6px;
-}
-
-.characteristics h3, .requirements h3 {
-  color: #2c3e50;
-  margin-bottom: 1rem;
-  font-size: 1.2rem;
-  border-left: 3px solid #4CAF50;
-  padding-left: 0.5rem;
-} */
 
 .characteristics ul {
   padding-left: 1.5rem;
@@ -399,14 +343,6 @@ onMounted(() => {
   margin-bottom: 0.8rem;
 }
 
-.category-label {
-  width: 120px;
-  text-align: right;
-  padding-right: 1rem;
-  font-size: 0.9rem;
-  color: var(--text-dark);
-}
-
 .bar-container {
   flex-grow: 1;
   height: 12px;
@@ -428,36 +364,6 @@ onMounted(() => {
   font-size: 0.9rem;
   color: var(--text-dark);
   font-weight: bold;
-}
-
-.config-info {
-  margin-top: 2rem;
-  padding: 1.5rem;
-  background-color: var(--light-pink);
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-}
-
-.config-info h3 {
-  color: var(--text-dark);
-  margin-bottom: 1rem;
-  text-align: center;
-  font-size: 1.2rem;
-}
-
-.config-info p {
-  text-align: center;
-  margin-bottom: 0.8rem;
-  line-height: 1.6;
-  color: var(--text-dark);
-}
-
-.config-info code {
-  background-color: #f1f1f1;
-  padding: 0.2rem 0.4rem;
-  border-radius: 4px;
-  font-family: monospace;
-  color: #d32f2f;
 }
 
 /* スマートフォン向け */
@@ -483,22 +389,6 @@ onMounted(() => {
   .category-bar {
     flex-wrap: wrap;
   }
-  
-  .category-label {
-    width: 100%;
-    text-align: left;
-    padding-right: 0;
-    margin-bottom: 0.2rem;
-  }
-  
-  .config-info {
-    padding: 1rem;
-  }
-  
-  .config-info h3 {
-    font-size: 1.1rem;
-  }
-
 }
 
 /* タブレット向け */

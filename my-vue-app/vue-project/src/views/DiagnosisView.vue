@@ -1,7 +1,7 @@
 <template>
   <div class="diagnosis-container">
     <div v-if="!showResult" class="welcome-section">
-      <h5 class="diagnosis-welcome">ため職へようこそ!<br>あなたの「思考スタイル」「行動特性」「対処力」「トレンド感度」などを、<br>8つの心理尺度（行動活性化システム尺度/認知的反省性/規制焦点尺度/ブリーフ・レジリエンス尺度/パブリック・スピーキング不安尺度/コーピング・インベントリー/運動自己効力感尺度/ファッション・インボルブメント尺度）をもとに、<br>短時間の質問で多角的に分析。現在の日本における高収入職業データベースから、<br>あなたに最適なキャリアをランキング形式でおすすめします。</h5>
+      <h1 class="diagnosis-welcome" style="white-space: normal; font-size: 1.1rem;">ため職へようこそ!<br>あなたの「思考スタイル」「行動特性」「対処力」「トレンド感度」などを、<br>8つの心理尺度（行動活性化システム尺度/認知的反省性/規制焦点尺度/ブリーフ・レジリエンス尺度/パブリック・スピーキング不安尺度/コーピング・インベントリー/運動自己効力感尺度/ファッション・インボルブメント尺度）をもとに、<br>短時間の質問で多角的に分析。現在の日本における高収入職業データベースから、<br>あなたに最適なキャリアをランキング形式でおすすめします。</h1>
     </div>
     <div class="diagnosis-content">
       <div v-if="loading" class="loading-section">
@@ -17,7 +17,6 @@
         <div v-if="!showResult">
           <div v-for="question in questions" :key="question.id" class="question-section">
             <h2>{{ question.id }}：{{ question.text }}</h2>
-            <!-- <p>{{ question.text }}</p> -->
             <div class="options">
               <button
                 v-for="option in question.options"
@@ -50,7 +49,7 @@
         </div>
         
         <div v-if="showResult" class="result-section">
-          <h5>診断結果</h5>
+          <h1>診断結果</h1>
 
           <!-- 選択UIを削除し、固定で上位3位を表示 -->
           <p>あなたにおすすめする職業は・・・</p>
@@ -459,13 +458,6 @@ onMounted(() => {
   outline: none;
   border-color: var(--bright-blue);
   box-shadow: 0 0 0 3px rgba(95, 144, 178, 0.1);
-}
-
-.result-section h2 {
-  color: #2c3e50;
-  margin-bottom: 1rem;
-  text-align: center;
-  font-size: 1.5rem;
 }
 
 .result-box {

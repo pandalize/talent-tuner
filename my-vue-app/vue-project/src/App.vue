@@ -1,10 +1,5 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from 'vue-router'
-// import HelloWorld from './components/HelloWorld.vue'
-// import Counter from    './components/Counter.vue'
-// import Greeting from './components/Greeting.vue'
-// import ColorBox from './components/ColorBox.vue'
-// import ToggleButton from './components/ToggleButton.vue'
 </script>
 
 <template>
@@ -15,7 +10,6 @@ import { RouterLink, RouterView } from 'vue-router'
         <RouterLink to="/">ホーム</RouterLink> |
         <RouterLink to="/diagnosis">診断ページ</RouterLink> |
         <RouterLink to="/about">職業一覧</RouterLink>
-
       </nav>
       <h1>
         <span class="title2">ため職</span><br>
@@ -30,13 +24,6 @@ import { RouterLink, RouterView } from 'vue-router'
     <div class="app-content">
       <RouterView />
     </div>
-    
-    <!-- ここにコンポーネントを配置 -->
-    <!-- <HelloWorld />
-    <Counter />
-    <Greeting />
-    <ColorBox />
-    <ToggleButton /> -->
   </div>
 </template>
 
@@ -78,7 +65,7 @@ h1 {
 .title1 {
   font-family: 'Hiragino Sans', sans-serif;
   font-size: 3rem;
-  display: inline-block;
+  display: inline-block; /* 画面の大きさに合わせて途中で改行されない*/
   color: orange;
   -webkit-text-stroke: 2px rgb(61, 61, 61);
   font-weight: 700;
@@ -87,11 +74,10 @@ h1 {
 }
 
 .title2 {
-  font-family: 'M PLUS Rounded 1c'; /* 修正ここ */
+  font-family: 'M PLUS Rounded 1c';
   font-size: 3.5rem;
   display: inline-block;
   color: orange;
-  /* font-style: italic; */
   text-shadow:3px 4px 3px rgb(51, 51, 53);
   position: relative;
   margin: 0 0.2rem;
@@ -100,6 +86,7 @@ h1 {
 span {
   font-size: 2.5rem;
   font-weight: 700;
+  display: inline-block;
 }
 
 nav {
@@ -110,6 +97,8 @@ nav {
   background-color: transparent;
   border-radius: 50px;
   position: relative;
+  flex-direction: row;
+  align-items: center;
 }
 
 .app-content {
@@ -144,7 +133,7 @@ nav a:hover {
   background-color: rgba(95, 144, 178, 0.1);
 }
 
-h5 {
+h1 {
   color: var(--text-dark);
   margin-bottom: 3rem;
   text-align: center;
@@ -168,25 +157,22 @@ h5 {
   }
   
   nav {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
     gap: 0.5rem;
     padding-bottom: 0;
+    display: flex;
+
   }
   
   nav a {
     margin: 0;
-    width: 80%;
-    text-align: center;
-    padding: 0.3rem 0;
+    padding: 0.5rem;
   }
 
   .app-header {
     padding-bottom: 0;
   }
 
-  h5 {
+  h1 {
     font-size: 1.3rem;
     margin-bottom: 1.5rem;
   }
@@ -195,18 +181,11 @@ h5 {
 /* タブレット向け */
 @media (min-width: 456px) and (max-width: 1024px) {
   nav {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
     gap: 0.5rem;
-    padding-bottom: 0;
   }
   
   nav a {
     margin: 0;
-    width: 80%;
-    text-align: center;
-    padding: 0.3rem 0;
   }
 }
 

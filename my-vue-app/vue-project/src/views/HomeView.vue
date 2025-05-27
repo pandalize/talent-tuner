@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { useRouter } from 'vue-router';
-// import MyComponent from '../components/MyComponent.vue';
 
 const router = useRouter();
 
@@ -16,14 +15,13 @@ function goToDiagnosis() {
 <template>
   <main>
     <div class="home-container">
-      <!-- 画像を中央に配置するため新たにコンテナを追加 -->
       <div class="image-container">
         <img src="/image/construction.png" alt="Image 1" />
         <img src="/image/influencer.png" alt="Image 2" />
       </div>
       <div class="navigation-cards">
-        <a class="btn btn-border-shadow btn-border-shadow--radius" @click.prevent="goToDiagnosis">診断する</a>
-        <a class="btn btn-border-shadow btn-border-shadow--radius" @click.prevent="goToAbout">職業一覧</a>
+        <router-link to="/diagnosis" class="btn btn-border-shadow btn-border-shadow--radius">診断する</router-link>
+        <router-link to="/about" class="btn btn-border-shadow btn-border-shadow--radius">職業一覧</router-link>
       </div>
     </div>
   </main>
@@ -43,10 +41,8 @@ main {
   max-width: 1200px;
   padding: 1rem;
   box-sizing: border-box;
-  justify-content: center;
 }
 
-/* 新たに追加: 画像コンテナを中央配置 */
 .image-container {
   display: flex;
   justify-content: center;
@@ -56,7 +52,7 @@ main {
 
 .home-container img {
   width: 20rem;
-  height: auto; /* 変更: 固定の高さから自動サイズに変更し縦横比を維持 */
+  height: auto; /* 固定の高さから自動サイズに変更し縦横比を維持 */
   max-width: 50%;
 }
 
@@ -148,7 +144,7 @@ a.btn-border-shadow:hover:before {
 @media (max-width: 455px) {
   .navigation-cards {
     flex-direction: column;
-    align-items: center;     /* 横方向の中央揃え */
+    align-items: center;  /* 横方向の中央揃え */
   }
 }
 
@@ -157,18 +153,12 @@ a.btn-border-shadow:hover:before {
   .home-container {
     max-width: 90%;
   }
-  .navigation-cards {
-    justify-content: center;
-  }
 }
 
 /* 大画面向け */
 @media (min-width: 1025px) {
   .home-container {
     max-width: 1200px;
-  }
-  .navigation-cards {
-    justify-content: center;
   }
 }
 </style>
