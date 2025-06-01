@@ -46,11 +46,11 @@
               ← 前の質問に戻る
             </button>
             
-            
             <button
-              v-if="answers[currentQuestion.id] && currentQuestionIndex === questions.length - 1"
               @click="calculateResult"
+              :disabled="Object.keys(answers).length !== questions.length"
               class="calculate-button"
+              :class="{ 'disabled': Object.keys(answers).length !== questions.length }"
             >
               診断結果を見る
             </button>
@@ -516,8 +516,6 @@ onMounted(() => {
 }
 
 .calculate-button {
-  display: block;
-  margin: 3rem auto;
   padding: 1.2rem 3rem;
   background-color: var(--orange-beige);
   color: var(--text-dark);
@@ -533,10 +531,26 @@ onMounted(() => {
   letter-spacing: 0.05em;
 }
 
-.calculate-button:hover {
+.calculate-button:hover:not(:disabled) {
   background-color: var(--accent-coral);
   transform: translateY(-5px);
   box-shadow: 0 15px 35px rgba(255, 107, 107, 0.4);
+}
+
+.calculate-button.disabled,
+.calculate-button:disabled {
+  background-color: #e0e0e0;
+  color: #999;
+  cursor: not-allowed;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transform: none;
+}
+
+.calculate-button.disabled:hover,
+.calculate-button:disabled:hover {
+  background-color: #e0e0e0;
+  transform: none;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .result-section {
@@ -983,11 +997,12 @@ onMounted(() => {
 .navigation-buttons {
   display: flex;
   gap: 1rem;
-  justify-content: center;
-  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
   margin-top: 2rem;
-  margin-bottom: 2rem; /* 下部に余白を追加 */
+  margin-bottom: 2rem;
   width: 100%;
+  min-height: 60px; /* レイアウト安定性のための最小高さ */
 }
 
 .nav-button {
@@ -1156,6 +1171,17 @@ onMounted(() => {
     width: 100%;
     max-width: 280px;
     min-width: auto;
+  }
+
+  .navigation-buttons {
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .calculate-button {
+    min-width: 250px;
+    font-size: 1.1rem;
   }
 }
 
