@@ -39,18 +39,19 @@
           
           <div class="navigation-buttons">
             <button
-              v-if="currentQuestionIndex > 0"
               @click="goToPreviousQuestion"
               class="nav-button prev-button"
+              :class="{ 'invisible-button': currentQuestionIndex === 0 }"
+              :disabled="currentQuestionIndex === 0"
             >
-              ← 前の質問に戻る
+              前の質問に戻る
             </button>
-            
+
             <button
               @click="calculateResult"
               :disabled="Object.keys(answers).length !== questions.length"
               class="calculate-button"
-              :class="{ 'disabled': Object.keys(answers).length !== questions.length }"
+              :class="{ 'invisible-button': Object.keys(answers).length !== questions.length }"
             >
               診断結果を見る
             </button>
@@ -222,9 +223,6 @@ function goToNextQuestion() {
           questionContent.scrollIntoView({ behavior: 'smooth', block: 'start' })
         }
       }, 100)
-    } else {
-      // 最初の質問では通常通りトップにスクロール
-      window.scrollTo(0, 0)
     }
   }
 }
@@ -326,18 +324,65 @@ function shareToX() {
 async function shareToInstagram() {
   const text = generateShareText()
   
-  try {
-    await navigator.clipboard.writeText(text)
-    alert('📋 共有テキストをクリップボードにコピーしました！\nInstagramアプリを開いて、ストーリーまたは投稿に貼り付けてください。')
-  } catch (err) {
-    console.error('クリップボードへのコピーに失敗しました:', err)
-    const textArea = document.createElement('textarea')
-    textArea.value = text
-    document.body.appendChild(textArea)
-    textArea.select()
-    document.execCommand('copy')
-    document.body.removeChild(textArea)
-    alert('📋 共有テキストをクリップボードにコピーしました！\nInstagramアプリを開いて、ストーリーまたは投稿に貼り付けてください。')
+  // モバイルデバイスでInstagramアプリが利用可能かチェック
+  const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
+  
+  if (isMobile) {
+    // モバイルの場合、Instagramアプリのカスタムスキームを試行
+    try {
+      // Instagramストーリー用のカスタムスキーム
+      const instagramUrl = `instagram://story-camera`
+      window.location.href = instagramUrl
+      
+      // フォールバック: テキストをクリップボードにコピー
+      setTimeout(async () => {
+        try {
+          await navigator.clipboard.writeText(text)
+          alert('📋 共有テキストをクリップボードにコピーしました！\nInstagramアプリでストーリーを作成し、テキストを貼り付けてください。')
+        } catch (err) {
+          console.error('クリップボードへのコピーに失敗しました:', err)
+          const textArea = document.createElement('textarea')
+          textArea.value = text
+          document.body.appendChild(textArea)
+          textArea.select()
+          document.execCommand('copy')
+          document.body.removeChild(textArea)
+          alert('📋 共有テキストをクリップボードにコピーしました！\nInstagramアプリでストーリーを作成し、テキストを貼り付けてください。')
+        }
+      }, 1000)
+    } catch (err) {
+      // Instagramアプリが開けない場合のフォールバック
+      try {
+        await navigator.clipboard.writeText(text)
+        alert('📋 共有テキストをクリップボードにコピーしました！\nInstagramアプリを開いて、ストーリーまたは投稿に貼り付けてください。')
+      } catch (clipboardErr) {
+        console.error('クリップボードへのコピーに失敗しました:', clipboardErr)
+        const textArea = document.createElement('textarea')
+        textArea.value = text
+        document.body.appendChild(textArea)
+        textArea.select()
+        document.execCommand('copy')
+        document.body.removeChild(textArea)
+        alert('📋 共有テキストをクリップボードにコピーしました！\nInstagramアプリを開いて、ストーリーまたは投稿に貼り付けてください。')
+      }
+    }
+  } else {
+    // デスクトップの場合、Instagram Webを開く
+    try {
+      await navigator.clipboard.writeText(text)
+      window.open('https://www.instagram.com/', '_blank')
+      alert('📋 共有テキストをクリップボードにコピーしました！\nInstagram Webでストーリーまたは投稿を作成し、テキストを貼り付けてください。')
+    } catch (err) {
+      console.error('クリップボードへのコピーに失敗しました:', err)
+      const textArea = document.createElement('textarea')
+      textArea.value = text
+      document.body.appendChild(textArea)
+      textArea.select()
+      document.execCommand('copy')
+      document.body.removeChild(textArea)
+      window.open('https://www.instagram.com/', '_blank')
+      alert('📋 共有テキストをクリップボードにコピーしました！\nInstagram Webでストーリーまたは投稿を作成し、テキストを貼り付けてください。')
+    }
   }
 }
 
@@ -447,7 +492,7 @@ onMounted(() => {
   padding: 1.2rem 1.8rem;
   background-color: var(--orange-beige);
   border: 2px solid transparent;
-  border-radius: 25px;
+  border-radius: 10px;
   cursor: pointer;
   transition: all 0.3s ease;
   font-size: 1rem;
@@ -524,8 +569,10 @@ onMounted(() => {
   cursor: pointer;
   transition: all 0.3s ease;
   font-size: 1.3rem;
-  min-width: 300px;
+  min-width: 500px;
+  min-height: 100px;
   font-family: 'Hiragino Sans', sans-serif;
+  font-size: 2rem;
   font-weight: 600;
   box-shadow: 0 8px 25px rgba(230, 188, 153, 0.3);
   letter-spacing: 0.05em;
@@ -996,8 +1043,9 @@ onMounted(() => {
 
 .navigation-buttons {
   display: flex;
+  flex-direction: column;
   gap: 1rem;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
   margin-top: 2rem;
   margin-bottom: 2rem;
@@ -1018,14 +1066,56 @@ onMounted(() => {
 }
 
 .prev-button {
-  background-color: #6c757d;
-  color: var(--background-white);
+  padding: 1.2rem 3rem;
+  background-color: var(--orange-beige);
+  color: var(--text-dark);
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 1.3rem;
+  min-width: 300px;
+  font-family: 'Hiragino Sans', sans-serif;
+  font-weight: 600;
+  box-shadow: 0 8px 25px rgba(230, 188, 153, 0.3);
+  letter-spacing: 0.05em;
 }
 
-.prev-button:hover {
-  background-color: #5a6268;
-  transform: translateY(-3px);
-  box-shadow: 0 8px 20px rgba(108, 117, 125, 0.4);
+.prev-button:hover:not(:disabled) {
+  background-color: var(--accent-coral);
+  transform: translateY(-5px);
+  box-shadow: 0 15px 35px rgba(255, 107, 107, 0.4);
+}
+
+.prev-button.disabled,
+.prev-button:disabled {
+  background-color: #e0e0e0;
+  color: #999;
+  cursor: not-allowed;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transform: none;
+}
+
+.prev-button.disabled:hover,
+.prev-button:disabled:hover {
+  background-color: #e0e0e0;
+  transform: none;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* 見えないボタンのスタイル（白背景、白文字、影なし） */
+.invisible-button {
+  background-color: white !important;
+  color: white !important;
+  box-shadow: none !important;
+  cursor: not-allowed !important;
+}
+
+.invisible-button:hover {
+  background-color: white !important;
+  color: white !important;
+  box-shadow: none !important;
+  transform: none !important;
 }
 
 .progress-section-fixed {
@@ -1177,6 +1267,7 @@ onMounted(() => {
     flex-direction: column;
     align-items: center;
     gap: 1rem;
+    justify-content: center;
   }
 
   .calculate-button {
