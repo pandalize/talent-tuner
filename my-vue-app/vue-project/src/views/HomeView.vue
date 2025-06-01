@@ -15,6 +15,12 @@ function goToDiagnosis() {
 <template>
   <main>
     <div class="home-container">
+      <div class="welcome-section">
+        <h1 class="diagnosis-welcome" style="white-space: normal; font-size: 1.1rem;">
+          ため職へようこそ！<br>「興味」「能力」「性格」「考え方」の4つの観点で、あなたにマッチする職業を短時間で多角的に分析。
+          <br>あなたに最適な高収入職業をランキング形式でおすすめします。
+        </h1>
+      </div>
       <div class="image-container">
         <img src="/image/construction.png" alt="Image 1" />
         <img src="/image/influencer.png" alt="Image 2" />
@@ -37,10 +43,26 @@ main {
 }
 
 .home-container {
-  width: 100%;
+  width: 70%;
   max-width: 1200px;
   padding: 1rem;
   box-sizing: border-box;
+}
+
+.welcome-section {
+  text-align: center;
+  margin-bottom: 2rem;
+  padding: 1.5rem;
+  background-color: var(--background-white, #ffffff);
+  border-radius: 15px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+}
+
+.diagnosis-welcome {
+  color: var(--text-dark, #333);
+  margin: 0;
+  line-height: 1.6;
+  font-weight: 500;
 }
 
 .image-container {

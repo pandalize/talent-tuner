@@ -31,7 +31,7 @@ import { RouterLink, RouterView } from 'vue-router'
 #app {
   font-family: 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Yu Gothic', 'Meiryo', sans-serif;
   width: 100%;
-  min-height: 100vh;
+  /* min-height: 100vh; */
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
@@ -43,19 +43,19 @@ import { RouterLink, RouterView } from 'vue-router'
 
 .app-header {
   position: relative;
-  width: 100%;
+  width: 70%;
   max-width: 1200px;
   z-index: 10;
   padding-top: 2rem;
   padding-left: 1rem;
   padding-right: 1rem;
-  padding-bottom: 1rem;
   background-color: transparent;
 }
 
 h1 {
   color: var(--text-dark);
-  margin: 1rem 0 2rem 0;
+  margin: 1rem;
+  margin-bottom: 1rem;
   text-align: center;
   font-weight: 700;
   font-size: 2.5rem;
@@ -174,7 +174,6 @@ h1 {
 
   h1 {
     font-size: 1.3rem;
-    margin-bottom: 1.5rem;
   }
 }
 
