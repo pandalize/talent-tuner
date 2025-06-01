@@ -63,7 +63,6 @@
           <h1>診断結果</h1>
 
           <div v-for="(profession, index) in displayedProfessions" :key="profession.name" class="result-box">
-            <div class="rank-badge">{{ index + 1 }}位</div>
             <h3>{{ profession.name }}</h3>
             <div class="total-score">
               <span class="score-label">総合スコア:</span>
@@ -603,24 +602,12 @@ onMounted(() => {
 }
 
 .result-box {
-  background-color: #f8f9fa;
-  border-radius: 15px;
-  padding: 2rem;
-  margin-bottom: 2rem;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-  position: relative;
-}
-
-.rank-badge {
-  position: absolute;
-  top: -10px;
-  left: 20px;
-  background-color: var(--main-color);
-  color: var(--background-white);
-  padding: 0.5rem 1rem;
-  border-radius: 20px;
-  font-weight: bold;
-  font-size: 1rem;
+  padding: 1.5rem;
+  background-color: white;
+  border-radius: 8px;
+  margin: 1.5rem 0;
+  line-height: 1.6;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .result-box h3 {
