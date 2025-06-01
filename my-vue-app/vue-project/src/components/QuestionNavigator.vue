@@ -20,11 +20,9 @@
       
       <template v-else>
         <div v-if="!showResult && currentQuestion" class="current-question-section">
-          <div class="question-header">
-            <h2>質問 {{ currentQuestionIndex + 1 }}</h2>
-          </div>
           
           <div class="question-card">
+            <h2>質問 {{ currentQuestionIndex + 1 }}</h2>
             <h3>{{ currentQuestion.text }}</h3>
             <div class="options">
               <button
@@ -374,9 +372,9 @@ onMounted(() => {
   padding: 2rem;
   box-shadow: 0 15px 50px rgba(0, 0, 0, 0.08);
   box-sizing: border-box;
-  overflow-x: hidden;
   border: none;
   position: relative;
+  margin-bottom: 120px; /* 固定プログレスバーの分の余白を追加 */
 }
 
 .diagnosis-content > p {
@@ -899,8 +897,6 @@ onMounted(() => {
 }
 
 .welcome-section {
-  width: 80%;
-  max-width: 1000px;
   padding: 2rem;
 }
 
@@ -908,15 +904,11 @@ onMounted(() => {
   display: flex;
   flex-direction: column;
   align-items: center;
-  min-height: 500px;
+  min-height: auto; /* 最小高さを自動に設定 */
+  padding-bottom: 2rem; /* ナビゲーションボタンのための余白 */
 }
 
-.question-header {
-  text-align: center;
-  margin-bottom: 2rem;
-}
-
-.question-header h2 {
+.question-caed h2 {
   color: var(--text-dark);
   font-size: 1.5rem;
   margin: 0;
@@ -925,11 +917,9 @@ onMounted(() => {
 .question-card {
   width: 100%;
   max-width: 800px;
-  background-color: #f8f9fa;
   border-radius: 20px;
   padding: 2rem;
   margin-bottom: 2rem;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
 }
 
 .question-card h3 {
@@ -996,6 +986,8 @@ onMounted(() => {
   justify-content: center;
   flex-wrap: wrap;
   margin-top: 2rem;
+  margin-bottom: 2rem; /* 下部に余白を追加 */
+  width: 100%;
 }
 
 .nav-button {
@@ -1181,12 +1173,8 @@ onMounted(() => {
     padding: 1rem;
   }
   
-  .diagnosis-content {
-    max-width: 1200px;
-  }
-  
   .options button {
-    width: calc(25% - 1rem);
+    width: calc(50% - 1rem);
     max-width: 300px;
   }
   
