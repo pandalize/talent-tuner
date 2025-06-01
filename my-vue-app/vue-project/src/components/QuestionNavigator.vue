@@ -1,13 +1,5 @@
 <template>
   <div class="diagnosis-container">
-    <div v-if="!showResult" class="welcome-section">
-      <h1 class="diagnosis-welcome" style="white-space: normal; font-size: 1.1rem;">
-        ため職へようこそ!<br>あなたの「思考スタイル」「行動特性」「対処力」「トレンド感度」などを、
-        <br>以下の4つの尺度をもとに、短時間の質問で多角的に分析。<br>高収入職業から、あなたに最適なキャリアをランキング形式でおすすめします。
-        <br>1. 興味 2. 能力 3. 価値観 4. バランス
-      </h1>
-    </div>
-
     <div class="diagnosis-content">
       <div v-if="loading" class="loading-section">
         <p>診断データを読み込んでいます...</p>
