@@ -219,10 +219,10 @@ function getCategoryWeight(category: string): number {
 // カテゴリーラベルを取得
 function getCategoryLabel(category: string): string {
   const labels: Record<string, string> = {
-    'skill': 'スキル',
-    'motivation': 'モチベーション',
-    'environment': '環境適応',
-    'personality': '性格'
+    'interest': '興味',
+    'skill': '能力',
+    'priority': '価値観',
+    'balance': '両立'
   }
   return labels[category] || category
 }

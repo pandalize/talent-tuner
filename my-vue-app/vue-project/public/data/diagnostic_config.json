@@ -1,391 +1,493 @@
 {
   "category_weights": {
     "skill": 1.1,
-    "motivation": 1.3,
-    "environment": 1.4,
-    "personality": 1.7
+    "interest": 1.5,
+    "priority": 1.7,
+    "balance": 1.2
   },
   "threshold": {
     "recommend_top_n": 3
   },
   "questions": [
-    {
-      "options": [
-        {
-          "label": "a",
-          "text": "海外や異文化でも臆せず行動できる",
-          "element": "変化耐性",
-          "category": "environment",
-          "professions": [
-            "ワーホリ",
-            "起業家",
-            "インフルエンサー"
-          ]
-        },
-        {
-          "label": "b",
-          "text": "常に同じ場所で安定したい",
-          "element": "安定志向",
-          "category": "motivation",
-          "professions": [
-            "公認会計士",
-            "建設業",
-            "プログラマー"
-          ]
-        },
-        {
-          "label": "c",
-          "text": "事前に情報を集めてから動くのが安心",
-          "element": "慎重計画",
-          "category": "motivation",
-          "professions": [
-            "公認会計士",
-            "プログラマー",
-            "難関大進学"
-          ]
-        },
-        {
-          "label": "d",
-          "text": "誰かの指示があれば動ける",
-          "element": "指示順守",
-          "category": "personality",
-          "professions": [
-            "建設業",
-            "ホスト",
-            "キャバ嬢"
-          ]
-        }
-      ],
-      "id": "1",
-      "text": "行動活性化システム"
-    },
-    {
-      "options": [
-        {
-          "label": "a",
-          "text": "投資や統計分析にワクワクする",
-          "element": "数量分析",
-          "category": "skill",
-          "professions": [
-            "デイトレーダー",
-            "公認会計士",
-            "起業家"
-          ]
-        },
-        {
-          "label": "b",
-          "text": "ロジックを組み立てるのが好き",
-          "element": "論理的思考",
-          "category": "skill",
-          "professions": [
-            "プログラマー",
-            "難関大進学"
-          ]
-        },
-        {
-          "label": "c",
-          "text": "家計簿を毎日つけるほどマメ",
-          "element": "正確記録",
-          "category": "skill",
-          "professions": [
-            "公認会計士",
-            "難関大進学"
-          ]
-        },
-        {
-          "label": "d",
-          "text": "人との会話のほうが楽しい",
-          "element": "対人コミュ",
-          "category": "personality",
-          "professions": [
-            "ホスト",
-            "キャバ嬢",
-            "インフルエンサー"
-          ]
-        }
-      ],
-      "id": "2",
-      "text": "認知的反省性"
-    },
-    {
-      "options": [
-        {
-          "label": "a",
-          "text": "すぐに試作して人に見せたい",
-          "element": "俊敏実行",
-          "category": "motivation",
-          "professions": [
-            "起業家",
-            "プログラマー",
-            "インフルエンサー"
-          ]
-        },
-        {
-          "label": "b",
-          "text": "堅実に計画を練ってから動きたい",
-          "element": "綿密計画",
-          "category": "motivation",
-          "professions": [
-            "公認会計士",
-            "建設業",
-            "難関大進学"
-          ]
-        },
-        {
-          "label": "c",
-          "text": "形よりも安定収入が大事",
-          "element": "リスク回避",
-          "category": "motivation",
-          "professions": [
-            "建設業",
-            "公認会計士"
-          ]
-        },
-        {
-          "label": "d",
-          "text": "人を巻き込んで盛り上げるほうが好き",
-          "element": "巻き込み力",
-          "category": "personality",
-          "professions": [
-            "ホスト",
-            "キャバ嬢",
-            "起業家"
-          ]
-        }
-      ],
-      "id": "3",
-      "text": "規制焦点"
-    },
-    {
-      "options": [
-        {
-          "label": "a",
-          "text": "すぐ次の挑戦を考える",
-          "element": "レジリエンス高",
-          "category": "personality",
-          "professions": [
-            "起業家",
-            "デイトレーダー",
-            "インフルエンサー",
-            "プログラマー"
-          ]
-        },
-        {
-          "label": "b",
-          "text": "しばらく反省してから再スタート",
-          "element": "粘り強さ",
-          "category": "personality",
-          "professions": [
-            "公認会計士",
-            "建設業",
-            "難関大進学"
-          ]
-        },
-        {
-          "label": "c",
-          "text": "一人で思い悩むことが多い",
-          "element": "内省型",
-          "category": "personality",
-          "professions": [
-            "プログラマー",
-            "難関大進学"
-          ]
-        },
-        {
-          "label": "d",
-          "text": "仲間に励まされれば復活できる",
-          "element": "社交依存",
-          "category": "personality",
-          "professions": [
-            "ワーホリ",
-            "ホスト",
-            "キャバ嬢"
-          ]
-        }
-      ],
-      "id": "4",
-      "text": "ブリーフ・レジリエンス"
-    },
-    {
-      "options": [
-        {
-          "label": "a",
-          "text": "目立つのが好き",
-          "element": "自己演出",
-          "category": "personality",
-          "professions": [
-            "インフルエンサー",
-            "ホスト",
-            "キャバ嬢"
-          ]
-        },
-        {
-          "label": "b",
-          "text": "場を和ませるために盛り上げる",
-          "element": "場づくり",
-          "category": "personality",
-          "professions": [
-            "ワーホリ",
-            "ホスト",
-            "キャバ嬢"
-          ]
-        },
-        {
-          "label": "c",
-          "text": "人前は緊張するので苦手",
-          "element": "対人回避",
-          "category": "personality",
-          "professions": [
-            "公認会計士",
-            "プログラマー",
-            "デイトレーダー",
-            "難関大進学"
-          ]
-        },
-        {
-          "label": "d",
-          "text": "堂々と講義・プレゼンできる",
-          "element": "公的発信",
-          "category": "personality",
-          "professions": [
-            "起業家",
-            "公認会計士",
-            "難関大進学"
-          ]
-        }
-      ],
-      "id": "5",
-      "text": "パブリック・スピーキング不安"
-    },
-    {
-      "options": [
-        {
-          "label": "a",
-          "text": "まず自分で解決策を見つけて動く",
-          "element": "自主解決",
-          "category": "motivation",
-          "professions": ["起業家", "プログラマー", "ワーホリ", "デイトレーダー"]
-        },
-        {
-          "label": "b",
-          "text": "上司や同僚にすぐ相談する",
-          "element": "相談依存",
-          "category": "personality",
-          "professions": ["建設業", "ホスト", "キャバ嬢"]
-        },
-        {
-          "label": "c",
-          "text": "状況を分析してから手順を組み立てる",
-          "element": "分析計画",
-          "category": "skill",
-          "professions": ["公認会計士", "プログラマー", "難関大進学"]
-        },
-        {
-          "label": "d",
-          "text": "チームで協力して乗り越える",
-          "element": "協調作業",
-          "category": "personality",
-          "professions": ["ワーホリ", "ホスト", "キャバ嬢", "建設業"]
-        }
-      ],
-      "id": "6",
-      "text": "コーピング・インベントリー"
-    },
-    {
-      "options": [
-        {
-          "label": "a",
-          "text": "高所でも平気で作業できる",
-          "element": "高所作業",
-          "category": "environment",
-          "professions": [
-            "建設業"
-          ]
-        },
-        {
-          "label": "b",
-          "text": "筋トレ・運動は苦にならない",
-          "element": "一般体力",
-          "category": "environment",
-          "professions": [
-            "ワーホリ",
-            "ホスト",
-            "キャバ嬢"
-          ]
-        },
-        {
-          "label": "c",
-          "text": "長時間座って作業するほうが得意",
-          "element": "デスク耐性",
-          "category": "environment",
-          "professions": [
-            "プログラマー",
-            "公認会計士",
-            "デイトレーダー"
-          ]
-        },
-        {
-          "label": "d",
-          "text": "接客で夜遅くまで働いても平気",
-          "element": "夜勤適応",
-          "category": "environment",
-          "professions": [
-            "ホスト",
-            "キャバ嬢",
-            "インフルエンサー"
-          ]
-        }
-      ],
-      "id": "7",
-      "text": "運動自己効力感"
-    },
-    {
-      "options": [
-        {
-          "label": "a",
-          "text": "最新のガジェットはすぐ手に入れる",
-          "element": "技術トレンド嗜好",
-          "category": "motivation",
-          "professions": [
-            "プログラマー",
-            "インフルエンサー"
-          ]
-        },
-        {
-          "label": "b",
-          "text": "ファッション・SNSで情報発信する",
-          "element": "流行発信",
-          "category": "motivation",
-          "professions": [
-            "インフルエンサー",
-            "ホスト",
-            "キャバ嬢"
-          ]
-        },
-        {
-          "label": "c",
-          "text": "流行はあまり気にしない",
-          "element": "安定・保守",
-          "category": "motivation",
-          "professions": [
-            "公認会計士",
-            "建設業"
-          ]
-        },
-        {
-          "label": "d",
-          "text": "専門書や論文を深掘りしたい",
-          "element": "深耕学習",
-          "category": "motivation",
-          "professions": [
-            "難関大進学",
-            "プログラマー",
-            "公認会計士"
-          ]
-        }
-      ],
-      "id": "8",
-      "text": "ファッション・インボルブメント"
-    }
-  ]
+  {
+    "options": [
+      {
+        "label": "a",
+        "text": "パズルやゲームのように、論理的に考えて答えを見つけること",
+        "category": "interest",
+        "professions": ["プログラマー", "公認会計士", "難関大進学"]
+      },
+      {
+        "label": "b",
+        "text": "自分のアイデアや作品で、人を驚かせたり楽しませたりすること",
+        "category": "interest",
+        "professions": ["インフルエンサー", "起業家"]
+      },
+      {
+        "label": "c",
+        "text": "手や体を動かして、実際に何かを作り上げたり、修理したりすること",
+        "category": "interest",
+        "professions": ["建設業", "プログラマー"]
+      },
+      {
+        "label": "d",
+        "text": "たくさんの人とワイワイおしゃべりしたり、人の相談に乗ること",
+        "category": "interest",
+        "professions": ["ホスト", "キャバ嬢"]
+      }
+    ],
+    "id": "1",
+    "text": "どんな活動をしている時が、一番「楽しい！」「夢中になれる！」と感じる？"
+  },
+  {
+    "options": [
+      {
+        "label": "a",
+        "text": "じっくり一人で集中して、難しい課題を完璧に仕上げたい",
+        "category": "interest",
+        "professions": ["プログラマー", "公認会計士", "難関大進学"]
+      },
+      {
+        "label": "b",
+        "text": "新しいことにどんどん挑戦して、大きな成果やスリルを味わいたい",
+        "category": "interest",
+        "professions": ["デイトレーダー", "起業家"]
+      },
+      {
+        "label": "c",
+        "text": "チームのみんなと協力して、何か大きな目標を達成したい",
+        "category": "interest",
+        "professions": ["建設業", "起業家"]
+      },
+      {
+        "label": "d",
+        "text": "自分の発信や行動で、たくさんの人に影響を与えたり、注目されたい",
+        "category": "interest",
+        "professions": ["インフルエンサー", "ホスト", "キャバ嬢"]
+      }
+    ],
+    "id": "2",
+    "text": "何かをやり遂げた時、どんな風に「やりがい」を感じたい？"
+  },
+  {
+    "options": [
+      {
+        "label": "a",
+        "text": "最新のニュースや流行をいち早くキャッチして、友達に教えるのが好き",
+        "category": "interest",
+        "professions": ["インフルエンサー", "起業家"]
+      },
+      {
+        "label": "b",
+        "text": "お金の動きや経済のニュースを見て、これからどうなるか予想するのが面白い",
+        "category": "interest",
+        "professions": ["デイトレーダー", "公認会計士"]
+      },
+      {
+        "label": "c",
+        "text": "難しい専門書を読んだり、マニアックな知識をとことん調べるのが好き",
+        "category": "interest",
+        "professions": ["難関大進学", "プログラマー", "公認会計士"]
+      },
+      {
+        "label": "d",
+        "text": "イベントを企画したり、人を集めて何かをするのが得意",
+        "category": "interest",
+        "professions": ["ホスト", "キャバ嬢", "起業家", "建設業"]
+      }
+    ],
+    "id": "3",
+    "text": "学校の勉強以外で、どんな情報集めや活動に熱中しやすい？"
+  },
+  {
+    "options": [
+      {
+        "label": "a",
+        "text": "新しい技術や発明で、世の中がガラッと変わる瞬間に立ち会いたい",
+        "category": "interest",
+        "professions": ["プログラマー", "起業家", "インフルエンサー"]
+      },
+      {
+        "label": "b",
+        "text": "誰かの心を動かす物語や、感動的なパフォーマンスに触れたい",
+        "category": "interest",
+        "professions": ["インフルエンサー", "ホスト", "キャバ嬢"]
+      },
+      {
+        "label": "c",
+        "text": "大きな建物や施設が完成して、街の景色が変わっていくのを見たい",
+        "category": "interest",
+        "professions": ["建設業"]
+      },
+      {
+        "label": "d",
+        "text": "数字やデータから社会の課題を見つけ出し、それを解決する方法を考えたい",
+        "category": "interest",
+        "professions": ["公認会計士", "難関大進学", "デイトレーダー"]
+      }
+    ],
+    "id": "4",
+    "text": "世の中で「すごい！」「見てみたい！」と強く思うのはどんなこと？"
+  },
+  {
+    "options": [
+      {
+        "label": "a",
+        "text": "物事を順序立てて、計画的にコツコツ進めるのが得意",
+        "category": "skill",
+        "professions": ["プログラマー", "公認会計士", "難関大進学"]
+      },
+      {
+        "label": "b",
+        "text": "みんなの前でハキハキと話したり、自分の考えを伝えるのがうまい",
+        "category": "skill",
+        "professions": ["インフルエンサー", "ホスト", "キャバ嬢", "起業家"]
+      },
+      {
+        "label": "c",
+        "text": "手先が器用だったり、体力には自信がある方だ",
+        "category": "skill",
+        "professions": ["建設業", "プログラマー"]
+      },
+      {
+        "label": "d",
+        "text": "場の空気を読んで、素早く判断し、思い切って行動できる",
+        "category": "skill",
+        "professions": ["デイトレーダー", "起業家", "ホスト"]
+      }
+    ],
+    "id": "5",
+    "text": "あなたの得意なことや、周りからよく褒められる能力は？"
+  },
+  {
+    "options": [
+      {
+        "label": "a",
+        "text": "一人で黙々と集中して、質の高いものを作り上げるのが好き",
+        "category": "skill",
+        "professions": ["プログラマー", "難関大進学"]
+      },
+      {
+        "label": "b",
+        "text": "リーダーとして皆をまとめ、目標に向かって引っ張っていくのが得意",
+        "category": "skill",
+        "professions": ["起業家", "建設業"]
+      },
+      {
+        "label": "c",
+        "text": "周りの人をサポートしたり、チームがうまくいくように気を配るのが得意",
+        "category": "skill",
+        "professions": ["公認会計士", "建設業"]
+      },
+      {
+        "label": "d",
+        "text": "初対面の人とでもすぐに打ち解けて、会話を盛り上げるのが得意",
+        "category": "skill",
+        "professions": ["ホスト", "キャバ嬢", "インフルエンサー"]
+      }
+    ],
+    "id": "6",
+    "text": "グループで何かをするとき、あなたはどんな役割が得意？"
+  },
+  {
+    "options": [
+      {
+        "label": "a",
+        "text": "じっくり原因を分析し、確実な解決方法を見つけ出す",
+        "category": "skill",
+        "professions": ["プログラマー", "公認会計士", "難関大進学"]
+      },
+      {
+        "label": "b",
+        "text": "とにかく行動！試行錯誤しながら、体当たりで解決策を探す",
+        "category": "skill",
+        "professions": ["起業家", "デイトレーダー", "建設業"]
+      },
+      {
+        "label": "c",
+        "text": "周りの人に相談して、色々な意見や協力を集めて解決する",
+        "category": "skill",
+        "professions": ["起業家", "建設業", "インフルエンサー"]
+      },
+      {
+        "label": "d",
+        "text": "直感を信じて、大胆なアイデアやひらめきで状況を打開する",
+        "category": "skill",
+        "professions": ["デイトレーダー", "インフルエンサー", "ホスト"]
+      }
+    ],
+    "id": "7",
+    "text": "初めての難しい問題にぶつかった時、あなたの解決スタイルは？"
+  },
+  {
+    "options": [
+      {
+        "label": "a",
+        "text": "変化はワクワクする！新しい情報ややり方をどんどん取り入れたい",
+        "category": "skill",
+        "professions": ["プログラマー", "インフルエンサー", "起業家", "デイトレーダー"]
+      },
+      {
+        "label": "b",
+        "text": "あまり変わらない、安定した環境でじっくり物事に取り組みたい",
+        "category": "skill",
+        "professions": ["公認会計士", "難関大進学"]
+      },
+      {
+        "label": "c",
+        "text": "変化の波に乗って、新しいチャンスを掴み取りたい",
+        "category": "skill",
+        "professions": ["起業家", "デイトレーダー", "インフルエンサー"]
+      },
+      {
+        "label": "d",
+        "text": "現場の状況に合わせて、臨機応変に対応していくのが得意だ",
+        "category": "skill",
+        "professions": ["建設業", "ホスト", "キャバ嬢"]
+      }
+    ],
+    "id": "8",
+    "text": "周りの状況がどんどん変わっていくことについて、どう思う？"
+  },
+  {
+    "options": [
+      {
+        "label": "a",
+        "text": "専門的な知識やスキルを身につけて、その道のプロとして認められたい",
+        "category": "priority",
+        "professions": ["公認会計士", "プログラマー", "難関大進学"]
+      },
+      {
+        "label": "b",
+        "text": "自分の力で大きな成功を掴んで、経済的に豊かになりたい",
+        "category": "priority",
+        "professions": ["デイトレーダー", "起業家", "ホスト", "キャバ嬢"]
+      },
+      {
+        "label": "c",
+        "text": "自分の仕事で誰かを助けたり、社会の役に立っていると実感したい",
+        "category": "priority",
+        "professions": ["建設業", "公認会計士", "プログラマー"]
+      },
+      {
+        "label": "d",
+        "text": "たくさんの人から注目されたり、影響力のある存在になりたい",
+        "category": "priority",
+        "professions": ["インフルエンサー", "起業家", "ホスト"]
+      }
+    ],
+    "id": "9",
+    "text": "将来、仕事を通じて一番「こうなりたい！」と思う姿は？"
+  },
+  {
+    "options": [
+      {
+        "label": "a",
+        "text": "静かで、自分のペースで黙々と作業に集中できる環境",
+        "category": "priority",
+        "professions": ["プログラマー", "難関大進学"]
+      },
+      {
+        "label": "b",
+        "text": "いつも新しい刺激があって、活気にあふれる華やかな環境",
+        "category": "priority",
+        "professions": ["ホスト", "キャバ嬢", "インフルエンサー"]
+      },
+      {
+        "label": "c",
+        "text": "チームみんなでワイワイと、一体感を持って働ける環境",
+        "category": "priority",
+        "professions": ["建設業", "起業家"]
+      },
+      {
+        "label": "d",
+        "text": "実力が正当に評価されて、結果を出せばどんどん上を目指せる環境",
+        "category": "priority",
+        "professions": ["デイトレーダー", "起業家", "公認会計士"]
+      }
+    ],
+    "id": "10",
+    "text": "働くなら、どんな雰囲気や環境が理想？"
+  },
+  {
+    "options": [
+      {
+        "label": "a",
+        "text": "難しい知識や技術を極めて、「スゴイ！」と尊敬されること",
+        "category": "priority",
+        "professions": ["難関大進学", "プログラマー", "公認会計士"]
+      },
+      {
+        "label": "b",
+        "text": "自分のアイデアや力で、世の中に新しい価値を生み出すこと",
+        "category": "priority",
+        "professions": ["起業家", "インフルエンサー"]
+      },
+      {
+        "label": "c",
+        "text": "とにかくお金をたくさん稼いで、自由な生活を手に入れること",
+        "category": "priority",
+        "professions": ["デイトレーダー", "ホスト", "キャバ嬢"]
+      },
+      {
+        "label": "d",
+        "text": "みんなが使う大きな建物や、便利な社会の仕組みを作ること",
+        "category": "priority",
+        "professions": ["建設業", "プログラマー"]
+      }
+    ],
+    "id": "11",
+    "text": "あなたにとって、仕事での「最高の成功」ってどんなイメージ？"
+  },
+  {
+    "options": [
+      {
+        "label": "a",
+        "text": "なるべく安全第一！安定した道を着実に進みたい",
+        "category": "priority",
+        "professions": ["公認会計士", "難関大進学"]
+      },
+      {
+        "label": "b",
+        "text": "チャンスがあるなら、よく考えて計算した上で挑戦したい",
+        "category": "priority",
+        "professions": ["プログラマー", "デイトレーダー", "起業家"]
+      },
+      {
+        "label": "c",
+        "text": "大きな夢のためなら、失敗を恐れず大胆にチャレンジしたい！",
+        "category": "priority",
+        "professions": ["起業家", "デイトレーダー", "インフルエンサー"]
+      },
+      {
+        "label": "d",
+        "text": "仲間と一緒なら心強い！チームで困難なことにも立ち向かいたい",
+        "category": "priority",
+        "professions": ["建設業", "起業家"]
+      }
+    ],
+    "id": "12",
+    "text": "「リスクを取る（危ない橋を渡るかも）」ことについて、どう考える？"
+  },
+  {
+    "options": [
+      {
+        "label": "a",
+        "text": "家やカフェなど、好きな場所で好きな時間に働きたい",
+        "category": "balance",
+        "professions": ["プログラマー", "インフルエンサー", "起業家", "デイトレーダー"]
+      },
+      {
+        "label": "b",
+        "text": "学校みたいに、決まった時間に働いて、休日はしっかり休みたい",
+        "category": "balance",
+        "professions": ["公認会計士", "建設業", "難関大進学"]
+      },
+      {
+        "label": "c",
+        "text": "夜に活動して、昼間は自分の好きなことに時間を使いたい",
+        "category": "balance",
+        "professions": ["ホスト", "キャバ嬢"]
+      },
+      {
+        "label": "d",
+        "text": "忙しい時期はガッツリ働き、一段落したら長期休暇でリフレッシュしたい",
+        "category": "balance",
+        "professions": ["プログラマー", "建設業", "起業家"]
+      }
+    ],
+    "id": "13",
+    "text": "どんな働き方や時間の使い方が自分に合ってると思う？"
+  },
+  {
+    "options": [
+      {
+        "label": "a",
+        "text": "仕事と遊びの時間はきっちり分けて、どっちも充実させたい",
+        "category": "balance",
+        "professions": ["公認会計士", "建設業", "難関大進学"]
+      },
+      {
+        "label": "b",
+        "text": "夢中になれる仕事なら、プライベートの時間が多少減っても構わない",
+        "category": "balance",
+        "professions": ["起業家", "プログラマー", "デイトレーダー"]
+      },
+      {
+        "label": "c",
+        "text": "好きなことなら仕事も趣味も一緒！常にそのことに関わっていたい",
+        "category": "balance",
+        "professions": ["インフルエンサー", "ホスト", "キャバ嬢"]
+      },
+      {
+        "label": "d",
+        "text": "健康が一番大事！無理せず、規則正しい生活を送りたい",
+        "category": "balance",
+        "professions": ["難関大進学", "建設業"]
+      }
+    ],
+    "id": "14",
+    "text": "仕事とプライベート（自分の時間）、どんなバランスが理想？"
+  },
+  {
+    "options": [
+      {
+        "label": "a",
+        "text": "毎月決まったお給料で、安定した生活を送りたい",
+        "category": "balance",
+        "professions": ["公認会計士", "建設業", "難関大進学"]
+      },
+      {
+        "label": "b",
+        "text": "頑張った分だけお給料が増える！実力で高収入を狙いたい",
+        "category": "balance",
+        "professions": ["デイトレーダー", "起業家", "ホスト", "キャバ嬢", "インフルエンサー"]
+      },
+      {
+        "label": "c",
+        "text": "お給料の額より、「やっててよかった！」と思えるやりがいが大切",
+        "category": "balance",
+        "professions": ["建設業", "インフルエンサー", "プログラマー"]
+      },
+      {
+        "label": "d",
+        "text": "将来たくさん稼ぐために、今はスキルアップや経験を優先したい",
+        "category": "balance",
+        "professions": ["難関大進学", "プログラマー", "起業家"]
+      }
+    ],
+    "id": "15",
+    "text": "お給料やお金について、どう考えてる？"
+  },
+  {
+    "options": [
+      {
+        "label": "a",
+        "text": "あまりプレッシャーがない方が、自分の力を出しやすい",
+        "category": "balance",
+        "professions": ["プログラマー", "難関大進学"]
+      },
+      {
+        "label": "b",
+        "text": "「絶対成功させる！」という強いプレッシャーでこそ燃えるタイプ",
+        "category": "balance",
+        "professions": ["デイトレーダー", "起業家", "ホスト", "キャバ嬢"]
+      },
+      {
+        "label": "c",
+        "text": "周りからの「頑張って！」という応援や期待が力になる",
+        "category": "balance",
+        "professions": ["インフルエンサー", "ホスト", "キャバ嬢"]
+      },
+      {
+        "label": "d",
+        "text": "大変な時は、みんなで励まし合って乗り越えたい",
+        "category": "balance",
+        "professions": ["建設業", "公認会計士", "起業家"]
+      }
+    ],
+    "id": "16",
+    "text": "プレッシャーや大変なことと、どう向き合いたい？"
+  }
+]
 }

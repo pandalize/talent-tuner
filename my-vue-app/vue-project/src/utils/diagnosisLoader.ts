@@ -146,13 +146,18 @@ export function calculateProfessionScores(
         professionScores[profession] = {
           name: profession,
           score: 0,
-          categories: {}
+          categories: {
+            skill: 1.0,
+            interest: 1.0,
+            priority: 1.0,
+            balance: 1.0
+          }
         };
       }
       
       // カテゴリースコアを初期化（存在しない場合）
       if (!professionScores[profession].categories[category]) {
-        professionScores[profession].categories[category] = 0;
+        professionScores[profession].categories[category] = 1.0;
       }
       
       // スコアを加算（カテゴリー別スコアにも重みを適用）
