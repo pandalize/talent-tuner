@@ -27,11 +27,28 @@ export interface DiagnosticConfig {
   questions: Question[];
 }
 
+// 職業データの定義
+export interface ProfessionData {
+  annualIncome: string;
+  jobDetails: string;
+  comment: string;
+  traits: string[];
+}
+
 // 職業スコアの定義
 export interface ProfessionScore {
   name: string;
   score: number;
   categories: Record<string, number>;
+  annualIncome?: string;
+  jobDetails?: string;
+  comment?: string;
+  traits?: string[];
+}
+
+// 職業データベースの定義
+export interface ProfessionDatabase {
+  professions: Record<string, ProfessionData>;
 }
 
 /**
@@ -68,14 +85,40 @@ export async function loadDiagnosticConfig(): Promise<DiagnosticConfig> {
 }
 
 /**
+ * 職業データベースを読み込む
+ * @returns Promise<ProfessionDatabase> 読み込まれた職業データ
+ */
+export async function loadProfessionDatabase(): Promise<ProfessionDatabase> {
+  try {
+    // JSONファイルを取得
+    const response = await fetch('/data/professions.json');
+    if (!response.ok) {
+      throw new Error(`職業データファイルの読み込みに失敗しました: ${response.statusText}`);
+    }
+
+    // JSONとして読み込み
+    const database = await response.json();
+    return database as ProfessionDatabase;
+  } catch (error) {
+    console.error('職業データの読み込み中にエラーが発生しました:', error);
+    // デフォルト値を返す
+    return {
+      professions: {}
+    };
+  }
+}
+
+/**
  * 回答に基づいて職業スコアを計算する
  * @param config 診断設定
  * @param answers 回答（質問IDと選択肢ラベルのマップ）
+ * @param professionDatabase 職業データベース（オプション）
  * @returns ProfessionScore[] 職業スコアの配列（スコア順）
  */
 export function calculateProfessionScores(
   config: DiagnosticConfig,
-  answers: Record<string, string>
+  answers: Record<string, string>,
+  professionDatabase?: ProfessionDatabase
 ): ProfessionScore[] {
   // 職業ごとのスコアを初期化
   const professionScores: Record<string, ProfessionScore> = {};
@@ -118,8 +161,23 @@ export function calculateProfessionScores(
     });
   });
   
-  // スコア順にソート
-  return Object.values(professionScores).sort((a, b) => b.score - a.score);
+  // スコア順にソートし、職業データを追加
+  const sortedScores = Object.values(professionScores).sort((a, b) => b.score - a.score);
+  
+  // 職業データベースが提供されている場合、追加情報を設定
+  if (professionDatabase) {
+    sortedScores.forEach(profession => {
+      const professionData = professionDatabase.professions[profession.name];
+      if (professionData) {
+        profession.annualIncome = professionData.annualIncome;
+        profession.jobDetails = professionData.jobDetails;
+        profession.comment = professionData.comment;
+        profession.traits = professionData.traits;
+      }
+    });
+  }
+  
+  return sortedScores;
 }
 
 /**

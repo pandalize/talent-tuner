@@ -159,7 +159,7 @@ h1 {
   nav {
     gap: 0.5rem;
     padding-bottom: 0;
-    display: flex;
+    /* display: flex; */
 
   }
   

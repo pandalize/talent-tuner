@@ -30,7 +30,7 @@
         </div>
         
         <div class="characteristics">
-          <h3>この職業に向いている人の特徴:</h3>
+          <h3>この職業に向いている人の特徴：</h3>
           <ul>
             <li v-for="(trait, index) in getProfessionTraits(selectedProfessionValue)" :key="index">
               {{ trait }}
@@ -44,6 +44,7 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
+import { loadProfessionDatabase, type ProfessionDatabase } from '../utils/diagnosisLoader';
 
 const professions = [
   { id: 1, label: 'プログラマー', value: 'プログラマー' },
@@ -61,12 +62,18 @@ const professions = [
 const selectedProfessionValue = ref('プログラマー');
 const loading = ref(true);
 const error = ref<string | null>(null);
+const professionDatabase = ref<ProfessionDatabase | null>(null);
 
 // 設定を読み込む
 async function loadProfessionData() {
   try {
     loading.value = true;
     error.value = null;
+    
+    // 職業データベースを読み込み
+    const data = await loadProfessionDatabase();
+    professionDatabase.value = data;
+    
     loading.value = false;
   } catch (err) {
     console.error('設定の読み込みに失敗しました:', err);
@@ -77,86 +84,22 @@ async function loadProfessionData() {
 
 // 職業に対するコメントを取得
 function getProfessionComment(professionName: string): string {
-  const comments: Record<string, string> = {
-    'プログラマー': 'コードを書くのが好きなあなたは、社会性が低くても稼げる職業に向いています。人間関係のストレスが少ない環境で、論理的思考を活かせるでしょう。',
-    '公認会計士': '細かい数字を扱うのが得意なあなたは、堅実で地味な仕事に向いています。安定志向で、リスクを取るのが苦手な性格が表れています。',
-    '建設業': '指示に従って黙々と作業するのが得意なあなたは、体力仕事に向いています。知的な仕事より、手に職をつけるタイプでしょう。',
-    'デイトレーダー': 'リスクを恐れず即断即決できるあなたは、ギャンブル的な要素のある仕事に向いています。ただし、失敗したときのメンタルの強さも必要です。',
-    '起業家': '自分の考えを形にしたいあなたは、リスクを取って挑戦する起業家タイプです。ただし、成功率は低いので覚悟が必要です。',
-    'ワーホリ': '計画性がなく、その場の勢いで行動するあなたは、将来のキャリアよりも今を楽しむタイプです。長期的な視点が欠けていますが、人生経験は豊かになるでしょう。',
-    'ホスト': '人と話すのが好きで、自分を演出するのが得意なあなたは、見た目と話術で稼ぐ仕事に向いています。深い専門知識は必要ありません。',
-    'キャバ嬢': '人の機嫌を取るのが上手で、自分を魅力的に見せられるあなたは、感情労働で高収入を得られる仕事に向いています。',
-    'インフルエンサー': '自己アピールが得意で、流行に敏感なあなたは、SNSでの発信力を活かせる仕事に向いています。ただし、安定性には欠けるでしょう。',
-    '難関大進学': '地道な努力ができ、計画的に物事を進められるあなたは、学術的な道に向いています。ただし、社会に出てからのギャップに注意が必要です。'
-  };
-  return comments[professionName] || 'この職業に関する詳細情報はまだ登録されていません。';
+  if (!professionDatabase.value) {
+    return 'この職業に関する詳細情報はまだ登録されていません。';
+  }
+  
+  const professionData = professionDatabase.value.professions[professionName];
+  return professionData?.comment || 'この職業に関する詳細情報はまだ登録されていません。';
 }
 
 // 職業の特徴を取得
 function getProfessionTraits(professionName: string): string[] {
-  const traits: Record<string, string[]> = {
-    'プログラマー': [
-      '論理的思考が得意',
-      '長時間座って作業できる集中力がある',
-      '一人で黙々と作業するのが苦にならない',
-      '新しい技術に興味がある'
-    ],
-    '公認会計士': [
-      '細かい数字を正確に扱える',
-      '計画的に物事を進められる',
-      '安定志向で堅実',
-      'コンプライアンスを重視する'
-    ],
-    '建設業': [
-      '体力がある',
-      '指示に従って作業できる',
-      '高所作業に抵抗がない',
-      '手に職をつけたい'
-    ],
-    'デイトレーダー': [
-      'リスクを恐れない',
-      '即断即決できる',
-      'ストレス耐性が高い',
-      '数字やチャートを分析するのが得意'
-    ],
-    '起業家': [
-      '自分の考えを形にしたい',
-      'リスクを取ることを恐れない',
-      'リーダーシップがある',
-      '新しいことに挑戦するのが好き'
-    ],
-    'ワーホリ': [
-      '海外や異文化に興味がある',
-      '計画よりも行動が先',
-      '適応力がある',
-      '今を楽しみたい'
-    ],
-    'ホスト': [
-      '人と話すのが好き',
-      '自分を演出するのが得意',
-      '夜型の生活リズムに適応できる',
-      '感情労働が苦にならない'
-    ],
-    'キャバ嬢': [
-      '人の機嫌を取るのが上手',
-      '自分を魅力的に見せられる',
-      '夜型の生活リズムに適応できる',
-      '感情労働が苦にならない'
-    ],
-    'インフルエンサー': [
-      '自己アピールが得意',
-      '流行に敏感',
-      'SNSでの発信力がある',
-      '自分をブランド化できる'
-    ],
-    '難関大進学': [
-      '地道な努力ができる',
-      '計画的に物事を進められる',
-      '学術的な内容に興味がある',
-      '長期的な目標に向かって頑張れる'
-    ]
-  };
-  return traits[professionName] || ['情報がありません'];
+  if (!professionDatabase.value) {
+    return ['情報がありません'];
+  }
+  
+  const professionData = professionDatabase.value.professions[professionName];
+  return professionData?.traits || ['情報がありません'];
 }
 
 // コンポーネントがマウントされたときに設定を読み込む
@@ -181,7 +124,7 @@ onMounted(() => {
   max-width: 1000px;
   background-color: var(--background-white);
   border-radius: 30px;
-  padding: 3rem;
+  padding: 2rem;
   box-shadow: 0 15px 50px rgba(0, 0, 0, 0.08);
   box-sizing: border-box;
   overflow-x: hidden;

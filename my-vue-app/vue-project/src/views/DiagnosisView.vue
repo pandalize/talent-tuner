@@ -1,7 +1,9 @@
 <template>
   <div class="diagnosis-container">
     <div v-if="!showResult" class="welcome-section">
-      <h1 class="diagnosis-welcome" style="white-space: normal; font-size: 1.1rem;">ため職へようこそ!<br>あなたの「思考スタイル」「行動特性」「対処力」「トレンド感度」などを、<br>8つの心理尺度（行動活性化システム尺度/認知的反省性/規制焦点尺度/ブリーフ・レジリエンス尺度/パブリック・スピーキング不安尺度/コーピング・インベントリー/運動自己効力感尺度/ファッション・インボルブメント尺度）をもとに、<br>短時間の質問で多角的に分析。現在の日本における高収入職業データベースから、<br>あなたに最適なキャリアをランキング形式でおすすめします。</h1>
+      <h1 class="diagnosis-welcome" style="white-space: normal; font-size: 1.1rem;">ため職へようこそ!<br>あなたの「思考スタイル」「行動特性」「対処力」「トレンド感度」などを、
+        <br>以下の8つの心理尺度をもとに、短時間の質問で多角的に分析。<br>現在の日本における高収入職業データベースから、<br>あなたに最適なキャリアをランキング形式でおすすめします。
+        <br>1. 行動活性化システム 2. 認知的反省性 3. 規制焦点 4. ブリーフ・レジリエンス <br>5. パブリック・スピーキング不安 6. コーピング・インベントリー 7. 運動自己効力感 8. ファッション・インボルブメント</h1>
     </div>
     <div class="diagnosis-content">
       <div v-if="loading" class="loading-section">
@@ -30,7 +32,7 @@
           </div>
           
           <div class="progress-section">
-            <p>回答済み: {{ Object.keys(answers).length }} / {{ questions.length }}</p>
+            <p>回答済み： {{ Object.keys(answers).length }} / {{ questions.length }}</p>
             <div class="progress-bar">
               <div
                 class="progress-fill"
@@ -50,9 +52,6 @@
         
         <div v-if="showResult" class="result-section">
           <h1>診断結果</h1>
-
-          <!-- 選択UIを削除し、固定で上位3位を表示 -->
-          <p>あなたにおすすめする職業は・・・</p>
 
           <div v-for="(profession, index) in displayedProfessions" :key="profession.name" class="result-box">
             <div class="rank-badge">{{ index + 1 }}位</div>
@@ -79,8 +78,39 @@
               </div>
             </div>
             
+            <!-- 年収範囲の表示 -->
+            <div v-if="profession.annualIncome" class="annual-income">
+              <h4>年収範囲:</h4>
+              <p class="income-value">{{ profession.annualIncome }}</p>
+            </div>
+            
+            <!-- 仕事内容の表示 -->
+            <div v-if="profession.jobDetails" class="job-details">
+              <h4>仕事内容:</h4>
+              <p class="job-description">{{ profession.jobDetails }}</p>
+            </div>
+            
             <div class="profession-comment">
-              <p>{{ getProfessionComment(profession.name) }}</p>
+              <p>{{ profession.comment || 'あなたの特性に合った職業です。自分の強みを活かして頑張りましょう。' }}</p>
+            </div>
+          </div>
+          
+          <!-- 共有機能セクション -->
+          <div class="share-section">
+            <h3 class="share-title">診断結果をシェア</h3>
+            <div class="share-buttons">
+              <button @click="shareToLine" class="share-button line-button">
+                <img src="/image/LINE.png" alt="LINE" class="share-icon line-icon-img">
+                LINEでシェア
+              </button>
+              <button @click="shareToX" class="share-button x-button">
+                <img src="/image/X.png" alt="X" class="share-icon x-icon-img">
+                Xでシェア
+              </button>
+              <button @click="shareToInstagram" class="share-button instagram-button">
+                <img src="/image/Instagram.png" alt="Instagram" class="share-icon instagram-icon-img">
+                Instagramでシェア
+              </button>
             </div>
           </div>
           
@@ -99,15 +129,18 @@ import { ref, onMounted, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import {
   loadDiagnosticConfig,
+  loadProfessionDatabase,
   calculateProfessionScores,
   getTopProfessions,
   type DiagnosticConfig,
   type Question,
-  type ProfessionScore
+  type ProfessionScore,
+  type ProfessionDatabase
 } from '../utils/diagnosisLoader'
 
 const router = useRouter()
 const config = ref<DiagnosticConfig | null>(null)
+const professionDatabase = ref<ProfessionDatabase | null>(null)
 const loading = ref(true)
 const error = ref<string | null>(null)
 const answers = ref<Record<string, string>>({})
@@ -126,7 +159,15 @@ async function loadConfig() {
   try {
     loading.value = true
     error.value = null
-    config.value = await loadDiagnosticConfig()
+    
+    // 診断設定と職業データベースを並行して読み込み
+    const [configData, professionData] = await Promise.all([
+      loadDiagnosticConfig(),
+      loadProfessionDatabase()
+    ])
+    
+    config.value = configData
+    professionDatabase.value = professionData
     loading.value = false
   } catch (err) {
     console.error('設定の読み込みに失敗しました:', err)
@@ -144,7 +185,7 @@ function selectOption(questionId: string, label: string) {
 function calculateResult() {
   if (!config.value) return
   
-  const scores = calculateProfessionScores(config.value, answers.value)
+  const scores = calculateProfessionScores(config.value, answers.value, professionDatabase.value || undefined)
   topProfessions.value = scores
   displayTopN.value = 3 // 常に3位結果を表示
   updateDisplayedProfessions()
@@ -186,22 +227,6 @@ function getCategoryLabel(category: string): string {
   return labels[category] || category
 }
 
-// 職業に対するコメントを取得
-function getProfessionComment(professionName: string): string {
-  const comments: Record<string, string> = {
-    'プログラマー': 'コードを書くのが好きなあなたは、社会性が低くても稼げる職業に向いています。人間関係のストレスが少ない環境で、論理的思考を活かせるでしょう。',
-    '公認会計士': '細かい数字を扱うのが得意なあなたは、堅実で地味な仕事に向いています。安定志向で、リスクを取るのが苦手な性格が表れています。',
-    '建設業': '指示に従って黙々と作業するのが得意なあなたは、体力仕事に向いています。知的な仕事より、手に職をつけるタイプでしょう。',
-    'デイトレーダー': 'リスクを恐れず即断即決できるあなたは、ギャンブル的な要素のある仕事に向いています。ただし、失敗したときのメンタルの強さも必要です。',
-    '起業家': '自分の考えを形にしたいあなたは、リスクを取って挑戦する起業家タイプです。ただし、成功率は低いので覚悟が必要です。',
-    'ワーホリ': '計画性がなく、その場の勢いで行動するあなたは、将来のキャリアよりも今を楽しむタイプです。長期的な視点が欠けていますが、人生経験は豊かになるでしょう。',
-    'ホスト': '人と話すのが好きで、自分を演出するのが得意なあなたは、見た目と話術で稼ぐ仕事に向いています。深い専門知識は必要ありません。',
-    'キャバ嬢': '人の機嫌を取るのが上手で、自分を魅力的に見せられるあなたは、感情労働で高収入を得られる仕事に向いています。',
-    'インフルエンサー': '自己アピールが得意で、流行に敏感なあなたは、SNSでの発信力を活かせる仕事に向いています。ただし、安定性には欠けるでしょう。',
-    '難関大進学': '地道な努力ができ、計画的に物事を進められるあなたは、学術的な道に向いています。ただし、社会に出てからのギャップに注意が必要です。'
-  }
-  return comments[professionName] || 'あなたの特性に合った職業です。自分の強みを活かして頑張りましょう。'
-}
 
 // 診断をリセット
 function resetDiagnosis() {
@@ -216,6 +241,52 @@ function resetDiagnosis() {
 // ホームに戻る
 function goHome() {
   router.push('/')
+}
+
+// 共有用のテキストを生成
+function generateShareText(): string {
+  if (displayedProfessions.value.length === 0) return ''
+  
+  const top3 = displayedProfessions.value.slice(0, 3)
+  const professionNames = top3.map((p, index) => `${index + 1}位: ${p.name}`).join('\n')
+  
+  return `🎯 職業診断結果 🎯\n\n${professionNames}\n\n#職業診断 #適職診断 #キャリア診断\n\n診断はこちら: ${window.location.href}`
+}
+
+// LINEで共有
+function shareToLine() {
+  const text = generateShareText()
+  const encodedText = encodeURIComponent(text)
+  const lineUrl = `https://social-plugins.line.me/lineit/share?url=${encodeURIComponent(window.location.href)}&text=${encodedText}`
+  window.open(lineUrl, '_blank')
+}
+
+// Xで共有
+function shareToX() {
+  const text = generateShareText()
+  const encodedText = encodeURIComponent(text)
+  const twitterUrl = `https://twitter.com/intent/tweet?text=${encodedText}`
+  window.open(twitterUrl, '_blank')
+}
+
+// Instagramで共有（クリップボードにコピー）
+async function shareToInstagram() {
+  const text = generateShareText()
+  
+  try {
+    await navigator.clipboard.writeText(text)
+    alert('📋 共有テキストをクリップボードにコピーしました！\nInstagramアプリを開いて、ストーリーまたは投稿に貼り付けてください。')
+  } catch (err) {
+    console.error('クリップボードへのコピーに失敗しました:', err)
+    // フォールバック: テキストエリアを使用
+    const textArea = document.createElement('textarea')
+    textArea.value = text
+    document.body.appendChild(textArea)
+    textArea.select()
+    document.execCommand('copy')
+    document.body.removeChild(textArea)
+    alert('📋 共有テキストをクリップボードにコピーしました！\nInstagramアプリを開いて、ストーリーまたは投稿に貼り付けてください。')
+  }
 }
 
 // コンポーネントがマウントされたときに設定を読み込む
@@ -247,7 +318,7 @@ onMounted(() => {
   max-width: 1000px;
   background-color: var(--background-white);
   border-radius: 30px;
-  padding: 3rem;
+  padding: 2rem;
   box-shadow: 0 15px 50px rgba(0, 0, 0, 0.08);
   box-sizing: border-box;
   overflow-x: hidden;
@@ -473,10 +544,6 @@ onMounted(() => {
   transition: transform 0.3s ease;
 }
 
-.result-box:hover {
-  transform: translateY(-5px);
-}
-
 .result-box::before {
   content: '';
   position: absolute;
@@ -503,15 +570,15 @@ onMounted(() => {
 }
 
 
-.result-box:nth-child(3) .rank-badge {
+.result-box:nth-child(2) .rank-badge {
   background: linear-gradient(135deg, #FFD700, #FFA500);
 }
 
-.result-box:nth-child(4) .rank-badge {
+.result-box:nth-child(3) .rank-badge {
   background: linear-gradient(135deg, #C0C0C0, #A9A9A9);
 }
 
-.result-box:nth-child(5) .rank-badge {
+.result-box:nth-child(4) .rank-badge {
   background: linear-gradient(135deg, #CD7F32, #B8860B);
 }
 
@@ -656,6 +723,117 @@ onMounted(() => {
   box-shadow: 0 15px 35px rgba(255, 107, 107, 0.4);
 }
 
+/* 共有機能のスタイル */
+.share-section {
+  margin: 3rem 0;
+  padding: 2rem;
+  background-color: #f8f9fa;
+  border-radius: 20px;
+  text-align: center;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+}
+
+.share-title {
+  color: var(--text-dark);
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  font-family: 'Hiragino Sans', sans-serif;
+}
+
+.share-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.share-button {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1rem 1.5rem;
+  border: none;
+  border-radius: 25px;
+  cursor: pointer;
+  /* transition: all 0.3s ease; */
+  font-size: 1rem;
+  font-weight: 600;
+  font-family: 'Hiragino Sans', sans-serif;
+  color: white;
+  min-width: 160px;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.share-button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+}
+
+.share-icon {
+  font-size: 1.2rem;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+}
+
+.line-icon-img, .x-icon-img, .instagram-icon-img {
+  width: 20px;
+  height: 20px;
+  border-radius: 30%;
+  object-fit: cover;
+  background-color: white;
+  box-sizing: border-box;
+}
+
+.line-icon {
+  color: #00B900;
+  font-family: Arial, sans-serif;
+  font-weight: 900;
+}
+
+.x-icon {
+  color: #000000;
+  font-family: Arial, sans-serif;
+  font-weight: 900;
+}
+
+.instagram-icon {
+  color: #E4405F;
+  font-size: 1rem;
+}
+
+/* LINE共有ボタン */
+.line-button {
+  background: linear-gradient(135deg, #00B900, #35f735);
+}
+
+.line-button:hover {
+  background: #00A000;
+}
+
+/* X（旧Twitter）共有ボタン */
+.x-button {
+  background: linear-gradient(135deg, #000000, #9f9e9e);
+}
+
+.x-button:hover {
+  background: #1a1a1a;
+}
+
+/* Instagram共有ボタン */
+.instagram-button {
+  background: linear-gradient(135deg, #E4405F, #f29884);
+}
+
+.instagram-button:hover {
+  background: #D73650;
+}
 
 .diagnosis-welcome {
   color: #333;
@@ -736,6 +914,63 @@ welcome-section {
   .rank-badge {
     top: 10px;
   }
+
+  /* 共有ボタンのモバイル対応 */
+  .share-buttons {
+    flex-direction: column;
+    align-items: center;
+    gap: 0.8rem;
+  }
+
+  .share-button {
+    width: 100%;
+    max-width: 280px;
+    min-width: auto;
+  }
+}
+
+.annual-income {
+  margin: 1.5rem 0;
+  padding: 1rem;
+  background-color: #f8f9fa;
+  border-radius: 10px;
+  border-left: 4px solid var(--main-color);
+}
+
+.annual-income h4 {
+  margin: 0 0 0.5rem 0;
+  color: var(--text-dark);
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.income-value {
+  margin: 0;
+  color: var(--main-color);
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.job-details {
+  margin: 1.5rem 0;
+  padding: 1rem;
+  background-color: #f0f8ff;
+  border-radius: 10px;
+  border-left: 4px solid var(--bright-blue);
+}
+
+.job-details h4 {
+  margin: 0 0 0.5rem 0;
+  color: var(--text-dark);
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.job-description {
+  margin: 0;
+  color: var(--text-dark);
+  line-height: 1.6;
+  font-size: 0.95rem;
 }
 
 /* タブレット向け */
