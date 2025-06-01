@@ -48,13 +48,6 @@
               ← 前の質問に戻る
             </button>
             
-            <button
-              v-if="answers[currentQuestion.id] && currentQuestionIndex < questions.length - 1"
-              @click="goToNextQuestion"
-              class="nav-button next-button"
-            >
-              次の質問へ →
-            </button>
             
             <button
               v-if="answers[currentQuestion.id] && currentQuestionIndex === questions.length - 1"
@@ -206,19 +199,52 @@ async function loadConfig() {
 
 function selectOption(questionId: string, label: string) {
   answers.value[questionId] = label
+  
+  // 500ms後に自動的に次の質問に移動
+  setTimeout(() => {
+    if (currentQuestionIndex.value < questions.value.length - 1) {
+      goToNextQuestion()
+    }
+  }, 500)
 }
 
 function goToNextQuestion() {
   if (currentQuestionIndex.value < questions.value.length - 1) {
     currentQuestionIndex.value++
-    window.scrollTo(0, 0)
+    
+    // 質問2以降では、question-contentの一番上にスクロール
+    if (currentQuestionIndex.value >= 1) {
+      // 少し遅延を入れてDOMの更新を待つ
+      setTimeout(() => {
+        const questionContent = document.querySelector('.question-content')
+        if (questionContent) {
+          questionContent.scrollIntoView({ behavior: 'smooth', block: 'start' })
+        }
+      }, 100)
+    } else {
+      // 最初の質問では通常通りトップにスクロール
+      window.scrollTo(0, 0)
+    }
   }
 }
 
 function goToPreviousQuestion() {
   if (currentQuestionIndex.value > 0) {
     currentQuestionIndex.value--
-    window.scrollTo(0, 0)
+    
+    // 質問2以降では、question-contentの一番上にスクロール
+    if (currentQuestionIndex.value >= 1) {
+      // 少し遅延を入れてDOMの更新を待つ
+      setTimeout(() => {
+        const questionContent = document.querySelector('.question-content')
+        if (questionContent) {
+          questionContent.scrollIntoView({ behavior: 'smooth', block: 'start' })
+        }
+      }, 100)
+    } else {
+      // 最初の質問では通常通りトップにスクロール
+      window.scrollTo(0, 0)
+    }
   }
 }
 
@@ -508,16 +534,6 @@ onMounted(() => {
   box-shadow: 0 8px 20px rgba(108, 117, 125, 0.4);
 }
 
-.next-button {
-  background-color: var(--main-color);
-  color: var(--background-white);
-}
-
-.next-button:hover {
-  background-color: var(--bright-blue);
-  transform: translateY(-3px);
-  box-shadow: 0 8px 20px rgba(67, 147, 221, 0.4);
-}
 
 .calculate-button {
   padding: 1.2rem 3rem;
