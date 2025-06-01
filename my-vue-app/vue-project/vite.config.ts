@@ -9,7 +9,7 @@ export default defineConfig({
   plugins: [
     vue(),
     vueDevTools({
-      launchEditor: 'vscode'
+      launchEditor: 'code'
     }),
   ],
   resolve: {
