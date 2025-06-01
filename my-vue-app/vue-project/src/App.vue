@@ -43,7 +43,7 @@ import { RouterLink, RouterView } from 'vue-router'
 
 .app-header {
   position: relative;
-  width: 100%;
+  width: 70%;
   max-width: 1200px;
   z-index: 10;
   padding-top: 2rem;
@@ -174,7 +174,6 @@ h1 {
 
   h1 {
     font-size: 1.3rem;
-    margin-bottom: 1.5rem;
   }
 }
 
