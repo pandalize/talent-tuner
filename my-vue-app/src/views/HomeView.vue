@@ -16,9 +16,9 @@ function goToDiagnosis() {
   <main>
     <div class="home-container">
       <div class="welcome-section">
-        <h1 class="diagnosis-welcome" style="white-space: normal; font-size: 1.1rem;">
-          ため職へようこそ！<br>「興味」「能力」「性格」「考え方」の4つの観点で、あなたにマッチする職業を短時間で多角的に分析。
-          <br>あなたに最適な高収入職業をランキング形式でおすすめします。
+        <h1 class="diagnosis-welcome" style="white-space: normal; font-size: clamp(6px, 2vw, 20px);">
+          ため職へようこそ！<br>「興味」「能力」「性格」「考え方」の4つの観点で、<br>あなたにマッチする職業を短時間で多角的に分析。
+          <br>あなたに最適な高収入職業を<br>ランキング形式でおすすめします。
         </h1>
       </div>
       <div class="image-container">
@@ -102,7 +102,7 @@ html {
 .btn,
 a.btn,
 button.btn {
-  font-size: 2rem;
+  font-size: clamp(5px, 3vw, 40px);
   font-weight: 700;
   line-height: 1.5;
   position: relative;
@@ -136,14 +136,11 @@ a.btn-border-shadow:before {
   position: absolute;
   top: -6px;
   left: -6px;
-
   width: 100%;
   height: 100%;
-
   content: "";
   -webkit-transition: all 0.3s ease;
   transition: all 0.3s ease;
-
   border: 3px solid #000;
   border-radius: 0.5rem;
 }

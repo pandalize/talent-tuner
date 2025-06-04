@@ -1,7 +1,7 @@
 <template>
   <div class="about">
     <div class="about-content">
-      <h1>君でもどれかには就ける高収入職業</h1>
+      <h1>あなたもどれかには就ける高収入職業</h1>
       
       <div class="profession-selector">
         <button
@@ -123,7 +123,7 @@ onMounted(() => {
   width: 95%;
   max-width: 1000px;
   background-color: var(--background-white);
-  border-radius: 30px;
+  border-radius: 10px;
   padding: 2rem;
   box-shadow: 0 15px 50px rgba(0, 0, 0, 0.08);
   box-sizing: border-box;
@@ -132,12 +132,13 @@ onMounted(() => {
   position: relative;
 }
 
-.about-content p {
+.about-content h1 {
+  color: var(--text-dark);
   text-align: center;
   margin-bottom: 1.5rem;
-  line-height: 1.6;
-  color: var(--text-dark);
-  font-size: 1.3rem;
+  font-size: clamp(15px, 3vw, 30px);
+  font-weight: 600;
+  font-family: 'Hiragino Sans', sans-serif;
 }
 
 .profession-selector {
@@ -252,6 +253,9 @@ h3 {
 .description-content p {
   text-align: justify;
   color: var(--text-dark);
+  font-size: clamp(15px, 2vw, 20px);
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
 }
 
 .characteristics ul {

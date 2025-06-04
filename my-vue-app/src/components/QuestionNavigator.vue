@@ -269,9 +269,9 @@ function getMaxCategoryScore(): number {
 function getCategoryLabel(category: string): string {
   const labels: Record<string, string> = {
     'skill': 'スキル',
-    'motivation': 'モチベーション',
-    'environment': '環境適応',
-    'personality': '性格'
+    'interest': '興味',
+    'priority': '性格',
+    'balance': '考え方'
   }
   return labels[category] || category
 }
@@ -385,7 +385,6 @@ onMounted(() => {
 
 <style scoped>
 .diagnosis-container {
-  width: 100%;
   margin: 0 auto;
   box-sizing: border-box;
   display: flex;
@@ -402,11 +401,10 @@ onMounted(() => {
 }
 
 .diagnosis-content {
-  width: 95%;
+  width: 70%;
   max-width: 1000px;
   background-color: var(--background-white);
-  border-radius: 30px;
-  padding: 2rem;
+  border-radius: 10px;
   box-shadow: 0 15px 50px rgba(0, 0, 0, 0.08);
   box-sizing: border-box;
   border: none;
@@ -452,25 +450,6 @@ onMounted(() => {
   box-shadow: 0 8px 20px rgba(230, 188, 153, 0.4);
 }
 
-.question-section {
-  margin-bottom: 1.5rem;
-  padding-bottom: 1rem;
-  border-bottom: 1px solid #eee;
-}
-
-.question-section h2 {
-  color: var(--text-dark);
-  margin-bottom: 0.5rem;
-}
-
-.question-section p {
-  color: var(--text-dark);
-  margin-bottom: 1rem;
-  word-wrap: break-word;
-  overflow-wrap: break-word;
-  max-width: 100%;
-}
-
 .options {
   display: flex;
   flex-wrap: wrap;
@@ -487,11 +466,9 @@ onMounted(() => {
   border-radius: 10px;
   cursor: pointer;
   transition: all 0.3s ease;
-  font-size: 1rem;
   text-align: left;
   width: calc(50% - 1rem);
   max-width: 400px;
-  min-width: 200px;
   word-wrap: break-word;
   white-space: normal;
   height: auto;
@@ -499,6 +476,7 @@ onMounted(() => {
   color: var(--text-dark);
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
   position: relative;
+  font-size: clamp(5px, 1.5vw, 16px);
   font-weight: 400;
   line-height: 1.4;
 }
@@ -511,23 +489,6 @@ onMounted(() => {
   background-color: #4393dd;
   color: var(--background-white);
   transform: translateY(-3px);
-}
-
-.options button.selected::after {
-  content: '✓';
-  position: absolute;
-  top: 15px;
-  right: 15px;
-  font-size: 14px;
-  color: var(--main-color);
-  background: var(--background-white);
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: bold;
 }
 
 .progress-section {
@@ -553,18 +514,15 @@ onMounted(() => {
 }
 
 .calculate-button {
-  padding: 1.2rem 3rem;
+  padding: 1rem 2rem;
   background-color: var(--orange-beige);
   color: var(--text-dark);
   border: none;
   border-radius: 50px;
   cursor: pointer;
   transition: all 0.3s ease;
-  font-size: 1.3rem;
-  min-width: 500px;
-  min-height: 100px;
+  font-size: clamp(15px, 4vw, 25px);
   font-family: 'Hiragino Sans', sans-serif;
-  font-size: 2rem;
   font-weight: 600;
   box-shadow: 0 8px 25px rgba(230, 188, 153, 0.3);
   letter-spacing: 0.05em;
@@ -961,28 +919,31 @@ onMounted(() => {
   padding-bottom: 2rem; /* ナビゲーションボタンのための余白 */
 }
 
-.question-caed h2 {
-  color: var(--text-dark);
-  font-size: 1.5rem;
-  margin: 0;
-}
-
 .question-card {
-  width: 100%;
+  width: 90%;
   max-width: 800px;
   border-radius: 20px;
   padding: 2rem;
   margin-bottom: 2rem;
+  text-align: center;
+}
+
+.question-card h2{
+  color: var(--text-dark);
+  font-size: clamp(10px, 3vw, 24px);
+  margin-bottom: 1rem;
+  font-weight: 600;
+  font-family: 'Hiragino Sans', sans-serif;
 }
 
 .question-card h3 {
   color: var(--text-dark);
   margin-bottom: 1.5rem;
-  font-size: 1.3rem;
+  font-size: clamp(7px, 2vw, 20px);
   line-height: 1.6;
   text-align: center;
 }
-
+/* 
 .option-button {
   padding: 1.5rem 2rem;
   background-color: var(--orange-beige);
@@ -990,7 +951,7 @@ onMounted(() => {
   border-radius: 15px;
   cursor: pointer;
   transition: all 0.3s ease;
-  font-size: 1rem;
+  font-size: clamp(5px, 1vw, 9px);
   text-align: left;
   width: 100%;
   word-wrap: break-word;
@@ -1021,7 +982,6 @@ onMounted(() => {
   position: absolute;
   top: 15px;
   right: 15px;
-  font-size: 14px;
   color: var(--main-color);
   background: var(--background-white);
   width: 20px;
@@ -1031,7 +991,7 @@ onMounted(() => {
   align-items: center;
   justify-content: center;
   font-weight: bold;
-}
+} */
 
 .navigation-buttons {
   display: flex;
@@ -1058,15 +1018,14 @@ onMounted(() => {
 }
 
 .prev-button {
-  padding: 1.2rem 3rem;
+  padding: 1rem 2rem;
   background-color: var(--orange-beige);
   color: var(--text-dark);
   border: none;
   border-radius: 50px;
   cursor: pointer;
   transition: all 0.3s ease;
-  font-size: 1.3rem;
-  min-width: 300px;
+  font-size: clamp(10px, 3vw, 16px);
   font-family: 'Hiragino Sans', sans-serif;
   font-weight: 600;
   box-shadow: 0 8px 25px rgba(230, 188, 153, 0.3);
@@ -1184,9 +1143,15 @@ onMounted(() => {
   .diagnosis-container {
     padding: 1rem;
   }
-  
-  .diagnosis-content {
+
+  .question-card {
     padding: 1rem;
+    margin-bottom: 0;
+  }
+
+  .navigation-buttons {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
   }
   
   .options {
@@ -1198,15 +1163,6 @@ onMounted(() => {
     width: 100%;
     max-width: 350px;
     margin-bottom: 0.5rem;
-  }
-  
-  .question-section h2 {
-    font-size: 1.2rem;
-  }
-  
-  .question-section p {
-    font-size: 1rem;
-    line-height: 1.4;
   }
   
   .action-buttons {
@@ -1261,11 +1217,6 @@ onMounted(() => {
     gap: 1rem;
     justify-content: center;
   }
-
-  .calculate-button {
-    min-width: 250px;
-    font-size: 1.1rem;
-  }
 }
 
 /* タブレット向け */
@@ -1285,15 +1236,6 @@ onMounted(() => {
   .options button {
     width: calc(50% - 1rem);
     max-width: 300px;
-  }
-  
-  .question-section h2 {
-    font-size: 1.2rem;
-    margin-bottom: 0.3rem;
-  }
-  
-  .question-section p {
-    margin-bottom: 0.5rem;
   }
 }
 </style>

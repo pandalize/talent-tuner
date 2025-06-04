@@ -53,18 +53,14 @@ import { RouterLink, RouterView } from 'vue-router'
 }
 
 h1 {
-  color: var(--text-dark);
   margin: 1rem;
-  margin-bottom: 1rem;
   text-align: center;
-  font-weight: 700;
-  font-size: 2.5rem;
   letter-spacing: 0.1em;
 }
 
 .title1 {
   font-family: 'Hiragino Sans', sans-serif;
-  font-size: 3rem;
+  font-size: clamp(12px, 4vw, 40px); /* 画面の大きさに合わせてフォントサイズが変わる */
   display: inline-block; /* 画面の大きさに合わせて途中で改行されない*/
   color: orange;
   -webkit-text-stroke: 2px rgb(61, 61, 61);
@@ -75,7 +71,7 @@ h1 {
 
 .title2 {
   font-family: 'M PLUS Rounded 1c';
-  font-size: 3.5rem;
+  font-size: clamp(15px, 5vw, 60px);
   display: inline-block;
   color: orange;
   text-shadow:3px 4px 3px rgb(51, 51, 53);
@@ -84,9 +80,10 @@ h1 {
 }
 
 span {
-  font-size: 2.5rem;
+  font-size: clamp(10px, 3vw, 30px);
   font-weight: 700;
   display: inline-block;
+  max-height: 3rem;
 }
 
 nav {
@@ -116,7 +113,7 @@ nav a {
   transition: all 0.3s ease;
   font-weight: 400;
   position: relative;
-  font-size: 1rem;
+  font-size: clamp(5px, 1.5vw, 20px);
   border: 1px solid transparent;
 }
 
@@ -133,29 +130,9 @@ nav a:hover {
   background-color: rgba(95, 144, 178, 0.1);
 }
 
-h1 {
-  color: var(--text-dark);
-  margin-bottom: 3rem;
-  text-align: center;
-  font-size: 1.8rem;
-  font-weight: 500;
-  letter-spacing: 0.05em;
-}
 
 /* スマートフォン向け */
 @media (max-width: 455px) {
-  .title1 {
-    font-size: 2.1rem;
-  }
-
-  .title2 {
-    font-size: 3.2rem;
-  }
-
-  span {
-    font-size: 1.4rem;
-  }
-  
   nav {
     gap: 0.5rem;
     padding-bottom: 0;
@@ -171,10 +148,6 @@ h1 {
   .app-header {
     padding-bottom: 0;
   }
-
-  h1 {
-    font-size: 1.3rem;
-  }
 }
 
 /* タブレット向け */
@@ -185,6 +158,7 @@ h1 {
   
   nav a {
     margin: 0;
+    padding: 0.5rem;
   }
 }
 
