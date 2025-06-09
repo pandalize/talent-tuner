@@ -1,22 +1,8 @@
-<script setup lang="ts">
-import { useRouter } from 'vue-router';
-
-const router = useRouter();
-
-function goToAbout() {
-  router.push('/about');
-}
-
-function goToDiagnosis() {
-  router.push('/diagnosis');
-}
-</script>
-
 <template>
   <main>
     <div class="home-container">
       <div class="welcome-section">
-        <h1 class="diagnosis-welcome" style="white-space: normal; font-size: clamp(6px, 2vw, 20px);">
+        <h1 class="diagnosis-welcome">
           ため職へようこそ！<br>「興味」「能力」「性格」「考え方」の4つの観点で、<br>あなたにマッチする職業を短時間で多角的に分析。
           <br>あなたに最適な高収入職業を<br>ランキング形式でおすすめします。
         </h1>
@@ -34,6 +20,26 @@ function goToDiagnosis() {
 </template>
 
 <style scoped>
+/* ==========================================================================
+   注: グローバルスタイル
+   本来は `src/assets/main.css` のようなサイト全体で読み込むファイルに記述します
+   ========================================================================== */
+*,
+*:before,
+*:after {
+  -webkit-box-sizing: inherit;
+  box-sizing: inherit;
+}
+
+html {
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  font-size: 62.5%;
+}
+
+/* ==========================================================================
+   ページ基本レイアウト
+   ========================================================================== */
 main {
   width: 100%;
   display: flex;
@@ -49,6 +55,11 @@ main {
   box-sizing: border-box;
 }
 
+/* ==========================================================================
+   コンテンツ要素（出現順）
+   ========================================================================== */
+
+/* --- 1. ウェルカムセクション --- */
 .welcome-section {
   text-align: center;
   margin-bottom: 2rem;
@@ -63,21 +74,23 @@ main {
   margin: 0;
   line-height: 1.6;
   font-weight: 500;
+  font-size: clamp(9px, 2vw, 20px);
 }
 
+/* --- 2. イメージコンテナ --- */
 .image-container {
   display: flex;
   justify-content: center;
-  /* gap: 2rem; */
   margin-bottom: 2rem;
 }
 
 .home-container img {
   width: 20rem;
-  height: auto; /* 固定の高さから自動サイズに変更し縦横比を維持 */
+  height: auto;
   max-width: 50%;
 }
 
+/* --- 3. ナビゲーションカード (ボタンのコンテナ) --- */
 .navigation-cards {
   display: flex;
   gap: 3rem;
@@ -86,23 +99,12 @@ main {
   justify-content: center;
 }
 
-*,
-*:before,
-*:after {
-  -webkit-box-sizing: inherit;
-  box-sizing: inherit;
-}
-
-html {
-  -webkit-box-sizing: border-box;
-  box-sizing: border-box;
-  font-size: 62.5%;
-}
-
+/* ==========================================================================
+   コンポーネント: ボタン
+   ========================================================================== */
 .btn,
-a.btn,
 button.btn {
-  font-size: clamp(5px, 3vw, 40px);
+  font-size: clamp(15px, 3vw, 40px);
   font-weight: 700;
   line-height: 1.5;
   position: relative;
@@ -123,16 +125,16 @@ button.btn {
   border-radius: 0.5rem;
 }
 
-a.btn-border-shadow--radius {
-  border-radius: 100vh;
-}
-a.btn-border-shadow {
+.btn-border-shadow {
   padding: calc(1.5rem - 12px) 3rem 1.5rem;
-
   background: var(--cream);
 }
 
-a.btn-border-shadow:before {
+.btn-border-shadow--radius {
+  border-radius: 100vh;
+}
+
+.btn-border-shadow:before {
   position: absolute;
   top: -6px;
   left: -6px;
@@ -145,25 +147,45 @@ a.btn-border-shadow:before {
   border-radius: 0.5rem;
 }
 
-a.btn-border-shadow--radius:before {
+.btn-border-shadow--radius:before {
   border-radius: 100vh;
 }
 
-a.btn-border-shadow:hover {
+.btn-border-shadow:hover {
   padding: calc(1.5rem - 6px) 3rem;
 }
 
-a.btn-border-shadow:hover:before {
+.btn-border-shadow:hover:before {
   top: 0;
   left: 0;
 }
 
-
+/* ==========================================================================
+   メディアクエリ (レスポンシブ対応)
+   ========================================================================== */
 /* スマートフォン向け */
 @media (max-width: 455px) {
+  .home-container {
+    width:90%;
+  }
+
   .navigation-cards {
-    flex-direction: column;
-    align-items: center;  /* 横方向の中央揃え */
+    justify-content: center;
+    align-items: center;
+  }
+
+  .btn,
+  button.btn {
+    font-size: clamp(12px, 2.5vw, 16px);
+    white-space: nowrap;
+  }
+
+  .btn-border-shadow {
+    padding: calc(1.3rem - 12px) 2rem 1.4rem;
+  }
+
+  .btn-border-shadow:hover {
+    padding: calc(0.8rem - 6px) 1.5rem;
   }
 }
 

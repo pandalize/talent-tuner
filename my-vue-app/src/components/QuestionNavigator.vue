@@ -7,7 +7,7 @@
       
       <div v-else-if="error" class="error-section">
         <p>{{ error }}</p>
-        <button @click="loadConfig" class="reload-button">再読み込み</button>
+        <button @click="loadConfig" class="btn reload-button">再読み込み</button>
       </div>
       
       <template v-else>
@@ -32,7 +32,7 @@
           <div class="navigation-buttons">
             <button
               @click="goToPreviousQuestion"
-              class="nav-button prev-button"
+              class="btn prev-button"
               :class="{ 'invisible-button': currentQuestionIndex === 0 }"
               :disabled="currentQuestionIndex === 0"
             >
@@ -42,12 +42,13 @@
             <button
               @click="calculateResult"
               :disabled="Object.keys(answers).length !== questions.length"
-              class="calculate-button"
+              class="btn calculate-button"
               :class="{ 'invisible-button': Object.keys(answers).length !== questions.length }"
             >
               診断結果を見る
             </button>
           </div>
+          
         </div>
         
         <div v-if="showResult" class="result-section">
@@ -57,45 +58,43 @@
             <div class="rank-badge">{{ index + 1 }}位</div>
             <h3>{{ profession.name }}</h3>
             <div class="total-score">
-              <span class="score-label">総合スコア:</span>
+              <span class="score-label">総合スコア：</span>
               <span class="score-value">{{ profession.score.toFixed(1) }}</span>
             </div>
             
             <div class="category-scores">
-              <h4>カテゴリー別スコア:</h4>
+              <h4>カテゴリー別スコア：</h4>
               <div class="category-bar-container">
                 <div
                   v-for="(score, category) in profession.categories"
                   :key="category"
                   class="category-bar"
                 >
-                  <div class="category-label">{{ getCategoryLabel(category) }}</div>
+                  <div class="category-label">{{ CATEGORY_LABELS[category] || category }}</div>
                   <div class="bar-container">
-                    <div class="bar-fill" :style="{ width: `${(score / getMaxCategoryScore()) * 100}%` }"></div>
+                    <div class="bar-fill" :style="{ width: `${(score / maxCategoryScore) * 100}%` }"></div>
                   </div>
                   <div class="category-score">{{ score.toFixed(1) }}</div>
                 </div>
               </div>
             </div>
-            
-            <!-- 年収範囲の表示 -->
-            <div v-if="profession.annualIncome" class="annual-income">
-              <h4>年収範囲:</h4>
-              <p class="income-value">{{ profession.annualIncome }}</p>
-            </div>
-            
-            <!-- 仕事内容の表示 -->
-            <div v-if="profession.jobDetails" class="job-details">
-              <h4>仕事内容:</h4>
-              <p class="job-description">{{ profession.jobDetails }}</p>
-            </div>
-            
+
             <div class="profession-comment">
               <p>{{ profession.comment || 'あなたの特性に合った職業です。自分の強みを活かして頑張りましょう。' }}</p>
             </div>
+            
+            <div v-if="profession.annualIncome" class="annual-income">
+              <h4>年収範囲：</h4>
+              <p class="income-value">{{ profession.annualIncome }}</p>
+            </div>
+            
+            <div v-if="profession.jobDetails" class="job-details">
+              <h4>仕事内容：</h4>
+              <p class="job-description">{{ profession.jobDetails }}</p>
+            </div>
+            
           </div>
           
-          <!-- 共有機能セクション -->
           <div class="share-section">
             <h3 class="share-title">診断結果をシェア</h3>
             <div class="share-buttons">
@@ -108,15 +107,15 @@
                 Xでシェア
               </button>
               <button @click="shareToInstagram" class="share-button instagram-button">
-                <img src="/image/Instagram.png" alt="Instagram" class="share-icon instagram-icon-img">
+                <img src="/image/Instagram.png" alt="Instagram Stories" class="share-icon instagram-icon-img">
                 Instagramでシェア
               </button>
             </div>
           </div>
           
           <div class="action-buttons">
-            <button @click="resetDiagnosis" class="reset-button">もう一度診断する</button>
-            <button @click="goHome" class="home-button">ホームに戻る</button>
+            <button @click="resetDiagnosis" class="btn action-button">もう一度診断する</button>
+            <button @click="goHome" class="btn action-button">ホームに戻る</button>
           </div>
         </div>
       </template>
@@ -137,7 +136,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, computed } from 'vue'
+import { ref, onMounted, computed, nextTick } from 'vue'
 import { useRouter } from 'vue-router'
 import {
   loadDiagnosticConfig,
@@ -158,7 +157,7 @@ const error = ref<string | null>(null)
 const answers = ref<Record<string, string>>({})
 const showResult = ref(false)
 const topProfessions = ref<ProfessionScore[]>([])
-const displayTopN = ref(3)
+const DISPLAY_TOP_N = 3; // リアクティブである必要がないため定数に変更
 const displayedProfessions = ref<ProfessionScore[]>([])
 const currentQuestionIndex = ref(0)
 
@@ -169,6 +168,18 @@ const questions = computed<Question[]>(() => {
 const currentQuestion = computed<Question | null>(() => {
   if (questions.value.length === 0) return null
   return questions.value[currentQuestionIndex.value] || null
+})
+
+const maxCategoryScore = computed(() => {
+  if (displayedProfessions.value.length === 0) return 1
+
+  let maxScore = 0
+  displayedProfessions.value.forEach(profession => {
+    Object.values(profession.categories).forEach(score => {
+      if (score > maxScore) maxScore = score
+    })
+  })
+  return maxScore || 1
 })
 
 async function loadConfig() {
@@ -191,50 +202,44 @@ async function loadConfig() {
   }
 }
 
+let navigationTimer: ReturnType<typeof setTimeout> | null = null;
+
 function selectOption(questionId: string, label: string) {
-  answers.value[questionId] = label
+  answers.value[questionId] = label;
   
-  // 500ms後に自動的に次の質問に移動
-  setTimeout(() => {
+  if (navigationTimer) {
+    clearTimeout(navigationTimer);
+  }
+  
+  navigationTimer = setTimeout(() => {
     if (currentQuestionIndex.value < questions.value.length - 1) {
-      goToNextQuestion()
+      goToNextQuestion();
     }
-  }, 500)
+  }, 500);
 }
 
-function goToNextQuestion() {
-  if (currentQuestionIndex.value < questions.value.length - 1) {
-    currentQuestionIndex.value++
-    
-    // 質問2以降では、question-contentの一番上にスクロール
-    if (currentQuestionIndex.value >= 1) {
-      // 少し遅延を入れてDOMの更新を待つ
-      setTimeout(() => {
-        const questionContent = document.querySelector('.diagnosis-content')
-        if (questionContent) {
-          questionContent.scrollIntoView({ behavior: 'smooth', block: 'start' })
-        }
-      }, 100)
-    }
+async function scrollToContentTop() {
+  await nextTick();
+  const content = document.querySelector('.diagnosis-content');
+  if (content) {
+    content.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 }
 
-function goToPreviousQuestion() {
+async function goToNextQuestion() {
+  if (currentQuestionIndex.value < questions.value.length - 1) {
+    currentQuestionIndex.value++;
+    scrollToContentTop();
+  }
+}
+
+async function goToPreviousQuestion() {
   if (currentQuestionIndex.value > 0) {
-    currentQuestionIndex.value--
-    
-    // 質問2以降では、question-contentの一番上にスクロール
+    currentQuestionIndex.value--;
     if (currentQuestionIndex.value >= 1) {
-      // 少し遅延を入れてDOMの更新を待つ
-      setTimeout(() => {
-        const questionContent = document.querySelector('.diagnosis-content')
-        if (questionContent) {
-          questionContent.scrollIntoView({ behavior: 'smooth', block: 'start' })
-        }
-      }, 100)
+      scrollToContentTop();
     } else {
-      // 最初の質問では通常通りトップにスクロール
-      window.scrollTo(0, 0)
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   }
 }
@@ -244,44 +249,27 @@ function calculateResult() {
   
   const scores = calculateProfessionScores(config.value, answers.value, professionDatabase.value || undefined)
   topProfessions.value = scores
-  displayTopN.value = 3
   updateDisplayedProfessions()
   showResult.value = true
   window.scrollTo(0, 0)
 }
 
 function updateDisplayedProfessions() {
-  displayedProfessions.value = getTopProfessions(topProfessions.value, displayTopN.value)
+  displayedProfessions.value = getTopProfessions(topProfessions.value, DISPLAY_TOP_N)
 }
 
-function getMaxCategoryScore(): number {
-  if (displayedProfessions.value.length === 0) return 1
-  
-  let maxScore = 0
-  displayedProfessions.value.forEach(profession => {
-    Object.values(profession.categories).forEach(score => {
-      if (score > maxScore) maxScore = score
-    })
-  })
-  return maxScore || 1
-}
-
-function getCategoryLabel(category: string): string {
-  const labels: Record<string, string> = {
-    'skill': 'スキル',
-    'interest': '興味',
-    'priority': '性格',
-    'balance': '考え方'
-  }
-  return labels[category] || category
-}
+const CATEGORY_LABELS: Record<string, string> = {
+  'skill': 'スキル',
+  'interest': '興味',
+  'priority': '性格',
+  'balance': '考え方'
+};
 
 function resetDiagnosis() {
   answers.value = {}
   showResult.value = false
   topProfessions.value = []
   displayedProfessions.value = []
-  displayTopN.value = 3
   currentQuestionIndex.value = 0
   window.scrollTo(0, 0)
 }
@@ -313,68 +301,128 @@ function shareToX() {
   window.open(twitterUrl, '_blank')
 }
 
-async function shareToInstagram() {
-  const text = generateShareText()
-  
-  // モバイルデバイスでInstagramアプリが利用可能かチェック
-  const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
-  
-  if (isMobile) {
-    // モバイルの場合、Instagramアプリのカスタムスキームを試行
+async function copyToClipboard(text: string): Promise<boolean> {
+  try {
+    await navigator.clipboard.writeText(text);
+    return true;
+  } catch (err) {
+    console.error('Clipboard API failed, falling back to execCommand:', err);
+    const textArea = document.createElement('textarea');
+    textArea.value = text;
+    textArea.style.position = 'fixed';
+    textArea.style.opacity = '0';
+    document.body.appendChild(textArea);
+    textArea.select();
     try {
-      // Instagramストーリー用のカスタムスキーム
-      const instagramUrl = `instagram://story-camera`
-      window.location.href = instagramUrl
+      const successful = document.execCommand('copy');
+      return successful;
+    } catch (execErr) {
+      console.error('execCommand failed:', execErr);
+      return false;
+    } finally {
+      document.body.removeChild(textArea);
+    }
+  }
+}
+
+async function shareToInstagram() {
+  const text = generateShareText();
+  const isMobile = /Android|webOS|iPhone|iPad|iPod/i.test(navigator.userAgent);
+  
+  try {
+    // Instagram Stories用のURLスキームを試行
+    if (isMobile) {
+      // モバイルデバイスでのInstagram Stories共有
+      await shareToInstagramStories(text);
+    } else {
+      // デスクトップでの代替手段
+      await shareToInstagramDesktop(text);
+    }
+  } catch (error) {
+    console.error('Instagram共有エラー:', error);
+    // フォールバック: 従来の方法
+    await fallbackInstagramShare(text);
+  }
+}
+
+async function shareToInstagramStories(text: string) {
+  // Instagram Stories用のURLスキーム
+  const instagramStoriesUrl = 'instagram-stories://share';
+  
+  // テキストをクリップボードにコピー
+  const copied = await copyToClipboard(text);
+  
+  if (copied) {
+    // Instagram Storiesアプリを開く
+    try {
+      window.location.href = instagramStoriesUrl;
       
-      // フォールバック: テキストをクリップボードにコピー
-      setTimeout(async () => {
-        try {
-          await navigator.clipboard.writeText(text)
-          alert('📋 共有テキストをクリップボードにコピーしました！\nInstagramアプリでストーリーを作成し、テキストを貼り付けてください。')
-        } catch (err) {
-          console.error('クリップボードへのコピーに失敗しました:', err)
-          const textArea = document.createElement('textarea')
-          textArea.value = text
-          document.body.appendChild(textArea)
-          textArea.select()
-          document.execCommand('copy')
-          document.body.removeChild(textArea)
-          alert('📋 共有テキストをクリップボードにコピーしました！\nInstagramアプリでストーリーを作成し、テキストを貼り付けてください。')
-        }
-      }, 1000)
-    } catch (err) {
-      // Instagramアプリが開けない場合のフォールバック
-      try {
-        await navigator.clipboard.writeText(text)
-        alert('📋 共有テキストをクリップボードにコピーしました！\nInstagramアプリを開いて、ストーリーまたは投稿に貼り付けてください。')
-      } catch (clipboardErr) {
-        console.error('クリップボードへのコピーに失敗しました:', clipboardErr)
-        const textArea = document.createElement('textarea')
-        textArea.value = text
-        document.body.appendChild(textArea)
-        textArea.select()
-        document.execCommand('copy')
-        document.body.removeChild(textArea)
-        alert('📋 共有テキストをクリップボードにコピーしました！\nInstagramアプリを開いて、ストーリーまたは投稿に貼り付けてください。')
-      }
+      // ユーザーに操作方法を案内
+      setTimeout(() => {
+        alert('📱 Instagram Storiesが開きました！\n\n' +
+              '1. ストーリー作成画面で背景を選択\n' +
+              '2. テキストツールを選択\n' +
+              '3. クリップボードからテキストを貼り付け\n' +
+              '4. 投稿してください！\n\n' +
+              '💡 診断結果のテキストはクリップボードにコピー済みです');
+      }, 1000);
+    } catch (error) {
+      // Instagram Storiesが開けない場合は通常のInstagramアプリを開く
+      window.location.href = 'instagram://camera';
+      alert('📱 Instagramカメラが開きました！\n\n' +
+            'ストーリーを作成して診断結果をシェアしてください。\n' +
+            'テキストはクリップボードにコピー済みです。');
     }
   } else {
-    // デスクトップの場合、Instagram Webを開く
+    throw new Error('クリップボードへのコピーに失敗');
+  }
+}
+
+async function shareToInstagramDesktop(text: string) {
+  // デスクトップでの Instagram Stories 共有
+  const copied = await copyToClipboard(text);
+  
+  if (copied) {
+    // Instagram Webを新しいタブで開く
+    const instagramWeb = window.open('https://www.instagram.com/', '_blank');
+    
+    // ユーザーに操作方法を案内
+    setTimeout(() => {
+      alert('💻 Instagram Webが開きました！\n\n' +
+            '1. 左上の「+」ボタンをクリック\n' +
+            '2. 「ストーリーズ」を選択\n' +
+            '3. 画像をアップロードまたは背景を選択\n' +
+            '4. テキストツールでクリップボードの内容を貼り付け\n' +
+            '5. ストーリーを投稿してください！\n\n' +
+            '💡 診断結果のテキストはクリップボードにコピー済みです');
+    }, 1500);
+  } else {
+    throw new Error('クリップボードへのコピーに失敗');
+  }
+}
+
+async function fallbackInstagramShare(text: string) {
+  // 従来の方法（フォールバック）
+  const copied = await copyToClipboard(text);
+  const isMobile = /Android|webOS|iPhone|iPad|iPod/i.test(navigator.userAgent);
+
+  if (copied) {
+    alert('📋 共有テキストをクリップボードにコピーしました！\n' +
+          'Instagramを開いてストーリーに貼り付けてください。');
+  } else {
+    alert('❌ クリップボードへのコピーに失敗しました。\n' +
+          '手動でテキストをコピーしてInstagramでシェアしてください。');
+  }
+
+  // InstagramアプリまたはWebサイトを開く
+  if (isMobile) {
     try {
-      await navigator.clipboard.writeText(text)
-      window.open('https://www.instagram.com/', '_blank')
-      alert('📋 共有テキストをクリップボードにコピーしました！\nInstagram Webでストーリーまたは投稿を作成し、テキストを貼り付けてください。')
-    } catch (err) {
-      console.error('クリップボードへのコピーに失敗しました:', err)
-      const textArea = document.createElement('textarea')
-      textArea.value = text
-      document.body.appendChild(textArea)
-      textArea.select()
-      document.execCommand('copy')
-      document.body.removeChild(textArea)
-      window.open('https://www.instagram.com/', '_blank')
-      alert('📋 共有テキストをクリップボードにコピーしました！\nInstagram Webでストーリーまたは投稿を作成し、テキストを貼り付けてください。')
+      window.location.href = 'instagram://';
+    } catch (error) {
+      window.open('https://www.instagram.com/', '_blank');
     }
+  } else {
+    window.open('https://www.instagram.com/', '_blank');
   }
 }
 
@@ -384,6 +432,40 @@ onMounted(() => {
 </script>
 
 <style scoped>
+/* ==========================================================================
+   汎用スタイル & ヘルパークラス
+   ========================================================================== */
+.btn {
+  display: inline-block;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  font-family: 'Hiragino Sans', sans-serif;
+  font-weight: 600;
+  text-align: center;
+  letter-spacing: 0.05em;
+  transition: all 0.3s ease;
+  box-shadow: 0 8px 25px rgba(230, 188, 153, 0.3);
+}
+.btn:hover:not(:disabled) {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 35px rgba(255, 107, 107, 0.4);
+}
+.btn:disabled {
+  background-color: #e0e0e0 !important; /* disabled時は色を強制上書き */
+  color: #999 !important;
+  cursor: not-allowed;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transform: none;
+}
+.invisible-button {
+  visibility: hidden;
+}
+
+
+/* ==========================================================================
+   基本レイアウト
+   ========================================================================== */
 .diagnosis-container {
   margin: 0 auto;
   box-sizing: border-box;
@@ -391,15 +473,13 @@ onMounted(() => {
   flex-direction: column;
   align-items: center;
 }
-
 .diagnosis-container p{
   color: var(--text-dark);
   margin-bottom: 2rem;
   line-height: 1.6;
   text-align: center;
-  font-size: 1.3rem;
+  font-size: clamp(12px, 2vw, 16px);
 }
-
 .diagnosis-content {
   width: 70%;
   max-width: 1000px;
@@ -409,9 +489,9 @@ onMounted(() => {
   box-sizing: border-box;
   border: none;
   position: relative;
-  margin-bottom: 120px; /* 固定プログレスバーの分の余白を追加 */
+  margin-bottom: 120px;
+  padding: 2rem;
 }
-
 .diagnosis-content > p {
   text-align: center;
   margin-bottom: 2rem;
@@ -419,37 +499,58 @@ onMounted(() => {
   line-height: 1.6;
 }
 
+
+/* ==========================================================================
+   ローディング & エラー表示
+   ========================================================================== */
 .loading-section, .error-section {
   text-align: center;
   padding: 3rem 1rem;
   color: var(--text-dark);
 }
-
 .error-section {
   color: #d32f2f;
 }
-
 .reload-button {
-  margin-top: 1rem;
-  padding: 0.8rem 2rem;
   background-color: var(--main-color);
   color: var(--background-white);
-  border: none;
-  border-radius: 50px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  font-size: 1rem;
-  font-family: 'Hiragino Sans', sans-serif;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+  padding: 0.8rem 2rem;
   font-weight: 500;
 }
-
-.reload-button:hover {
+.reload-button:hover:not(:disabled) {
   background-color: var(--orange-beige);
-  transform: translateY(-3px);
-  box-shadow: 0 8px 20px rgba(230, 188, 153, 0.4);
 }
 
+
+/* ==========================================================================
+   質問セクション
+   ========================================================================== */
+.current-question-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: auto;
+}
+.question-card {
+  width: 90%;
+  max-width: 800px;
+  border-radius: 20px;
+  text-align: center;
+}
+.question-card h2{
+  color: var(--text-dark);
+  font-size: clamp(15px, 4vw, 24px);
+  margin-bottom: 1rem;
+  font-weight: 600;
+  font-family: 'Hiragino Sans', sans-serif;
+}
+.question-card h3 {
+  color: var(--text-dark);
+  margin-bottom: 1.5rem;
+  font-size: clamp(12px, 2vw, 20px);
+  line-height: 1.6;
+  text-align: center;
+}
 .options {
   display: flex;
   flex-wrap: wrap;
@@ -458,7 +559,6 @@ onMounted(() => {
   justify-content: center;
   width: 100%;
 }
-
 .options button {
   padding: 1.2rem 1.8rem;
   background-color: var(--orange-beige);
@@ -472,127 +572,67 @@ onMounted(() => {
   word-wrap: break-word;
   white-space: normal;
   height: auto;
+  min-height: 110px;
   font-family: 'Hiragino Sans', sans-serif;
   color: var(--text-dark);
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
   position: relative;
-  font-size: clamp(5px, 1.5vw, 16px);
+  font-size: clamp(10px, 1.5vw, 16px);
   font-weight: 400;
   line-height: 1.4;
 }
-
 .options button:hover {
   transform: translateY(-3px);
 }
-
 .options button.selected {
   background-color: #4393dd;
   color: var(--background-white);
   transform: translateY(-3px);
 }
-
-.progress-section {
-  margin: 2rem 0;
-  text-align: center;
-}
-
-.progress-bar {
+.navigation-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  justify-content: center;
+  align-items: center;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
   width: 100%;
-  height: 10px;
-  background-color: #e0e0e0;
-  border-radius: 5px;
-  overflow: hidden;
-  margin-top: 0.5rem;
+  min-height: 130px; 
 }
-
-.progress-fill {
-  height: 100%;
-  background-color: var(--main-color);
-  transition: width 0.3s ease;
-  background-image: linear-gradient(to right, var(--bright-blue), var(--main-color));
-  border-radius: 5px;
-}
-
-.calculate-button {
-  padding: 1rem 2rem;
+.prev-button {
   background-color: var(--orange-beige);
   color: var(--text-dark);
-  border: none;
-  border-radius: 50px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  font-size: clamp(15px, 4vw, 25px);
-  font-family: 'Hiragino Sans', sans-serif;
-  font-weight: 600;
-  box-shadow: 0 8px 25px rgba(230, 188, 153, 0.3);
-  letter-spacing: 0.05em;
+  font-size: clamp(12px, 3vw, 25px);
+  padding: 1rem 2rem;
 }
-
+.prev-button:hover:not(:disabled) {
+  background-color: var(--accent-coral);
+}
+.calculate-button {
+  background-color: var(--orange-beige);
+  color: var(--text-dark);
+  font-size: clamp(20px, 3vw, 40px);
+  padding: 1rem 5rem;
+}
 .calculate-button:hover:not(:disabled) {
   background-color: var(--accent-coral);
-  transform: translateY(-5px);
-  box-shadow: 0 15px 35px rgba(255, 107, 107, 0.4);
 }
 
-.calculate-button.disabled,
-.calculate-button:disabled {
-  background-color: #e0e0e0;
-  color: #999;
-  cursor: not-allowed;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  transform: none;
-}
-
-.calculate-button.disabled:hover,
-.calculate-button:disabled:hover {
-  background-color: #e0e0e0;
-  transform: none;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-}
-
+/* ==========================================================================
+   結果セクション
+   ========================================================================== */
 .result-section {
   border-radius: 8px;
 }
-
-.result-controls {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 1rem;
-  margin: 1.5rem 0;
-  padding: 1rem;
-  background-color: var(--light-blue);
-  border-radius: 15px;
-}
-
-.result-controls label {
+.result-section h1 {
+  color: var(--text-dark);
+  text-align: center;
+  margin-bottom: 1.5rem;
+  font-size: clamp(15px, 3vw, 30px);
   font-weight: 600;
-  color: var(--text-dark);
-  font-size: 1rem;
+  font-family: 'Hiragino Sans', sans-serif;
 }
-
-.result-controls select {
-  padding: 0.5rem 1rem;
-  border: 2px solid var(--main-color);
-  border-radius: 10px;
-  background-color: white;
-  color: var(--text-dark);
-  font-size: 1rem;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.result-controls select:hover {
-  border-color: var(--bright-blue);
-  box-shadow: 0 2px 8px rgba(95, 144, 178, 0.2);
-}
-
-.result-controls select:focus {
-  outline: none;
-  border-color: var(--bright-blue);
-  box-shadow: 0 0 0 3px rgba(95, 144, 178, 0.1);
-}
-
 .result-box {
   padding: 2rem;
   background-color: white;
@@ -605,7 +645,38 @@ onMounted(() => {
   transform: translateZ(0);
   transition: transform 0.3s ease;
 }
-
+.rank-badge {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-weight: bold;
+  font-size: clamp(12px, 2vw, 16px);
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+  z-index: 2;
+}
+.result-box:nth-child(2) .rank-badge {
+  background: linear-gradient(135deg, #FFD700, #FFA500);
+}
+.result-box:nth-child(3) .rank-badge {
+  background: linear-gradient(135deg, #C0C0C0, #A9A9A9);
+}
+.result-box:nth-child(4) .rank-badge {
+  background: linear-gradient(135deg, #CD7F32, #B8860B);
+}
+.result-box h3 {
+  color: var(--main-color);
+  font-family: 'ToppanBunkyuMidashiGothicStdN-ExtraBold', sans-serif;
+  font-size: clamp(18px, 3vw, 36px);
+  letter-spacing: 0.3rem;
+  margin-bottom: 0.5rem;
+  border-bottom: 2px solid var(--main-color);
+  padding-bottom: 0.5rem;
+  text-align: center;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+}
 .result-box::before {
   content: '';
   position: absolute;
@@ -617,45 +688,6 @@ onMounted(() => {
   border-width: 0 50px 50px 0;
   border-color: transparent var(--light-blue) transparent transparent;
 }
-
-.rank-badge {
-  position: absolute;
-  top: 15px;
-  left: 15px;
-  color: white;
-  padding: 0.5rem 1rem;
-  border-radius: 20px;
-  font-weight: bold;
-  font-size: 1rem;
-  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
-  z-index: 2;
-}
-
-
-.result-box:nth-child(2) .rank-badge {
-  background: linear-gradient(135deg, #FFD700, #FFA500);
-}
-
-.result-box:nth-child(3) .rank-badge {
-  background: linear-gradient(135deg, #C0C0C0, #A9A9A9);
-}
-
-.result-box:nth-child(4) .rank-badge {
-  background: linear-gradient(135deg, #CD7F32, #B8860B);
-}
-
-.result-box h3 {
-  color: var(--main-color);
-  font-family: ToppanBunkyuMidashiGothicStdN-ExtraBold;
-  font-size: 2.0rem;
-  letter-spacing: 0.3rem;
-  margin-bottom: 0.5rem;
-  border-bottom: 2px solid var(--main-color);
-  padding-bottom: 0.5rem;
-  text-align: center;
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
-}
-
 .total-score {
   text-align: center;
   margin: 1rem 0;
@@ -663,48 +695,41 @@ onMounted(() => {
   background-color: var(--light-blue);
   border-radius: 10px;
 }
-
 .score-label {
-  font-size: 1rem;
+  font-size: clamp(12px, 2vw, 16px);
   color: #666;
   margin-right: 0.5rem;
 }
-
 .score-value {
-  font-size: 1.5rem;
+  font-size: clamp(16px, 2.5vw, 24px);
   font-weight: bold;
   color: var(--main-color);
 }
-
 .category-scores {
   margin: 1.5rem 0;
 }
-
 .category-scores h4 {
-  color: #2c3e50;
+  color: var(--text-dark);
   margin-bottom: 1rem;
-  font-size: 1.1rem;
+  font-size: clamp(14px, 2.2vw, 20px);
+  font-weight: 600;
 }
-
 .category-bar-container {
   display: flex;
   flex-direction: column;
   gap: 0.8rem;
 }
-
 .category-bar {
   display: flex;
   align-items: center;
   gap: 0.5rem;
 }
-
 .category-label {
   width: 120px;
   text-align: right;
-  font-size: 0.9rem;
-  color: #666;
+  font-size: clamp(12px, 2vw, 16px);
+  color: var(--text-dark);
 }
-
 .bar-container {
   flex-grow: 1;
   height: 12px;
@@ -712,30 +737,19 @@ onMounted(() => {
   border-radius: 6px;
   overflow: hidden;
 }
-
 .bar-fill {
   height: 100%;
   background-color: var(--main-color);
   transition: width 0.5s ease;
   background-image: linear-gradient(to right, var(--bright-blue), var(--main-color));
 }
-
 .category-score {
   width: 40px;
   text-align: right;
-  font-size: 0.9rem;
+  font-size: clamp(12px, 2vw, 16px);
   color: #666;
   font-weight: bold;
 }
-
-.category-weight {
-  width: 100px;
-  text-align: left;
-  font-size: 0.8rem;
-  color: #999;
-  margin-left: 0.5rem;
-}
-
 .profession-comment {
   margin-top: 2rem;
   padding: 2rem;
@@ -745,47 +759,55 @@ onMounted(() => {
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.06);
   position: relative;
 }
-
 .profession-comment p {
   color: var(--text-dark);
   margin: 0;
   line-height: 1.7;
   font-weight: 400;
-  font-size: 1.1rem;
+  font-size: clamp(10px, 2vw, 18px);
 }
-
-.action-buttons {
+.annual-income {
+  margin: 1.5rem 0;
+  padding: 1rem;
+  background-color: #f8f9fa;
+  border-radius: 10px;
+  border-left: 4px solid var(--main-color);
   display: flex;
-  justify-content: center;
-  gap: 1.5rem;
-  margin-top: 3rem;
+  gap: 1rem;
+  align-items: center;
+  flex-wrap: wrap;
 }
-
-.reset-button, .home-button {
-  display: block;
-  margin: 3rem auto;
-  padding: 1.2rem 3rem;
-  background-color: var(--orange-beige);
+.annual-income h4 {
   color: var(--text-dark);
-  border: none;
-  border-radius: 50px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  font-size: 1.3rem;
-  min-width: 300px;
-  font-family: 'Hiragino Sans', sans-serif;
+  font-size: clamp(10px, 2vw, 20px);
   font-weight: 600;
-  box-shadow: 0 8px 25px rgba(230, 188, 153, 0.3);
-  letter-spacing: 0.05em;
+  margin: 0;
 }
-
-.reset-button:hover, .home-button:hover {
-  background-color: var(--accent-coral);
-  transform: translateY(-5px);
-  box-shadow: 0 15px 35px rgba(255, 107, 107, 0.4);
+.annual-income p {
+  margin: 0;
+  color: var(--text-dark);
+  font-size: var(--fontsize-text);
+  font-weight: 700;
 }
-
-/* 共有機能のスタイル */
+.job-details {
+  margin-top: 1.5rem;
+  padding: 1rem;
+  background-color: #f0f8ff;
+  border-radius: 10px;
+  border-left: 4px solid var(--bright-blue);
+}
+.job-details h4 {
+  margin: 0 0 0.5rem 0;
+  color: var(--text-dark);
+  font-size: clamp(10px, 2vw, 20px);
+  font-weight: 600;
+}
+.job-details p {
+  margin: 0;
+  color: var(--text-dark);
+  font-size: var(--fontsize-text);
+  font-weight: 400;
+}
 .share-section {
   margin: 3rem 0;
   padding: 2rem;
@@ -794,22 +816,19 @@ onMounted(() => {
   text-align: center;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
 }
-
 .share-title {
   color: var(--text-dark);
-  font-size: 1.3rem;
+  font-size: clamp(16px, 2.5vw, 28px);
   font-weight: 600;
   margin-bottom: 1.5rem;
   font-family: 'Hiragino Sans', sans-serif;
 }
-
 .share-buttons {
   display: flex;
   justify-content: center;
   gap: 1rem;
   flex-wrap: wrap;
 }
-
 .share-button {
   display: flex;
   align-items: center;
@@ -818,8 +837,8 @@ onMounted(() => {
   border: none;
   border-radius: 25px;
   cursor: pointer;
-  /* transition: all 0.3s ease; */
-  font-size: 1rem;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  font-size: clamp(14px, 2vw, 20px);
   font-weight: 600;
   font-family: 'Hiragino Sans', sans-serif;
   color: white;
@@ -827,23 +846,14 @@ onMounted(() => {
   justify-content: center;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
-
 .share-button:hover {
   transform: translateY(-3px);
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
 }
-
 .share-icon {
-  font-size: 1.2rem;
-  font-weight: bold;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   width: 20px;
   height: 20px;
-  border-radius: 50%;
 }
-
 .line-icon-img, .x-icon-img, .instagram-icon-img {
   width: 20px;
   height: 20px;
@@ -852,223 +862,37 @@ onMounted(() => {
   background-color: white;
   box-sizing: border-box;
 }
-
-.line-icon {
-  color: #00B900;
-  font-family: Arial, sans-serif;
-  font-weight: 900;
-}
-
-.x-icon {
-  color: #000000;
-  font-family: Arial, sans-serif;
-  font-weight: 900;
-}
-
-.instagram-icon {
-  color: #E4405F;
-  font-size: 1rem;
-}
-
-/* LINE共有ボタン */
 .line-button {
   background: linear-gradient(135deg, #00B900, #35f735);
 }
-
-.line-button:hover {
-  background: #00A000;
-}
-
-/* X（旧Twitter）共有ボタン */
 .x-button {
   background: linear-gradient(135deg, #000000, #9f9e9e);
 }
-
-.x-button:hover {
-  background: #1a1a1a;
-}
-
-/* Instagram共有ボタン */
 .instagram-button {
   background: linear-gradient(135deg, #E4405F, #f29884);
 }
-
-.instagram-button:hover {
-  background: #D73650;
-}
-
-.diagnosis-welcome {
-  color: #333;
-  width: 90%;
-  max-width: 1000px;
-  margin: 0 auto 2rem;
-  text-align: center;
-  font-size: 1.2rem;
-  line-height: 1.5;
-}
-
-.welcome-section {
-  padding: 2rem;
-}
-
-.current-question-section {
+.action-buttons {
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  min-height: auto; /* 最小高さを自動に設定 */
-  padding-bottom: 2rem; /* ナビゲーションボタンのための余白 */
-}
-
-.question-card {
-  width: 90%;
-  max-width: 800px;
-  border-radius: 20px;
-  padding: 2rem;
-  margin-bottom: 2rem;
-  text-align: center;
-}
-
-.question-card h2{
-  color: var(--text-dark);
-  font-size: clamp(10px, 3vw, 24px);
-  margin-bottom: 1rem;
-  font-weight: 600;
-  font-family: 'Hiragino Sans', sans-serif;
-}
-
-.question-card h3 {
-  color: var(--text-dark);
-  margin-bottom: 1.5rem;
-  font-size: clamp(7px, 2vw, 20px);
-  line-height: 1.6;
-  text-align: center;
-}
-/* 
-.option-button {
-  padding: 1.5rem 2rem;
-  background-color: var(--orange-beige);
-  border: 2px solid transparent;
-  border-radius: 15px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  font-size: clamp(5px, 1vw, 9px);
-  text-align: left;
-  width: 100%;
-  word-wrap: break-word;
-  white-space: normal;
-  height: auto;
-  font-family: 'Hiragino Sans', sans-serif;
-  color: var(--text-dark);
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
-  position: relative;
-  font-weight: 400;
-  line-height: 1.4;
-}
-
-.option-button:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
-}
-
-.option-button.selected {
-  background-color: #4393dd;
-  color: var(--background-white);
-  transform: translateY(-3px);
-  box-shadow: 0 8px 20px rgba(67, 147, 221, 0.4);
-}
-
-.option-button.selected::after {
-  content: '✓';
-  position: absolute;
-  top: 15px;
-  right: 15px;
-  color: var(--main-color);
-  background: var(--background-white);
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
   justify-content: center;
-  font-weight: bold;
-} */
-
-.navigation-buttons {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  justify-content: center;
-  align-items: center;
-  margin-top: 2rem;
-  margin-bottom: 2rem;
-  width: 100%;
-  min-height: 60px; /* レイアウト安定性のための最小高さ */
+  gap: 1.5rem;
+  margin-top: 3rem;
+  flex-wrap: wrap;
 }
-
-.nav-button {
-  padding: 1rem 2rem;
-  border: none;
-  border-radius: 50px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  font-size: 1rem;
-  font-family: 'Hiragino Sans', sans-serif;
-  font-weight: 500;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
-}
-
-.prev-button {
-  padding: 1rem 2rem;
+.action-button {
   background-color: var(--orange-beige);
   color: var(--text-dark);
-  border: none;
-  border-radius: 50px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  font-size: clamp(10px, 3vw, 16px);
-  font-family: 'Hiragino Sans', sans-serif;
-  font-weight: 600;
-  box-shadow: 0 8px 25px rgba(230, 188, 153, 0.3);
-  letter-spacing: 0.05em;
+  font-size: clamp(16px, 2.5vw, 24px);
+  padding: 1.2rem 3rem;
+  min-width: 250px;
 }
-
-.prev-button:hover:not(:disabled) {
+.action-button:hover:not(:disabled) {
   background-color: var(--accent-coral);
-  transform: translateY(-5px);
-  box-shadow: 0 15px 35px rgba(255, 107, 107, 0.4);
 }
 
-.prev-button.disabled,
-.prev-button:disabled {
-  background-color: #e0e0e0;
-  color: #999;
-  cursor: not-allowed;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  transform: none;
-}
 
-.prev-button.disabled:hover,
-.prev-button:disabled:hover {
-  background-color: #e0e0e0;
-  transform: none;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-}
-
-/* 見えないボタンのスタイル（白背景、白文字、影なし） */
-.invisible-button {
-  background-color: white !important;
-  color: white !important;
-  box-shadow: none !important;
-  cursor: not-allowed !important;
-}
-
-.invisible-button:hover {
-  background-color: white !important;
-  color: white !important;
-  box-shadow: none !important;
-  transform: none !important;
-}
-
+/* ==========================================================================
+   固定プログレスバー
+   ========================================================================== */
 .progress-section-fixed {
   position: fixed;
   bottom: 0;
@@ -1080,142 +904,136 @@ onMounted(() => {
   box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.1);
   z-index: 1000;
 }
-
 .progress-content {
   max-width: 1000px;
   margin: 0 auto;
   text-align: center;
 }
-
 .progress-content p {
   margin: 0 0 0.5rem 0;
   color: var(--text-dark);
-  font-size: 1rem;
+  font-size: clamp(12px, 2vw, 16px);
   font-weight: 500;
 }
-
-.annual-income {
-  margin: 1.5rem 0;
-  padding: 1rem;
-  background-color: #f8f9fa;
-  border-radius: 10px;
-  border-left: 4px solid var(--main-color);
+.progress-bar {
+  width: 100%;
+  height: 10px;
+  background-color: #e0e0e0;
+  border-radius: 5px;
+  overflow: hidden;
+  margin-top: 0.5rem;
+}
+.progress-fill {
+  height: 100%;
+  background-color: var(--main-color);
+  transition: width 0.3s ease;
+  background-image: linear-gradient(to right, var(--bright-blue), var(--main-color));
+  border-radius: 5px;
 }
 
-.annual-income h4 {
-  margin: 0 0 0.5rem 0;
-  color: var(--text-dark);
-  font-size: 1rem;
-  font-weight: 600;
-}
-
-.income-value {
-  margin: 0;
-  color: var(--main-color);
-  font-size: 1.1rem;
-  font-weight: 700;
-}
-
-.job-details {
-  margin: 1.5rem 0;
-  padding: 1rem;
-  background-color: #f0f8ff;
-  border-radius: 10px;
-  border-left: 4px solid var(--bright-blue);
-}
-
-.job-details h4 {
-  margin: 0 0 0.5rem 0;
-  color: var(--text-dark);
-  font-size: 1rem;
-  font-weight: 600;
-}
-
-.job-description {
-  margin: 0;
-  color: var(--text-dark);
-  line-height: 1.6;
-  font-size: 0.95rem;
-}
-
+/* ==========================================================================
+   メディアクエリ (レスポンシブ対応)
+   ========================================================================== */
 /* スマートフォン向け */
 @media (max-width: 455px) {
   .diagnosis-container {
     padding: 1rem;
   }
-
-  .question-card {
+  .diagnosis-content {
+    width: 100%;
     padding: 1rem;
+  }
+  .current-question-section{
+    width: 100%;
+    padding: 0;
+  }
+  .question-card {
     margin-bottom: 0;
   }
-
   .navigation-buttons {
     margin-top: 1rem;
     margin-bottom: 1rem;
+    min-height: 120px;
   }
-  
   .options {
     flex-direction: column;
     align-items: center;
+    gap: 0.5rem;
   }
-  
   .options button {
     width: 100%;
-    max-width: 350px;
+    max-width: 300px;
+    min-height: 65px;
+    padding: 0.5rem 1rem;
     margin-bottom: 0.5rem;
   }
-  
+  .calculate-button {
+    padding-left: 1rem;
+    padding-right: 1rem;
+    width: 90%;
+  }
   .action-buttons {
     flex-direction: column;
     gap: 0.8rem;
+    align-items: center;
+    min-width: 100px;
   }
-  
   .reset-button, .home-button {
-    width: 100%;
+    width: 90%;
     max-width: 350px;
     margin: 0.7rem auto;
   }
-  
   .category-bar {
     flex-wrap: wrap;
+    gap: 0.2rem;
   }
-  
   .category-label {
     width: 100%;
     text-align: left;
-    margin-bottom: 0.2rem;
+    margin-bottom: 0;
   }
-
   .result-box{
-    padding-top: 2.5rem;
+    padding: 1rem;
   }
-
   .result-box h3{
-    font-size: 1.5rem;
+    font-size: clamp(20px, 5vw, 24px);
+    padding: 0;
+    padding-top: 2rem;
   }
-
+  .profession-comment {
+    padding: 1.5rem;
+  }
   .rank-badge {
     top: 10px;
+    left: 10px;
   }
-
-  /* 共有ボタンのモバイル対応 */
+  .progress-section-fixed p {
+    font-size: clamp(12px, 3vw, 14px);
+  }
+  .annual-income {
+    gap: 0.5rem;
+  }
+  .progress-bar {
+    height: 7px;
+  }
+  .category-bar-container {
+    gap: 0.5rem;
+  }
+  .bar-container {
+    height: 9px;
+  }
   .share-buttons {
     flex-direction: column;
     align-items: center;
     gap: 0.8rem;
   }
-
   .share-button {
     width: 100%;
     max-width: 280px;
     min-width: auto;
   }
-
-  .navigation-buttons {
-    flex-direction: column;
-    align-items: center;
-    gap: 1rem;
-    justify-content: center;
+  .progress-section-fixed {
+    padding: 0.8rem 1rem;
   }
 }
 
@@ -1225,6 +1043,9 @@ onMounted(() => {
     width: calc(50% - 1rem);
     max-width: 350px;
   }
+  .navigation-buttons {
+    min-height: 130px;
+  }
 }
 
 /* 大画面向け */
@@ -1232,7 +1053,6 @@ onMounted(() => {
   .diagnosis-container {
     padding: 1rem;
   }
-  
   .options button {
     width: calc(50% - 1rem);
     max-width: 300px;

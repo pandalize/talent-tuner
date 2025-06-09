@@ -7,10 +7,10 @@
         <button
           v-for="profession in professions"
           :key="profession.id"
-          @click="selectedProfessionValue = profession.value"
-          :class="{ active: selectedProfessionValue === profession.value }"
+          @click="selectedProfessionName = profession.name"
+          :class="{ active: selectedProfessionName === profession.name }"
         >
-          {{ profession.label }}
+          {{ profession.name }}
         </button>
       </div>
       
@@ -24,15 +24,15 @@
       </div>
       
       <div v-else class="profession-description">
-        <h2>{{ selectedProfessionValue }}</h2>
+        <h2>{{ selectedProfessionName }}</h2>
         <div class="description-content">
-          <p>{{ getProfessionComment(selectedProfessionValue) }}</p>
+          <p>{{ professionJobDetails }}</p>
         </div>
         
         <div class="characteristics">
           <h3>この職業に向いている人の特徴：</h3>
           <ul>
-            <li v-for="(trait, index) in getProfessionTraits(selectedProfessionValue)" :key="index">
+            <li v-for="(trait, index) in professionTraits" :key="index">
               {{ trait }}
             </li>
           </ul>
@@ -43,72 +43,60 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import { loadProfessionDatabase, type ProfessionDatabase } from '../utils/diagnosisLoader';
 
 const professions = [
-  { id: 1, label: 'プログラマー', value: 'プログラマー' },
-  { id: 2, label: '公認会計士', value: '公認会計士' },
-  { id: 3, label: '建設業', value: '建設業' },
-  { id: 4, label: 'デイトレーダー', value: 'デイトレーダー' },
-  { id: 5, label: '起業家', value: '起業家' },
-  { id: 6, label: 'ワーホリ', value: 'ワーホリ' },
-  { id: 7, label: 'ホスト', value: 'ホスト' },
-  { id: 8, label: 'キャバ嬢', value: 'キャバ嬢' },
-  { id: 9, label: 'インフルエンサー', value: 'インフルエンサー' },
-  { id: 10, label: '難関大進学', value: '難関大進学' }
+  { id: 1, name: 'プログラマー' },
+  { id: 2, name: '公認会計士' },
+  { id: 3, name: '建設業' },
+  { id: 4, name: 'デイトレーダー' },
+  { id: 5, name: '起業家' },
+  { id: 6, name: 'ワーホリ' },
+  { id: 7, name: 'ホスト' },
+  { id: 8, name: 'キャバ嬢' },
+  { id: 9, name: 'インフルエンサー' },
+  { id: 10, name: '難関大進学' }
 ];
 
-const selectedProfessionValue = ref('プログラマー');
+const selectedProfessionName = ref('プログラマー');
 const loading = ref(true);
 const error = ref<string | null>(null);
 const professionDatabase = ref<ProfessionDatabase | null>(null);
 
-// 設定を読み込む
 async function loadProfessionData() {
+  loading.value = true;
+  error.value = null;
   try {
-    loading.value = true;
-    error.value = null;
-    
-    // 職業データベースを読み込み
-    const data = await loadProfessionDatabase();
-    professionDatabase.value = data;
-    
-    loading.value = false;
+    professionDatabase.value = await loadProfessionDatabase();
   } catch (err) {
     console.error('設定の読み込みに失敗しました:', err);
     error.value = '職業データの読み込みに失敗しました。もう一度お試しください。';
+  } finally {
     loading.value = false;
   }
 }
 
-// 職業に対するコメントを取得
-function getProfessionComment(professionName: string): string {
-  if (!professionDatabase.value) {
-    return 'この職業に関する詳細情報はまだ登録されていません。';
-  }
-  
-  const professionData = professionDatabase.value.professions[professionName];
-  return professionData?.comment || 'この職業に関する詳細情報はまだ登録されていません。';
-}
-
-// 職業の特徴を取得
-function getProfessionTraits(professionName: string): string[] {
-  if (!professionDatabase.value) {
-    return ['情報がありません'];
-  }
-  
-  const professionData = professionDatabase.value.professions[professionName];
-  return professionData?.traits || ['情報がありません'];
-}
-
-// コンポーネントがマウントされたときに設定を読み込む
-onMounted(() => {
-  loadProfessionData();
+const selectedProfessionData = computed(() => {
+  if (!professionDatabase.value || !selectedProfessionName.value) return null;
+  return professionDatabase.value.professions[selectedProfessionName.value];
 });
+
+const professionJobDetails = computed<string>(() => {
+  return selectedProfessionData.value?.jobDetails || 'この職業に関する詳細情報はまだ登録されていません。';
+});
+
+const professionTraits = computed<string[]>(() => {
+  return selectedProfessionData.value?.traits || ['情報がありません'];
+});
+
+onMounted(loadProfessionData);
 </script>
 
-<style>
+<style scoped>
+/* ==========================================================================
+   基本レイアウト
+   ========================================================================== */
 .about {
   width: 100%;
   padding: 0;
@@ -118,9 +106,8 @@ onMounted(() => {
   align-items: center;
 }
 
-
 .about-content {
-  width: 95%;
+  width: 70%;
   max-width: 1000px;
   background-color: var(--background-white);
   border-radius: 10px;
@@ -139,8 +126,12 @@ onMounted(() => {
   font-size: clamp(15px, 3vw, 30px);
   font-weight: 600;
   font-family: 'Hiragino Sans', sans-serif;
+  line-height: 1.6;
 }
 
+/* ==========================================================================
+   職業セレクター
+   ========================================================================== */
 .profession-selector {
   display: flex;
   flex-wrap: wrap;
@@ -156,7 +147,7 @@ onMounted(() => {
   border-radius: 50px;
   cursor: pointer;
   transition: all 0.3s ease;
-  font-size: 1rem;
+  font-size: clamp(10px, 1.3vw, 20px);
   font-family: 'Hiragino Sans', sans-serif;
   color: var(--text-dark);
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
@@ -179,6 +170,9 @@ onMounted(() => {
   transform: translateY(-2px);
 }
 
+/* ==========================================================================
+   状態別コンテナ (ローディング, エラー)
+   ========================================================================== */
 .loading-container, .error-container {
   text-align: center;
   padding: 3rem 1rem;
@@ -208,9 +202,12 @@ onMounted(() => {
   font-size: 0.9rem;
 }
 
+/* ==========================================================================
+   職業詳細説明
+   ========================================================================== */
 .profession-description {
-  margin-top: 2rem 0;
-  padding: 2rem;
+  margin-top: 2rem;
+  padding: 1.5rem;
   background-color: #fff;
   border-radius: 15px;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
@@ -230,19 +227,13 @@ onMounted(() => {
   border-radius: 0 0 0 100%;
 }
 
-h2 {
+.profession-description h2 {
   color: var(--main-color);
   margin-bottom: 1rem;
   text-align: center;
-  font-size: 1.5rem;
+  font-size: clamp(18px, 3.5vw, 30px);
   border-bottom: 2px solid var(--main-color);
   padding-bottom: 0.5rem;
-}
-
-h3 {
-  color: var(--text-dark);
-  margin-bottom: 1rem;
-  font-size: 1.1rem;
 }
 
 .description-content {
@@ -253,66 +244,34 @@ h3 {
 .description-content p {
   text-align: justify;
   color: var(--text-dark);
-  font-size: clamp(15px, 2vw, 20px);
+  font-size: var(--fontsize-text);
   padding-left: 0.5rem;
   padding-right: 0.5rem;
 }
 
+.characteristics h3 {
+  color: var(--text-dark);
+  margin-bottom: 1rem;
+  font-size: clamp(12px, 1.7vw, 20px);
+}
+
 .characteristics ul {
   padding-left: 1.5rem;
-  list-style-type: none;
+  list-style-type: '✓ ';
+  color: var(--main-color);
 }
 
 .characteristics li {
   margin-bottom: 0.8rem;
-  line-height: 1.4;
   color: var(--text-dark);
-  font-size: 1.1rem;
+  font-size: var(--fontsize-text);
   position: relative;
-  padding-left: 1.5rem;
-}
-
-.characteristics li::before {
-  content: '✓';
-  position: absolute;
-  left: 0;
-  color: var(--main-color);
-  font-weight: bold;
-}
-
-.category-scores {
-  margin-top: 1rem;
-}
-
-.category-bar {
-  display: flex;
-  align-items: center;
-  margin-bottom: 0.8rem;
-}
-
-.bar-container {
-  flex-grow: 1;
-  height: 12px;
-  background-color: #e0e0e0;
-  border-radius: 6px;
-  overflow: hidden;
-}
-
-.bar-fill {
-  height: 100%;
-  background-color: var(--main-color);
-  transition: width 0.5s ease;
-}
-
-.category-score {
-  width: 30px;
-  text-align: right;
   padding-left: 0.5rem;
-  font-size: 0.9rem;
-  color: var(--text-dark);
-  font-weight: bold;
 }
 
+/* ==========================================================================
+   メディアクエリ (レスポンシブ対応)
+   ========================================================================== */
 /* スマートフォン向け */
 @media (max-width: 456px) {
   .about {
@@ -320,6 +279,7 @@ h3 {
   }
   
   .about-content {
+    width: 100%;
     padding: 1rem;
   }
   
@@ -330,11 +290,20 @@ h3 {
   .profession-selector button {
     width: 40%;
     max-width: 300px;
+    margin: 0.3rem;
+    padding: 0.5rem;
+  }
+  
+  .characteristics h3 {
     margin-bottom: 0.5rem;
   }
   
-  .category-bar {
-    flex-wrap: wrap;
+  .characteristics ul {
+    padding-left: 0.5rem;
+  }
+
+  .characteristics li {
+    margin-bottom: 0.5rem;
   }
 }
 
