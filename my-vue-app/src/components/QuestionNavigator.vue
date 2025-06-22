@@ -150,16 +150,47 @@ import {
 } from '../utils/diagnosisLoader'
 
 const router = useRouter()
+
+// localStorage キー
+const STORAGE_KEYS = {
+  ANSWERS: 'diagnosis_answers',
+  SHOW_RESULT: 'diagnosis_show_result',
+  TOP_PROFESSIONS: 'diagnosis_top_professions',
+  CURRENT_QUESTION_INDEX: 'diagnosis_current_question_index'
+}
+
+// localStorage ヘルパー関数
+function loadFromStorage<T>(key: string, defaultValue: T): T {
+  try {
+    const stored = localStorage.getItem(key)
+    return stored ? JSON.parse(stored) : defaultValue
+  } catch {
+    return defaultValue
+  }
+}
+
+function saveToStorage<T>(key: string, value: T): void {
+  try {
+    localStorage.setItem(key, JSON.stringify(value))
+  } catch (error) {
+    console.warn('localStorage への保存に失敗:', error)
+  }
+}
+
 const config = ref<DiagnosticConfig | null>(null)
 const professionDatabase = ref<ProfessionDatabase | null>(null)
-const loading = ref(true)
+// 保存された状態がある場合はローディング時間を短縮
+const hasSavedState = loadFromStorage(STORAGE_KEYS.ANSWERS, null) !== null || loadFromStorage(STORAGE_KEYS.SHOW_RESULT, false)
+const loading = ref(!hasSavedState)
 const error = ref<string | null>(null)
-const answers = ref<Record<string, string>>({})
-const showResult = ref(false)
-const topProfessions = ref<ProfessionScore[]>([])
+
+// 状態を localStorage から復元
+const answers = ref<Record<string, string>>(loadFromStorage(STORAGE_KEYS.ANSWERS, {}))
+const showResult = ref(loadFromStorage(STORAGE_KEYS.SHOW_RESULT, false))
+const topProfessions = ref<ProfessionScore[]>(loadFromStorage(STORAGE_KEYS.TOP_PROFESSIONS, []))
 const DISPLAY_TOP_N = 3; // リアクティブである必要がないため定数に変更
 const displayedProfessions = ref<ProfessionScore[]>([])
-const currentQuestionIndex = ref(0)
+const currentQuestionIndex = ref(loadFromStorage(STORAGE_KEYS.CURRENT_QUESTION_INDEX, 0))
 
 const questions = computed<Question[]>(() => {
   return config.value?.questions || []
@@ -194,11 +225,33 @@ async function loadConfig() {
     
     config.value = configData
     professionDatabase.value = professionData
+    
+    // 結果画面の状態を復元
+    if (showResult.value && topProfessions.value.length > 0) {
+      updateDisplayedProfessions()
+    }
+    
     loading.value = false
   } catch (err) {
     console.error('設定の読み込みに失敗しました:', err)
-    error.value = '診断データの読み込みに失敗しました。もう一度お試しください。'
-    loading.value = false
+    
+    // 保存されたデータがある場合は、エラー状態でも一部機能を利用可能にする
+    if (hasSavedState) {
+      error.value = 'データの読み込みに失敗しましたが、保存された診断データは利用できます。ネットワーク接続を確認してください。'
+      loading.value = false
+      
+      // 最低限の設定で動作させる
+      if (!config.value) {
+        config.value = {
+          category_weights: { skill: 1.0, interest: 1.0, priority: 1.0, balance: 1.0 },
+          threshold: { recommend_top_n: 3 },
+          questions: []
+        }
+      }
+    } else {
+      error.value = '診断データの読み込みに失敗しました。インターネット接続を確認してもう一度お試しください。'
+      loading.value = false
+    }
   }
 }
 
@@ -206,6 +259,7 @@ let navigationTimer: ReturnType<typeof setTimeout> | null = null;
 
 function selectOption(questionId: string, label: string) {
   answers.value[questionId] = label;
+  saveToStorage(STORAGE_KEYS.ANSWERS, answers.value);
   
   if (navigationTimer) {
     clearTimeout(navigationTimer);
@@ -229,6 +283,7 @@ async function scrollToContentTop() {
 async function goToNextQuestion() {
   if (currentQuestionIndex.value < questions.value.length - 1) {
     currentQuestionIndex.value++;
+    saveToStorage(STORAGE_KEYS.CURRENT_QUESTION_INDEX, currentQuestionIndex.value);
     scrollToContentTop();
   }
 }
@@ -236,6 +291,7 @@ async function goToNextQuestion() {
 async function goToPreviousQuestion() {
   if (currentQuestionIndex.value > 0) {
     currentQuestionIndex.value--;
+    saveToStorage(STORAGE_KEYS.CURRENT_QUESTION_INDEX, currentQuestionIndex.value);
     if (currentQuestionIndex.value >= 1) {
       scrollToContentTop();
     } else {
@@ -249,8 +305,10 @@ function calculateResult() {
   
   const scores = calculateProfessionScores(config.value, answers.value, professionDatabase.value || undefined)
   topProfessions.value = scores
+  saveToStorage(STORAGE_KEYS.TOP_PROFESSIONS, topProfessions.value)
   updateDisplayedProfessions()
   showResult.value = true
+  saveToStorage(STORAGE_KEYS.SHOW_RESULT, showResult.value)
   window.scrollTo(0, 0)
 }
 
@@ -271,6 +329,12 @@ function resetDiagnosis() {
   topProfessions.value = []
   displayedProfessions.value = []
   currentQuestionIndex.value = 0
+  
+  // localStorage もクリア
+  Object.values(STORAGE_KEYS).forEach(key => {
+    localStorage.removeItem(key)
+  })
+  
   window.scrollTo(0, 0)
 }
 
@@ -314,7 +378,8 @@ async function copyToClipboard(text: string): Promise<boolean> {
     document.body.appendChild(textArea);
     textArea.select();
     try {
-      const successful = document.execCommand('copy');
+      // eslint-disable-next-line deprecation/deprecation
+      const successful = document.execCommand('copy'); // 古いブラウザ互換性のためのフォールバック
       return successful;
     } catch (execErr) {
       console.error('execCommand failed:', execErr);
@@ -384,7 +449,7 @@ async function shareToInstagramDesktop(text: string) {
   
   if (copied) {
     // Instagram Webを新しいタブで開く
-    const instagramWeb = window.open('https://www.instagram.com/', '_blank');
+    window.open('https://www.instagram.com/', '_blank');
     
     // ユーザーに操作方法を案内
     setTimeout(() => {
