@@ -80,7 +80,7 @@
             </div>
 
             <div class="profession-comment">
-              <p>{{ profession.comment || 'あなたの特性に合った職業です。自分の強みを活かして頑張りましょう。' }}</p>
+              <p>{{ profession.comment || 'あなたの回答から分析した結果、この職業があなたの特性や価値観に適している可能性が高いことがわかりました。ぜひチャレンジを検討してみてください。' }}</p>
             </div>
             
             <div v-if="profession.annualIncome" class="annual-income">
@@ -99,15 +99,15 @@
             <h3 class="share-title">診断結果をシェア</h3>
             <div class="share-buttons">
               <button @click="shareToLine" class="share-button line-button">
-                <img src="/image/LINE.png" alt="LINE" class="share-icon line-icon-img">
+                <img src="/image/LINE.png" alt="LINEのロゴアイコン" class="share-icon line-icon-img">
                 LINEでシェア
               </button>
               <button @click="shareToX" class="share-button x-button">
-                <img src="/image/X.png" alt="X" class="share-icon x-icon-img">
+                <img src="/image/X.png" alt="X（旧Twitter）のロゴアイコン" class="share-icon x-icon-img">
                 Xでシェア
               </button>
               <button @click="shareToInstagram" class="share-button instagram-button">
-                <img src="/image/Instagram.png" alt="Instagram Stories" class="share-icon instagram-icon-img">
+                <img src="/image/Instagram.png" alt="Instagramのロゴアイコン" class="share-icon instagram-icon-img">
                 Instagramでシェア
               </button>
             </div>

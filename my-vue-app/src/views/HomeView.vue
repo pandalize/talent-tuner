@@ -8,8 +8,8 @@
         </h1>
       </div>
       <div class="image-container">
-        <img src="/image/construction.png" alt="Image 1" />
-        <img src="/image/influencer.png" alt="Image 2" />
+        <img src="/image/construction.png" alt="建設業で働く人のイラスト - 高収入職業の一つ" />
+        <img src="/image/influencer.png" alt="インフルエンサーのイラスト - 高収入職業の一つ" />
       </div>
       <div class="navigation-cards">
         <router-link to="/diagnosis" class="btn btn-border-shadow btn-border-shadow--radius">診断する</router-link>

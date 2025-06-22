@@ -81,11 +81,14 @@ const selectedProfessionData = computed(() => {
 });
 
 const professionJobDetails = computed<string>(() => {
-  return selectedProfessionData.value?.jobDetails || 'この職業に関する詳細情報はまだ登録されていません。';
+  return selectedProfessionData.value?.jobDetails || 'この職業に関する詳細情報は現在準備中です。診断ページで適性をチェックしてみてください。';
 });
 
 const professionTraits = computed<string[]>(() => {
-  return selectedProfessionData.value?.traits || ['情報がありません'];
+  return selectedProfessionData.value?.traits || [
+    '詳細な特徴情報は準備中ですが、この職業はあなたの適性に合う可能性があります',
+    '診断ページで詳しくチェックしてみることをおすすめします'
+  ];
 });
 
 onMounted(loadProfessionData);
