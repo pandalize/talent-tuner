@@ -53,8 +53,6 @@ const professions = [
   { id: 4, name: 'デイトレーダー' },
   { id: 5, name: '起業家' },
   { id: 6, name: 'ワーホリ' },
-  { id: 7, name: 'ホスト' },
-  { id: 8, name: 'キャバ嬢' },
   { id: 9, name: 'インフルエンサー' },
   { id: 10, name: '難関大進学' }
 ];
