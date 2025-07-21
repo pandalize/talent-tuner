@@ -90,6 +90,14 @@ Google AdSense審査通過のために以下の改善を実装済み：
 - フッター位置の最適化（margin-top: auto）
 - 診断ページのフッター位置問題修正（DiagnosisView.vueの height: 100vh削除）
 
+## 連絡先情報更新（2025年7月21日）
+
+メールアドレスとサイト情報を更新：
+- 全ページの連絡先メールアドレス：`pandalize.info@gmail.com`
+- 運営者所在地：北海道
+- サイトURL：https://pandalize.com/
+- お問い合わせ方式：直接メールアドレス表示（フォーム廃止）
+
 ## 開発時の注意点
 
 - アプリは `QuestionNavigator.vue` にメインロジックを持つシングルページ構造
