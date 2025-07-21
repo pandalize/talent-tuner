@@ -11,7 +11,7 @@
         </div>
         <div class="info-item">
           <dt>URL</dt>
-          <dd>https://talent-tuner.com/</dd>
+          <dd>https://pandalize.com/</dd>
         </div>
         <div class="info-item">
           <dt>サービス内容</dt>
@@ -27,11 +27,15 @@
         </div>
         <div class="info-item">
           <dt>所在地</dt>
-          <dd>日本</dd>
+          <dd>北海道</dd>
         </div>
         <div class="info-item">
           <dt>連絡先</dt>
-          <dd><router-link to="/contact">お問い合わせフォーム</router-link>よりご連絡ください</dd>
+          <dd>
+            <a href="mailto:pandalize.info@gmail.com?subject=【ため職】お問い合わせ">
+              pandalize.info@gmail.com
+            </a>
+          </dd>
         </div>
       </div>
       

@@ -57,7 +57,13 @@
       
       <div class="terms-section">
         <h2>9. お問い合わせ</h2>
-        <p>本規約に関するお問い合わせは、<router-link to="/contact">お問い合わせページ</router-link>よりご連絡ください。</p>
+        <p>
+          本規約に関するお問い合わせは、
+          <a href="mailto:pandalize.info@gmail.com?subject=【ため職】利用規約について">
+            pandalize.info@gmail.com
+          </a>
+          よりご連絡ください。
+        </p>
       </div>
       
       <div class="update-date">
