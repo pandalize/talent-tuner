@@ -113,6 +113,22 @@
             </div>
           </div>
           
+          <div class="purchase-section">
+            <h3 class="purchase-title">📊 詳細PDFレポート</h3>
+            <p class="purchase-description">
+              あなたの診断結果をより詳しく分析した、パーソナライズされたPDFレポートをご用意しています。
+            </p>
+            <ul class="purchase-features">
+              <li>📈 各カテゴリーの詳細分析</li>
+              <li>💡 職業選択のアドバイス</li>
+              <li>🎯 キャリアパスの提案</li>
+              <li>📚 スキルアップのヒント</li>
+            </ul>
+            <button @click="purchasePdfReport" class="btn purchase-button">
+              詳細レポートを購入する（¥500）
+            </button>
+          </div>
+          
           <div class="action-buttons">
             <button @click="resetDiagnosis" class="btn action-button">もう一度診断する</button>
             <button @click="goHome" class="btn action-button">ホームに戻る</button>
@@ -340,6 +356,47 @@ function resetDiagnosis() {
 
 function goHome() {
   router.push('/')
+}
+
+async function purchasePdfReport() {
+  try {
+    // 診断結果データを準備
+    const resultData = {
+      answers: answers.value,
+      topProfessions: topProfessions.value,
+      timestamp: new Date().toISOString()
+    }
+    
+    // Stripe Checkoutセッションを作成
+    const response = await fetch('/api/create-checkout-session.php', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        priceAmount: 500, // 500円
+        resultData: resultData
+      })
+    })
+    
+    if (!response.ok) {
+      throw new Error('決済セッションの作成に失敗しました')
+    }
+    
+    const { sessionId } = await response.json()
+    
+    // Stripe Checkoutにリダイレクト
+    const stripe = (window as any).Stripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY)
+    const { error } = await stripe.redirectToCheckout({ sessionId })
+    
+    if (error) {
+      console.error('Stripe Error:', error)
+      alert('決済処理でエラーが発生しました。もう一度お試しください。')
+    }
+  } catch (error) {
+    console.error('Purchase error:', error)
+    alert('購入処理中にエラーが発生しました。もう一度お試しください。')
+  }
 }
 
 function generateShareText(): string {
@@ -937,6 +994,76 @@ onMounted(() => {
 .instagram-button {
   background: linear-gradient(135deg, #E4405F, #f29884);
 }
+.purchase-section {
+  margin: 3rem auto;
+  padding: 2.5rem;
+  background: linear-gradient(135deg, #f7f9fc 0%, #f1f5f9 100%);
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  border: 2px solid var(--main-color);
+  max-width: 600px;
+}
+
+.purchase-title {
+  color: var(--text-dark);
+  font-size: clamp(18px, 3vw, 32px);
+  font-weight: 700;
+  margin-bottom: 1rem;
+  text-align: center;
+  font-family: 'Hiragino Sans', sans-serif;
+}
+
+.purchase-description {
+  color: var(--text-dark);
+  font-size: clamp(14px, 2vw, 18px);
+  text-align: center;
+  margin-bottom: 2rem;
+  line-height: 1.8;
+}
+
+.purchase-features {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 2rem 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+.purchase-features li {
+  background: white;
+  padding: 1rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  font-size: clamp(13px, 1.8vw, 16px);
+  font-weight: 500;
+  color: var(--text-dark);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.purchase-button {
+  background: linear-gradient(135deg, var(--main-color), #4a7ba7);
+  color: white;
+  font-size: clamp(16px, 2.5vw, 22px);
+  font-weight: 700;
+  padding: 1.5rem 3rem;
+  border-radius: 50px;
+  width: 100%;
+  max-width: 400px;
+  margin: 0 auto;
+  display: block;
+  transition: all 0.3s ease;
+  box-shadow: 0 8px 25px rgba(95, 144, 178, 0.3);
+}
+
+.purchase-button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 35px rgba(95, 144, 178, 0.4);
+  background: linear-gradient(135deg, #4a7ba7, var(--main-color));
+}
+
 .action-buttons {
   display: flex;
   justify-content: center;

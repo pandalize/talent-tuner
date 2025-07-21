@@ -78,6 +78,15 @@ const router = createRouter({
       }
     },
     {
+      path: '/payment-success',
+      name: 'payment-success',
+      component: () => import('../views/PaymentSuccessView.vue'),
+      meta: {
+        title: '決済完了 | ため職',
+        description: 'ため職の詳細診断レポートの決済が完了しました。PDFレポートのダウンロードが可能です。'
+      }
+    },
+    {
       path: '/404',
       name: 'notfound',
       component: () => import('../views/NotFoundView.vue'),
