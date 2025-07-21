@@ -1,0 +1,12 @@
+User-agent: *
+Allow: /
+
+# Disallow admin or sensitive paths (if any)
+# Disallow: /admin/
+# Disallow: /api/
+
+# Sitemap location
+Sitemap: https://talent-tuner.com/sitemap.xml
+
+# Crawl-delay for polite crawling
+Crawl-delay: 1

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from 'vue-router'
+import AppFooter from './components/AppFooter.vue'
 </script>
 
 <template>
@@ -22,6 +23,8 @@ import { RouterLink, RouterView } from 'vue-router'
     <main class="app-content">
       <RouterView />
     </main>
+    
+    <AppFooter />
   </div>
 </template>
 
@@ -45,6 +48,7 @@ html, body {
   align-items: center;
   padding: 0;
   background-color: var(--light-blue);
+  min-height: 100vh;
 }
 
 /* ==========================================================================
@@ -129,6 +133,7 @@ h1 {
    ========================================================================== */
 .app-content {
   width: 100%;
+  flex: 1;
 }
 
 /* ==========================================================================

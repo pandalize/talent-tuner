@@ -11,6 +11,5 @@ import QuestionNavigator from '../components/QuestionNavigator.vue'
 <style scoped>
 .diagnosis-container {
   width: 100%;
-  height: 100vh;
 }
 </style>

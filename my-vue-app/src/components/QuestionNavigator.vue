@@ -1,5 +1,5 @@
 <template>
-  <div class="diagnosis-container">
+  <div class="diagnosis-container" :class="{ 'has-progress': !showResult && questions.length > 0 }">
     <div class="diagnosis-content">
       <div v-if="loading" class="loading-section">
         <p>診断データを読み込んでいます...</p>
@@ -554,7 +554,7 @@ onMounted(() => {
   box-sizing: border-box;
   border: none;
   position: relative;
-  margin-bottom: 120px;
+  margin-bottom: 2rem;
   padding: 2rem;
 }
 .diagnosis-content > p {
@@ -689,6 +689,7 @@ onMounted(() => {
    ========================================================================== */
 .result-section {
   border-radius: 8px;
+  width: 100%;
 }
 .result-section h1 {
   color: var(--text-dark);
@@ -968,6 +969,11 @@ onMounted(() => {
   padding: 1rem 2rem;
   box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.1);
   z-index: 1000;
+}
+
+/* プログレスバーが表示される時のみ下部パディングを追加 */
+.diagnosis-container.has-progress {
+  padding-bottom: 100px;
 }
 .progress-content {
   max-width: 1000px;
