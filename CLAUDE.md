@@ -331,6 +331,57 @@ cd my-vue-app && npm run dev
 - [ ] サポート体制構築
 - [ ] 利用規約・特商法表記更新
 
+## AdSense審査用コンテンツ充実（2025年8月4日実装）
+
+Google AdSense審査通過のために大規模なコンテンツ拡充を実施。
+
+### 実装内容
+
+#### 1. 職業詳細ページ（8ページ）
+- **個別職業ページ** (`/profession/:id`)
+  - プログラマー、デザイナー、営業職、建設業、公認会計士、起業家、建築士、保育士
+  - 各職業の詳細情報（必要スキル、キャリアパス、労働環境、需要見通し、関連職業、必要学歴）
+  - `ProfessionDetailView.vue` で動的ルーティング実装
+
+#### 2. キャリアガイドページ（5ページ）
+- `/career-guide` - キャリア選択の総合ガイド
+- `/skills-development` - スキル開発ガイド（職業別学習ロードマップ）
+- `/salary-guide` - 年収・転職情報ガイド
+- `/career-change` - 転職・キャリアチェンジガイド
+- `/student-guide` - 学生向けキャリアガイド
+
+#### 3. 診断関連ページ（3ページ）
+- `/diagnosis-method` - 診断方法の詳細解説
+- `/result-guide` - 診断結果活用ガイド
+- `/diagnosis-theory` - 適性診断の理論と背景
+
+### データ構造の拡張
+
+#### professions.json の拡張フィールド
+```json
+{
+  "id": "profession-id",
+  "requiredSkills": ["スキル1", "スキル2"],
+  "careerPath": ["ジュニア", "シニア", "マネージャー"],
+  "workEnvironment": "働く環境の説明",
+  "demandOutlook": "需要見通し",
+  "relatedProfessions": ["関連職業1", "関連職業2"],
+  "educationRequirements": "必要な学歴・資格"
+}
+```
+
+#### TypeScript型定義の更新
+`diagnosisLoader.ts` の `ProfessionData` インターフェースに新フィールドを追加。
+
+### 成果
+- **総ページ数**: 25ページ（AdSense推奨15-20ページを大幅超過）
+- **コンテンツ品質**: 各ページ2000-3000文字の専門的コンテンツ
+- **SEO最適化**: 全ページにメタタグ、構造化されたHTML
+- **ユーザビリティ**: 相互リンクによる回遊性向上
+
+### sitemap.xml
+全25ページを記載し、Google Search Consoleへの送信準備完了。
+
 ## 開発時の注意点
 
 - アプリは `QuestionNavigator.vue` にメインロジックを持つシングルページ構造
@@ -340,3 +391,4 @@ cd my-vue-app && npm run dev
 - CSS カスタムプロパティを使用したテーマ対応のレスポンシブデザイン
 - **フッター位置**: App.vueのflexレイアウトに依存するため、各ビューで固定高さ（height: 100vh等）を設定しない
 - **決済処理**: Stripeの公式ベストプラクティスに従い、カード情報は直接扱わない
+- **TypeScript型定義**: 新規フィールド追加時は必ず `diagnosisLoader.ts` の型定義を更新
