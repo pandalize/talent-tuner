@@ -37,6 +37,19 @@
             </li>
           </ul>
         </div>
+        
+        <div class="profession-actions">
+          <router-link 
+            :to="`/profession/${selectedProfessionId}`" 
+            class="detail-button"
+            v-if="selectedProfessionId"
+          >
+            詳細情報を見る
+          </router-link>
+          <router-link to="/diagnosis" class="diagnosis-button">
+            適性診断を受ける
+          </router-link>
+        </div>
       </div>
     </div>
   </div>
@@ -47,14 +60,14 @@ import { ref, onMounted, computed } from 'vue';
 import { loadProfessionDatabase, type ProfessionDatabase } from '../utils/diagnosisLoader';
 
 const professions = [
-  { id: 1, name: 'プログラマー' },
-  { id: 2, name: '公認会計士' },
-  { id: 3, name: '建設業' },
-  { id: 4, name: 'デイトレーダー' },
-  { id: 5, name: '起業家' },
-  { id: 6, name: 'ワーホリ' },
-  { id: 9, name: 'インフルエンサー' },
-  { id: 10, name: '難関大進学' }
+  { id: 1, name: 'プログラマー', urlId: 'programmer' },
+  { id: 2, name: '公認会計士', urlId: 'cpa' },
+  { id: 3, name: '建設業', urlId: 'construction' },
+  { id: 4, name: 'デイトレーダー', urlId: 'daytrader' },
+  { id: 5, name: '起業家', urlId: 'entrepreneur' },
+  { id: 6, name: 'ワーホリ', urlId: 'workingholiday' },
+  { id: 9, name: 'インフルエンサー', urlId: 'influencer' },
+  { id: 10, name: '難関大進学', urlId: 'university' }
 ];
 
 const selectedProfessionName = ref('プログラマー');
@@ -89,6 +102,11 @@ const professionTraits = computed<string[]>(() => {
     '詳細な特徴情報は準備中ですが、この職業はあなたの適性に合う可能性があります',
     '診断ページで詳しくチェックしてみることをおすすめします'
   ];
+});
+
+const selectedProfessionId = computed<string>(() => {
+  const profession = professions.find(p => p.name === selectedProfessionName.value);
+  return profession?.urlId || '';
 });
 
 onMounted(loadProfessionData);
@@ -271,6 +289,56 @@ onMounted(loadProfessionData);
 }
 
 /* ==========================================================================
+   職業アクション
+   ========================================================================== */
+.profession-actions {
+  display: flex;
+  gap: 1rem;
+  margin-top: 2rem;
+  justify-content: center;
+  align-items: center;
+}
+
+.detail-button,
+.diagnosis-button {
+  display: inline-block;
+  padding: 1rem 2rem;
+  border-radius: 25px;
+  text-decoration: none;
+  font-weight: 600;
+  text-align: center;
+  transition: all 0.3s ease;
+  font-size: clamp(12px, 1.2vw, 16px);
+  min-width: 160px;
+}
+
+.detail-button {
+  background: var(--main-color);
+  color: white;
+  border: 2px solid var(--main-color);
+}
+
+.detail-button:hover {
+  background: white;
+  color: var(--main-color);
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(95, 144, 178, 0.3);
+}
+
+.diagnosis-button {
+  background: var(--orange-beige);
+  color: var(--text-dark);
+  border: 2px solid var(--orange-beige);
+}
+
+.diagnosis-button:hover {
+  background: white;
+  color: var(--orange-beige);
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(230, 188, 153, 0.3);
+}
+
+/* ==========================================================================
    メディアクエリ (レスポンシブ対応)
    ========================================================================== */
 /* スマートフォン向け */
@@ -305,6 +373,18 @@ onMounted(loadProfessionData);
 
   .characteristics li {
     margin-bottom: 0.5rem;
+  }
+  
+  .profession-actions {
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+  }
+  
+  .detail-button,
+  .diagnosis-button {
+    width: 100%;
+    max-width: 300px;
   }
 }
 

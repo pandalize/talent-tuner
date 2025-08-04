@@ -87,6 +87,60 @@ const router = createRouter({
       }
     },
     {
+      path: '/profession/:id',
+      name: 'profession-detail',
+      component: () => import('../views/ProfessionDetailView.vue'),
+      meta: {
+        title: '職業詳細 | ため職',
+        description: '職業の詳細情報、必要スキル、キャリアパス、年収情報、転職・就職に役立つ情報を詳しく解説します。'
+      }
+    },
+    {
+      path: '/career-guide',
+      name: 'career-guide',
+      component: () => import('../views/CareerGuideView.vue'),
+      meta: {
+        title: 'キャリア選択ガイド | ため職',
+        description: '自分に合ったキャリアの選び方、職業選択のポイント、キャリア設計の方法を詳しく解説。適性診断と合わせて最適な職業を見つけましょう。'
+      }
+    },
+    {
+      path: '/skills-development',
+      name: 'skills-development',
+      component: () => import('../views/SkillsDevelopmentView.vue'),
+      meta: {
+        title: 'スキル開発ガイド | ため職',
+        description: '高収入職業に必要なスキルの身につけ方、効率的な学習方法、資格取得のポイントを職業別に詳しく解説します。'
+      }
+    },
+    {
+      path: '/salary-guide',
+      name: 'salary-guide',
+      component: () => import('../views/SalaryGuideView.vue'),
+      meta: {
+        title: '年収・転職情報ガイド | ため職',
+        description: '職業別の年収相場、転職市場の動向、年収アップのための戦略を詳しく解説。高収入を目指すためのキャリア戦略をご紹介します。'
+      }
+    },
+    {
+      path: '/career-change',
+      name: 'career-change',
+      component: () => import('../views/CareerChangeView.vue'),
+      meta: {
+        title: '転職・キャリアチェンジガイド | ため職',
+        description: '異業種転職の成功法、キャリアチェンジのタイミング、転職活動のポイントを詳しく解説。新たなキャリアへの第一歩をサポートします。'
+      }
+    },
+    {
+      path: '/student-guide',
+      name: 'student-guide',
+      component: () => import('../views/StudentGuideView.vue'),
+      meta: {
+        title: '学生向けキャリアガイド | ため職',
+        description: '就職活動の準備、業界研究の方法、内定獲得のコツを詳しく解説。学生のうちから始めるキャリア設計で理想の職業を目指しましょう。'
+      }
+    },
+    {
       path: '/404',
       name: 'notfound',
       component: () => import('../views/NotFoundView.vue'),

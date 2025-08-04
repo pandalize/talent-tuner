@@ -9,7 +9,8 @@ import AppFooter from './components/AppFooter.vue'
       <nav>
         <RouterLink to="/">ホーム</RouterLink> |
         <RouterLink to="/diagnosis">診断ページ</RouterLink> |
-        <RouterLink to="/about">職業一覧</RouterLink>
+        <RouterLink to="/about">職業一覧</RouterLink> |
+        <RouterLink to="/career-guide">キャリアガイド</RouterLink>
       </nav>
       <h1>
         <span class="title-base title-emphasis">ため職</span><br>
