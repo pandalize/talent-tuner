@@ -29,10 +29,17 @@ export interface DiagnosticConfig {
 
 // 職業データの定義
 export interface ProfessionData {
+  id?: string;
   annualIncome: string;
   jobDetails: string;
   comment: string;
   traits: string[];
+  requiredSkills?: string[];
+  careerPath?: string[];
+  workEnvironment?: string;
+  demandOutlook?: string;
+  relatedProfessions?: string[];
+  educationRequirements?: string;
 }
 
 // 職業スコアの定義

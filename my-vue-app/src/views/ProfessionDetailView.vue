@@ -152,7 +152,7 @@ const professionData = computed((): ProfessionData | null => {
 });
 
 const relatedProfessionsWithIds = computed(() => {
-  if (!professionData.value || !professionDatabase.value) return [];
+  if (!professionData.value || !professionDatabase.value || !professionData.value.relatedProfessions) return [];
   
   return professionData.value.relatedProfessions.map(profName => {
     const data = professionDatabase.value!.professions[profName];
