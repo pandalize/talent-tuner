@@ -1,0 +1,47 @@
+name: Deploy to お名前.com Server
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'my-vue-app/**'
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+        cache: 'npm'
+        cache-dependency-path: my-vue-app/package-lock.json
+    
+    - name: Install dependencies
+      working-directory: ./my-vue-app
+      run: npm ci
+    
+    - name: Build Vue app
+      working-directory: ./my-vue-app
+      run: npm run build
+    
+    - name: Deploy to FTP server
+      uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+      with:
+        server: ${{ secrets.FTP_SERVER }}
+        username: ${{ secrets.FTP_USERNAME }}
+        password: ${{ secrets.FTP_PASSWORD }}
+        port: ${{ secrets.FTP_PORT }}
+        local-dir: ./my-vue-app/dist/
+        server-dir: ./public_html/
+        dangerous-clean-slate: false
+        exclude: |
+          **/.git*
+          **/.git*/**
+          **/node_modules/**
+          .env
