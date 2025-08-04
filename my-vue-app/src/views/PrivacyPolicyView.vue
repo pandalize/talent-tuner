@@ -61,7 +61,7 @@
       </div>
       
       <div class="update-date">
-        <p>最終更新日：2025年7月21日</p>
+        <p>最終更新日：2025年8月4日</p>
       </div>
     </div>
   </div>
