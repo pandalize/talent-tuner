@@ -141,6 +141,33 @@ const router = createRouter({
       }
     },
     {
+      path: '/diagnosis-method',
+      name: 'diagnosis-method',
+      component: () => import('../views/DiagnosisMethodView.vue'),
+      meta: {
+        title: '診断方法について | ため職',
+        description: 'ため職の適性診断システムの詳細解説。4つのカテゴリー（スキル・興味・優先事項・バランス）による科学的分析方法、スコアリング・アルゴリズム、診断の信頼性と限界について専門的に説明します。'
+      }
+    },
+    {
+      path: '/result-guide',
+      name: 'result-guide',
+      component: () => import('../views/ResultGuideView.vue'),
+      meta: {
+        title: '診断結果の活用ガイド | ため職',
+        description: '適性診断の結果を最大限に活用するための実践的ガイド。結果の読み方から、現職者・学生・転職検討者それぞれの活用方法、注意点、次のステップまで詳細に解説します。'
+      }
+    },
+    {
+      path: '/diagnosis-theory',
+      name: 'diagnosis-theory',
+      component: () => import('../views/DiagnosisTheoryView.vue'),
+      meta: {
+        title: '適性診断の理論と背景 | ため職',
+        description: '適性診断の科学的根拠を詳細解説。ホランド理論、多重知能理論、統計学的手法、診断精度、今後の技術発展まで、職業適性診断の理論的背景を専門的に説明します。'
+      }
+    },
+    {
       path: '/404',
       name: 'notfound',
       component: () => import('../views/NotFoundView.vue'),
