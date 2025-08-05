@@ -5,11 +5,26 @@
  * Node.js + basic-ftp を使用した完全自動化
  */
 
-const ftp = require('basic-ftp');
-const fs = require('fs');
-const path = require('path');
-const { exec } = require('child_process');
-const { promisify } = require('util');
+import ftp from 'basic-ftp';
+import fs from 'fs';
+import path from 'path';
+import { exec } from 'child_process';
+import { promisify } from 'util';
+import { fileURLToPath } from 'url';
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// .env.deployファイルを手動で読み込み
+const envPath = path.join(__dirname, '.env.deploy');
+if (fs.existsSync(envPath)) {
+  const envContent = fs.readFileSync(envPath, 'utf8');
+  envContent.split('\n').forEach(line => {
+    const [key, value] = line.split('=');
+    if (key && value && !key.startsWith('#')) {
+      process.env[key.trim()] = value.trim();
+    }
+  });
+}
 
 const execAsync = promisify(exec);
 
@@ -84,43 +99,90 @@ class FTPDeployer {
     }
   }
 
+  async findWebDirectory() {
+    console.log('🔍 Webディレクトリを検索中...');
+    
+    // 可能性のあるWebディレクトリ名
+    const possibleDirs = ['public_html', 'www', 'htdocs', 'html', 'public', 'web'];
+    
+    try {
+      // ルートディレクトリの内容を取得
+      await this.client.cd('/');
+      const list = await this.client.list();
+      
+      console.log('  📂 ルートディレクトリの内容:');
+      list.forEach(item => {
+        console.log(`    ${item.type === 1 ? '📁' : '📄'} ${item.name} (type: ${item.type})`);
+      });
+      
+      // ドメイン名のディレクトリを探す（お名前.com特有の構造）
+      const domainDirs = list.filter(item => 
+        (item.type === 1 || item.type === 2) && 
+        (item.name.includes('.com') || item.name.includes('.jp') || item.name.includes('.net'))
+      );
+      
+      if (domainDirs.length > 0) {
+        // pandalize.com を優先的に選択
+        const pandalizeDir = domainDirs.find(item => item.name === 'pandalize.com');
+        if (pandalizeDir) {
+          console.log(`  ✅ ドメインディレクトリ発見: ${pandalizeDir.name}`);
+          return `/${pandalizeDir.name}`;
+        } else {
+          console.log(`  ✅ ドメインディレクトリ発見: ${domainDirs[0].name}`);
+          return `/${domainDirs[0].name}`;
+        }
+      }
+      
+      // 標準的なWebディレクトリがあるかチェック
+      for (const dir of possibleDirs) {
+        const found = list.find(item => item.name === dir && (item.type === 1 || item.type === 2));
+        if (found) {
+          console.log(`  ✅ Webディレクトリ発見: ${dir}`);
+          return `/${dir}`;
+        }
+      }
+      
+      // どちらも見つからない場合はルートを使用
+      console.log('  ⚠️  適切なWebディレクトリが見つかりません。ルートディレクトリを使用します。');
+      return '/';
+      
+    } catch (error) {
+      console.warn('  ⚠️  ディレクトリ検索に失敗しました。デフォルトを使用します:', error.message);
+      return REMOTE_DIR;
+    }
+  }
+
   async uploadFiles() {
     console.log('📤 ファイルをアップロード中...');
 
+    // サーバーのディレクトリ構造を確認
+    const remoteDir = await this.findWebDirectory();
+    console.log(`  📁 Web ディレクトリ: ${remoteDir}`);
+
     // distディレクトリの全ファイルをアップロード
-    await this.client.ensureDir(REMOTE_DIR);
-    await this.client.clearWorkingDir();
+    await this.client.ensureDir(remoteDir);
+    await this.client.cd(remoteDir);
     
     console.log('  📁 静的ファイル（dist/）をアップロード...');
-    await this.client.uploadFromDir(LOCAL_DIST_DIR, REMOTE_DIR);
+    await this.client.uploadFromDir(LOCAL_DIST_DIR, '.');
 
     // 設定ファイルのアップロード
     console.log('  ⚙️  設定ファイルをアップロード...');
     
     // .htaccess
     const htaccessLocal = './public/.htaccess';
-    const htaccessRemote = `${REMOTE_DIR}/.htaccess`;
     if (fs.existsSync(htaccessLocal)) {
-      await this.client.uploadFrom(htaccessLocal, htaccessRemote);
+      await this.client.uploadFrom(htaccessLocal, '.htaccess');
       console.log('    ✅ .htaccess アップロード完了');
     }
 
-    // API ディレクトリ作成
-    await this.client.ensureDir(`${REMOTE_DIR}/api`);
-    
-    // PHP APIプロキシ
-    const phpApiLocal = './public/api/chat-proxy.php';
-    const phpApiRemote = `${REMOTE_DIR}/api/chat-proxy.php`;
-    if (fs.existsSync(phpApiLocal)) {
-      await this.client.uploadFrom(phpApiLocal, phpApiRemote);
-      console.log('    ✅ chat-proxy.php アップロード完了');
-    }
+    // 追加ファイルは dist/ のアップロードで既に処理済み
+    console.log('    ✅ APIファイルはメインアップロードで処理済み');
 
     // .env ファイル
     const envLocal = './.env';
-    const envRemote = `${REMOTE_DIR}/.env`;
     if (fs.existsSync(envLocal)) {
-      await this.client.uploadFrom(envLocal, envRemote);
+      await this.client.uploadFrom(envLocal, '.env');
       console.log('    ✅ .env アップロード完了');
     }
 
@@ -155,9 +217,9 @@ class FTPDeployer {
 }
 
 // メイン実行
-if (require.main === module) {
+if (import.meta.url === `file://${process.argv[1]}`) {
   const deployer = new FTPDeployer();
   deployer.deploy();
 }
 
-module.exports = FTPDeployer;
+export default FTPDeployer;
