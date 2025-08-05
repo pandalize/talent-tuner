@@ -1,0 +1,33 @@
+{
+  "home": {
+    "hero": {
+      "subtitle": "Japan's Most Beneficial",
+      "title": "Honest Career Assessment",
+      "description": "Comprehensive analysis of your skills, interests, values, and lifestyle to recommend high-income careers that truly match you."
+    },
+    "features": {
+      "analysis": {
+        "title": "Multi-dimensional Analysis",
+        "description": "Comprehensive evaluation of skills, interests, values, and lifestyle"
+      },
+      "evidence": {
+        "title": "Evidence-based Recommendations",
+        "description": "Scientific diagnosis using statistical data and psychometric theory"
+      },
+      "instant": {
+        "title": "Quick Precision Assessment",
+        "description": "Efficient and accurate aptitude assessment with 16 carefully selected questions"
+      }
+    },
+    "cta": {
+      "start_diagnosis": "Start Assessment",
+      "ai_counseling": "AI Career Counseling",
+      "view_professions": "View Professions"
+    },
+    "trust": {
+      "users": "{count} users",
+      "updated": "{year} data",
+      "privacy": "Privacy protected"
+    }
+  }
+}

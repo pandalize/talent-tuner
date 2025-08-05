@@ -1,0 +1,10 @@
+{
+  "diagnosis": {
+    "title": "Career Assessment",
+    "start": "Start Assessment",
+    "next": "Next Question",
+    "previous": "Previous Question",
+    "submit": "View Results",
+    "results": "Assessment Results"
+  }
+}

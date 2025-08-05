@@ -1,0 +1,33 @@
+{
+  "home": {
+    "hero": {
+      "subtitle": "日本最有用的",
+      "title": "诚实的职业诊断推荐",
+      "description": "综合分析你的技能、兴趣、价值观和生活方式，推荐真正适合你的高收入职业。"
+    },
+    "features": {
+      "analysis": {
+        "title": "四个维度多角度分析",
+        "description": "技能、兴趣、价值观、生活方式综合评估"
+      },
+      "evidence": {
+        "title": "基于证据的推荐",
+        "description": "基于统计数据和心理测量学理论的科学诊断"
+      },
+      "instant": {
+        "title": "快速精准诊断",
+        "description": "通过16个精选问题实现高效准确的适性判定"
+      }
+    },
+    "cta": {
+      "start_diagnosis": "开始诊断",
+      "ai_counseling": "AI职业咨询",
+      "view_professions": "查看职业列表"
+    },
+    "trust": {
+      "users": "{count}用户使用",
+      "updated": "{year}年版数据",
+      "privacy": "隐私保护"
+    }
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "diagnosis": {
+    "title": "职业适性诊断",
+    "start": "开始诊断",
+    "next": "下一个问题",
+    "previous": "上一个问题",
+    "submit": "查看诊断结果",
+    "results": "诊断结果"
+  }
+}

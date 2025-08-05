@@ -1,0 +1,33 @@
+{
+  "home": {
+    "hero": {
+      "subtitle": "日本一ためになる",
+      "title": "正直なおすすめ職業診断",
+      "description": "あなたのスキル、興味、価値観、ライフスタイルを総合的に分析し、本当にあなたに合った高収入職業をおすすめします。"
+    },
+    "features": {
+      "analysis": {
+        "title": "4つの観点から多角的分析",
+        "description": "スキル・興味・価値観・ライフスタイルを総合評価"
+      },
+      "evidence": {
+        "title": "根拠に基づく推奨",
+        "description": "統計データと心理測定学理論による科学的診断"
+      },
+      "instant": {
+        "title": "短時間で精密診断",
+        "description": "16の厳選質問で効率的かつ正確な適性判定"
+      }
+    },
+    "cta": {
+      "start_diagnosis": "診断を始める",
+      "ai_counseling": "AI進路相談",
+      "view_professions": "職業一覧を見る"
+    },
+    "trust": {
+      "users": "{count}人が利用",
+      "updated": "{year}年版データ",
+      "privacy": "プライバシー保護"
+    }
+  }
+}

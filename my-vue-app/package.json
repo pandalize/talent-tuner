@@ -13,7 +13,9 @@
     "lint": "eslint . --fix",
     "format": "prettier --write src/",
     "deploy": "node deploy-ftp.js",
-    "deploy:setup": "cp .env.deploy.example .env.deploy && echo 'Please edit .env.deploy with your FTP credentials'"
+    "deploy:setup": "cp .env.deploy.example .env.deploy && echo 'Please edit .env.deploy with your FTP credentials'",
+    "validate:translations": "node scripts/validate-translations.js",
+    "validate:translations:verbose": "node scripts/validate-translations.js --verbose"
   },
   "dependencies": {
     "pinia": "^3.0.1",
