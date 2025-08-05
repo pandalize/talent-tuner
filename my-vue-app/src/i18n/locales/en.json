@@ -1,0 +1,128 @@
+{
+  "meta": {
+    "title": {
+      "home": "TameShoku - Professional Career Assessment System",
+      "diagnosis": "Career Assessment | TameShoku",
+      "chat": "AI Career Counseling | TameShoku",
+      "about": "Professions | TameShoku"
+    },
+    "description": {
+      "home": "Comprehensive career analysis from 4 perspectives: skills, interests, values, and lifestyle to match you with high-income professions.",
+      "diagnosis": "Answer just 16 questions to discover careers perfectly matched to your aptitude, ranked by compatibility.",
+      "chat": "Our AI career counseling assistant is here to listen and guide you through your career and transition concerns."
+    }
+  },
+  "nav": {
+    "home": "Home",  
+    "diagnosis": "Start Assessment",
+    "chat": "AI Career Counseling",
+    "about": "Professions",
+    "career_guide": "Career Guide",
+    "language": "Language"
+  },
+  "common": {
+    "loading": "Loading...",
+    "error": "An error occurred",
+    "retry": "Retry",
+    "close": "Close",
+    "next": "Next",
+    "previous": "Previous",
+    "submit": "Submit",
+    "save": "Save",
+    "cancel": "Cancel"
+  },
+  "home": {
+    "hero": {
+      "subtitle": "Professional",
+      "title": "Career Assessment System",
+      "description": "We provide scientific career aptitude assessments based on psychological approaches and statistical analysis."
+    },
+    "features": {
+      "analysis": {
+        "title": "Comprehensive Analysis",
+        "description": "Holistic evaluation from 4 perspectives: skills, interests, values, and lifestyle"
+      },
+      "evidence": {
+        "title": "Data-Driven",
+        "description": "Scientifically derive optimal choices from 8 professional categories"
+      },
+      "instant": {
+        "title": "Instant Results",
+        "description": "Generate detailed analysis reports instantly with a 5-minute assessment"
+      }
+    },
+    "cta": {
+      "start_diagnosis": "Start Assessment",
+      "ai_counseling": "AI Career Counseling",
+      "view_professions": "View Professions"
+    },
+    "trust": {
+      "users": "Used by {count}+ people",
+      "updated": "{year} Latest Version",
+      "privacy": "Privacy Protected"
+    }
+  },
+  "diagnosis": {
+    "title": "Career Assessment",
+    "question_progress": "Question {current} of {total}",
+    "category": {
+      "skill": "Skills",
+      "interest": "Interests",
+      "priority": "Values & Priorities",
+      "balance": "Work-Life Balance"
+    },
+    "results": {
+      "title": "Your Results",
+      "your_matches": "Recommended Careers for You",
+      "rank": "#{rank}",
+      "match_rate": "{rate}% Match",
+      "salary_range": "Salary: ${min}K - ${max}K",
+      "view_details": "View Details",
+      "restart": "Take Assessment Again"
+    }
+  },
+  "chat": {
+    "title": "AI Career Counseling",
+    "subtitle": "Ask me anything about your career path",
+    "placeholder": "Tell me about your career concerns...",
+    "send": "Send",
+    "typing": "Typing...",
+    "suggestions": {
+      "title": "Common Questions",
+      "items": [
+        "I don't know what career suits me",
+        "Considering a career change but unsure which field",
+        "Want to learn about future-proof careers",
+        "How can I develop my skills?"
+      ]
+    },
+    "profession_card": {
+      "learn_more": "Learn More",
+      "take_diagnosis": "Take Assessment"
+    }
+  },
+  "professions": {
+    "categories": {
+      "tech_creative": "Technology & Creative",
+      "business_finance": "Business & Finance",
+      "medical_education": "Healthcare & Education",
+      "service": "Service & Hospitality",
+      "professional": "Professional Services"
+    },
+    "details": {
+      "description": "Job Description",
+      "salary": "Salary Range",
+      "skills": "Required Skills",
+      "environment": "Work Environment",
+      "outlook": "Career Outlook",
+      "related": "Related Careers",
+      "education": "Education & Certifications"
+    }
+  },
+  "footer": {
+    "service": "Services",
+    "support": "Support",
+    "legal": "Legal",
+    "copyright": "© {year} TameShoku. All rights reserved."
+  }
+}

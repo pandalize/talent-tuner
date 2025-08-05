@@ -42,56 +42,73 @@ export class ClaudeApiClient {
    * 進路相談のための会話を処理
    */
   async getCareerAdvice(request: CareerAdviceRequest): Promise<CareerAdviceResponse> {
-    // Claude APIを使用（モックレスポンスは無効化）
-    // if (import.meta.env.DEV) {
-    //   return this.getMockResponse(request);
-    // }
-
     try {
-      const systemPrompt = this.buildSystemPrompt();
-      const messages = this.buildMessages(request.messages, request.userProfile);
+      // 本番環境ではPHPプロキシAPIを使用
+      const apiUrl = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+        ? this.baseUrl  // 開発環境: 直接Claude APIを呼び出し
+        : '/api/chat';   // 本番環境: PHPプロキシ経由
 
-      console.log('Claude API リクエスト:', { 
-        model: 'claude-3-haiku-20240307',
-        max_tokens: 1000,
-        system: systemPrompt.substring(0, 200) + '...',
-        messages: messages
-      });
+      const lastUserMessage = request.messages
+        .filter(msg => msg.role === 'user')
+        .pop()?.content || '';
+
+      console.log('API URL:', apiUrl);
+      console.log('User message:', lastUserMessage);
+
+      let response;
       
-      console.log('APIキー確認:', this.apiKey ? `${this.apiKey.substring(0, 20)}...` : '未設定');
+      if (apiUrl === this.baseUrl) {
+        // 開発環境: 直接Claude APIを呼び出し
+        const systemPrompt = this.buildSystemPrompt();
+        const messages = this.buildMessages(request.messages, request.userProfile);
 
-      const response = await fetch(this.baseUrl, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'x-api-key': this.apiKey,
-          'anthropic-version': '2023-06-01'
-        },
-        body: JSON.stringify({
-          model: 'claude-3-haiku-20240307',
-          max_tokens: 1000,
-          system: systemPrompt,
-          messages: messages
-        })
-      });
+        response = await fetch(this.baseUrl, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'x-api-key': this.apiKey,
+            'anthropic-version': '2023-06-01'
+          },
+          body: JSON.stringify({
+            model: 'claude-3-haiku-20240307',
+            max_tokens: 1000,
+            system: systemPrompt,
+            messages: messages
+          })
+        });
 
-      console.log('Claude API レスポンス状態:', response.status, response.statusText);
+        if (!response.ok) {
+          throw new Error(`Claude API error: ${response.status}`);
+        }
 
-      if (!response.ok) {
-        const errorText = await response.text();
-        console.error('Claude API エラー詳細:', errorText);
+        const data = await response.json();
+        return this.parseResponse(data.content[0].text);
+      } else {
+        // 本番環境: PHPプロキシ経由
+        response = await fetch(apiUrl, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            message: lastUserMessage
+          })
+        });
+
+        if (!response.ok) {
+          throw new Error(`Proxy API error: ${response.status}`);
+        }
+
+        const data = await response.json();
         
-        // API エラーの場合はモックレスポンスにフォールバック
-        console.log('API エラーのため、モックレスポンスを使用します');
-        return this.getMockResponse(request);
-      }
+        if (!data.success) {
+          throw new Error(data.error || 'Unknown API error');
+        }
 
-      const data = await response.json();
-      console.log('Claude API レスポンス:', data);
-      
-      return this.parseResponse(data.content[0].text);
+        return this.parseResponse(data.message);
+      }
     } catch (error) {
-      console.error('Claude API呼び出しエラー:', error);
+      console.error('API呼び出しエラー:', error);
       
       // エラーの場合はモックレスポンスにフォールバック
       console.log('エラーのため、モックレスポンスを使用します');

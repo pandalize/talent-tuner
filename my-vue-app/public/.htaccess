@@ -1,18 +1,37 @@
+# Vue.js SPA対応のURL Rewrite設定
 <IfModule mod_rewrite.c>
   RewriteEngine On
   RewriteBase /
-  RewriteRule ^index\.html$ - [L]
-  RewriteCond %{REQUEST_FILENAME} !-f
-  RewriteCond %{REQUEST_FILENAME} !-d
+  
+  # 既存のファイル・ディレクトリは直接配信
+  RewriteCond %{REQUEST_FILENAME} -f [OR]
+  RewriteCond %{REQUEST_FILENAME} -d
+  RewriteRule ^ - [L]
+  
+  # APIリクエストは対応するPHPファイルへ
+  RewriteRule ^api/chat$ api/chat-proxy.php [L]
+  
+  # その他のリクエストはindex.htmlへ（SPA対応）
   RewriteRule . /index.html [L]
 </IfModule>
+
+# 404エラーをindex.htmlにリダイレクト（SPA対応）
+ErrorDocument 404 /index.html
 
 # セキュリティヘッダー
 <IfModule mod_headers.c>
   Header set X-Content-Type-Options "nosniff"
   Header set X-Frame-Options "SAMEORIGIN"
   Header set X-XSS-Protection "1; mode=block"
+  Header set Referrer-Policy "strict-origin-when-cross-origin"
 </IfModule>
+
+# API CORS設定
+<Files "*.php">
+  Header add Access-Control-Allow-Origin "*"
+  Header add Access-Control-Allow-Methods "GET, POST, OPTIONS"
+  Header add Access-Control-Allow-Headers "Content-Type, Authorization"
+</Files>
 
 # Gzip圧縮
 <IfModule mod_deflate.c>

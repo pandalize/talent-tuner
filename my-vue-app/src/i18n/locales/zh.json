@@ -1,0 +1,128 @@
+{
+  "meta": {
+    "title": {
+      "home": "为职 - 专业职业适性诊断系统",
+      "diagnosis": "职业适性诊断 | 为职",
+      "chat": "AI职业咨询 | 为职",
+      "about": "职业列表 | 为职"
+    },
+    "description": {
+      "home": "从技能、兴趣、价值观、生活方式4个角度全面分析，为您匹配高收入职业。",
+      "diagnosis": "只需回答16个问题，即可发现最适合您的职业，按匹配度排名显示。",
+      "chat": "AI职业咨询助手将倾听您的职业和转职烦恼，提供贴心指导。"
+    }
+  },
+  "nav": {
+    "home": "首页",
+    "diagnosis": "开始诊断",
+    "chat": "AI职业咨询",
+    "about": "职业列表",
+    "career_guide": "职业指南",
+    "language": "语言"
+  },
+  "common": {
+    "loading": "加载中...",
+    "error": "发生错误",
+    "retry": "重试",
+    "close": "关闭",
+    "next": "下一步",
+    "previous": "上一步",
+    "submit": "提交",
+    "save": "保存",
+    "cancel": "取消"
+  },
+  "home": {
+    "hero": {
+      "subtitle": "专业的",
+      "title": "职业适性诊断系统",
+      "description": "基于心理学方法和统计分析，为您提供科学的职业适性诊断。"
+    },
+    "features": {
+      "analysis": {
+        "title": "多角度分析",
+        "description": "从技能、兴趣、价值观、生活方式4个角度进行综合评估"
+      },
+      "evidence": {
+        "title": "数据驱动",
+        "description": "从8个职业类别中科学推导出最优选择"
+      },
+      "instant": {
+        "title": "即时结果",
+        "description": "5分钟诊断即可生成详细分析报告"
+      }
+    },
+    "cta": {
+      "start_diagnosis": "开始诊断",
+      "ai_counseling": "AI职业咨询",
+      "view_professions": "查看职业"
+    },
+    "trust": {
+      "users": "已有{count}+人使用",
+      "updated": "{year}年最新版",
+      "privacy": "隐私保护"
+    }
+  },
+  "diagnosis": {
+    "title": "职业适性诊断",
+    "question_progress": "问题 {current} / {total}",
+    "category": {
+      "skill": "技能",
+      "interest": "兴趣爱好",
+      "priority": "价值观优先事项",
+      "balance": "工作生活平衡"
+    },
+    "results": {
+      "title": "诊断结果",
+      "your_matches": "为您推荐的职业",
+      "rank": "第{rank}名",
+      "match_rate": "匹配度 {rate}%",
+      "salary_range": "年薪范围：{min}万 - {max}万元",
+      "view_details": "查看详情",
+      "restart": "重新诊断"
+    }
+  },
+  "chat": {
+    "title": "AI职业咨询",
+    "subtitle": "关于您的职业发展，请随时咨询",
+    "placeholder": "请输入您想咨询的职业问题...",
+    "send": "发送",
+    "typing": "输入中...",
+    "suggestions": {
+      "title": "常见咨询",
+      "items": [
+        "不知道什么职业适合自己",
+        "想转职但不确定哪个领域好",
+        "想了解有前景的职业",
+        "如何提升技能"
+      ]
+    },
+    "profession_card": {
+      "learn_more": "了解更多",
+      "take_diagnosis": "进行适性诊断"
+    }
+  },
+  "professions": {
+    "categories": {
+      "tech_creative": "技术创意类",
+      "business_finance": "商务金融类",
+      "medical_education": "医疗教育类",
+      "service": "服务接待类",
+      "professional": "专业服务类"
+    },
+    "details": {
+      "description": "工作内容",
+      "salary": "薪资范围",
+      "skills": "必要技能",
+      "environment": "工作环境",
+      "outlook": "职业前景",
+      "related": "相关职业",
+      "education": "学历资格要求"
+    }
+  },
+  "footer": {
+    "service": "服务",
+    "support": "支持",
+    "legal": "法律信息",
+    "copyright": "© {year} 为职. 保留所有权利。"
+  }
+}

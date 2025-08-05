@@ -1,0 +1,128 @@
+{
+  "meta": {
+    "title": {
+      "home": "ため職 - 日本一ためになる正直なおすすめ職業診断",
+      "diagnosis": "職業適性診断 | ため職",
+      "chat": "AI進路相談 | ため職",
+      "about": "職業一覧 | ため職"
+    },
+    "description": {
+      "home": "スキル、興味、価値観、ライフスタイルの4つの観点から、あなたにマッチする高収入職業を短時間で多角的に分析。",
+      "diagnosis": "16の質問に答えるだけで、あなたの適性に合った職業をランキング形式で診断。",
+      "chat": "AI進路相談アシスタントが、あなたの進路・転職の悩みを親身に聞きます。"
+    }
+  },
+  "nav": {
+    "home": "ホーム",
+    "diagnosis": "診断を始める",
+    "chat": "AI進路相談",
+    "about": "職業一覧",
+    "career_guide": "キャリアガイド",
+    "language": "言語"
+  },
+  "common": {
+    "loading": "読み込み中...",
+    "error": "エラーが発生しました",
+    "retry": "再試行",
+    "close": "閉じる",
+    "next": "次へ",
+    "previous": "前へ",
+    "submit": "送信",
+    "save": "保存",
+    "cancel": "キャンセル"
+  },
+  "home": {
+    "hero": {
+      "subtitle": "プロフェッショナルのための",
+      "title": "適職診断システム",
+      "description": "心理学的アプローチと統計的分析に基づいた、科学的な職業適性診断をご提供します。"
+    },
+    "features": {
+      "analysis": {
+        "title": "多角的分析",
+        "description": "スキル・興味・価値観・ライフスタイルの4つの観点から総合評価"
+      },
+      "evidence": {
+        "title": "統計的根拠",
+        "description": "8つの職業カテゴリーから最適な選択肢を科学的に導出"
+      },
+      "instant": {
+        "title": "即時結果",
+        "description": "約5分の診断で詳細な分析レポートを即座に生成"
+      }
+    },
+    "cta": {
+      "start_diagnosis": "診断を開始する",
+      "ai_counseling": "AI進路相談",
+      "view_professions": "職業一覧を見る"
+    },
+    "trust": {
+      "users": "{count}人以上が利用",
+      "updated": "{year}年最新版",
+      "privacy": "プライバシー保護"
+    }
+  },
+  "diagnosis": {
+    "title": "職業適性診断",
+    "question_progress": "質問 {current} / {total}",
+    "category": {
+      "skill": "スキル",
+      "interest": "興味・関心",
+      "priority": "価値観・優先事項",
+      "balance": "ワークライフバランス"
+    },
+    "results": {
+      "title": "診断結果",
+      "your_matches": "あなたにおすすめの職業",
+      "rank": "{rank}位",
+      "match_rate": "適合率 {rate}%",
+      "salary_range": "年収範囲: {min}万円〜{max}万円",
+      "view_details": "詳細を見る",
+      "restart": "もう一度診断する"
+    }
+  },
+  "chat": {
+    "title": "AI進路相談",
+    "subtitle": "あなたの進路について何でもご相談ください",
+    "placeholder": "進路について相談したいことを入力してください...",
+    "send": "送信",
+    "typing": "入力中...",
+    "suggestions": {
+      "title": "よくある相談",
+      "items": [
+        "自分に向いている職業がわからない",
+        "転職を考えているがどの分野がいいか迷っている",
+        "将来性のある職業について知りたい",
+        "スキルアップの方法を教えて"
+      ]
+    },
+    "profession_card": {
+      "learn_more": "詳しく見る",
+      "take_diagnosis": "適性診断を受ける"
+    }
+  },
+  "professions": {
+    "categories": {
+      "tech_creative": "技術・クリエイティブ",
+      "business_finance": "ビジネス・金融",
+      "medical_education": "医療・福祉・教育",
+      "service": "サービス・接客",
+      "professional": "専門職・士業"
+    },
+    "details": {
+      "description": "仕事内容",
+      "salary": "年収範囲",
+      "skills": "必要なスキル",
+      "environment": "労働環境",
+      "outlook": "将来性",
+      "related": "関連職業",
+      "education": "必要な学歴・資格"
+    }
+  },
+  "footer": {
+    "service": "サービス",
+    "support": "サポート",
+    "legal": "法的情報",
+    "copyright": "© {year} ため職. All rights reserved."
+  }
+}

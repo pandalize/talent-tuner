@@ -14,12 +14,117 @@
 - **ビルドツール**: Vite（標準Vue設定）
 - **データ保存**: `/public/data/` の静的JSONファイルをfetch APIで取得
 
-### 主要コンポーネント構造
-- `App.vue`: ナビゲーション付きメインアプリケーションシェル
-- `DiagnosisView.vue`: 診断フローのシンプルなコンテナ
-- `QuestionNavigator.vue`: 質問ロジックと結果表示を担うコアコンポーネント
-- `diagnosisLoader.ts`: データ読み込みとスコアリングアルゴリズムのユーティリティ関数
-- `AppFooter.vue`: 全ページ共通のフッターコンポーネント（必須ページリンク含む）
+## プロジェクト構成
+
+```
+talent-tuner/
+│
+├── 📁 my-vue-app/                    # メインアプリケーション
+│   ├── 📁 src/                       # ソースコード
+│   │   ├── 📄 App.vue                # ナビゲーション付きメインアプリシェル
+│   │   ├── 📄 main.ts                # アプリケーションエントリーポイント
+│   │   │
+│   │   ├── 📁 components/            # 再利用可能コンポーネント
+│   │   │   ├── 📄 AppFooter.vue      # 全ページ共通フッター（必須ページリンク）
+│   │   │   ├── 📄 QuestionNavigator.vue # 診断コアロジック（質問・結果表示）
+│   │   │   ├── 📄 CareerChatBot.vue  # AI進路相談チャットUI
+│   │   │   └── 📄 Breadcrumb.vue     # パンくずナビゲーション
+│   │   │
+│   │   ├── 📁 views/                 # ページコンポーネント（25ページ）
+│   │   │   ├── 📄 HomeView.vue       # ホームページ
+│   │   │   ├── 📄 DiagnosisView.vue  # 診断ページコンテナ
+│   │   │   ├── 📄 CareerChatView.vue # AI進路相談ページ
+│   │   │   ├── 📄 AboutView.vue      # 職業一覧ページ
+│   │   │   │
+│   │   │   ├── 📄 ProfessionDetailView.vue  # 職業詳細（動的ルーティング）
+│   │   │   │
+│   │   │   ├── 📁 キャリアガイド/
+│   │   │   │   ├── 📄 CareerGuideView.vue      # キャリア選択ガイド
+│   │   │   │   ├── 📄 SkillsDevelopmentView.vue # スキル開発ガイド
+│   │   │   │   ├── 📄 SalaryGuideView.vue      # 年収・転職情報
+│   │   │   │   ├── 📄 CareerChangeView.vue     # 転職・キャリアチェンジ
+│   │   │   │   └── 📄 StudentGuideView.vue     # 学生向けガイド
+│   │   │   │
+│   │   │   ├── 📁 診断関連/
+│   │   │   │   ├── 📄 DiagnosisMethodView.vue  # 診断方法解説
+│   │   │   │   ├── 📄 ResultGuideView.vue      # 結果活用ガイド
+│   │   │   │   └── 📄 DiagnosisTheoryView.vue  # 適性診断理論
+│   │   │   │
+│   │   │   ├── 📁 必須ページ/
+│   │   │   │   ├── 📄 PrivacyPolicyView.vue    # プライバシーポリシー
+│   │   │   │   ├── 📄 TermsOfServiceView.vue   # 利用規約
+│   │   │   │   ├── 📄 ContactView.vue          # お問い合わせ
+│   │   │   │   ├── 📄 CompanyInfoView.vue      # 運営者情報
+│   │   │   │   └── 📄 NotFoundView.vue         # 404エラーページ
+│   │   │   │
+│   │   │   └── 📄 PaymentSuccessView.vue # Stripe決済成功ページ
+│   │   │
+│   │   ├── 📁 router/                # ルーティング設定
+│   │   │   └── 📄 index.ts           # Vue Router設定（25ページ対応）
+│   │   │
+│   │   ├── 📁 utils/                 # ユーティリティ関数
+│   │   │   ├── 📄 diagnosisLoader.ts      # 診断ロジック・データ処理
+│   │   │   ├── 📄 claudeApiClient.ts      # Claude AI API統合
+│   │   │   ├── 📄 professionDataManager.ts # 職業データ管理
+│   │   │   ├── 📄 seoUtils.ts             # SEO・構造化データ
+│   │   │   └── 📄 seoKeywords.ts          # SEOキーワード定義
+│   │   │
+│   │   └── 📁 assets/                # 静的アセット
+│   │       ├── 📄 base.css           # ベースCSS（CSS Variables）
+│   │       └── 📄 main.css           # メインスタイル
+│   │
+│   ├── 📁 public/                    # 静的ファイル（ビルド時にそのまま配信）
+│   │   ├── 📁 data/                  # 診断・職業データ（JSON）
+│   │   │   ├── 📄 diagnostic_config.json  # 診断設定（質問・重み・マッピング）
+│   │   │   ├── 📄 professions.json        # 職業詳細データ
+│   │   │   ├── 📄 categories.json         # カテゴリー定義
+│   │   │   └── 📁 professions/            # 職業別詳細データ
+│   │   │       ├── 📄 tech-creative.json       # 技術・クリエイティブ系
+│   │   │       ├── 📄 business-finance.json    # ビジネス・金融系
+│   │   │       ├── 📄 medical-welfare-education.json # 医療・福祉・教育系
+│   │   │       ├── 📄 service-hospitality.json # サービス・接客系
+│   │   │       └── 📄 professional-specialized.json # 専門職・士業
+│   │   │
+│   │   ├── 📁 api/                   # サーバーサイドAPI（PHP）
+│   │   │   ├── 📄 chat-proxy.php          # Claude API プロキシ
+│   │   │   └── 📄 create-checkout-session.php # Stripe決済API
+│   │   │
+│   │   ├── 📁 image/                 # 画像ファイル
+│   │   │   ├── 📄 construction.png   # 職業イメージ画像
+│   │   │   ├── 📄 influencer.png     # SNSアイコン等
+│   │   │   └── 📄 *.png              # その他画像
+│   │   │
+│   │   ├── 📄 .htaccess              # SPA対応・セキュリティ設定
+│   │   ├── 📄 sitemap.xml            # SEO用サイトマップ（25ページ）
+│   │   ├── 📄 robots.txt             # 検索エンジン設定
+│   │   └── 📄 favicon.ico            # ファビコン
+│   │
+│   ├── 📁 .github/workflows/         # GitHub Actions CI/CD
+│   │   └── 📄 deploy.yml             # 自動デプロイ設定
+│   │
+│   ├── 📄 .env                       # 環境変数（APIキー）※Git除外
+│   ├── 📄 .env.deploy                # デプロイ設定（FTP情報）※Git除外  
+│   ├── 📄 .env.deploy.example        # デプロイ設定テンプレート
+│   ├── 📄 package.json               # npm設定・依存関係
+│   ├── 📄 vite.config.ts             # Vite設定
+│   ├── 📄 tsconfig.json              # TypeScript設定
+│   │
+│   ├── 📄 deploy-ftp.js              # Node.js自動デプロイスクリプト
+│   ├── 📄 deploy-simple.sh           # Bash自動デプロイスクリプト
+│   └── 📄 DEPLOY_AUTOMATION.md       # デプロイ自動化ガイド
+│
+├── 📄 CLAUDE.md                      # プロジェクト仕様書（このファイル）
+├── 📄 DEPLOYMENT_ONAMAE.md           # お名前.com デプロイガイド
+└── 📄 README.md                      # プロジェクト概要
+```
+
+### 主要コンポーネント機能
+- **App.vue**: ナビゲーション付きメインアプリケーションシェル
+- **QuestionNavigator.vue**: 診断コアロジック（質問表示・結果計算・表示）
+- **CareerChatBot.vue**: Claude AI統合チャット機能
+- **diagnosisLoader.ts**: データ読み込み・スコアリングアルゴリズム
+- **claudeApiClient.ts**: AI進路相談API統合・環境別処理
+- **AppFooter.vue**: 全ページ共通フッター（必須ページリンク含む）
 
 ### データフロー
 1. JSONファイルから診断設定と職業データを読み込み
@@ -53,6 +158,12 @@ npm run lint
 
 # コードフォーマット
 npm run format
+
+# 自動デプロイ（本番サーバーへアップロード）
+npm run deploy
+
+# デプロイ設定ファイル作成
+npm run deploy:setup
 ```
 
 ## 重要なファイルと設定
@@ -392,3 +503,192 @@ Google AdSense審査通過のために大規模なコンテンツ拡充を実施
 - **フッター位置**: App.vueのflexレイアウトに依存するため、各ビューで固定高さ（height: 100vh等）を設定しない
 - **決済処理**: Stripeの公式ベストプラクティスに従い、カード情報は直接扱わない
 - **TypeScript型定義**: 新規フィールド追加時は必ず `diagnosisLoader.ts` の型定義を更新
+
+## AI進路相談チャットbot機能実装（2025年8月5日）
+
+Claude AI APIを活用した進路相談機能を実装。
+
+### 実装内容
+
+#### 1. チャットbotコア機能
+- **Claude API統合** (`src/utils/claudeApiClient.ts`)
+  - Claude 3 Haiku モデル使用
+  - 28職業データベースと連携したシステムプロンプト
+  - 開発・本番環境自動判定（localhost: 直接API、本番: PHP proxy経由）
+  - フォールバック機能（APIエラー時はモックレスポンス）
+
+- **チャットUI** (`src/components/CareerChatBot.vue`)
+  - リアルタイム会話インターフェース
+  - タイピングアニメーション、職業カード表示
+  - 提案質問機能、適性診断への誘導
+  - 完全レスポンシブデザイン
+
+#### 2. お名前.com共用サーバー対応
+- **PHPプロキシAPI** (`public/api/chat-proxy.php`)
+  - Claude API呼び出し中継（CORS対応）
+  - 環境変数（.env）からAPIキー取得
+  - セキュリティ・エラーハンドリング実装
+
+- **SPA対応設定** (`public/.htaccess`)
+  - Vue Routerクライアントサイドルーティング対応
+  - APIリクエストプロキシ設定
+  - セキュリティヘッダー、GZIP圧縮
+
+#### 3. 自動デプロイシステム
+複数の自動化手法を実装：
+
+##### Node.js FTPスクリプト（推奨）
+```bash
+# 初期設定
+npm run deploy:setup
+# FTP情報を .env.deploy に設定
+
+# ワンコマンドデプロイ
+npm run deploy
+```
+- 完全自動化（ビルド→FTP→権限設定）
+- エラーハンドリング充実
+- `deploy-ftp.js` + `basic-ftp` ライブラリ使用
+
+##### GitHub Actions CI/CD
+- mainブランチpush時に自動デプロイ
+- `.github/workflows/deploy.yml` 設定済み
+- Secrets設定でFTP情報管理
+
+##### 軽量Bashスクリプト
+```bash
+./deploy-simple.sh
+```
+- `lftp` + `rsync` 使用の高速デプロイ
+- 上級者・軽量重視向け
+
+### APIキー設定
+
+#### 環境変数
+```bash
+# .env
+VITE_CLAUDE_API_KEY=sk-ant-api03-your_actual_api_key_here
+
+# .env.deploy（FTPデプロイ用）
+FTP_HOST=your-ftp-server.com
+FTP_USER=your-username
+FTP_PASSWORD=your-password
+```
+
+#### セキュリティ
+- APIキーは環境変数で管理
+- .envファイルは権限600設定必須
+- 公開リポジトリへのコミット厳禁
+
+### 職業相談機能
+28職業カテゴリー対応：
+- 技術・クリエイティブ系（プログラマー、Webデザイナー等）
+- ビジネス・金融系（営業、コンサルタント等）
+- 医療・福祉・教育系（看護師、教師等）
+- サービス・接客系（美容師、シェフ等）
+- 専門職・士業（会計士、弁護士等）
+
+### デプロイ手順
+1. **ローカルビルド**: `npm run build`
+2. **自動アップロード**: FTPスクリプトで全ファイル配置
+3. **権限設定**: .env (600), .htaccess (644), PHP (644)
+4. **動作確認**: チャット機能・SPA動作テスト
+
+### アーキテクチャ更新
+- **API呼び出し**: 開発環境（直接）⇔ 本番環境（PHP proxy）
+- **エラー処理**: API失敗時は高品質なモックレスポンス
+- **パフォーマンス**: 遅延アニメーション、非同期処理最適化
+- **セキュリティ**: CORS対応、入力サニタイズ、レート制限
+
+### 運用・保守
+- **ログ監視**: API呼び出しエラー、PHP実行エラー
+- **APIキー管理**: 定期ローテーション推奨
+- **バックアップ**: 全サイトファイル、.envファイル
+- **アップデート**: `npm run deploy` で即座に本番反映
+
+## 多言語対応システム設計（2025年8月5日策定）
+
+グローバル展開を見据えた包括的な多言語対応戦略を策定。
+
+### 対象言語・展開戦略
+- **Phase 1**: 🇯🇵日本語（現在）+ 🇺🇸英語 + 🇨🇳中国語（簡体字）
+- **Phase 2**: 🇰🇷韓国語 + 🇹🇼中国語（繁体字）+ 🇻🇳ベトナム語  
+- **Phase 3**: 🇩🇪ドイツ語 + 🇫🇷フランス語 + 🇪🇸スペイン語
+
+### 技術実装
+
+#### Vue I18n統合
+- **国際化エンジン**: Vue I18n v9（Composition API対応）
+- **言語検出**: ブラウザ言語 → URL → ローカルストレージの優先順位
+- **フォールバック**: 全言語で日本語をフォールバック言語に設定
+
+#### ファイル構造拡張
+```
+src/i18n/
+├── index.ts                 # Vue I18n設定・言語切り替えロジック
+├── locales/                 # UI文言（JSON）
+│   ├── ja.json             # 日本語UI文言
+│   ├── en.json             # 英語UI文言
+│   └── zh.json             # 中国語UI文言
+└── utils/
+    ├── languageDetector.ts  # ブラウザ言語自動検出
+    └── dateFormatter.ts     # 言語別日時フォーマット
+
+public/data/locales/         # コンテンツデータ
+├── ja/                     # 日本語コンテンツ
+│   ├── diagnostic_config.json  # 診断質問・選択肢
+│   ├── professions.json        # 職業詳細データ
+│   └── chat_prompts.json       # Claude AIプロンプト
+├── en/                     # 英語コンテンツ
+└── zh/                     # 中国語コンテンツ
+```
+
+#### URL構造設計
+```
+https://pandalize.com/        # 日本語（デフォルト）
+https://pandalize.com/en/     # 英語
+https://pandalize.com/zh/     # 中国語
+https://pandalize.com/ko/     # 韓国語
+
+# 各言語でのページ例
+/diagnosis          → /en/diagnosis
+/chat              → /en/chat
+/profession/programmer → /en/profession/programmer
+```
+
+#### 主要コンポーネント
+- **LanguageSwitcher.vue**: レスポンシブ言語切り替えUI
+  - モバイル: ドロップダウン選択
+  - デスクトップ: フラグ付きボタン
+  - 初回変更時確認モーダル
+  - アクセシビリティ完全対応
+
+- **多言語データローダー**: 必要な言語のみを動的読み込み
+- **SEO対応**: hreflang設定、言語別サイトマップ生成
+
+### Claude AI多言語対応
+- **言語別システムプロンプト**: 各言語に最適化された専門プロンプト
+- **レスポンス言語制御**: ユーザー言語での回答を強制
+- **職業データベース連携**: 28職業×多言語の詳細情報提供
+
+### 実装工数・コスト試算
+- **Phase 1基盤構築**: 2-3週間（Vue I18n、英語・中国語対応）
+- **コンテンツ翻訳**: 4-6週間（全25ページ + 診断データ）
+- **AI多言語化**: 1-2週間（Claude プロンプト最適化）
+- **SEO・運用対応**: 1週間（hreflang、サイトマップ）
+
+**合計推定**: 8-12週間で3言語完全対応
+
+### 技術的特徴
+- **自動言語検出**: ブラウザ言語→URL→保存設定の優先順位
+- **動的データローディング**: 必要言語のみを効率的に読み込み
+- **完全レスポンシブ**: 全デバイスで統一された多言語体験
+- **アクセシビリティ**: WCAG 2.1準拠の言語切り替えUI
+- **SEO最適化**: 各言語の検索エンジン最適化
+
+### グローバル展開効果
+- **市場拡大**: アジア太平洋地域で25億人のユーザーベース
+- **競合優位性**: 多言語AI進路相談サービスとしての先行者利益
+- **収益多様化**: 地域別の収益化モデル構築
+
+この多言語対応により、国内市場から世界市場への本格展開が可能になります。
