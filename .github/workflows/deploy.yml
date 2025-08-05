@@ -53,7 +53,7 @@ jobs:
         run: node deploy-ftp.js
           
       - name: 📧 Send success notification
-        if: success() && secrets.NOTIFICATION_EMAIL != ''
+        if: success() && secrets.NOTIFICATION_EMAIL != null
         uses: dawidd6/action-send-mail@v3
         with:
           server_address: smtp.gmail.com
@@ -83,7 +83,7 @@ jobs:
             GitHub Actions 自動通知システム
             
       - name: 📧 Send failure notification
-        if: failure() && secrets.NOTIFICATION_EMAIL != ''
+        if: failure() && secrets.NOTIFICATION_EMAIL != null
         uses: dawidd6/action-send-mail@v3
         with:
           server_address: smtp.gmail.com
@@ -112,14 +112,14 @@ jobs:
             GitHub Actions 自動通知システム
             
       - name: 💬 Success message (No email configured)
-        if: success() && secrets.NOTIFICATION_EMAIL == ''
+        if: success() && secrets.NOTIFICATION_EMAIL == null
         run: |
           echo "🎉 デプロイが成功しました！"
           echo "📧 メール通知を有効にするには、GitHub Secretsを設定してください："
           echo "   NOTIFICATION_EMAIL, MAIL_USERNAME, MAIL_PASSWORD"
           
       - name: 💬 Failure message (No email configured)  
-        if: failure() && secrets.NOTIFICATION_EMAIL == ''
+        if: failure() && secrets.NOTIFICATION_EMAIL == null
         run: |
           echo "❌ デプロイが失敗しました。"
           echo "📧 メール通知を有効にするには、GitHub Secretsを設定してください："
