@@ -1,0 +1,76 @@
+{
+  "categories": {
+    "tech-creative": {
+      "id": "tech-creative",
+      "name": "技術・クリエイティブ系",
+      "description": "テクノロジーやクリエイティブスキルを活用する職業群",
+      "icon": "💻",
+      "traits": ["創造性", "技術スキル", "問題解決能力", "継続学習"],
+      "workStyle": ["remote", "office", "mixed"],
+      "demandOutlook": "high"
+    },
+    "business-finance": {
+      "id": "business-finance", 
+      "name": "ビジネス・金融系",
+      "description": "ビジネス戦略や金融知識を活用する職業群",
+      "icon": "📊",
+      "traits": ["分析力", "コミュニケーション", "数値感覚", "戦略思考"],
+      "workStyle": ["office", "mixed"],
+      "demandOutlook": "high"
+    },
+    "medical-welfare-education": {
+      "id": "medical-welfare-education",
+      "name": "医療・福祉・教育系", 
+      "description": "人の健康や成長をサポートする職業群",
+      "icon": "🏥",
+      "traits": ["共感力", "責任感", "専門知識", "人間関係構築"],
+      "workStyle": ["office", "field"],
+      "demandOutlook": "high"
+    },
+    "service-hospitality": {
+      "id": "service-hospitality",
+      "name": "サービス・接客系",
+      "description": "お客様へのサービス提供を中心とする職業群", 
+      "icon": "🤝",
+      "traits": ["接客スキル", "チームワーク", "柔軟性", "おもてなし精神"],
+      "workStyle": ["office", "field"],
+      "demandOutlook": "medium"
+    },
+    "professional-specialized": {
+      "id": "professional-specialized",
+      "name": "専門職・士業",
+      "description": "高度な専門知識と資格を要する職業群",
+      "icon": "⚖️", 
+      "traits": ["専門知識", "論理思考", "倫理観", "継続学習"],
+      "workStyle": ["office", "mixed"],
+      "demandOutlook": "medium"
+    },
+    "entrepreneurial": {
+      "id": "entrepreneurial",
+      "name": "起業・独立系",
+      "description": "自分でビジネスを立ち上げたり独立して働く職業群",
+      "icon": "🚀",
+      "traits": ["リーダーシップ", "リスク耐性", "創造性", "行動力"],
+      "workStyle": ["mixed", "remote"],
+      "demandOutlook": "medium"
+    },
+    "lifestyle": {
+      "id": "lifestyle",
+      "name": "ライフスタイル重視系",
+      "description": "働き方や生き方を重視する職業群",
+      "icon": "🌍",
+      "traits": ["適応力", "語学力", "冒険心", "柔軟性"],
+      "workStyle": ["remote", "field", "mixed"],
+      "demandOutlook": "medium"
+    },
+    "academic": {
+      "id": "academic",
+      "name": "学術・研究系",
+      "description": "学問や研究を通じて社会に貢献する職業群",
+      "icon": "🎓",
+      "traits": ["知的好奇心", "論理思考", "継続学習", "研究能力"],
+      "workStyle": ["office", "mixed"],
+      "demandOutlook": "medium"
+    }
+  }
+}

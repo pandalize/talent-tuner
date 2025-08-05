@@ -57,31 +57,27 @@
 
 <script setup lang="ts">
 import { ref, onMounted, computed } from 'vue';
-import { loadProfessionDatabase, type ProfessionDatabase } from '../utils/diagnosisLoader';
+import { professionDataManager } from '../utils/professionDataManager';
+import type { ProfessionData } from '../utils/diagnosisLoader';
 
-const professions = [
-  { id: 1, name: 'プログラマー', urlId: 'programmer' },
-  { id: 2, name: '公認会計士', urlId: 'cpa' },
-  { id: 3, name: '建設業', urlId: 'construction' },
-  { id: 4, name: 'デイトレーダー', urlId: 'daytrader' },
-  { id: 5, name: '起業家', urlId: 'entrepreneur' },
-  { id: 6, name: 'ワーホリ', urlId: 'workingholiday' },
-  { id: 9, name: 'インフルエンサー', urlId: 'influencer' },
-  { id: 10, name: '難関大進学', urlId: 'university' }
-];
-
-const selectedProfessionName = ref('プログラマー');
+const professions = ref<ProfessionData[]>([]);
+const selectedProfessionName = ref('');
 const loading = ref(true);
 const error = ref<string | null>(null);
-const professionDatabase = ref<ProfessionDatabase | null>(null);
 
 async function loadProfessionData() {
   loading.value = true;
   error.value = null;
   try {
-    professionDatabase.value = await loadProfessionDatabase();
+    await professionDataManager.initialize();
+    professions.value = professionDataManager.getAllProfessions();
+    
+    // 最初の職業を選択状態にする
+    if (professions.value.length > 0) {
+      selectedProfessionName.value = professions.value[0].name;
+    }
   } catch (err) {
-    console.error('設定の読み込みに失敗しました:', err);
+    console.error('職業データの読み込みに失敗しました:', err);
     error.value = '職業データの読み込みに失敗しました。もう一度お試しください。';
   } finally {
     loading.value = false;
@@ -89,8 +85,8 @@ async function loadProfessionData() {
 }
 
 const selectedProfessionData = computed(() => {
-  if (!professionDatabase.value || !selectedProfessionName.value) return null;
-  return professionDatabase.value.professions[selectedProfessionName.value];
+  if (!selectedProfessionName.value || professions.value.length === 0) return null;
+  return professions.value.find((p: ProfessionData) => p.name === selectedProfessionName.value);
 });
 
 const professionJobDetails = computed<string>(() => {
@@ -105,8 +101,7 @@ const professionTraits = computed<string[]>(() => {
 });
 
 const selectedProfessionId = computed<string>(() => {
-  const profession = professions.find(p => p.name === selectedProfessionName.value);
-  return profession?.urlId || '';
+  return selectedProfessionData.value?.id || '';
 });
 
 onMounted(loadProfessionData);

@@ -27,19 +27,52 @@ export interface DiagnosticConfig {
   questions: Question[];
 }
 
-// 職業データの定義
+// 職業カテゴリーの定義
+export interface ProfessionCategory {
+  id: string;
+  name: string;
+  description: string;
+  icon: string;
+  traits: string[];
+  workStyle: WorkStyle[];
+  demandOutlook: DemandLevel;
+}
+
+// 作業スタイルの定義
+export type WorkStyle = 'remote' | 'office' | 'field' | 'mixed';
+
+// 需要レベルの定義
+export type DemandLevel = 'high' | 'medium' | 'low';
+
+// 難易度レベルの定義
+export type DifficultyLevel = 1 | 2 | 3 | 4 | 5;
+
+// 安定性レベルの定義
+export type StabilityLevel = 1 | 2 | 3 | 4 | 5;
+
+// 職業データの定義（拡張版）
 export interface ProfessionData {
-  id?: string;
+  id: string;
+  name: string;
+  categoryId: string;
   annualIncome: string;
   jobDetails: string;
   comment: string;
   traits: string[];
-  requiredSkills?: string[];
-  careerPath?: string[];
-  workEnvironment?: string;
-  demandOutlook?: string;
-  relatedProfessions?: string[];
-  educationRequirements?: string;
+  requiredSkills: string[];
+  careerPath: string[];
+  workEnvironment: string;
+  demandOutlook: string;
+  relatedProfessions: string[];
+  educationRequirements: string;
+  // 新しい属性
+  workStyle: WorkStyle;
+  difficultyLevel: DifficultyLevel;
+  stabilityLevel: StabilityLevel;
+  averageWorkingHours?: string;
+  stressLevel?: DifficultyLevel;
+  creativityLevel?: DifficultyLevel;
+  socialInteractionLevel?: DifficultyLevel;
 }
 
 // 職業スコアの定義
@@ -93,27 +126,43 @@ export async function loadDiagnosticConfig(): Promise<DiagnosticConfig> {
 }
 
 /**
- * 職業データベースを読み込む
+ * 職業データベースを読み込む（新システム対応）
  * @returns Promise<ProfessionDatabase> 読み込まれた職業データ
  */
 export async function loadProfessionDatabase(): Promise<ProfessionDatabase> {
   try {
-    // JSONファイルを取得
-    const response = await fetch('/data/professions.json');
-    if (!response.ok) {
-      throw new Error(`職業データファイルの読み込みに失敗しました: ${response.statusText}`);
-    }
-
-    // JSONとして読み込み
-    const database = await response.json();
-    return database as ProfessionDatabase;
+    // 新しいProfessionDataManagerを使用
+    const { professionDataManager } = await import('./professionDataManager');
+    await professionDataManager.initialize();
+    
+    // レガシー形式で返す（後方互換性のため）
+    return professionDataManager.getLegacyDatabase();
   } catch (error) {
     console.error('職業データの読み込み中にエラーが発生しました:', error);
-    // デフォルト値を返す
-    return {
-      professions: {}
-    };
+    
+    // フォールバック: 直接JSONファイルを読み込み
+    try {
+      const response = await fetch('/data/professions.json');
+      if (!response.ok) {
+        throw new Error(`職業データファイルの読み込みに失敗しました: ${response.statusText}`);
+      }
+      const database = await response.json();
+      return database as ProfessionDatabase;
+    } catch (fallbackError) {
+      console.error('フォールバック読み込みも失敗しました:', fallbackError);
+      return { professions: {} };
+    }
   }
+}
+
+/**
+ * 職業データマネージャーを取得（新システム用）
+ * @returns Promise<ProfessionDataManager> 初期化済みのデータマネージャー
+ */
+export async function getProfessionDataManager() {
+  const { professionDataManager } = await import('./professionDataManager');
+  await professionDataManager.initialize();
+  return professionDataManager;
 }
 
 /**
