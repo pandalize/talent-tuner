@@ -33,6 +33,17 @@ jobs:
         working-directory: ./my-vue-app
         run: npm run build
           
+      - name: 🔍 Check FTP credentials
+        run: |
+          if [ -z "${{ secrets.FTP_HOST }}" ]; then
+            echo "❌ FTP_HOST secret is not set"
+            echo "Please configure GitHub Secrets:"
+            echo "  FTP_HOST, FTP_USER, FTP_PASSWORD"
+            echo "See DEPLOYMENT_SETUP.md for details"
+            exit 1
+          fi
+          echo "✅ FTP credentials are configured"
+          
       - name: 🚀 Deploy to FTP (Custom Script)
         working-directory: ./my-vue-app
         env:
@@ -42,7 +53,7 @@ jobs:
         run: node deploy-ftp.js
           
       - name: 📧 Send success notification
-        if: success()
+        if: success() && secrets.NOTIFICATION_EMAIL != ''
         uses: dawidd6/action-send-mail@v3
         with:
           server_address: smtp.gmail.com
@@ -72,7 +83,7 @@ jobs:
             GitHub Actions 自動通知システム
             
       - name: 📧 Send failure notification
-        if: failure()
+        if: failure() && secrets.NOTIFICATION_EMAIL != ''
         uses: dawidd6/action-send-mail@v3
         with:
           server_address: smtp.gmail.com
@@ -99,3 +110,17 @@ jobs:
             
             --
             GitHub Actions 自動通知システム
+            
+      - name: 💬 Success message (No email configured)
+        if: success() && secrets.NOTIFICATION_EMAIL == ''
+        run: |
+          echo "🎉 デプロイが成功しました！"
+          echo "📧 メール通知を有効にするには、GitHub Secretsを設定してください："
+          echo "   NOTIFICATION_EMAIL, MAIL_USERNAME, MAIL_PASSWORD"
+          
+      - name: 💬 Failure message (No email configured)  
+        if: failure() && secrets.NOTIFICATION_EMAIL == ''
+        run: |
+          echo "❌ デプロイが失敗しました。"
+          echo "📧 メール通知を有効にするには、GitHub Secretsを設定してください："
+          echo "   NOTIFICATION_EMAIL, MAIL_USERNAME, MAIL_PASSWORD"
