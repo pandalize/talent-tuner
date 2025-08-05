@@ -1,5 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
+import { createMultilingualRoutes, getMetaForRoute } from './multilingual'
+import { changeLanguage, type SupportedLocale } from '../i18n'
 // SEOユーティリティをインポート
 // import { setupStructuredData } from '../utils/seoUtils'
 
@@ -13,6 +15,10 @@ const router = createRouter({
     }
   },
   routes: [
+    // 多言語対応ルート
+    ...createMultilingualRoutes(),
+    
+    // 従来のルート（後方互換性のため残す）
     {
       path: '/',
       name: 'home',
@@ -194,47 +200,61 @@ const router = createRouter({
   ],
 })
 
-// ページ遷移時にメタタグを動的に更新
+// ページ遷移時にメタタグを動的に更新（多言語対応）
 router.beforeEach(async (to, from, next) => {
+  // 言語の検出と設定
+  const locale = (to.meta?.locale as SupportedLocale) || 'ja'
+  const routeName = to.name as string
+  
+  // 言語が変更された場合はi18nを更新
+  if (locale !== 'ja') {
+    changeLanguage(locale)
+  }
+  
+  // 多言語対応メタ情報の取得
+  const meta = getMetaForRoute(routeName, locale)
+  
   // タイトルの更新
-  if (to.meta.title) {
-    document.title = to.meta.title as string
+  const title = meta.title || (to.meta.title as string)
+  if (title) {
+    document.title = title
   }
   
   // meta descriptionの更新
-  if (to.meta.description) {
+  const description = meta.description || (to.meta.description as string)
+  if (description) {
     let metaDescription = document.querySelector('meta[name="description"]')
     if (!metaDescription) {
       metaDescription = document.createElement('meta')
       metaDescription.setAttribute('name', 'description')
       document.head.appendChild(metaDescription)
     }
-    metaDescription.setAttribute('content', to.meta.description as string)
+    metaDescription.setAttribute('content', description)
     
     // OGP descriptionも更新
     const ogDescription = document.querySelector('meta[property="og:description"]')
     if (ogDescription) {
-      ogDescription.setAttribute('content', to.meta.description as string)
+      ogDescription.setAttribute('content', description)
     }
     
     // Twitter descriptionも更新
     const twitterDescription = document.querySelector('meta[property="twitter:description"]')
     if (twitterDescription) {
-      twitterDescription.setAttribute('content', to.meta.description as string)
+      twitterDescription.setAttribute('content', description)
     }
   }
   
   // OGP titleの更新
-  if (to.meta.title) {
+  if (title) {
     const ogTitle = document.querySelector('meta[property="og:title"]')
     if (ogTitle) {
-      ogTitle.setAttribute('content', to.meta.title as string)
+      ogTitle.setAttribute('content', title)
     }
     
     // Twitter titleも更新
     const twitterTitle = document.querySelector('meta[property="twitter:title"]')
     if (twitterTitle) {
-      twitterTitle.setAttribute('content', to.meta.title as string)
+      twitterTitle.setAttribute('content', title)
     }
   }
 
@@ -258,30 +278,8 @@ router.beforeEach(async (to, from, next) => {
   }
   canonical.setAttribute('href', `https://pandalize.com${to.path}`)
   
-  // 構造化データの設定（現在は無効化）
-  // try {
-  //   const { setupStructuredData } = await import('../utils/seoUtils')
-  //   
-  //   if (to.name === 'home') {
-  //     setupStructuredData('home')
-  //   } else if (to.name === 'profession-detail' && to.params.id) {
-  //     // 職業データを読み込んで構造化データを設定
-  //     const { loadProfessionData } = await import('../utils/diagnosisLoader')
-  //     try {
-  //       const professions = await loadProfessionData()
-  //       const professionKey = Object.keys(professions).find(key => 
-  //         professions[key].id === to.params.id
-  //       )
-  //       if (professionKey) {
-  //         setupStructuredData('profession', professions[professionKey])
-  //       }
-  //     } catch (error) {
-  //       console.warn('Failed to load profession data for structured data:', error)
-  //     }
-  //   }
-  // } catch (error) {
-  //   console.warn('Failed to setup structured data:', error)
-  // }
+  // 言語属性の設定
+  document.documentElement.lang = locale
   
   next()
 })

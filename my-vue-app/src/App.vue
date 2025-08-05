@@ -1,10 +1,13 @@
 <script setup lang="ts">
 import { RouterLink, RouterView, useRoute } from 'vue-router'
 import { computed } from 'vue'
+import { useI18n } from 'vue-i18n'
 import AppFooter from './components/AppFooter.vue'
 import Breadcrumb from './components/Breadcrumb.vue'
+import LanguageSwitcher from './components/LanguageSwitcher.vue'
 
 const route = useRoute()
+const { t } = useI18n()
 
 // パンくずリストを表示しないページ
 const hideBreadcrumbPages = computed(() => {
@@ -23,12 +26,17 @@ const hideBreadcrumbPages = computed(() => {
 
       <!-- ナビゲーション -->
       <nav class="main-nav">
-        <RouterLink to="/" class="nav-item">ホーム</RouterLink>
-        <RouterLink to="/diagnosis" class="nav-item">診断開始</RouterLink>
-        <RouterLink to="/about" class="nav-item">職業一覧</RouterLink>
-        <RouterLink to="/career-guide" class="nav-item">キャリアガイド</RouterLink>
+        <RouterLink to="/" class="nav-item">{{ $t('nav.home') }}</RouterLink>
+        <RouterLink to="/diagnosis" class="nav-item">{{ $t('nav.diagnosis') }}</RouterLink>
+        <RouterLink to="/about" class="nav-item">{{ $t('nav.about') }}</RouterLink>
+        <RouterLink to="/career-guide" class="nav-item">{{ $t('nav.career_guide') }}</RouterLink>
         <RouterLink to="/diagnosis-method" class="nav-item">診断について</RouterLink>
       </nav>
+
+      <!-- 言語切り替え -->
+      <div class="header-controls">
+        <LanguageSwitcher />
+      </div>
     </header>
     
     <main class="app-content">
@@ -84,6 +92,7 @@ html, body {
   justify-content: space-between;
   padding: var(--space-sm) var(--space-lg);
   box-shadow: var(--shadow-sm);
+  gap: var(--space-md);
 }
 
 /* ==========================================================================
@@ -156,6 +165,14 @@ html, body {
   border-radius: 1px;
 }
 
+/* ==========================================================================
+   ヘッダーコントロール（言語切り替え等）
+   ========================================================================== */
+.header-controls {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
 
 /* ==========================================================================
    メインコンテンツエリア
@@ -197,6 +214,13 @@ html, body {
 
   .logo {
     order: 1;
+  }
+
+  .header-controls {
+    order: 3;
+    width: 100%;
+    justify-content: center;
+    margin-top: var(--space-xs);
   }
 
   .logo-main {

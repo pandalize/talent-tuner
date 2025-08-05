@@ -3,35 +3,34 @@
     <div class="hero-section">
       <div class="hero-content">
         <h1 class="hero-title">
-          <span class="hero-subtitle">プロフェッショナルのための</span>
-          適職診断システム
+          <span class="hero-subtitle">{{ $t('home.hero.subtitle') }}</span>
+          {{ $t('home.hero.title') }}
         </h1>
         <p class="hero-description">
-          心理学的アプローチと統計的分析に基づいた、<br>
-          科学的な職業適性診断をご提供します。
+          {{ $t('home.hero.description') }}
         </p>
         
         <div class="feature-grid">
           <div class="feature-item">
             <div class="feature-number">01</div>
-            <h3 class="feature-title">多角的分析</h3>
-            <p class="feature-desc">スキル・興味・価値観・ライフスタイルの4つの観点から総合評価</p>
+            <h3 class="feature-title">{{ $t('home.features.analysis.title') }}</h3>
+            <p class="feature-desc">{{ $t('home.features.analysis.description') }}</p>
           </div>
           <div class="feature-item">
             <div class="feature-number">02</div>
-            <h3 class="feature-title">統計的根拠</h3>
-            <p class="feature-desc">8つの職業カテゴリーから最適な選択肢を科学的に導出</p>
+            <h3 class="feature-title">{{ $t('home.features.evidence.title') }}</h3>
+            <p class="feature-desc">{{ $t('home.features.evidence.description') }}</p>
           </div>
           <div class="feature-item">
             <div class="feature-number">03</div>
-            <h3 class="feature-title">即時結果</h3>
-            <p class="feature-desc">約5分の診断で詳細な分析レポートを即座に生成</p>
+            <h3 class="feature-title">{{ $t('home.features.instant.title') }}</h3>
+            <p class="feature-desc">{{ $t('home.features.instant.description') }}</p>
           </div>
         </div>
 
         <div class="action-buttons">
           <router-link to="/diagnosis" class="btn btn-primary">
-            診断を開始する
+            {{ $t('home.cta.start_diagnosis') }}
             <svg class="btn-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M5 12h14M12 5l7 7-7 7"/>
             </svg>
@@ -40,10 +39,10 @@
             <svg class="btn-icon" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
               <path d="M12,2A2,2 0 0,1 14,4C14,4.74 13.6,5.39 13,5.73V7A1,1 0 0,0 14,8H18A4,4 0 0,1 22,12V16A4,4 0 0,1 18,20H6A4,4 0 0,1 2,16V12A4,4 0 0,1 6,8H10A1,1 0 0,0 11,7V5.73C10.4,5.39 10,4.74 10,4A2,2 0 0,1 12,2M7.5,13A1.5,1.5 0 0,0 6,14.5A1.5,1.5 0 0,0 7.5,16A1.5,1.5 0 0,0 9,14.5A1.5,1.5 0 0,0 7.5,13M16.5,13A1.5,1.5 0 0,0 15,14.5A1.5,1.5 0 0,0 16.5,16A1.5,1.5 0 0,0 18,14.5A1.5,1.5 0 0,0 16.5,13Z" />
             </svg>
-            AI進路相談
+            {{ $t('home.cta.ai_counseling') }}
           </router-link>
           <router-link to="/about" class="btn btn-secondary">
-            職業一覧を見る
+            {{ $t('home.cta.view_professions') }}
           </router-link>
         </div>
 
@@ -52,19 +51,19 @@
             <svg class="trust-icon" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
               <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/>
             </svg>
-            <span>25,000人以上が利用</span>
+            <span>{{ $t('home.trust.users', { count: '25,000' }) }}</span>
           </div>
           <div class="trust-item">
             <svg class="trust-icon" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
               <path d="M9 11H7v2h2v-2zm4 0h-2v2h2v-2zm4 0h-2v2h2v-2zm2-7h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V9h14v11z"/>
             </svg>
-            <span>2024年最新版</span>
+            <span>{{ $t('home.trust.updated', { year: '2025' }) }}</span>
           </div>
           <div class="trust-item">
             <svg class="trust-icon" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
               <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/>
             </svg>
-            <span>プライバシー保護</span>
+            <span>{{ $t('home.trust.privacy') }}</span>
           </div>
         </div>
       </div>
