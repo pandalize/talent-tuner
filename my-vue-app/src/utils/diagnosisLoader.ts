@@ -44,6 +44,7 @@ export interface ProfessionData {
 
 // 職業スコアの定義
 export interface ProfessionScore {
+  id?: string;
   name: string;
   score: number;
   categories: Record<string, number>;
@@ -124,7 +125,7 @@ export async function loadProfessionDatabase(): Promise<ProfessionDatabase> {
  */
 export function calculateProfessionScores(
   config: DiagnosticConfig,
-  answers: Record<string, string>,
+  answers: Record<string, string | Record<string, number>>,
   professionDatabase?: ProfessionDatabase
 ): ProfessionScore[] {
   // 職業ごとのスコアを初期化
@@ -134,43 +135,57 @@ export function calculateProfessionScores(
   const categoryWeights = config.category_weights;
   
   // 回答を処理
-  Object.entries(answers).forEach(([questionId, selectedLabel]) => {
+  Object.entries(answers).forEach(([questionId, answerData]) => {
     // 質問を見つける
     const question = config.questions.find(q => q.id === questionId);
     if (!question) return;
     
-    // 選択された選択肢を見つける
-    const selectedOption = question.options.find(opt => opt.label === selectedLabel);
-    if (!selectedOption) return;
-    
-    // この選択肢に関連する職業にスコアを加算
-    const category = selectedOption.category;
-    const categoryWeight = categoryWeights[category] || 1.0;
-    
-    selectedOption.professions.forEach(profession => {
-      // 職業のスコアを初期化（存在しない場合）
-      if (!professionScores[profession]) {
-        professionScores[profession] = {
-          name: profession,
-          score: 0,
-          categories: {
-            skill: 1.0,
-            interest: 1.0,
-            priority: 1.0,
-            balance: 1.0
+    // 新しい評価形式かレガシー形式かを判定
+    if (typeof answerData === 'string') {
+      // レガシー形式（A/B/C/Dの単一選択）
+      const selectedOption = question.options.find(opt => opt.label === answerData);
+      if (!selectedOption) return;
+      
+      const category = selectedOption.category;
+      const categoryWeight = categoryWeights[category] || 1.0;
+      
+      selectedOption.professions.forEach(profession => {
+        if (!professionScores[profession]) {
+          professionScores[profession] = {
+            name: profession,
+            score: 0,
+            categories: { skill: 0, interest: 0, priority: 0, balance: 0 }
+          };
+        }
+        
+        professionScores[profession].score += categoryWeight;
+        professionScores[profession].categories[category] += categoryWeight;
+      });
+    } else if (typeof answerData === 'object') {
+      // 新しい評価形式（各選択肢に1-5の評価）
+      Object.entries(answerData).forEach(([optionLabel, rating]) => {
+        const option = question.options.find(opt => opt.label === optionLabel);
+        if (!option || typeof rating !== 'number' || rating < 1 || rating > 5) return;
+        
+        const category = option.category;
+        const categoryWeight = categoryWeights[category] || 1.0;
+        // 評価値（1-5）をスコアに反映
+        const scoreContribution = rating * categoryWeight;
+        
+        option.professions.forEach(profession => {
+          if (!professionScores[profession]) {
+            professionScores[profession] = {
+              name: profession,
+              score: 0,
+              categories: { skill: 0, interest: 0, priority: 0, balance: 0 }
+            };
           }
-        };
-      }
-      
-      // カテゴリースコアを初期化（存在しない場合）
-      if (!professionScores[profession].categories[category]) {
-        professionScores[profession].categories[category] = 1.0;
-      }
-      
-      // スコアを加算（カテゴリー別スコアにも重みを適用）
-      professionScores[profession].categories[category] += categoryWeight;
-      professionScores[profession].score += categoryWeight;
-    });
+          
+          professionScores[profession].score += scoreContribution;
+          professionScores[profession].categories[category] += scoreContribution;
+        });
+      });
+    }
   });
   
   // スコア順にソートし、職業データを追加

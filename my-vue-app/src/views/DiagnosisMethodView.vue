@@ -1,36 +1,92 @@
 <template>
   <div class="diagnosis-method-page">
+    <!-- ヒーローセクション -->
     <div class="hero-section">
-      <h1>ため職の診断方法について</h1>
-      <p class="hero-subtitle">科学的根拠に基づく4つのカテゴリーで、あなたの職業適性を多角的に分析</p>
+      <div class="hero-content">
+        <div class="hero-badge">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M9 11H7v2h2v-2zm4 0h-2v2h2v-2zm4 0h-2v2h2v-2zm2-7h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V9h14v11z"/>
+          </svg>
+          診断システム
+        </div>
+        <h1 class="hero-title">科学的な適職診断メソッド</h1>
+        <p class="hero-subtitle">
+          心理学とデータサイエンスを融合した<br>
+          精密な職業適性分析システム
+        </p>
+        <div class="hero-stats">
+          <div class="stat-item">
+            <div class="stat-number">4</div>
+            <div class="stat-label">診断軸</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-number">16</div>
+            <div class="stat-label">質問項目</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-number">8</div>
+            <div class="stat-label">職業分野</div>
+          </div>
+        </div>
+      </div>
     </div>
     
     <div class="content-container">
-      <!-- 診断の概要 -->
-      <section class="overview-section">
-        <h2>診断システムの概要</h2>
-        <div class="overview-grid">
-          <div class="overview-card">
-            <div class="card-icon">📊</div>
-            <h3>多次元分析</h3>
-            <p>スキル、興味、優先事項、ワークライフバランスの4つの軸で総合的に判定</p>
+      <!-- システム特徴 -->
+      <section class="features-section">
+        <div class="section-header">
+          <h2 class="section-title">診断システムの3つの特徴</h2>
+          <p class="section-subtitle">最新の心理学理論に基づく、信頼性の高い職業適性診断</p>
+        </div>
+        
+        <div class="features-grid">
+          <div class="feature-card">
+            <div class="feature-icon">
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+              </svg>
+            </div>
+            <h3 class="feature-title">多次元分析</h3>
+            <p class="feature-description">
+              スキル、興味、価値観、ライフスタイルの4つの観点から、
+              あなたの職業適性を立体的に分析します。
+            </p>
           </div>
-          <div class="overview-card">
-            <div class="card-icon">🎯</div>
-            <h3>精密なマッチング</h3>
-            <p>各職業に対して重み付けされたスコアリングシステムで適性を算出</p>
+          
+          <div class="feature-card">
+            <div class="feature-icon">
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+              </svg>
+            </div>
+            <h3 class="feature-title">精密マッチング</h3>
+            <p class="feature-description">
+              各職業に対する重み付けスコアリングにより、
+              あなたに最も適した職業を科学的に算出します。
+            </p>
           </div>
-          <div class="overview-card">
-            <div class="card-icon">⚡</div>
-            <h3>即座の結果</h3>
-            <p>16の質問に答えるだけで、3分以内に詳細な分析結果を提供</p>
+          
+          <div class="feature-card">
+            <div class="feature-icon">
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M13 10V3L4 14h7v7l9-11h-7z"/>
+              </svg>
+            </div>
+            <h3 class="feature-title">即時フィードバック</h3>
+            <p class="feature-description">
+              短時間の回答で即座に結果を生成。
+              詳細な分析レポートをリアルタイムで提供します。
+            </p>
           </div>
         </div>
       </section>
 
-      <!-- 4つのカテゴリー詳細 -->
+      <!-- 診断カテゴリー -->
       <section class="categories-section">
-        <h2>4つの診断カテゴリー</h2>
+        <div class="section-header">
+          <h2 class="section-title">4つの診断カテゴリー</h2>
+          <p class="section-subtitle">各カテゴリーが職業適性の異なる側面を測定し、総合的な分析を実現</p>
+        </div>
         
         <div class="category-detail">
           <div class="category-header">
@@ -208,33 +264,95 @@ onMounted(() => {
 
 <style scoped>
 .diagnosis-method-page {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 2rem 1rem;
-  background-color: var(--background-white, #fff);
+  width: 100%;
+  min-height: 100vh;
+  background: var(--bg-primary);
 }
 
 .hero-section {
-  text-align: center;
-  padding: 3rem 0;
-  background: linear-gradient(135deg, #f8fafc 0%, #e3f2fd 100%);
-  border-radius: 20px;
-  margin-bottom: 3rem;
+  background: linear-gradient(135deg, var(--primary-navy) 0%, var(--primary-blue) 100%);
+  color: white;
+  padding: var(--space-xxl) 0;
+  position: relative;
+  overflow: hidden;
 }
 
-.hero-section h1 {
-  font-size: clamp(28px, 4vw, 42px);
-  color: var(--text-dark, #333);
-  margin-bottom: 1rem;
+.hero-section::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+  animation: pulse 20s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+}
+
+.hero-content {
+  max-width: 1200px;
+  width: 90%;
+  margin: 0 auto;
+  text-align: center;
+  position: relative;
+  z-index: 1;
+}
+
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  padding: var(--space-xs) var(--space-md);
+  border-radius: 50px;
+  font-size: var(--fs-small);
+  font-weight: 500;
+  margin-bottom: var(--space-md);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.hero-title {
+  font-family: var(--font-heading);
+  font-size: var(--fs-h1);
   font-weight: 700;
+  margin-bottom: var(--space-md);
+  line-height: 1.2;
 }
 
 .hero-subtitle {
-  font-size: clamp(16px, 2.5vw, 20px);
-  color: var(--text-medium, #666);
-  max-width: 600px;
-  margin: 0 auto;
-  line-height: 1.6;
+  font-size: var(--fs-body);
+  opacity: 0.9;
+  margin-bottom: var(--space-xl);
+  line-height: 1.8;
+}
+
+.hero-stats {
+  display: flex;
+  justify-content: center;
+  gap: var(--space-xl);
+  margin-top: var(--space-xl);
+}
+
+.stat-item {
+  text-align: center;
+}
+
+.stat-number {
+  font-family: var(--font-heading);
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--accent-gold);
+  margin-bottom: var(--space-xs);
+}
+
+.stat-label {
+  font-size: var(--fs-small);
+  opacity: 0.9;
 }
 
 .content-container {
@@ -243,129 +361,254 @@ onMounted(() => {
 }
 
 section {
-  margin-bottom: 4rem;
+  margin-bottom: var(--space-xxl);
 }
 
-h2 {
-  font-size: clamp(24px, 3.5vw, 32px);
-  color: var(--text-dark, #333);
-  margin-bottom: 2rem;
-  padding-bottom: 0.5rem;
-  border-bottom: 3px solid var(--main-color, #5f90b2);
-  font-weight: 600;
-}
-
-/* 概要セクション */
-.overview-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 2rem;
-  margin-top: 2rem;
-}
-
-.overview-card {
-  background: #fff;
-  padding: 2rem;
-  border-radius: 15px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+/* 特徴セクション */
+.section-header {
   text-align: center;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  margin-bottom: var(--space-xl);
 }
 
-.overview-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+.section-title {
+  font-family: var(--font-heading);
+  font-size: var(--fs-h2);
+  color: var(--primary-navy);
+  margin-bottom: var(--space-md);
+  position: relative;
 }
 
-.card-icon {
-  font-size: 3rem;
-  margin-bottom: 1rem;
+.section-title::after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 3px;
+  background: linear-gradient(90deg, var(--accent-gold), var(--accent-blue));
+  border-radius: 2px;
 }
 
-.overview-card h3 {
-  font-size: clamp(18px, 2.5vw, 22px);
-  color: var(--text-dark, #333);
-  margin-bottom: 1rem;
+.section-subtitle {
+  font-size: var(--fs-body);
+  color: var(--text-secondary);
+  max-width: 600px;
+  margin: 0 auto;
+  line-height: 1.8;
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: var(--space-lg);
+  padding: 0 var(--space-md);
+}
+
+.feature-card {
+  background: var(--bg-primary);
+  padding: var(--space-xl);
+  border-radius: 16px;
+  box-shadow: var(--shadow-lg);
+  text-align: center;
+  transition: all var(--transition-normal);
+  border: 1px solid var(--border-light);
+  position: relative;
+  overflow: hidden;
+}
+
+.feature-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--accent-gold), var(--accent-blue));
+}
+
+.feature-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 40px rgba(26, 35, 50, 0.15);
+  border-color: var(--accent-blue);
+}
+
+.feature-icon {
+  color: var(--primary-navy);
+  margin-bottom: var(--space-md);
+  transition: color var(--transition-normal);
+}
+
+.feature-card:hover .feature-icon {
+  color: var(--accent-blue);
+}
+
+.feature-title {
+  font-family: var(--font-heading);
+  font-size: var(--fs-h3);
+  color: var(--primary-navy);
+  margin-bottom: var(--space-md);
   font-weight: 600;
 }
 
-.overview-card p {
-  color: var(--text-medium, #666);
-  line-height: 1.6;
+.feature-description {
+  color: var(--text-secondary);
+  line-height: 1.7;
+  font-size: var(--fs-body);
 }
 
 /* カテゴリー詳細 */
+.categories-section {
+  padding: 0 var(--space-md);
+}
+
 .category-detail {
-  background: #fff;
-  border-radius: 15px;
-  padding: 2.5rem;
-  margin-bottom: 2rem;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
-  border-left: 5px solid var(--main-color, #5f90b2);
+  background: var(--bg-primary);
+  border-radius: 16px;
+  padding: var(--space-xl);
+  margin-bottom: var(--space-xl);
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--border-light);
+  transition: all var(--transition-normal);
+  position: relative;
+}
+
+.category-detail:hover {
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-2px);
 }
 
 .category-header {
   display: flex;
   align-items: center;
-  margin-bottom: 2rem;
+  margin-bottom: var(--space-lg);
+  gap: var(--space-md);
 }
 
 .category-number {
-  background: var(--main-color, #5f90b2);
+  background: linear-gradient(135deg, var(--primary-navy), var(--primary-blue));
   color: white;
-  font-size: 1.2rem;
+  font-family: var(--font-mono);
+  font-size: 1.1rem;
   font-weight: 700;
-  padding: 0.5rem 1rem;
-  border-radius: 50px;
-  margin-right: 1rem;
-  min-width: 60px;
+  padding: var(--space-sm) var(--space-md);
+  border-radius: 12px;
+  min-width: 64px;
   text-align: center;
+  box-shadow: var(--shadow-sm);
 }
 
 .category-header h3 {
-  font-size: clamp(20px, 3vw, 26px);
-  color: var(--text-dark, #333);
+  font-family: var(--font-heading);
+  font-size: var(--fs-h3);
+  color: var(--primary-navy);
   margin: 0;
   font-weight: 600;
 }
 
 .category-content h4 {
-  font-size: clamp(16px, 2.5vw, 20px);
-  color: var(--text-dark, #333);
-  margin: 1.5rem 0 1rem 0;
+  font-family: var(--font-heading);
+  font-size: 1.25rem;
+  color: var(--primary-navy);
+  margin: var(--space-lg) 0 var(--space-md) 0;
   font-weight: 600;
+  position: relative;
+  padding-left: var(--space-md);
+}
+
+.category-content h4::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 4px;
+  height: 20px;
+  background: var(--accent-gold);
+  border-radius: 2px;
 }
 
 .category-content ul {
-  margin: 1rem 0;
-  padding-left: 1.5rem;
+  margin: var(--space-md) 0;
+  padding-left: var(--space-lg);
 }
 
 .category-content li {
-  margin-bottom: 0.5rem;
-  line-height: 1.5;
-  color: var(--text-medium, #666);
+  margin-bottom: var(--space-sm);
+  line-height: 1.7;
+  color: var(--text-secondary);
+  position: relative;
+}
+
+.category-content li::marker {
+  color: var(--accent-blue);
 }
 
 .category-content p {
   line-height: 1.7;
-  color: var(--text-medium, #666);
-  margin: 1rem 0;
+  color: var(--text-secondary);
+  margin: var(--space-md) 0;
+  font-size: var(--fs-body);
 }
 
 /* スコアリングセクション */
+.scoring-section {
+  padding: 0 var(--space-md);
+}
+
+.scoring-section h2 {
+  font-family: var(--font-heading);
+  font-size: var(--fs-h2);
+  color: var(--primary-navy);
+  margin-bottom: var(--space-xl);
+  text-align: center;
+  position: relative;
+}
+
+.scoring-section h2::after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 3px;
+  background: linear-gradient(90deg, var(--accent-gold), var(--accent-blue));
+  border-radius: 2px;
+}
+
 .scoring-explanation {
-  background: #f8fafc;
-  border-radius: 15px;
-  padding: 2rem;
+  background: linear-gradient(135deg, var(--bg-secondary), var(--bg-tertiary));
+  border-radius: 16px;
+  padding: var(--space-xl);
+  border: 1px solid var(--border-light);
 }
 
 .scoring-step {
-  margin-bottom: 2rem;
-  padding: 1.5rem;
-  background: white;
-  border-radius: 10px;
-  border-left: 4px solid var(--main-color, #5f90b2);
+  margin-bottom: var(--space-lg);
+  padding: var(--space-lg);
+  background: var(--bg-primary);
+  border-radius: 12px;
+  border: 1px solid var(--border-light);
+  box-shadow: var(--shadow-sm);
+  transition: all var(--transition-normal);
+  position: relative;
+  overflow: hidden;
+}
+
+.scoring-step::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 4px;
+  background: linear-gradient(180deg, var(--accent-gold), var(--accent-blue));
+}
+
+.scoring-step:hover {
+  transform: translateX(4px);
+  box-shadow: var(--shadow-md);
 }
 
 .scoring-step:last-child {
@@ -373,163 +616,311 @@ h2 {
 }
 
 .scoring-step h3 {
-  font-size: clamp(18px, 2.5vw, 22px);
-  color: var(--text-dark, #333);
-  margin-bottom: 1rem;
+  font-family: var(--font-heading);
+  font-size: 1.25rem;
+  color: var(--primary-navy);
+  margin-bottom: var(--space-md);
   font-weight: 600;
 }
 
 .scoring-step p {
   line-height: 1.7;
-  color: var(--text-medium, #666);
+  color: var(--text-secondary);
+  font-size: var(--fs-body);
 }
 
 /* 信頼性セクション */
+.reliability-section {
+  padding: 0 var(--space-md);
+}
+
+.reliability-section h2 {
+  font-family: var(--font-heading);
+  font-size: var(--fs-h2);
+  color: var(--primary-navy);
+  margin-bottom: var(--space-xl);
+  text-align: center;
+  position: relative;
+}
+
+.reliability-section h2::after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 3px;
+  background: linear-gradient(90deg, var(--accent-gold), var(--accent-blue));
+  border-radius: 2px;
+}
+
 .reliability-content {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 2rem;
-  margin-bottom: 2rem;
+  gap: var(--space-lg);
+  margin-bottom: var(--space-xl);
 }
 
 .reliability-point {
-  background: #fff;
-  padding: 2rem;
-  border-radius: 15px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
+  background: var(--bg-primary);
+  padding: var(--space-xl);
+  border-radius: 16px;
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--border-light);
+  transition: all var(--transition-normal);
+}
+
+.reliability-point:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
 }
 
 .reliability-point h3 {
-  font-size: clamp(18px, 2.5vw, 22px);
-  margin-bottom: 1rem;
+  font-family: var(--font-heading);
+  font-size: 1.25rem;
+  margin-bottom: var(--space-md);
   font-weight: 600;
+  color: var(--primary-navy);
 }
 
 .reliability-point ul {
-  padding-left: 1.5rem;
+  padding-left: var(--space-lg);
 }
 
 .reliability-point li {
-  margin-bottom: 0.8rem;
-  line-height: 1.5;
-  color: var(--text-medium, #666);
+  margin-bottom: var(--space-sm);
+  line-height: 1.7;
+  color: var(--text-secondary);
+}
+
+.reliability-point li::marker {
+  color: var(--accent-blue);
 }
 
 .recommendation-note {
-  background: linear-gradient(135deg, #fff3cd, #fef9e7);
-  border: 1px solid #faebcc;
-  border-radius: 15px;
-  padding: 2rem;
+  background: linear-gradient(135deg, rgba(184, 134, 11, 0.05), rgba(52, 152, 219, 0.05));
+  border: 1px solid var(--border-light);
+  border-radius: 16px;
+  padding: var(--space-xl);
+  position: relative;
+  overflow: hidden;
+}
+
+.recommendation-note::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--accent-gold), var(--accent-blue));
 }
 
 .recommendation-note h3 {
-  font-size: clamp(18px, 2.5vw, 22px);
-  color: var(--text-dark, #333);
-  margin-bottom: 1rem;
+  font-family: var(--font-heading);
+  font-size: 1.25rem;
+  color: var(--primary-navy);
+  margin-bottom: var(--space-md);
   font-weight: 600;
 }
 
 .recommendation-note p {
   line-height: 1.7;
-  color: var(--text-medium, #666);
+  color: var(--text-secondary);
   margin: 0;
+  font-size: var(--fs-body);
 }
 
 /* 関連リンク */
+.related-links {
+  padding: 0 var(--space-md);
+}
+
+.related-links h2 {
+  font-family: var(--font-heading);
+  font-size: var(--fs-h2);
+  color: var(--primary-navy);
+  margin-bottom: var(--space-xl);
+  text-align: center;
+  position: relative;
+}
+
+.related-links h2::after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 3px;
+  background: linear-gradient(90deg, var(--accent-gold), var(--accent-blue));
+  border-radius: 2px;
+}
+
 .links-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 1.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--space-lg);
 }
 
 .link-card {
-  background: #fff;
-  padding: 2rem;
-  border-radius: 15px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
+  background: var(--bg-primary);
+  padding: var(--space-xl);
+  border-radius: 16px;
+  box-shadow: var(--shadow-md);
   text-decoration: none;
   color: inherit;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  border: 2px solid transparent;
+  transition: all var(--transition-normal);
+  border: 1px solid var(--border-light);
+  position: relative;
+  overflow: hidden;
+}
+
+.link-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--accent-gold), var(--accent-blue));
+  transform: translateY(-4px);
+  transition: transform var(--transition-normal);
+}
+
+.link-card:hover::before {
+  transform: translateY(0);
 }
 
 .link-card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
-  border-color: var(--main-color, #5f90b2);
+  transform: translateY(-8px);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--accent-blue);
 }
 
 .link-card h3 {
-  font-size: clamp(16px, 2.5vw, 20px);
-  color: var(--text-dark, #333);
-  margin-bottom: 1rem;
+  font-family: var(--font-heading);
+  font-size: 1.125rem;
+  color: var(--primary-navy);
+  margin-bottom: var(--space-md);
   font-weight: 600;
 }
 
 .link-card p {
-  line-height: 1.5;
-  color: var(--text-medium, #666);
+  line-height: 1.7;
+  color: var(--text-secondary);
   margin: 0;
+  font-size: var(--fs-body);
 }
 
 /* レスポンシブ対応 */
 @media (max-width: 768px) {
-  .diagnosis-method-page {
-    padding: 1rem;
-  }
-
   .hero-section {
-    padding: 2rem 1rem;
-    margin-bottom: 2rem;
+    padding: var(--space-xl) var(--space-md);
+  }
+  
+  .hero-stats {
+    gap: var(--space-lg);
+  }
+  
+  .stat-number {
+    font-size: 2rem;
   }
 
-  section {
-    margin-bottom: 3rem;
+  .content-container {
+    padding: 0 var(--space-sm);
+  }
+
+  .features-grid {
+    grid-template-columns: 1fr;
+    padding: 0;
+  }
+
+  .feature-card {
+    padding: var(--space-lg);
   }
 
   .category-detail {
-    padding: 1.5rem;
+    padding: var(--space-lg);
   }
 
   .category-header {
     flex-direction: column;
     align-items: flex-start;
-    gap: 1rem;
-  }
-
-  .category-number {
-    margin-right: 0;
+    gap: var(--space-md);
   }
 
   .reliability-content {
     grid-template-columns: 1fr;
-    gap: 1.5rem;
+    gap: var(--space-md);
   }
 
   .reliability-point {
-    padding: 1.5rem;
+    padding: var(--space-lg);
   }
 
   .recommendation-note {
-    padding: 1.5rem;
+    padding: var(--space-lg);
   }
 
   .scoring-step {
-    padding: 1.5rem;
+    padding: var(--space-lg);
+  }
+  
+  .scoring-explanation {
+    padding: var(--space-lg);
   }
 }
 
 @media (max-width: 480px) {
-  .overview-grid {
-    grid-template-columns: 1fr;
+  .hero-content {
+    width: 95%;
+  }
+  
+  .hero-stats {
+    flex-direction: column;
+    gap: var(--space-md);
+  }
+  
+  .stat-item {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+  }
+  
+  .stat-number {
+    font-size: 1.75rem;
+    margin-bottom: 0;
   }
 
-  .overview-card {
-    padding: 1.5rem;
+  .features-grid {
+    gap: var(--space-md);
+  }
+
+  .feature-card {
+    padding: var(--space-md);
+  }
+
+  .category-detail {
+    padding: var(--space-md);
+  }
+  
+  .category-content h4 {
+    padding-left: var(--space-sm);
+  }
+  
+  .category-content h4::before {
+    width: 3px;
+    height: 16px;
   }
 
   .links-grid {
     grid-template-columns: 1fr;
+  }
+  
+  .link-card {
+    padding: var(--space-lg);
   }
 }
 </style>

@@ -7,6 +7,19 @@
         <p>最適な質問をご用意しています...</p>
       </div>
       
+      <!-- 診断リセットボタン（開発・テスト用） -->
+      <div v-if="!loading && !error" class="reset-section">
+        <button @click.prevent="handleResetDiagnosis" class="btn reset-button" type="button">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M3 12a9 9 0 019-9 9.75 9.75 0 016.74 2.74L21 8"/>
+            <path d="M21 3v5h-5"/>
+            <path d="M21 12a9 9 0 01-9 9 9.75 9.75 0 01-6.74-2.74L3 16"/>
+            <path d="M3 21v-5h5"/>
+          </svg>
+          診断をリセット
+        </button>
+      </div>
+      
       <div v-else-if="error" class="error-section">
         <div class="error-icon">
           <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -28,41 +41,69 @@
         </button>
       </div>
       
-      <template v-else>
+      <!-- メインコンテンツ（loading と error が false の時に表示） -->
+      <div v-if="!loading && !error">
+        <!-- デバッグ情報表示 -->
+        <div v-if="false" class="debug-info" style="background: #f0f0f0; padding: 1rem; margin: 1rem 0; border-radius: 8px;">
+          <h4>Debug Info:</h4>
+          <p>Loading: {{ loading }}</p>
+          <p>Error: {{ error }}</p>
+          <p>Show Result: {{ showResult }}</p>
+          <p>Current Question: {{ !!currentQuestion }}</p>
+          <p>Questions Length: {{ questions.length }}</p>
+          <p>Current Index: {{ currentQuestionIndex }}</p>
+          <p>Condition (!showResult && currentQuestion): {{ !showResult && !!currentQuestion }}</p>
+          <p>Question Text: {{ currentQuestion?.text?.substring(0, 50) }}...</p>
+        </div>
+        
+        <!-- 質問表示セクション -->
         <div v-if="!showResult && currentQuestion" class="current-question-section">
           <!-- ヘッダー情報 -->
           <div class="question-header">
             <div class="question-meta">
               <span class="question-number">質問 {{ currentQuestionIndex + 1 }} / {{ questions.length }}</span>
-              <span class="category-badge">{{ getCategoryName(currentQuestion.category) }}</span>
+              <span class="category-badge">{{ getQuestionCategoryName(currentQuestion) }}</span>
             </div>
             <h2 class="question-title">{{ currentQuestion.text }}</h2>
-            <p class="question-subtitle">最も当てはまるものを選択してください</p>
+            <p class="question-subtitle">各項目について、あなたにどの程度当てはまるかを5段階で評価してください</p>
           </div>
           
           <div class="question-card">
-            <div class="options-grid">
-              <button
+            <div class="options-list">
+              <div
                 v-for="(option, index) in currentQuestion.options"
                 :key="option.label"
-                @click="selectOption(currentQuestion.id, option.label)"
-                :class="{ 
-                  selected: answers[currentQuestion.id] === option.label,
-                  'option-a': index === 0,
-                  'option-b': index === 1,
-                  'option-c': index === 2,
-                  'option-d': index === 3
-                }"
-                class="option-button"
+                class="option-item"
               >
-                <div class="option-label">{{ String.fromCharCode(65 + index) }}</div>
-                <div class="option-text">{{ option.text }}</div>
-                <div class="option-indicator">
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <polyline points="20,6 9,17 4,12"/>
-                  </svg>
+                <div class="option-content">
+                  <div class="option-header">
+                    <div class="option-label">{{ String.fromCharCode(65 + index) }}</div>
+                    <div class="option-text">{{ option.text }}</div>
+                  </div>
+                  
+                  <div class="rating-scale">
+                    <div class="scale-labels">
+                      <span class="scale-label-left">全く当てはまらない</span>
+                      <span class="scale-label-right">よく当てはまる</span>
+                    </div>
+                    <div class="scale-buttons">
+                      <button
+                        v-for="rating in [1, 2, 3, 4, 5]"
+                        :key="`${option.label}-${rating}`"
+                        @click="selectOptionRating(currentQuestion.id, option.label, rating)"
+                        :class="{ 
+                          selected: getOptionRating(currentQuestion.id, option.label) === rating,
+                          [`rating-${rating}`]: true
+                        }"
+                        class="rating-button"
+                        :title="getRatingLabel(rating)"
+                      >
+                        {{ rating }}
+                      </button>
+                    </div>
+                  </div>
                 </div>
-              </button>
+              </div>
             </div>
           </div>
           
@@ -85,7 +126,7 @@
                   :key="question.id"
                   class="progress-dot"
                   :class="{
-                    completed: answers[question.id],
+                    completed: answers[question.id] && Object.keys(answers[question.id]).length > 0,
                     current: index === currentQuestionIndex
                   }"
                 ></div>
@@ -93,12 +134,12 @@
             </div>
 
             <button
-              @click="calculateResult"
-              :disabled="Object.keys(answers).length !== questions.length"
+              @click="isAllQuestionsAnswered() ? calculateResult() : goToNextQuestion()"
+              :disabled="!isCurrentQuestionCompleted()"
               class="btn nav-button next-button"
-              :class="{ 'results-ready': Object.keys(answers).length === questions.length }"
+              :class="{ 'results-ready': isAllQuestionsAnswered() }"
             >
-              <span v-if="Object.keys(answers).length === questions.length">
+              <span v-if="isAllQuestionsAnswered()">
                 結果を見る
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                   <path d="M9 18l6-6-6-6"/>
@@ -366,7 +407,7 @@
           <!-- アクションボタン -->
           <div class="action-section">
             <div class="action-grid">
-              <button @click="resetDiagnosis" class="action-button secondary-action">
+              <button @click.prevent="handleResetDiagnosis" class="action-button secondary-action" type="button">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                   <path d="M3 12a9 9 0 009-9 9.75 9.75 0 016.74 2.74L21 8"/>
                   <path d="M21 3v5h-5"/>
@@ -384,16 +425,16 @@
             </div>
           </div>
         </div>
-      </template>
+      </div>
     </div>
     
     <div v-if="!showResult && questions.length > 0" class="progress-section-fixed">
       <div class="progress-content">
-        <p>回答済み： {{ Object.keys(answers).length }} / {{ questions.length }}</p>
+        <p>回答済み： {{ getAnsweredQuestionsCount() }} / {{ questions.length }}</p>
         <div class="progress-bar">
           <div
             class="progress-fill"
-            :style="{ width: `${(Object.keys(answers).length / questions.length) * 100}%` }"
+            :style="{ width: `${(getAnsweredQuestionsCount() / questions.length) * 100}%` }"
           ></div>
         </div>
       </div>
@@ -451,7 +492,7 @@ const loading = ref(!hasSavedState)
 const error = ref<string | null>(null)
 
 // 状態を localStorage から復元
-const answers = ref<Record<string, string>>(loadFromStorage(STORAGE_KEYS.ANSWERS, {}))
+const answers = ref<Record<string, string | Record<string, number>>>(loadFromStorage(STORAGE_KEYS.ANSWERS, {}))
 const showResult = ref(loadFromStorage(STORAGE_KEYS.SHOW_RESULT, false))
 const topProfessions = ref<ProfessionScore[]>(loadFromStorage(STORAGE_KEYS.TOP_PROFESSIONS, []))
 const DISPLAY_TOP_N = 3; // リアクティブである必要がないため定数に変更
@@ -463,8 +504,17 @@ const questions = computed<Question[]>(() => {
 })
 
 const currentQuestion = computed<Question | null>(() => {
+  console.log('currentQuestion computed:', {
+    questionsLength: questions.value.length,
+    currentIndex: currentQuestionIndex.value,
+    hasConfig: !!config.value,
+    loading: loading.value
+  }); // デバッグ用
+  
   if (questions.value.length === 0) return null
-  return questions.value[currentQuestionIndex.value] || null
+  const question = questions.value[currentQuestionIndex.value] || null
+  console.log('Selected question:', question); // デバッグ用
+  return question
 })
 
 const maxCategoryScore = computed(() => {
@@ -479,8 +529,17 @@ const maxCategoryScore = computed(() => {
   return maxScore || 1
 })
 
+let isLoadingConfig = false
+
 async function loadConfig() {
+  if (isLoadingConfig) {
+    console.log('loadConfig already in progress, skipping'); // デバッグ用
+    return
+  }
+  
   try {
+    console.log('loadConfig started'); // デバッグ用
+    isLoadingConfig = true
     loading.value = true
     error.value = null
     
@@ -488,6 +547,11 @@ async function loadConfig() {
       loadDiagnosticConfig(),
       loadProfessionDatabase()
     ])
+    
+    console.log('Config loaded:', {
+      questionsCount: configData.questions?.length || 0,
+      hasQuestions: !!(configData.questions && configData.questions.length > 0)
+    }); // デバッグ用
     
     config.value = configData
     professionDatabase.value = professionData
@@ -498,6 +562,7 @@ async function loadConfig() {
     }
     
     loading.value = false
+    console.log('loadConfig completed successfully, loading set to false'); // デバッグ用
   } catch (err) {
     console.error('設定の読み込みに失敗しました:', err)
     
@@ -518,25 +583,90 @@ async function loadConfig() {
       error.value = '診断データの読み込みに失敗しました。インターネット接続を確認してもう一度お試しください。'
       loading.value = false
     }
+  } finally {
+    isLoadingConfig = false
+    console.log('loadConfig finally block, isLoadingConfig set to false'); // デバッグ用
   }
 }
 
-let navigationTimer: ReturnType<typeof setTimeout> | null = null;
-
-function selectOption(questionId: string, label: string) {
-  answers.value[questionId] = label;
+// 新しい評価形式の回答を管理
+function selectOptionRating(questionId: string, optionLabel: string, rating: number) {
+  console.log('selectOptionRating called:', { questionId, optionLabel, rating }); // デバッグ用
+  
+  if (!answers.value[questionId] || typeof answers.value[questionId] === 'string') {
+    answers.value[questionId] = {};
+  }
+  
+  const questionAnswers = answers.value[questionId] as Record<string, number>;
+  questionAnswers[optionLabel] = rating;
+  
   saveToStorage(STORAGE_KEYS.ANSWERS, answers.value);
-  
-  if (navigationTimer) {
-    clearTimeout(navigationTimer);
-  }
-  
-  navigationTimer = setTimeout(() => {
-    if (currentQuestionIndex.value < questions.value.length - 1) {
-      goToNextQuestion();
-    }
-  }, 500);
+  console.log('Updated answers:', answers.value); // デバッグ用
 }
+
+// 特定の選択肢の評価値を取得
+function getOptionRating(questionId: string, optionLabel: string): number | null {
+  const questionAnswers = answers.value[questionId];
+  if (!questionAnswers || typeof questionAnswers === 'string') return null;
+  
+  const rating = questionAnswers[optionLabel];
+  return (typeof rating === 'number' && rating >= 1 && rating <= 5) ? rating : null;
+}
+
+// 評価値のラベルを取得
+function getRatingLabel(rating: number): string {
+  const labels: Record<number, string> = {
+    1: '全く当てはまらない',
+    2: 'あまり当てはまらない', 
+    3: 'どちらとも言えない',
+    4: 'やや当てはまる',
+    5: 'よく当てはまる'
+  };
+  return labels[rating] || '';
+}
+
+// すべての質問に回答済みかチェック
+function isAllQuestionsAnswered(): boolean {
+  console.log('Checking completion. Current answers:', answers.value); // デバッグ用
+  
+  return questions.value.every(question => {
+    const questionAnswers = answers.value[question.id];
+    console.log(`Question ${question.id}:`, questionAnswers); // デバッグ用
+    
+    // 新しい評価形式でない場合はfalse
+    if (!questionAnswers || typeof questionAnswers === 'string') {
+      console.log(`Question ${question.id} not in new format`); // デバッグ用
+      return false;
+    }
+    
+    // すべての選択肢に評価が付いているかチェック
+    const allRated = question.options.every(option => {
+      const rating = questionAnswers[option.label];
+      const isValid = rating && rating >= 1 && rating <= 5;
+      console.log(`Option ${option.label}: rating=${rating}, valid=${isValid}`); // デバッグ用
+      return isValid;
+    });
+    
+    console.log(`Question ${question.id} completion: ${allRated}`); // デバッグ用
+    return allRated;
+  });
+}
+
+// 回答済み質問数を計算
+function getAnsweredQuestionsCount(): number {
+  return questions.value.filter(question => {
+    const questionAnswers = answers.value[question.id];
+    if (!questionAnswers || typeof questionAnswers !== 'object') return false;
+    
+    // 少なくとも1つの選択肢に回答があるかチェック
+    return question.options.some(option => {
+      const rating = questionAnswers[option.label];
+      return rating && rating >= 1 && rating <= 5;
+    });
+  }).length;
+}
+
+// レガシー関数を削除（5段階評価に移行したため不要）
 
 async function scrollToContentTop() {
   await nextTick();
@@ -546,11 +676,41 @@ async function scrollToContentTop() {
   }
 }
 
+function isCurrentQuestionCompleted(): boolean {
+  if (!currentQuestion.value) return false
+  
+  const questionId = currentQuestion.value.id
+  const answer = answers.value[questionId]
+  
+  console.log('Checking completion for question:', questionId, 'answer:', answer); // デバッグ用
+  
+  if (!answer || typeof answer !== 'object') {
+    console.log('No answer or wrong format'); // デバッグ用
+    return false
+  }
+  
+  const answerObj = answer as Record<string, number>
+  const allOptionsRated = currentQuestion.value.options.every(option => {
+    const rating = answerObj[option.label]
+    const isRated = rating >= 1 && rating <= 5
+    console.log(`Option ${option.label}: rating=${rating}, isRated=${isRated}`); // デバッグ用
+    return isRated
+  })
+  
+  console.log('All options rated:', allOptionsRated); // デバッグ用
+  return allOptionsRated
+}
+
 async function goToNextQuestion() {
+  console.log('goToNextQuestion called'); // デバッグ用
   if (currentQuestionIndex.value < questions.value.length - 1) {
-    currentQuestionIndex.value++;
-    saveToStorage(STORAGE_KEYS.CURRENT_QUESTION_INDEX, currentQuestionIndex.value);
-    scrollToContentTop();
+    currentQuestionIndex.value++
+    saveToStorage(STORAGE_KEYS.CURRENT_QUESTION_INDEX, currentQuestionIndex.value)
+    scrollToContentTop()
+    console.log('Moved to question:', currentQuestionIndex.value + 1); // デバッグ用
+  } else {
+    console.log('All questions completed, calculating result'); // デバッグ用
+    calculateResult()
   }
 }
 
@@ -594,19 +754,66 @@ const getCategoryName = (category: string): string => {
   return CATEGORY_LABELS[category] || category
 }
 
+// 質問の主要カテゴリーを取得（最初の選択肢のカテゴリーを使用）
+const getQuestionCategoryName = (question: Question): string => {
+  if (question.options && question.options.length > 0) {
+    return getCategoryName(question.options[0].category)
+  }
+  return '診断'
+}
+
+function handleResetDiagnosis() {
+  console.log('handleResetDiagnosis called'); // デバッグ用
+  
+  const userConfirmed = confirm('診断データをすべてリセットしますか？\n※この操作は元に戻せません。')
+  console.log('User confirmed:', userConfirmed); // デバッグ用
+  
+  if (userConfirmed) {
+    try {
+      resetDiagnosis()
+      alert('診断データがリセットされました。')
+      console.log('Reset completed successfully'); // デバッグ用
+    } catch (error) {
+      console.error('Reset failed:', error);
+      alert('リセット中にエラーが発生しました。')
+    }
+  }
+}
+
 function resetDiagnosis() {
+  console.log('resetDiagnosis called'); // デバッグ用
+  
+  // すべての状態をリセット
   answers.value = {}
   showResult.value = false
   topProfessions.value = []
   displayedProfessions.value = []
   currentQuestionIndex.value = 0
+  error.value = null
   
-  // localStorage もクリア
-  Object.values(STORAGE_KEYS).forEach(key => {
-    localStorage.removeItem(key)
+  // localStorage をクリア
+  try {
+    Object.values(STORAGE_KEYS).forEach(key => {
+      console.log('Removing from localStorage:', key); // デバッグ用
+      localStorage.removeItem(key)
+    })
+    console.log('LocalStorage cleared successfully'); // デバッグ用
+  } catch (storageError) {
+    console.error('Failed to clear localStorage:', storageError);
+  }
+  
+  console.log('Reset completed. Current answers:', answers.value); // デバッグ用
+  console.log('Current question index:', currentQuestionIndex.value); // デバッグ用
+  console.log('Show result:', showResult.value); // デバッグ用
+  
+  // ページの最上部にスクロール
+  window.scrollTo({ top: 0, behavior: 'smooth' })
+  
+  // 確実にloadingをfalseに設定
+  nextTick(() => {
+    loading.value = false
+    console.log('Loading set to false after reset'); // デバッグ用
   })
-  
-  window.scrollTo(0, 0)
 }
 
 function goHome() {
@@ -921,6 +1128,33 @@ onMounted(() => {
   transform: translateY(-1px);
 }
 
+.reset-section {
+  text-align: center;
+  padding: var(--space-md);
+  border-bottom: 1px solid var(--border-light);
+  margin-bottom: var(--space-lg);
+}
+
+.reset-button {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  background: #f39c12;
+  color: white;
+  border: none;
+  padding: var(--space-xs) var(--space-md);
+  border-radius: 6px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  font-size: var(--fs-small);
+}
+
+.reset-button:hover {
+  background: #e67e22;
+  transform: translateY(-1px);
+}
+
 /* ==========================================================================
    質問ヘッダー部分
    ========================================================================== */
@@ -971,46 +1205,122 @@ onMounted(() => {
 }
 
 /* ==========================================================================
-   質問カード - 選択肢グリッド
+   質問カード - 5段階評価形式
    ========================================================================== */
 .question-card {
   margin-bottom: var(--space-xl);
 }
 
-.options-grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: var(--space-md);
-  max-width: 800px;
+.options-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+  max-width: 900px;
   margin: 0 auto;
 }
 
-.option-button {
-  display: flex;
-  align-items: center;
-  gap: var(--space-md);
-  padding: var(--space-lg);
+.option-item {
   background: var(--bg-primary);
+  border: 1px solid var(--border-light);
+  border-radius: 12px;
+  padding: var(--space-lg);
+  transition: all var(--transition-fast);
+}
+
+.option-item:hover {
+  border-color: var(--accent-blue);
+  box-shadow: var(--shadow-sm);
+}
+
+.option-content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.option-header {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-md);
+}
+
+/* 評価スケール */
+.rating-scale {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.scale-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: var(--fs-small);
+  color: var(--text-secondary);
+  margin-bottom: var(--space-xs);
+}
+
+.scale-buttons {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-xs);
+  max-width: 300px;
+  margin: 0 auto;
+}
+
+.rating-button {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
   border: 2px solid var(--border-light);
-  border-radius: 8px;
+  background: var(--bg-primary);
+  color: var(--text-secondary);
   cursor: pointer;
   transition: all var(--transition-fast);
-  text-align: left;
-  position: relative;
-  min-height: 80px;
+  font-weight: 600;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.option-button:hover {
+.rating-button:hover {
   border-color: var(--accent-blue);
-  background: rgba(52, 152, 219, 0.02);
-  transform: translateY(-2px);
+  background: rgba(52, 152, 219, 0.1);
+  transform: scale(1.1);
+}
+
+.rating-button.selected {
+  border-color: var(--accent-blue);
+  background: var(--accent-blue);
+  color: white;
+  transform: scale(1.15);
   box-shadow: var(--shadow-md);
 }
 
-.option-button.selected {
-  border-color: var(--accent-blue);
-  background: rgba(52, 152, 219, 0.05);
-  box-shadow: var(--shadow-md);
+/* 評価値別の色分け */
+.rating-button.rating-1.selected {
+  background: #e74c3c;
+  border-color: #e74c3c;
+}
+
+.rating-button.rating-2.selected {
+  background: #f39c12;
+  border-color: #f39c12;
+}
+
+.rating-button.rating-3.selected {
+  background: #95a5a6;
+  border-color: #95a5a6;
+}
+
+.rating-button.rating-4.selected {
+  background: #3498db;
+  border-color: #3498db;
+}
+
+.rating-button.rating-5.selected {
+  background: #27ae60;
+  border-color: #27ae60;
 }
 
 .option-label {
@@ -1019,18 +1329,13 @@ onMounted(() => {
   justify-content: center;
   width: 32px;
   height: 32px;
-  background: var(--bg-tertiary);
+  background: var(--accent-blue);
+  color: white;
   border-radius: 50%;
   font-family: var(--font-mono);
   font-weight: 600;
-  color: var(--text-secondary);
   font-size: 0.875rem;
   flex-shrink: 0;
-}
-
-.option-button.selected .option-label {
-  background: var(--accent-blue);
-  color: white;
 }
 
 .option-text {
@@ -1038,25 +1343,7 @@ onMounted(() => {
   font-size: var(--fs-body);
   color: var(--text-primary);
   line-height: 1.6;
-}
-
-.option-indicator {
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-  border: 2px solid var(--border-light);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  opacity: 0;
-  transition: all var(--transition-fast);
-}
-
-.option-button.selected .option-indicator {
-  opacity: 1;
-  border-color: var(--accent-blue);
-  background: var(--accent-blue);
-  color: white;
+  font-weight: 500;
 }
 
 /* ==========================================================================
@@ -1201,6 +1488,31 @@ onMounted(() => {
     font-size: 1.5rem;
   }
 
+  /* 5段階評価のモバイル対応 */
+  .options-list {
+    gap: var(--space-md);
+  }
+  
+  .option-item {
+    padding: var(--space-md);
+  }
+  
+  .option-header {
+    flex-direction: column;
+    gap: var(--space-sm);
+    text-align: center;
+  }
+  
+  .scale-buttons {
+    max-width: 280px;
+  }
+  
+  .rating-button {
+    width: 45px;
+    height: 45px;
+    font-size: 0.875rem;
+  }
+
   .navigation-section {
     flex-direction: column;
     gap: var(--space-sm);
@@ -1224,14 +1536,25 @@ onMounted(() => {
     gap: var(--space-xs);
   }
 
-  .option-button {
-    padding: var(--space-md);
-    min-height: 60px;
+  /* 極小画面での5段階評価対応 */
+  .scale-buttons {
+    max-width: 250px;
+    gap: 2px;
   }
-
+  
+  .rating-button {
+    width: 40px;
+    height: 40px;
+    font-size: 0.8125rem;
+  }
+  
   .option-label {
     width: 28px;
     height: 28px;
+    font-size: 0.75rem;
+  }
+  
+  .scale-labels {
     font-size: 0.75rem;
   }
 
@@ -1248,15 +1571,18 @@ onMounted(() => {
 
 /* タッチデバイス最適化 */
 @media (hover: none) and (pointer: coarse) {
-  .option-button:hover {
+  .rating-button:hover {
     transform: none;
-    box-shadow: none;
     border-color: var(--border-light);
     background: var(--bg-primary);
   }
 
-  .option-button:active {
-    transform: scale(0.98);
+  .rating-button:active {
+    transform: scale(0.95);
+  }
+  
+  .rating-button.selected:active {
+    transform: scale(1.1);
   }
 }
 
