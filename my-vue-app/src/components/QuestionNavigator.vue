@@ -2,136 +2,386 @@
   <div class="diagnosis-container" :class="{ 'has-progress': !showResult && questions.length > 0 }">
     <div class="diagnosis-content">
       <div v-if="loading" class="loading-section">
-        <p>診断データを読み込んでいます...</p>
+        <div class="loading-spinner"></div>
+        <h3>診断システムを初期化中</h3>
+        <p>最適な質問をご用意しています...</p>
       </div>
       
       <div v-else-if="error" class="error-section">
+        <div class="error-icon">
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"/>
+            <line x1="12" y1="8" x2="12" y2="12"/>
+            <line x1="12" y1="16" x2="12.01" y2="16"/>
+          </svg>
+        </div>
+        <h3>データの読み込みに失敗しました</h3>
         <p>{{ error }}</p>
-        <button @click="loadConfig" class="btn reload-button">再読み込み</button>
+        <button @click="loadConfig" class="btn reload-button">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M3 12a9 9 0 019-9 9.75 9.75 0 016.74 2.74L21 8"/>
+            <path d="M21 3v5h-5"/>
+            <path d="M21 12a9 9 0 01-9 9 9.75 9.75 0 01-6.74-2.74L3 16"/>
+            <path d="M3 21v-5h5"/>
+          </svg>
+          再読み込み
+        </button>
       </div>
       
       <template v-else>
         <div v-if="!showResult && currentQuestion" class="current-question-section">
+          <!-- ヘッダー情報 -->
+          <div class="question-header">
+            <div class="question-meta">
+              <span class="question-number">質問 {{ currentQuestionIndex + 1 }} / {{ questions.length }}</span>
+              <span class="category-badge">{{ getCategoryName(currentQuestion.category) }}</span>
+            </div>
+            <h2 class="question-title">{{ currentQuestion.text }}</h2>
+            <p class="question-subtitle">最も当てはまるものを選択してください</p>
+          </div>
           
           <div class="question-card">
-            <h2>質問 {{ currentQuestionIndex + 1 }}</h2>
-            <h3>{{ currentQuestion.text }}</h3>
-            <div class="options">
+            <div class="options-grid">
               <button
-                v-for="option in currentQuestion.options"
+                v-for="(option, index) in currentQuestion.options"
                 :key="option.label"
                 @click="selectOption(currentQuestion.id, option.label)"
-                :class="{ selected: answers[currentQuestion.id] === option.label }"
+                :class="{ 
+                  selected: answers[currentQuestion.id] === option.label,
+                  'option-a': index === 0,
+                  'option-b': index === 1,
+                  'option-c': index === 2,
+                  'option-d': index === 3
+                }"
                 class="option-button"
               >
-                {{ option.text }}
+                <div class="option-label">{{ String.fromCharCode(65 + index) }}</div>
+                <div class="option-text">{{ option.text }}</div>
+                <div class="option-indicator">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="20,6 9,17 4,12"/>
+                  </svg>
+                </div>
               </button>
             </div>
           </div>
           
-          <div class="navigation-buttons">
+          <div class="navigation-section">
             <button
               @click="goToPreviousQuestion"
-              class="btn prev-button"
-              :class="{ 'invisible-button': currentQuestionIndex === 0 }"
+              class="btn nav-button prev-button"
               :disabled="currentQuestionIndex === 0"
             >
-              前の質問に戻る
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M19 12H5M12 19l-7-7 7-7"/>
+              </svg>
+              前へ
             </button>
+
+            <div class="progress-indicator">
+              <div class="progress-dots">
+                <div
+                  v-for="(question, index) in questions"
+                  :key="question.id"
+                  class="progress-dot"
+                  :class="{
+                    completed: answers[question.id],
+                    current: index === currentQuestionIndex
+                  }"
+                ></div>
+              </div>
+            </div>
 
             <button
               @click="calculateResult"
               :disabled="Object.keys(answers).length !== questions.length"
-              class="btn calculate-button"
-              :class="{ 'invisible-button': Object.keys(answers).length !== questions.length }"
+              class="btn nav-button next-button"
+              :class="{ 'results-ready': Object.keys(answers).length === questions.length }"
             >
-              診断結果を見る
+              <span v-if="Object.keys(answers).length === questions.length">
+                結果を見る
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M9 18l6-6-6-6"/>
+                </svg>
+              </span>
+              <span v-else>
+                次へ
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M5 12h14M12 5l7 7-7 7"/>
+                </svg>
+              </span>
             </button>
           </div>
           
         </div>
         
         <div v-if="showResult" class="result-section">
-          <h1>診断結果</h1>
-
-          <div v-for="(profession, index) in displayedProfessions" :key="profession.name" class="result-box">
-            <div class="rank-badge">{{ index + 1 }}位</div>
-            <h3>{{ profession.name }}</h3>
-            <div class="total-score">
-              <span class="score-label">総合スコア：</span>
-              <span class="score-value">{{ profession.score.toFixed(1) }}</span>
+          <!-- 結果ヘッダー -->
+          <div class="result-header">
+            <div class="completion-badge">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M9 11l3 3l8-8"/>
+                <path d="M21 12c-.3 1.5-1.1 2.9-2.3 4"/>
+                <path d="M3 12c0-4.2 3.4-7.6 7.6-7.6"/>
+              </svg>
+              診断完了
             </div>
-            
-            <div class="category-scores">
-              <h4>カテゴリー別スコア：</h4>
-              <div class="category-bar-container">
-                <div
-                  v-for="(score, category) in profession.categories"
-                  :key="category"
-                  class="category-bar"
-                >
-                  <div class="category-label">{{ CATEGORY_LABELS[category] || category }}</div>
-                  <div class="bar-container">
-                    <div class="bar-fill" :style="{ width: `${(score / maxCategoryScore) * 100}%` }"></div>
+            <h1 class="result-title">あなたの適職診断結果</h1>
+            <p class="result-subtitle">
+              {{ Object.keys(answers).length }}問の質問から分析した、あなたに最適な職業をランキング形式でご紹介します
+            </p>
+          </div>
+
+          <!-- 結果カードリスト -->
+          <div class="results-grid">
+            <div 
+              v-for="(profession, index) in displayedProfessions" 
+              :key="profession.name" 
+              class="profession-card"
+              :class="`rank-${index + 1}`"
+            >
+              <!-- カードヘッダー -->
+              <div class="card-header">
+                <div class="rank-section">
+                  <div class="rank-badge">{{ index + 1 }}</div>
+                  <div class="rank-label">
+                    <span v-if="index === 0" class="rank-title">最適職業</span>
+                    <span v-else-if="index === 1" class="rank-title">次点候補</span>
+                    <span v-else class="rank-title">候補職業</span>
                   </div>
-                  <div class="category-score">{{ score.toFixed(1) }}</div>
+                </div>
+                <div class="total-score">
+                  <div class="score-circle">
+                    <svg class="score-ring" width="60" height="60">
+                      <circle cx="30" cy="30" r="25" fill="none" stroke="var(--bg-tertiary)" stroke-width="4"/>
+                      <circle 
+                        cx="30" cy="30" r="25" fill="none" 
+                        stroke="var(--accent-blue)" 
+                        stroke-width="4"
+                        stroke-linecap="round"
+                        :stroke-dasharray="`${2 * Math.PI * 25}`"
+                        :stroke-dashoffset="`${2 * Math.PI * 25 * (1 - profession.score / 100)}`"
+                        transform="rotate(-90 30 30)"
+                      />
+                    </svg>
+                    <div class="score-text">
+                      <span class="score-value">{{ profession.score.toFixed(0) }}</span>
+                      <span class="score-unit">点</span>
+                    </div>
+                  </div>
                 </div>
               </div>
-            </div>
 
-            <div class="profession-comment">
-              <p>{{ profession.comment || 'あなたの回答から分析した結果、この職業があなたの特性や価値観に適している可能性が高いことがわかりました。ぜひチャレンジを検討してみてください。' }}</p>
+              <!-- 職業名 -->
+              <h3 class="profession-name">{{ profession.name }}</h3>
+              
+              <!-- カテゴリー別スコア -->
+              <div class="category-analysis">
+                <h4 class="analysis-title">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+                  </svg>
+                  適性分析
+                </h4>
+                <div class="category-grid">
+                  <div
+                    v-for="(score, category) in profession.categories"
+                    :key="category"
+                    class="category-item"
+                  >
+                    <div class="category-header">
+                      <span class="category-name">{{ CATEGORY_LABELS[category] || category }}</span>
+                      <span class="category-score">{{ score.toFixed(1) }}pt</span>
+                    </div>
+                    <div class="category-bar">
+                      <div 
+                        class="category-fill" 
+                        :style="{ width: `${(score / maxCategoryScore) * 100}%` }"
+                        :data-category="category"
+                      ></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 職業詳細情報 -->
+              <div class="profession-details">
+                <!-- コメント -->
+                <div class="detail-section">
+                  <h4 class="detail-title">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/>
+                    </svg>
+                    適性コメント
+                  </h4>
+                  <p class="detail-content">
+                    {{ profession.comment || 'あなたの回答から分析した結果、この職業があなたの特性や価値観に適している可能性が高いことがわかりました。ぜひチャレンジを検討してみてください。' }}
+                  </p>
+                </div>
+                
+                <!-- 年収情報 -->
+                <div v-if="profession.annualIncome" class="detail-section">
+                  <h4 class="detail-title">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <line x1="12" y1="1" x2="12" y2="23"/>
+                      <path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/>
+                    </svg>
+                    年収目安
+                  </h4>
+                  <p class="income-value">{{ profession.annualIncome }}</p>
+                </div>
+                
+                <!-- 仕事内容 -->
+                <div v-if="profession.jobDetails" class="detail-section">
+                  <h4 class="detail-title">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
+                      <line x1="8" y1="21" x2="16" y2="21"/>
+                      <line x1="12" y1="17" x2="12" y2="21"/>
+                    </svg>
+                    業務内容
+                  </h4>
+                  <p class="detail-content">{{ profession.jobDetails }}</p>
+                </div>
+              </div>
+              
+              <!-- 詳細リンクボタン -->
+              <router-link 
+                :to="`/profession/${profession.id || profession.name.toLowerCase().replace(/\s+/g, '-')}`" 
+                class="detail-link-button"
+              >
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M9 18l6-6-6-6"/>
+                </svg>
+                この職業の詳細を見る
+              </router-link>
             </div>
-            
-            <div v-if="profession.annualIncome" class="annual-income">
-              <h4>年収範囲：</h4>
-              <p class="income-value">{{ profession.annualIncome }}</p>
-            </div>
-            
-            <div v-if="profession.jobDetails" class="job-details">
-              <h4>仕事内容：</h4>
-              <p class="job-description">{{ profession.jobDetails }}</p>
-            </div>
-            
           </div>
           
+          <!-- シェア機能 -->
           <div class="share-section">
-            <h3 class="share-title">診断結果をシェア</h3>
-            <div class="share-buttons">
-              <button @click="shareToLine" class="share-button line-button">
-                <img src="/image/LINE.png" alt="LINEのロゴアイコン" class="share-icon line-icon-img">
-                LINEでシェア
+            <div class="section-header">
+              <h3 class="section-title">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M4 12v8a2 2 0 002 2h12a2 2 0 002-2v-8"/>
+                  <polyline points="16,6 12,2 8,6"/>
+                  <line x1="12" y1="2" x2="12" y2="15"/>
+                </svg>
+                診断結果をシェア
+              </h3>
+              <p class="section-subtitle">友人や家族と結果を共有して、キャリアについて話し合ってみましょう</p>
+            </div>
+            <div class="share-grid">
+              <button @click="shareToLine" class="share-card line-card">
+                <div class="share-icon">
+                  <img src="/image/LINE.png" alt="LINE" class="platform-icon">
+                </div>
+                <div class="share-content">
+                  <h4>LINEでシェア</h4>
+                  <p>友達やグループに結果を送信</p>
+                </div>
               </button>
-              <button @click="shareToX" class="share-button x-button">
-                <img src="/image/X.png" alt="X（旧Twitter）のロゴアイコン" class="share-icon x-icon-img">
-                Xでシェア
+              <button @click="shareToX" class="share-card x-card">
+                <div class="share-icon">
+                  <img src="/image/X.png" alt="X (Twitter)" class="platform-icon">
+                </div>
+                <div class="share-content">
+                  <h4>Xでシェア</h4>
+                  <p>フォロワーと診断結果を共有</p>
+                </div>
               </button>
-              <button @click="shareToInstagram" class="share-button instagram-button">
-                <img src="/image/Instagram.png" alt="Instagramのロゴアイコン" class="share-icon instagram-icon-img">
-                Instagramでシェア
+              <button @click="shareToInstagram" class="share-card instagram-card">
+                <div class="share-icon">
+                  <img src="/image/Instagram.png" alt="Instagram" class="platform-icon">
+                </div>
+                <div class="share-content">
+                  <h4>Instagramでシェア</h4>
+                  <p>ストーリーズで結果を投稿</p>
+                </div>
               </button>
             </div>
           </div>
           
-          <div class="purchase-section">
-            <h3 class="purchase-title">📊 詳細PDFレポート</h3>
-            <p class="purchase-description">
-              あなたの診断結果をより詳しく分析した、パーソナライズされたPDFレポートをご用意しています。
-            </p>
-            <ul class="purchase-features">
-              <li>📈 各カテゴリーの詳細分析</li>
-              <li>💡 職業選択のアドバイス</li>
-              <li>🎯 キャリアパスの提案</li>
-              <li>📚 スキルアップのヒント</li>
-            </ul>
-            <button @click="purchasePdfReport" class="btn purchase-button">
-              詳細レポートを購入する（¥500）
-            </button>
+          <!-- 詳細レポート購入 -->
+          <div class="premium-section">
+            <div class="premium-card">
+              <div class="premium-header">
+                <div class="premium-icon">
+                  <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
+                    <polyline points="14,2 14,8 20,8"/>
+                    <line x1="16" y1="13" x2="8" y2="13"/>
+                    <line x1="16" y1="17" x2="8" y2="17"/>
+                    <polyline points="10,9 9,9 8,9"/>
+                  </svg>
+                </div>
+                <div class="premium-content">
+                  <h3 class="premium-title">詳細診断レポート</h3>
+                  <p class="premium-subtitle">より深い自己理解とキャリア設計のために</p>
+                </div>
+                <div class="premium-price">
+                  <span class="price-amount">¥500</span>
+                  <span class="price-tax">税込</span>
+                </div>
+              </div>
+              
+              <div class="premium-features">
+                <div class="feature-item">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="20,6 9,17 4,12"/>
+                  </svg>
+                  <span>16の詳細な適性分析レポート</span>
+                </div>
+                <div class="feature-item">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="20,6 9,17 4,12"/>
+                  </svg>
+                  <span>パーソナライズされたキャリアアドバイス</span>
+                </div>
+                <div class="feature-item">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="20,6 9,17 4,12"/>
+                  </svg>
+                  <span>スキル開発ロードマップの提案</span>
+                </div>
+                <div class="feature-item">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="20,6 9,17 4,12"/>
+                  </svg>
+                  <span>面接対策・転職活動のヒント</span>
+                </div>
+              </div>
+              
+              <button @click="purchasePdfReport" class="premium-button">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="9" cy="21" r="1"/>
+                  <circle cx="20" cy="21" r="1"/>
+                  <path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"/>
+                </svg>
+                詳細レポートを購入する
+              </button>
+            </div>
           </div>
           
-          <div class="action-buttons">
-            <button @click="resetDiagnosis" class="btn action-button">もう一度診断する</button>
-            <button @click="goHome" class="btn action-button">ホームに戻る</button>
+          <!-- アクションボタン -->
+          <div class="action-section">
+            <div class="action-grid">
+              <button @click="resetDiagnosis" class="action-button secondary-action">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M3 12a9 9 0 009-9 9.75 9.75 0 016.74 2.74L21 8"/>
+                  <path d="M21 3v5h-5"/>
+                  <path d="M21 12a9 9 0 01-9 9 9.75 9.75 0 01-6.74-2.74L3 16"/>
+                  <path d="M3 21v-5h5"/>
+                </svg>
+                もう一度診断する
+              </button>
+              <button @click="goHome" class="action-button primary-action">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/>
+                </svg>
+                ホームに戻る
+              </button>
+            </div>
           </div>
         </div>
       </template>
@@ -333,11 +583,16 @@ function updateDisplayedProfessions() {
 }
 
 const CATEGORY_LABELS: Record<string, string> = {
-  'skill': 'スキル',
-  'interest': '興味',
-  'priority': '性格',
-  'balance': '考え方'
+  'skill': 'スキル・能力',
+  'interest': '興味・関心',
+  'priority': '価値観・優先事項',
+  'balance': 'ワークライフバランス'
 };
+
+// カテゴリー名を取得する関数
+const getCategoryName = (category: string): string => {
+  return CATEGORY_LABELS[category] || category
+}
 
 function resetDiagnosis() {
   answers.value = {}
@@ -386,7 +641,11 @@ async function purchasePdfReport() {
     const { sessionId } = await response.json()
     
     // Stripe Checkoutにリダイレクト
-    const stripe = (window as any).Stripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY)
+    const stripe = (window as Window & { Stripe?: (key: string) => { redirectToCheckout: (options: { sessionId: string }) => Promise<{ error?: Error }> } }).Stripe?.(import.meta.env.VITE_STRIPE_PUBLIC_KEY)
+    if (!stripe) {
+      alert('決済システムの初期化に失敗しました。ページを再読み込みしてください。')
+      return
+    }
     const { error } = await stripe.redirectToCheckout({ sessionId })
     
     if (error) {
@@ -435,7 +694,6 @@ async function copyToClipboard(text: string): Promise<boolean> {
     document.body.appendChild(textArea);
     textArea.select();
     try {
-      // eslint-disable-next-line deprecation/deprecation
       const successful = document.execCommand('copy'); // 古いブラウザ互換性のためのフォールバック
       return successful;
     } catch (execErr) {
@@ -488,7 +746,7 @@ async function shareToInstagramStories(text: string) {
               '4. 投稿してください！\n\n' +
               '💡 診断結果のテキストはクリップボードにコピー済みです');
       }, 1000);
-    } catch (error) {
+    } catch {
       // Instagram Storiesが開けない場合は通常のInstagramアプリを開く
       window.location.href = 'instagram://camera';
       alert('📱 Instagramカメラが開きました！\n\n' +
@@ -540,7 +798,7 @@ async function fallbackInstagramShare(text: string) {
   if (isMobile) {
     try {
       window.location.href = 'instagram://';
-    } catch (error) {
+    } catch {
       window.open('https://www.instagram.com/', '_blank');
     }
   } else {
@@ -555,97 +813,1014 @@ onMounted(() => {
 
 <style scoped>
 /* ==========================================================================
-   汎用スタイル & ヘルパークラス
+   診断画面 - 知的でプロフェッショナルなデザイン
    ========================================================================== */
-.btn {
-  display: inline-block;
-  border: none;
-  border-radius: 50px;
-  cursor: pointer;
-  font-family: 'Hiragino Sans', sans-serif;
-  font-weight: 600;
-  text-align: center;
-  letter-spacing: 0.05em;
-  transition: all 0.3s ease;
-  box-shadow: 0 8px 25px rgba(230, 188, 153, 0.3);
-}
-.btn:hover:not(:disabled) {
-  transform: translateY(-5px);
-  box-shadow: 0 15px 35px rgba(255, 107, 107, 0.4);
-}
-.btn:disabled {
-  background-color: #e0e0e0 !important; /* disabled時は色を強制上書き */
-  color: #999 !important;
-  cursor: not-allowed;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  transform: none;
-}
-.invisible-button {
-  visibility: hidden;
-}
 
-
-/* ==========================================================================
-   基本レイアウト
-   ========================================================================== */
+/* 基本レイアウト */
 .diagnosis-container {
-  margin: 0 auto;
-  box-sizing: border-box;
+  width: 100%;
+  min-height: calc(100vh - 80px); /* ヘッダー分を差し引き */
+  background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
   display: flex;
   flex-direction: column;
   align-items: center;
-}
-.diagnosis-container p{
-  color: var(--text-dark);
-  margin-bottom: 2rem;
-  line-height: 1.6;
-  text-align: center;
-  font-size: clamp(12px, 2vw, 16px);
-}
-.diagnosis-content {
-  width: 70%;
-  max-width: 1000px;
-  background-color: var(--background-white);
-  border-radius: 10px;
-  box-shadow: 0 15px 50px rgba(0, 0, 0, 0.08);
+  padding: var(--space-md);
   box-sizing: border-box;
-  border: none;
-  position: relative;
-  margin-bottom: 2rem;
-  padding: 2rem;
-}
-.diagnosis-content > p {
-  text-align: center;
-  margin-bottom: 2rem;
-  color: var(--text-dark);
-  line-height: 1.6;
+  overflow-x: hidden; /* 横スクロールを防止 */
 }
 
+.diagnosis-content {
+  width: calc(100% - var(--space-md) * 2); /* パディング分を考慮 */
+  max-width: 900px;
+  background: var(--bg-primary);
+  border-radius: 12px;
+  box-shadow: var(--shadow-lg);
+  border: 1px solid var(--border-light);
+  padding: var(--space-lg);
+  margin-bottom: var(--space-lg);
+  position: relative;
+  box-sizing: border-box;
+}
 
 /* ==========================================================================
    ローディング & エラー表示
    ========================================================================== */
-.loading-section, .error-section {
+.loading-section {
   text-align: center;
-  padding: 3rem 1rem;
-  color: var(--text-dark);
-}
-.error-section {
-  color: #d32f2f;
-}
-.reload-button {
-  background-color: var(--main-color);
-  color: var(--background-white);
-  padding: 0.8rem 2rem;
-  font-weight: 500;
-}
-.reload-button:hover:not(:disabled) {
-  background-color: var(--orange-beige);
+  padding: var(--space-xxl) var(--space-lg);
+  color: var(--text-primary);
 }
 
+.loading-spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid var(--bg-tertiary);
+  border-top: 3px solid var(--accent-blue);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: 0 auto var(--space-md);
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.loading-section h3 {
+  font-family: var(--font-heading);
+  font-size: var(--fs-h3);
+  color: var(--primary-navy);
+  margin-bottom: var(--space-sm);
+  font-weight: 600;
+}
+
+.loading-section p {
+  color: var(--text-secondary);
+  font-size: var(--fs-body);
+}
+
+.error-section {
+  text-align: center;
+  padding: var(--space-xxl) var(--space-lg);
+  color: #dc3545;
+}
+
+.error-icon {
+  margin-bottom: var(--space-md);
+  color: #dc3545;
+}
+
+.error-section h3 {
+  font-family: var(--font-heading);
+  font-size: var(--fs-h3);
+  margin-bottom: var(--space-sm);
+  font-weight: 600;
+}
+
+.error-section p {
+  color: var(--text-secondary);
+  margin-bottom: var(--space-lg);
+}
+
+.reload-button {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  background: var(--accent-blue);
+  color: white;
+  border: none;
+  padding: var(--space-sm) var(--space-lg);
+  border-radius: 6px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.reload-button:hover {
+  background: var(--primary-blue);
+  transform: translateY(-1px);
+}
 
 /* ==========================================================================
-   質問セクション
+   質問ヘッダー部分
+   ========================================================================== */
+.question-header {
+  text-align: center;
+  margin-bottom: var(--space-xl);
+}
+
+.question-meta {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: var(--space-md);
+  margin-bottom: var(--space-md);
+}
+
+.question-number {
+  font-family: var(--font-mono);
+  font-size: var(--fs-small);
+  color: var(--text-secondary);
+  background: var(--bg-tertiary);
+  padding: var(--space-xs) var(--space-sm);
+  border-radius: 20px;
+}
+
+.category-badge {
+  font-size: var(--fs-small);
+  color: var(--accent-blue);
+  background: rgba(52, 152, 219, 0.1);
+  padding: var(--space-xs) var(--space-sm);
+  border-radius: 20px;
+  font-weight: 500;
+}
+
+.question-title {
+  font-family: var(--font-heading);
+  font-size: var(--fs-h2);
+  color: var(--primary-navy);
+  margin-bottom: var(--space-sm);
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.question-subtitle {
+  color: var(--text-secondary);
+  font-size: var(--fs-body);
+  margin-bottom: 0;
+}
+
+/* ==========================================================================
+   質問カード - 選択肢グリッド
+   ========================================================================== */
+.question-card {
+  margin-bottom: var(--space-xl);
+}
+
+.options-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-md);
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.option-button {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  padding: var(--space-lg);
+  background: var(--bg-primary);
+  border: 2px solid var(--border-light);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  text-align: left;
+  position: relative;
+  min-height: 80px;
+}
+
+.option-button:hover {
+  border-color: var(--accent-blue);
+  background: rgba(52, 152, 219, 0.02);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.option-button.selected {
+  border-color: var(--accent-blue);
+  background: rgba(52, 152, 219, 0.05);
+  box-shadow: var(--shadow-md);
+}
+
+.option-label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  background: var(--bg-tertiary);
+  border-radius: 50%;
+  font-family: var(--font-mono);
+  font-weight: 600;
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+  flex-shrink: 0;
+}
+
+.option-button.selected .option-label {
+  background: var(--accent-blue);
+  color: white;
+}
+
+.option-text {
+  flex: 1;
+  font-size: var(--fs-body);
+  color: var(--text-primary);
+  line-height: 1.6;
+}
+
+.option-indicator {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 2px solid var(--border-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: all var(--transition-fast);
+}
+
+.option-button.selected .option-indicator {
+  opacity: 1;
+  border-color: var(--accent-blue);
+  background: var(--accent-blue);
+  color: white;
+}
+
+/* ==========================================================================
+   ナビゲーション部分
+   ========================================================================== */
+.navigation-section {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-md);
+}
+
+.nav-button {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: var(--space-sm) var(--space-lg);
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  border: 1px solid var(--border-light);
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all var(--transition-fast);
+  font-size: var(--fs-body);
+}
+
+.nav-button:hover:not(:disabled) {
+  background: var(--bg-tertiary);
+  transform: translateY(-1px);
+}
+
+.nav-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.nav-button.results-ready {
+  background: var(--accent-blue);
+  color: white;
+  border-color: var(--accent-blue);
+}
+
+.nav-button.results-ready:hover {
+  background: var(--primary-blue);
+  border-color: var(--primary-blue);
+}
+
+/* ==========================================================================
+   プログレス表示
+   ========================================================================== */
+.progress-indicator {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+}
+
+.progress-dots {
+  display: flex;
+  gap: var(--space-xs);
+  align-items: center;
+}
+
+.progress-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--bg-tertiary);
+  transition: all var(--transition-fast);
+}
+
+.progress-dot.completed {
+  background: var(--accent-blue);
+  transform: scale(1.2);
+}
+
+.progress-dot.current {
+  background: var(--accent-gold);
+  transform: scale(1.4);
+  box-shadow: 0 0 8px rgba(184, 134, 11, 0.3);
+}
+
+/* ==========================================================================
+   固定プログレスバー
+   ========================================================================== */
+.progress-section-fixed {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border-top: 1px solid var(--border-light);
+  padding: var(--space-sm) var(--space-md);
+  z-index: 100;
+}
+
+.progress-content {
+  max-width: 900px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+}
+
+.progress-content p {
+  font-family: var(--font-mono);
+  font-size: var(--fs-small);
+  color: var(--text-secondary);
+  margin: 0;
+  white-space: nowrap;
+}
+
+.progress-bar {
+  flex: 1;
+  height: 6px;
+  background: var(--bg-tertiary);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent-blue), var(--accent-gold));
+  border-radius: 3px;
+  transition: width var(--transition-normal);
+}
+
+/* ==========================================================================
+   レスポンシブデザイン
+   ========================================================================== */
+@media (max-width: 768px) {
+  .diagnosis-container {
+    padding: var(--space-md) var(--space-sm);
+  }
+
+  .diagnosis-content {
+    padding: var(--space-lg);
+  }
+
+  .question-title {
+    font-size: 1.5rem;
+  }
+
+  .navigation-section {
+    flex-direction: column;
+    gap: var(--space-sm);
+    width: 100%;
+  }
+
+  .nav-button {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .progress-indicator {
+    order: -1;
+    margin-bottom: var(--space-sm);
+  }
+}
+
+@media (max-width: 480px) {
+  .question-meta {
+    flex-direction: column;
+    gap: var(--space-xs);
+  }
+
+  .option-button {
+    padding: var(--space-md);
+    min-height: 60px;
+  }
+
+  .option-label {
+    width: 28px;
+    height: 28px;
+    font-size: 0.75rem;
+  }
+
+  .progress-content {
+    flex-direction: column;
+    gap: var(--space-xs);
+    text-align: center;
+  }
+
+  .progress-content p {
+    white-space: normal;
+  }
+}
+
+/* タッチデバイス最適化 */
+@media (hover: none) and (pointer: coarse) {
+  .option-button:hover {
+    transform: none;
+    box-shadow: none;
+    border-color: var(--border-light);
+    background: var(--bg-primary);
+  }
+
+  .option-button:active {
+    transform: scale(0.98);
+  }
+}
+
+/* ==========================================================================
+   結果表示画面
+   ========================================================================== */
+.result-section {
+  width: 100%;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+/* 結果ヘッダー */
+.result-header {
+  text-align: center;
+  margin-bottom: var(--space-xxl);
+  padding: var(--space-xl);
+  background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+  border-radius: 12px;
+  border: 1px solid var(--border-light);
+}
+
+.completion-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  background: var(--accent-blue);
+  color: white;
+  padding: var(--space-xs) var(--space-md);
+  border-radius: 20px;
+  font-size: var(--fs-small);
+  font-weight: 500;
+  margin-bottom: var(--space-md);
+}
+
+.result-title {
+  font-family: var(--font-heading);
+  font-size: var(--fs-h1);
+  color: var(--primary-navy);
+  margin-bottom: var(--space-sm);
+  font-weight: 700;
+}
+
+.result-subtitle {
+  color: var(--text-secondary);
+  font-size: var(--fs-body);
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* 結果カードグリッド */
+.results-grid {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xl);
+  margin-bottom: var(--space-xxl);
+}
+
+.profession-card {
+  background: var(--bg-primary);
+  border-radius: 12px;
+  padding: var(--space-xl);
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--border-light);
+  transition: all var(--transition-normal);
+  position: relative;
+}
+
+.profession-card.rank-1 {
+  border-left: 4px solid var(--accent-gold);
+  box-shadow: var(--shadow-lg);
+}
+
+.profession-card.rank-2 {
+  border-left: 4px solid #c0c0c0;
+}
+
+.profession-card.rank-3 {
+  border-left: 4px solid #cd7f32;
+}
+
+/* カードヘッダー */
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-lg);
+}
+
+.rank-section {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+}
+
+.rank-badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  background: var(--accent-blue);
+  color: white;
+  border-radius: 50%;
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 1.25rem;
+}
+
+.profession-card.rank-1 .rank-badge {
+  background: var(--accent-gold);
+}
+
+.rank-label {
+  display: flex;
+  flex-direction: column;
+}
+
+.rank-title {
+  font-size: var(--fs-small);
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+/* スコア円グラフ */
+.score-circle {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.score-text {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.score-value {
+  font-family: var(--font-mono);
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--primary-navy);
+  line-height: 1;
+}
+
+.score-unit {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  line-height: 1;
+}
+
+/* 職業名 */
+.profession-name {
+  font-family: var(--font-heading);
+  font-size: var(--fs-h2);
+  color: var(--primary-navy);
+  margin-bottom: var(--space-lg);
+  font-weight: 600;
+}
+
+/* カテゴリー分析 */
+.category-analysis {
+  margin-bottom: var(--space-lg);
+}
+
+.analysis-title {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  font-size: 1.125rem;
+  color: var(--primary-navy);
+  margin-bottom: var(--space-md);
+  font-weight: 600;
+}
+
+.category-grid {
+  display: grid;
+  gap: var(--space-md);
+}
+
+.category-item {
+  background: var(--bg-secondary);
+  padding: var(--space-md);
+  border-radius: 8px;
+}
+
+.category-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-xs);
+}
+
+.category-name {
+  font-size: var(--fs-small);
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+.category-score {
+  font-family: var(--font-mono);
+  font-size: var(--fs-small);
+  color: var(--accent-blue);
+  font-weight: 600;
+}
+
+.category-bar {
+  height: 6px;
+  background: var(--bg-tertiary);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.category-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent-blue), var(--accent-gold));
+  border-radius: 3px;
+  transition: width var(--transition-normal);
+}
+
+/* 職業詳細 */
+.profession-details {
+  margin-bottom: var(--space-lg);
+}
+
+.detail-section {
+  margin-bottom: var(--space-md);
+}
+
+.detail-title {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  font-size: 1rem;
+  color: var(--primary-navy);
+  margin-bottom: var(--space-sm);
+  font-weight: 600;
+}
+
+.detail-content {
+  color: var(--text-primary);
+  line-height: 1.7;
+  margin: 0;
+}
+
+.income-value {
+  font-family: var(--font-mono);
+  font-size: 1.125rem;
+  color: var(--accent-gold);
+  font-weight: 600;
+  margin: 0;
+}
+
+/* 詳細リンクボタン */
+.detail-link-button {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  color: var(--accent-blue);
+  text-decoration: none;
+  font-weight: 500;
+  padding: var(--space-sm) var(--space-md);
+  border: 1px solid var(--accent-blue);
+  border-radius: 6px;
+  transition: all var(--transition-fast);
+}
+
+.detail-link-button:hover {
+  background: var(--accent-blue);
+  color: white;
+  transform: translateY(-1px);
+}
+
+/* セクション共通スタイル */
+.section-header {
+  text-align: center;
+  margin-bottom: var(--space-xl);
+}
+
+.section-title {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-xs);
+  font-family: var(--font-heading);
+  font-size: var(--fs-h2);
+  color: var(--primary-navy);
+  margin-bottom: var(--space-sm);
+  font-weight: 600;
+}
+
+.section-subtitle {
+  color: var(--text-secondary);
+  font-size: var(--fs-body);
+  margin: 0;
+}
+
+/* シェア機能 */
+.share-section {
+  margin-bottom: var(--space-xxl);
+  padding: var(--space-xl);
+  background: var(--bg-secondary);
+  border-radius: 12px;
+}
+
+.share-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: var(--space-md);
+}
+
+.share-card {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  padding: var(--space-lg);
+  background: var(--bg-primary);
+  border: 1px solid var(--border-light);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  text-align: left;
+}
+
+.share-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.share-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 8px;
+  background: var(--bg-secondary);
+}
+
+.platform-icon {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+}
+
+.share-content h4 {
+  font-size: 1rem;
+  color: var(--primary-navy);
+  margin-bottom: var(--space-xs);
+  font-weight: 600;
+}
+
+.share-content p {
+  font-size: var(--fs-small);
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+/* プレミアム機能 */
+.premium-section {
+  margin-bottom: var(--space-xxl);
+}
+
+.premium-card {
+  background: linear-gradient(135deg, var(--primary-navy) 0%, var(--primary-blue) 100%);
+  color: white;
+  border-radius: 12px;
+  padding: var(--space-xl);
+  position: relative;
+  overflow: hidden;
+}
+
+.premium-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 100px;
+  height: 100px;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+  border-radius: 50%;
+  transform: translate(50%, -50%);
+}
+
+.premium-header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-lg);
+  margin-bottom: var(--space-lg);
+}
+
+.premium-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 60px;
+  height: 60px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  flex-shrink: 0;
+}
+
+.premium-content {
+  flex: 1;
+}
+
+.premium-title {
+  font-family: var(--font-heading);
+  font-size: 1.5rem;
+  margin-bottom: var(--space-xs);
+  font-weight: 600;
+}
+
+.premium-subtitle {
+  opacity: 0.8;
+  font-size: var(--fs-body);
+  margin: 0;
+}
+
+.premium-price {
+  text-align: right;
+}
+
+.price-amount {
+  font-family: var(--font-mono);
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.price-tax {
+  font-size: var(--fs-small);
+  opacity: 0.8;
+}
+
+.premium-features {
+  display: grid;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-xl);
+}
+
+.feature-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  font-size: var(--fs-body);
+}
+
+.premium-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  width: 100%;
+  padding: var(--space-md) var(--space-lg);
+  background: white;
+  color: var(--primary-navy);
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 1.125rem;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.premium-button:hover {
+  background: var(--bg-secondary);
+  transform: translateY(-2px);
+}
+
+/* アクション機能 */
+.action-section {
+  margin-bottom: var(--space-xl);
+}
+
+.action-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--space-md);
+}
+
+.action-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  padding: var(--space-md) var(--space-lg);
+  border: 2px solid var(--border-light);
+  border-radius: 8px;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  cursor: pointer;
+  font-weight: 500;
+  font-size: var(--fs-body);
+  transition: all var(--transition-fast);
+}
+
+.action-button.primary-action {
+  background: var(--accent-blue);
+  color: white;
+  border-color: var(--accent-blue);
+}
+
+.action-button:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.action-button.primary-action:hover {
+  background: var(--primary-blue);
+  border-color: var(--primary-blue);
+}
+
+/* ==========================================================================
+   結果表示のレスポンシブデザイン
+   ========================================================================== */
+@media (max-width: 768px) {
+  .result-header {
+    padding: var(--space-lg);
+  }
+
+  .card-header {
+    flex-direction: column;
+    gap: var(--space-md);
+    text-align: center;
+  }
+
+  .share-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .premium-header {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .premium-price {
+    text-align: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .profession-card {
+    padding: var(--space-lg);
+  }
+
+  .share-card {
+    padding: var(--space-md);
+  }
+
+  .premium-card {
+    padding: var(--space-lg);
+  }
+
+  .action-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ==========================================================================
+   質問セクション（レガシー - 段階的に削除予定）
    ========================================================================== */
 .current-question-section {
   display: flex;

@@ -730,7 +730,7 @@ function showTab(tabId: string) {
 }
 
 // グローバルに関数を公開
-(window as any).showTab = showTab;
+(window as Window & { showTab?: typeof showTab }).showTab = showTab;
 </script>
 
 <style scoped>

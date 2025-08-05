@@ -1,205 +1,588 @@
 <template>
-  <main>
-    <div class="home-container">
-      <div class="welcome-section">
-        <h1 class="diagnosis-welcome">
-          ため職へようこそ！<br>「興味」「能力」「性格」「考え方」の4つの観点で、<br>あなたにマッチする職業を短時間で多角的に分析。
-          <br>あなたに最適な高収入職業を<br>ランキング形式でおすすめします。
+  <main class="home-main">
+    <div class="hero-section">
+      <div class="hero-content">
+        <h1 class="hero-title">
+          <span class="hero-subtitle">プロフェッショナルのための</span>
+          適職診断システム
         </h1>
-      </div>
-      <div class="image-container">
-        <img src="/image/construction.png" alt="建設業で働く人のイラスト - 高収入職業の一つ" />
-        <img src="/image/influencer.png" alt="インフルエンサーのイラスト - 高収入職業の一つ" />
-      </div>
-      <div class="navigation-cards">
-        <router-link to="/diagnosis" class="btn btn-border-shadow btn-border-shadow--radius">診断する</router-link>
-        <router-link to="/about" class="btn btn-border-shadow btn-border-shadow--radius">職業一覧</router-link>
+        <p class="hero-description">
+          心理学的アプローチと統計的分析に基づいた、<br>
+          科学的な職業適性診断をご提供します。
+        </p>
+        
+        <div class="feature-grid">
+          <div class="feature-item">
+            <div class="feature-number">01</div>
+            <h3 class="feature-title">多角的分析</h3>
+            <p class="feature-desc">スキル・興味・価値観・ライフスタイルの4つの観点から総合評価</p>
+          </div>
+          <div class="feature-item">
+            <div class="feature-number">02</div>
+            <h3 class="feature-title">統計的根拠</h3>
+            <p class="feature-desc">8つの職業カテゴリーから最適な選択肢を科学的に導出</p>
+          </div>
+          <div class="feature-item">
+            <div class="feature-number">03</div>
+            <h3 class="feature-title">即時結果</h3>
+            <p class="feature-desc">約5分の診断で詳細な分析レポートを即座に生成</p>
+          </div>
+        </div>
+
+        <div class="action-buttons">
+          <router-link to="/diagnosis" class="btn btn-primary">
+            診断を開始する
+            <svg class="btn-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M5 12h14M12 5l7 7-7 7"/>
+            </svg>
+          </router-link>
+          <router-link to="/about" class="btn btn-secondary">
+            職業一覧を見る
+          </router-link>
+        </div>
+
+        <div class="trust-indicators">
+          <div class="trust-item">
+            <svg class="trust-icon" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/>
+            </svg>
+            <span>25,000人以上が利用</span>
+          </div>
+          <div class="trust-item">
+            <svg class="trust-icon" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M9 11H7v2h2v-2zm4 0h-2v2h2v-2zm4 0h-2v2h2v-2zm2-7h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V9h14v11z"/>
+            </svg>
+            <span>2024年最新版</span>
+          </div>
+          <div class="trust-item">
+            <svg class="trust-icon" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/>
+            </svg>
+            <span>プライバシー保護</span>
+          </div>
+        </div>
       </div>
     </div>
+
+    <section class="methodology-section">
+      <div class="section-container">
+        <h2 class="section-title">診断の特徴</h2>
+        <div class="methodology-grid">
+          <div class="methodology-card">
+            <div class="card-icon">
+              <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M9 17H7a2 2 0 01-2-2V7a2 2 0 012-2h2m10 10h2a2 2 0 002-2V7a2 2 0 00-2-2h-2m-5-3v18m-4-8h8"/>
+              </svg>
+            </div>
+            <h3>包括的な評価基準</h3>
+            <p>個人の能力、興味、価値観、ワークライフバランスを総合的に分析し、最適な職業を提案します。</p>
+          </div>
+          <div class="methodology-card">
+            <div class="card-icon">
+              <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+              </svg>
+            </div>
+            <h3>データに基づく分析</h3>
+            <p>統計的手法と心理測定学の理論を応用し、信頼性の高い診断結果を提供します。</p>
+          </div>
+          <div class="methodology-card">
+            <div class="card-icon">
+              <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+              </svg>
+            </div>
+            <h3>迅速な診断プロセス</h3>
+            <p>厳選された質問により、短時間で精度の高い診断を実現。忙しい方にも最適です。</p>
+          </div>
+        </div>
+      </div>
+    </section>
   </main>
 </template>
 
 <style scoped>
 /* ==========================================================================
-   注: グローバルスタイル
-   本来は `src/assets/main.css` のようなサイト全体で読み込むファイルに記述します
+   ホームページ - 知的でプロフェッショナルなデザイン
    ========================================================================== */
-*,
-*:before,
-*:after {
-  -webkit-box-sizing: inherit;
-  box-sizing: inherit;
-}
 
-html {
-  -webkit-box-sizing: border-box;
-  box-sizing: border-box;
-  font-size: 62.5%;
+/* メインコンテナ */
+.home-main {
+  width: 100%;
+  min-height: 100vh;
+  background: var(--bg-primary);
 }
 
 /* ==========================================================================
-   ページ基本レイアウト
+   ヒーローセクション
    ========================================================================== */
-main {
-  width: 100%;
+.hero-section {
+  min-height: 100vh;
   display: flex;
-  justify-content: center;
   align-items: center;
-  padding: 0;
-}
-
-.home-container {
-  width: 70%;
-  max-width: 1200px;
-  padding: 1rem;
-  box-sizing: border-box;
-}
-
-/* ==========================================================================
-   コンテンツ要素（出現順）
-   ========================================================================== */
-
-/* --- 1. ウェルカムセクション --- */
-.welcome-section {
-  text-align: center;
-  margin-bottom: 2rem;
-  padding: 1.5rem;
-  background-color: var(--background-white, #ffffff);
-  border-radius: 15px;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
-}
-
-.diagnosis-welcome {
-  color: var(--text-dark, #333);
-  margin: 0;
-  line-height: 1.6;
-  font-weight: 500;
-  font-size: clamp(9px, 2vw, 20px);
-}
-
-/* --- 2. イメージコンテナ --- */
-.image-container {
-  display: flex;
   justify-content: center;
-  margin-bottom: 2rem;
-}
-
-.home-container img {
-  width: 20rem;
-  height: auto;
-  max-width: 50%;
-}
-
-/* --- 3. ナビゲーションカード (ボタンのコンテナ) --- */
-.navigation-cards {
-  display: flex;
-  gap: 3rem;
-  margin-bottom: 4rem;
-  width: 100%;
-  justify-content: center;
-}
-
-/* ==========================================================================
-   コンポーネント: ボタン
-   ========================================================================== */
-.btn,
-button.btn {
-  font-size: clamp(15px, 3vw, 40px);
-  font-weight: 700;
-  line-height: 1.5;
+  background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
   position: relative;
-  display: inline-block;
-  padding: 1rem 4rem;
-  cursor: pointer;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-  -webkit-transition: all 0.3s;
-  transition: all 0.3s;
-  text-align: center;
-  vertical-align: middle;
-  text-decoration: none;
-  letter-spacing: 0.1em;
-  color: #212529;
-  border-radius: 0.5rem;
+  overflow: hidden;
 }
 
-.btn-border-shadow {
-  padding: calc(1.5rem - 12px) 3rem 1.5rem;
-  background: var(--cream);
-}
-
-.btn-border-shadow--radius {
-  border-radius: 100vh;
-}
-
-.btn-border-shadow:before {
+.hero-section::before {
+  content: '';
   position: absolute;
-  top: -6px;
-  left: -6px;
-  width: 100%;
-  height: 100%;
-  content: "";
-  -webkit-transition: all 0.3s ease;
-  transition: all 0.3s ease;
-  border: 3px solid #000;
-  border-radius: 0.5rem;
+  top: -50%;
+  right: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(52, 152, 219, 0.03) 0%, transparent 70%);
+  animation: pulse 20s ease-in-out infinite;
 }
 
-.btn-border-shadow--radius:before {
-  border-radius: 100vh;
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.1); }
 }
 
-.btn-border-shadow:hover {
-  padding: calc(1.5rem - 6px) 3rem;
+.hero-content {
+  max-width: 1200px;
+  width: 90%;
+  padding: var(--space-xl) var(--space-lg);
+  text-align: center;
+  position: relative;
+  z-index: 1;
 }
 
-.btn-border-shadow:hover:before {
-  top: 0;
-  left: 0;
+.hero-title {
+  font-family: var(--font-heading);
+  font-size: var(--fs-h1);
+  font-weight: 700;
+  color: var(--primary-navy);
+  margin-bottom: var(--space-sm);
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+
+.hero-subtitle {
+  display: block;
+  font-size: clamp(1rem, 2vw, 1.25rem);
+  font-weight: 400;
+  color: var(--text-secondary);
+  margin-bottom: var(--space-xs);
+  letter-spacing: 0.05em;
+}
+
+.hero-description {
+  font-size: var(--fs-body);
+  color: var(--text-secondary);
+  margin-bottom: var(--space-xl);
+  line-height: 1.8;
 }
 
 /* ==========================================================================
-   メディアクエリ (レスポンシブ対応)
+   特徴グリッド
    ========================================================================== */
-/* スマートフォン向け */
-@media (max-width: 455px) {
-  .home-container {
-    width:90%;
+.feature-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: var(--space-lg);
+  margin-bottom: var(--space-xl);
+}
+
+.feature-item {
+  background: var(--bg-primary);
+  padding: var(--space-lg);
+  border-radius: 8px;
+  box-shadow: var(--shadow-sm);
+  transition: all var(--transition-normal);
+  border: 1px solid var(--border-light);
+}
+
+.feature-item:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
+}
+
+.feature-number {
+  font-family: var(--font-mono);
+  font-size: var(--fs-small);
+  color: var(--accent-blue);
+  font-weight: 500;
+  margin-bottom: var(--space-xs);
+}
+
+.feature-title {
+  font-family: var(--font-heading);
+  font-size: 1.25rem;
+  color: var(--primary-navy);
+  margin-bottom: var(--space-xs);
+  font-weight: 600;
+}
+
+.feature-desc {
+  font-size: var(--fs-small);
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+/* ==========================================================================
+   アクションボタン
+   ========================================================================== */
+.action-buttons {
+  display: flex;
+  gap: var(--space-md);
+  justify-content: center;
+  margin-bottom: var(--space-xl);
+  flex-wrap: wrap;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: var(--space-sm) var(--space-lg);
+  font-size: var(--fs-body);
+  font-weight: 500;
+  text-decoration: none;
+  border-radius: 6px;
+  transition: all var(--transition-fast);
+  cursor: pointer;
+  border: 2px solid transparent;
+}
+
+.btn-primary {
+  background: var(--primary-navy);
+  color: white;
+  border-color: var(--primary-navy);
+}
+
+.btn-primary:hover {
+  background: var(--primary-blue);
+  border-color: var(--primary-blue);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.btn-secondary {
+  background: transparent;
+  color: var(--primary-navy);
+  border-color: var(--primary-navy);
+}
+
+.btn-secondary:hover {
+  background: var(--primary-navy);
+  color: white;
+}
+
+.btn-icon {
+  transition: transform var(--transition-fast);
+}
+
+.btn:hover .btn-icon {
+  transform: translateX(4px);
+}
+
+/* ==========================================================================
+   信頼性指標
+   ========================================================================== */
+.trust-indicators {
+  display: flex;
+  gap: var(--space-lg);
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.trust-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  font-size: var(--fs-small);
+  color: var(--text-secondary);
+}
+
+.trust-icon {
+  color: var(--accent-gold);
+}
+
+/* ==========================================================================
+   方法論セクション
+   ========================================================================== */
+.methodology-section {
+  padding: var(--space-xxl) 0;
+  background: var(--bg-secondary);
+}
+
+.section-container {
+  max-width: 1200px;
+  width: 90%;
+  margin: 0 auto;
+}
+
+.section-title {
+  font-family: var(--font-heading);
+  font-size: var(--fs-h2);
+  color: var(--primary-navy);
+  text-align: center;
+  margin-bottom: var(--space-xl);
+  font-weight: 600;
+}
+
+.methodology-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: var(--space-lg);
+}
+
+.methodology-card {
+  background: var(--bg-primary);
+  padding: var(--space-lg);
+  border-radius: 8px;
+  text-align: center;
+  transition: all var(--transition-normal);
+  border: 1px solid var(--border-light);
+}
+
+.methodology-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+}
+
+.card-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 80px;
+  height: 80px;
+  background: var(--bg-secondary);
+  border-radius: 50%;
+  margin-bottom: var(--space-md);
+  color: var(--primary-navy);
+}
+
+.methodology-card h3 {
+  font-family: var(--font-heading);
+  font-size: 1.25rem;
+  color: var(--primary-navy);
+  margin-bottom: var(--space-sm);
+  font-weight: 600;
+}
+
+.methodology-card p {
+  font-size: var(--fs-body);
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+/* ==========================================================================
+   レスポンシブデザイン - タブレット (768px以下)
+   ========================================================================== */
+@media (max-width: 768px) {
+  .hero-section {
+    min-height: auto;
+    padding: var(--space-lg) 0;
   }
 
-  .navigation-cards {
+  .hero-content {
+    padding: var(--space-lg) var(--space-md);
+  }
+
+  .hero-title {
+    font-size: clamp(1.75rem, 5vw, 2.5rem);
+  }
+
+  .feature-grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-md);
+  }
+
+  .action-buttons {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .btn {
+    width: 100%;
     justify-content: center;
+  }
+
+  .trust-indicators {
+    gap: var(--space-md);
+  }
+
+  .methodology-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ==========================================================================
+   レスポンシブデザイン - スマートフォン (480px以下)
+   ========================================================================== */
+@media (max-width: 480px) {
+  /* ヒーローセクション調整 */
+  .hero-section {
+    padding: var(--space-md) 0;
+  }
+
+  .hero-content {
+    padding: var(--space-md) var(--space-sm);
+    width: 95%;
+  }
+
+  .hero-title {
+    font-size: 1.75rem;
+    margin-bottom: var(--space-xs);
+  }
+
+  .hero-subtitle {
+    font-size: 0.875rem;
+    letter-spacing: 0.02em;
+  }
+
+  .hero-description {
+    font-size: 0.9375rem;
+    margin-bottom: var(--space-lg);
+  }
+
+  .hero-description br {
+    display: none;
+  }
+
+  /* 特徴カード調整 */
+  .feature-grid {
+    gap: var(--space-sm);
+    margin-bottom: var(--space-lg);
+  }
+
+  .feature-item {
+    padding: var(--space-md);
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+  }
+
+  .feature-number {
+    font-size: 0.75rem;
+  }
+
+  .feature-title {
+    font-size: 1.125rem;
+  }
+
+  .feature-desc {
+    font-size: 0.875rem;
+    line-height: 1.5;
+  }
+
+  /* ボタン調整 */
+  .action-buttons {
+    gap: var(--space-sm);
+    margin-bottom: var(--space-lg);
+  }
+
+  .btn {
+    padding: var(--space-sm) var(--space-md);
+    font-size: 1rem;
+    border-radius: 8px;
+  }
+
+  .btn-icon {
+    width: 16px;
+    height: 16px;
+  }
+
+  /* 信頼性指標調整 */
+  .trust-indicators {
+    gap: var(--space-sm);
+    flex-direction: column;
     align-items: center;
   }
 
-  .btn,
-  button.btn {
-    font-size: clamp(12px, 2.5vw, 16px);
-    white-space: nowrap;
+  .trust-item {
+    font-size: 0.8125rem;
   }
 
-  .btn-border-shadow {
-    padding: calc(1.3rem - 12px) 2rem 1.4rem;
+  .trust-icon {
+    width: 14px;
+    height: 14px;
   }
 
-  .btn-border-shadow:hover {
-    padding: calc(0.8rem - 6px) 1.5rem;
+  /* 方法論セクション調整 */
+  .methodology-section {
+    padding: var(--space-xl) 0;
+  }
+
+  .section-title {
+    font-size: 1.5rem;
+    margin-bottom: var(--space-lg);
+  }
+
+  .methodology-card {
+    padding: var(--space-md);
+  }
+
+  .card-icon {
+    width: 60px;
+    height: 60px;
+    margin-bottom: var(--space-sm);
+  }
+
+  .card-icon svg {
+    width: 30px;
+    height: 30px;
+  }
+
+  .methodology-card h3 {
+    font-size: 1.125rem;
+  }
+
+  .methodology-card p {
+    font-size: 0.875rem;
   }
 }
 
-/* タブレット向け */
-@media (min-width: 456px) and (max-width: 1024px) {
-  .home-container {
-    max-width: 90%;
+/* ==========================================================================
+   レスポンシブデザイン - 極小画面 (375px以下)
+   ========================================================================== */
+@media (max-width: 375px) {
+  .hero-title {
+    font-size: 1.5rem;
+  }
+
+  .hero-subtitle {
+    font-size: 0.8125rem;
+  }
+
+  .feature-item {
+    padding: var(--space-sm);
+  }
+
+  .btn {
+    font-size: 0.9375rem;
+    padding: 0.75rem var(--space-md);
   }
 }
 
-/* 大画面向け */
-@media (min-width: 1025px) {
-  .home-container {
-    max-width: 1200px;
+/* ==========================================================================
+   モバイルファースト最適化
+   ========================================================================== */
+@media (hover: none) and (pointer: coarse) {
+  /* タッチデバイス向けの調整 */
+  .feature-item:hover,
+  .methodology-card:hover {
+    transform: none;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .btn {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .btn:active {
+    transform: scale(0.98);
+  }
+
+  /* スクロールパフォーマンス向上 */
+  .hero-section::before {
+    animation: none;
   }
 }
 </style>

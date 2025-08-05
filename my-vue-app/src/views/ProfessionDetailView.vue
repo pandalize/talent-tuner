@@ -196,18 +196,18 @@ function updateMetaTags() {
   document.title = title;
   
   // description meta tag
-  let metaDescription = document.querySelector('meta[name="description"]');
+  const metaDescription = document.querySelector('meta[name="description"]');
   if (metaDescription) {
     metaDescription.setAttribute('content', description);
   }
   
   // OGP tags
-  let ogTitle = document.querySelector('meta[property="og:title"]');
+  const ogTitle = document.querySelector('meta[property="og:title"]');
   if (ogTitle) {
     ogTitle.setAttribute('content', title);
   }
   
-  let ogDescription = document.querySelector('meta[property="og:description"]');
+  const ogDescription = document.querySelector('meta[property="og:description"]');
   if (ogDescription) {
     ogDescription.setAttribute('content', description);
   }

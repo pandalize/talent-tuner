@@ -6,20 +6,20 @@ import AppFooter from './components/AppFooter.vue'
 <template>
   <div id="app">
     <header class="app-header">
-      <nav>
-        <RouterLink to="/">ホーム</RouterLink> |
-        <RouterLink to="/diagnosis">診断ページ</RouterLink> |
-        <RouterLink to="/about">職業一覧</RouterLink> |
-        <RouterLink to="/career-guide">キャリアガイド</RouterLink> |
-        <RouterLink to="/diagnosis-method">診断について</RouterLink>
+      <!-- ロゴ部分 -->
+      <RouterLink to="/" class="logo">
+        <span class="logo-main">ため職</span>
+        <span class="logo-sub">Professional Career Assessment</span>
+      </RouterLink>
+
+      <!-- ナビゲーション -->
+      <nav class="main-nav">
+        <RouterLink to="/" class="nav-item">ホーム</RouterLink>
+        <RouterLink to="/diagnosis" class="nav-item">診断開始</RouterLink>
+        <RouterLink to="/about" class="nav-item">職業一覧</RouterLink>
+        <RouterLink to="/career-guide" class="nav-item">キャリアガイド</RouterLink>
+        <RouterLink to="/diagnosis-method" class="nav-item">診断について</RouterLink>
       </nav>
-      <h1>
-        <span class="title-base title-emphasis">ため職</span><br>
-        <span class="title-base">日本一</span>
-        <span class="title-base title-highlight">ためになる正直な</span>
-        <span class="title-base">おすすめ</span>
-        <span class="title-base title-highlight">職業診断</span>
-      </h1>
     </header>
     
     <main class="app-content">
@@ -39,137 +39,187 @@ html, body {
   padding: 0;
   width: 100%;
   height: 100%;
+  overflow-x: hidden; /* 横スクロールを完全に防止 */
 }
 
 #app {
-  font-family: 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Yu Gothic', 'Meiryo', sans-serif;
-  width: 100%;
+  font-family: var(--font-body);
+  width: 100vw;
+  max-width: 100%;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
   align-items: center;
   padding: 0;
-  background-color: var(--light-blue);
+  background-color: var(--bg-primary);
   min-height: 100vh;
+  overflow-x: hidden;
 }
 
 /* ==========================================================================
-   ヘッダーエリア
+   ヘッダーエリア - 知的でプロフェッショナルなデザイン
    ========================================================================== */
 .app-header {
-  position: relative;
+  position: sticky;
+  top: 0;
   width: 100%;
-  max-width: 1200px;
-  z-index: 10;
-  padding: 2rem 1rem 0 1rem;
-  box-sizing: border-box;
-  background-color: transparent;
-}
-
-nav {
-  margin-bottom: 0;
-  text-align: center;
-  padding: 1rem;
-}
-
-nav a {
-  color: var(--text-medium);
-  text-decoration: none;
-  margin: 0 1rem;
-  padding: 0.8rem 1.5rem;
-  border-radius: 50px;
-  transition: all 0.3s ease;
-  font-weight: 400;
-  border: 1px solid transparent;
-  font-size: clamp(10px, 1.5vw, 20px);
-}
-
-nav a:hover {
-  color: var(--main-color);
-  border: 1px solid var(--main-color);
-  background-color: rgba(95, 144, 178, 0.1);
-}
-
-nav a.router-link-active {
-  color: var(--background-white);
-  background-color: var(--main-color);
-  border-color: var(--main-color);
-  box-shadow: 0 4px 15px rgba(95, 144, 178, 0.3);
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--border-light);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-sm) var(--space-lg);
+  box-shadow: var(--shadow-sm);
 }
 
 /* ==========================================================================
-   タイトル (h1)
+   ロゴ
    ========================================================================== */
-h1 {
-  margin: 1rem;
-  text-align: center;
-  letter-spacing: 0.1em;
+.logo {
+  display: flex;
+  flex-direction: column;
+  text-decoration: none;
+  color: var(--primary-navy);
 }
 
-/* h1内のspanの共通スタイル */
-.title-base {
+.logo-main {
+  font-family: var(--font-heading);
+  font-size: 1.75rem;
   font-weight: 700;
-  display: inline-block;
-  margin: 0 0.2rem;
+  color: var(--primary-navy);
+  line-height: 1;
+}
+
+.logo-sub {
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  color: var(--text-secondary);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  margin-top: 2px;
+}
+
+/* ==========================================================================
+   メインナビゲーション
+   ========================================================================== */
+.main-nav {
+  display: flex;
+  gap: var(--space-md);
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.nav-item {
+  color: var(--text-secondary);
+  text-decoration: none;
+  padding: var(--space-xs) var(--space-sm);
+  border-radius: 6px;
+  transition: all var(--transition-fast);
+  font-weight: 500;
+  font-size: 0.9375rem;
   position: relative;
-  font-size: clamp(13px, 3vw, 30px);
 }
 
-/* 強調したい部分のスタイル */
-.title-highlight {
-  font-size: clamp(17px, 4vw, 40px);
-  color: orange;
-  text-shadow: 2px 3px 2px rgb(51, 51, 51);
+.nav-item:hover {
+  color: var(--primary-navy);
+  background-color: var(--bg-secondary);
 }
 
-/* 最も強調したい部分のスタイル */
-.title-emphasis {
-  font-family: 'M PLUS Rounded 1c', sans-serif;
-  font-size: clamp(20px, 5vw, 60px);
-  color: orange;
-  text-shadow: 2px 3px 2px rgb(51, 51, 53);
+.nav-item.router-link-active {
+  color: var(--primary-navy);
+  background-color: var(--bg-tertiary);
 }
+
+.nav-item.router-link-active::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60%;
+  height: 2px;
+  background: var(--accent-blue);
+  border-radius: 1px;
+}
+
 
 /* ==========================================================================
    メインコンテンツエリア
    ========================================================================== */
 .app-content {
   width: 100%;
+  max-width: 100vw;
   flex: 1;
+  overflow-x: hidden;
 }
 
 /* ==========================================================================
-   メディアクエリ (レスポンシブ対応)
+   レスポンシブデザイン
    ========================================================================== */
-/* タブレット以下 */
-@media (max-width: 1024px) {
-  nav {
-    gap: 0.5rem;
+@media (max-width: 768px) {
+  .app-header {
+    flex-direction: column;
+    gap: var(--space-sm);
+    padding: var(--space-sm) var(--space-md);
   }
-  
-  nav a {
-    margin: 0;
-    padding: 0.5rem;
+
+  .main-nav {
+    order: 2;
+    justify-content: center;
+    gap: var(--space-sm);
+  }
+
+  .logo {
+    order: 1;
+  }
+
+  .logo-main {
+    font-size: 1.5rem;
+  }
+
+  .logo-sub {
+    font-size: 0.5625rem;
+  }
+
+  .nav-item {
+    font-size: 0.875rem;
+    padding: var(--space-xs) var(--space-sm);
   }
 }
 
-/* スマートフォン向け */
-@media (max-width: 455px) {
+@media (max-width: 480px) {
   .app-header {
-    padding-top: 0;
+    padding: var(--space-sm);
   }
 
-  nav {
-    padding-bottom: 0;
+  .logo-main {
+    font-size: 1.375rem;
   }
 
-  h1 {
-    line-height: 1.2; /* 少し行間を調整 */
+  .main-nav {
+    flex-direction: column;
+    width: 100%;
+    gap: var(--space-xs);
   }
 
-  .title-base {
-    margin-top: 0.1rem;
-    margin-bottom: 0.1rem;
+  .nav-item {
+    width: 100%;
+    text-align: center;
+    padding: var(--space-sm);
+    border-radius: 6px;
   }
-} 
+}
+
+/* タッチデバイス最適化 */
+@media (hover: none) and (pointer: coarse) {
+  .nav-item:hover {
+    background-color: transparent;
+  }
+
+  .nav-item:active {
+    background-color: var(--bg-secondary);
+  }
+}
 </style>

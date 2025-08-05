@@ -201,13 +201,13 @@ router.beforeEach((to, from, next) => {
     metaDescription.setAttribute('content', to.meta.description as string)
     
     // OGP descriptionも更新
-    let ogDescription = document.querySelector('meta[property="og:description"]')
+    const ogDescription = document.querySelector('meta[property="og:description"]')
     if (ogDescription) {
       ogDescription.setAttribute('content', to.meta.description as string)
     }
     
     // Twitter descriptionも更新
-    let twitterDescription = document.querySelector('meta[property="twitter:description"]')
+    const twitterDescription = document.querySelector('meta[property="twitter:description"]')
     if (twitterDescription) {
       twitterDescription.setAttribute('content', to.meta.description as string)
     }
@@ -215,13 +215,13 @@ router.beforeEach((to, from, next) => {
   
   // OGP titleの更新
   if (to.meta.title) {
-    let ogTitle = document.querySelector('meta[property="og:title"]')
+    const ogTitle = document.querySelector('meta[property="og:title"]')
     if (ogTitle) {
       ogTitle.setAttribute('content', to.meta.title as string)
     }
     
     // Twitter titleも更新
-    let twitterTitle = document.querySelector('meta[property="twitter:title"]')
+    const twitterTitle = document.querySelector('meta[property="twitter:title"]')
     if (twitterTitle) {
       twitterTitle.setAttribute('content', to.meta.title as string)
     }
