@@ -1,6 +1,15 @@
 <script setup lang="ts">
-import { RouterLink, RouterView } from 'vue-router'
+import { RouterLink, RouterView, useRoute } from 'vue-router'
+import { computed } from 'vue'
 import AppFooter from './components/AppFooter.vue'
+import Breadcrumb from './components/Breadcrumb.vue'
+
+const route = useRoute()
+
+// パンくずリストを表示しないページ
+const hideBreadcrumbPages = computed(() => {
+  return route.name === 'home' || route.name === 'notfound'
+})
 </script>
 
 <template>
@@ -23,6 +32,9 @@ import AppFooter from './components/AppFooter.vue'
     </header>
     
     <main class="app-content">
+      <div v-if="!hideBreadcrumbPages" class="breadcrumb-container">
+        <Breadcrumb />
+      </div>
       <RouterView />
     </main>
     
@@ -153,6 +165,18 @@ html, body {
   max-width: 100vw;
   flex: 1;
   overflow-x: hidden;
+}
+
+.breadcrumb-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 var(--space-lg);
+}
+
+@media (max-width: 768px) {
+  .breadcrumb-container {
+    padding: 0 var(--space-md);
+  }
 }
 
 /* ==========================================================================

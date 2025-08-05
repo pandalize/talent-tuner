@@ -21,5 +21,30 @@ export default defineConfig({
     fs: {
       allow: ['..']
     }
+  },
+  build: {
+    // Core Web Vitals最適化
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          vendor: ['vue', 'vue-router'],
+          utils: ['./src/utils/diagnosisLoader.ts', './src/utils/seoUtils.ts']
+        }
+      }
+    },
+    // 圧縮最適化
+    minify: 'terser',
+    terserOptions: {
+      compress: {
+        drop_console: true,
+        drop_debugger: true
+      }
+    },
+    // チャンクサイズ警告の閾値を調整
+    chunkSizeWarningLimit: 1000
+  },
+  // プリロード最適化
+  optimizeDeps: {
+    include: ['vue', 'vue-router']
   }
 })

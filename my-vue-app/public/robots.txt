@@ -1,12 +1,19 @@
 User-agent: *
 Allow: /
 
-# Disallow admin or sensitive paths (if any)
-# Disallow: /admin/
-# Disallow: /api/
+# Disallow sensitive paths
+Disallow: /api/
+Disallow: /*.json$
+Disallow: /src/
+Disallow: /node_modules/
+
+# Allow important directories
+Allow: /profession/
+Allow: /career-guide/
+Allow: /diagnosis/
 
 # Sitemap location
-Sitemap: https://talent-tuner.com/sitemap.xml
+Sitemap: https://pandalize.com/sitemap.xml
 
 # Crawl-delay for polite crawling
 Crawl-delay: 1

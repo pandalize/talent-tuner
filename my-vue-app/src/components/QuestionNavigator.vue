@@ -504,17 +504,8 @@ const questions = computed<Question[]>(() => {
 })
 
 const currentQuestion = computed<Question | null>(() => {
-  console.log('currentQuestion computed:', {
-    questionsLength: questions.value.length,
-    currentIndex: currentQuestionIndex.value,
-    hasConfig: !!config.value,
-    loading: loading.value
-  }); // デバッグ用
-  
   if (questions.value.length === 0) return null
-  const question = questions.value[currentQuestionIndex.value] || null
-  console.log('Selected question:', question); // デバッグ用
-  return question
+  return questions.value[currentQuestionIndex.value] || null
 })
 
 const maxCategoryScore = computed(() => {
@@ -533,12 +524,10 @@ let isLoadingConfig = false
 
 async function loadConfig() {
   if (isLoadingConfig) {
-    console.log('loadConfig already in progress, skipping'); // デバッグ用
     return
   }
   
   try {
-    console.log('loadConfig started'); // デバッグ用
     isLoadingConfig = true
     loading.value = true
     error.value = null
@@ -547,11 +536,6 @@ async function loadConfig() {
       loadDiagnosticConfig(),
       loadProfessionDatabase()
     ])
-    
-    console.log('Config loaded:', {
-      questionsCount: configData.questions?.length || 0,
-      hasQuestions: !!(configData.questions && configData.questions.length > 0)
-    }); // デバッグ用
     
     config.value = configData
     professionDatabase.value = professionData
@@ -562,7 +546,6 @@ async function loadConfig() {
     }
     
     loading.value = false
-    console.log('loadConfig completed successfully, loading set to false'); // デバッグ用
   } catch (err) {
     console.error('設定の読み込みに失敗しました:', err)
     
@@ -585,14 +568,11 @@ async function loadConfig() {
     }
   } finally {
     isLoadingConfig = false
-    console.log('loadConfig finally block, isLoadingConfig set to false'); // デバッグ用
   }
 }
 
 // 新しい評価形式の回答を管理
 function selectOptionRating(questionId: string, optionLabel: string, rating: number) {
-  console.log('selectOptionRating called:', { questionId, optionLabel, rating }); // デバッグ用
-  
   if (!answers.value[questionId] || typeof answers.value[questionId] === 'string') {
     answers.value[questionId] = {};
   }
@@ -601,7 +581,6 @@ function selectOptionRating(questionId: string, optionLabel: string, rating: num
   questionAnswers[optionLabel] = rating;
   
   saveToStorage(STORAGE_KEYS.ANSWERS, answers.value);
-  console.log('Updated answers:', answers.value); // デバッグ用
 }
 
 // 特定の選択肢の評価値を取得
@@ -627,28 +606,19 @@ function getRatingLabel(rating: number): string {
 
 // すべての質問に回答済みかチェック
 function isAllQuestionsAnswered(): boolean {
-  console.log('Checking completion. Current answers:', answers.value); // デバッグ用
-  
   return questions.value.every(question => {
     const questionAnswers = answers.value[question.id];
-    console.log(`Question ${question.id}:`, questionAnswers); // デバッグ用
     
     // 新しい評価形式でない場合はfalse
     if (!questionAnswers || typeof questionAnswers === 'string') {
-      console.log(`Question ${question.id} not in new format`); // デバッグ用
       return false;
     }
     
     // すべての選択肢に評価が付いているかチェック
-    const allRated = question.options.every(option => {
+    return question.options.every(option => {
       const rating = questionAnswers[option.label];
-      const isValid = rating && rating >= 1 && rating <= 5;
-      console.log(`Option ${option.label}: rating=${rating}, valid=${isValid}`); // デバッグ用
-      return isValid;
+      return rating && rating >= 1 && rating <= 5;
     });
-    
-    console.log(`Question ${question.id} completion: ${allRated}`); // デバッグ用
-    return allRated;
   });
 }
 
@@ -682,34 +652,23 @@ function isCurrentQuestionCompleted(): boolean {
   const questionId = currentQuestion.value.id
   const answer = answers.value[questionId]
   
-  console.log('Checking completion for question:', questionId, 'answer:', answer); // デバッグ用
-  
   if (!answer || typeof answer !== 'object') {
-    console.log('No answer or wrong format'); // デバッグ用
     return false
   }
   
   const answerObj = answer as Record<string, number>
-  const allOptionsRated = currentQuestion.value.options.every(option => {
+  return currentQuestion.value.options.every(option => {
     const rating = answerObj[option.label]
-    const isRated = rating >= 1 && rating <= 5
-    console.log(`Option ${option.label}: rating=${rating}, isRated=${isRated}`); // デバッグ用
-    return isRated
+    return rating >= 1 && rating <= 5
   })
-  
-  console.log('All options rated:', allOptionsRated); // デバッグ用
-  return allOptionsRated
 }
 
 async function goToNextQuestion() {
-  console.log('goToNextQuestion called'); // デバッグ用
   if (currentQuestionIndex.value < questions.value.length - 1) {
     currentQuestionIndex.value++
     saveToStorage(STORAGE_KEYS.CURRENT_QUESTION_INDEX, currentQuestionIndex.value)
     scrollToContentTop()
-    console.log('Moved to question:', currentQuestionIndex.value + 1); // デバッグ用
   } else {
-    console.log('All questions completed, calculating result'); // デバッグ用
     calculateResult()
   }
 }
@@ -763,16 +722,12 @@ const getQuestionCategoryName = (question: Question): string => {
 }
 
 function handleResetDiagnosis() {
-  console.log('handleResetDiagnosis called'); // デバッグ用
-  
   const userConfirmed = confirm('診断データをすべてリセットしますか？\n※この操作は元に戻せません。')
-  console.log('User confirmed:', userConfirmed); // デバッグ用
   
   if (userConfirmed) {
     try {
       resetDiagnosis()
       alert('診断データがリセットされました。')
-      console.log('Reset completed successfully'); // デバッグ用
     } catch (error) {
       console.error('Reset failed:', error);
       alert('リセット中にエラーが発生しました。')
@@ -781,8 +736,6 @@ function handleResetDiagnosis() {
 }
 
 function resetDiagnosis() {
-  console.log('resetDiagnosis called'); // デバッグ用
-  
   // すべての状態をリセット
   answers.value = {}
   showResult.value = false
@@ -794,17 +747,11 @@ function resetDiagnosis() {
   // localStorage をクリア
   try {
     Object.values(STORAGE_KEYS).forEach(key => {
-      console.log('Removing from localStorage:', key); // デバッグ用
       localStorage.removeItem(key)
     })
-    console.log('LocalStorage cleared successfully'); // デバッグ用
   } catch (storageError) {
     console.error('Failed to clear localStorage:', storageError);
   }
-  
-  console.log('Reset completed. Current answers:', answers.value); // デバッグ用
-  console.log('Current question index:', currentQuestionIndex.value); // デバッグ用
-  console.log('Show result:', showResult.value); // デバッグ用
   
   // ページの最上部にスクロール
   window.scrollTo({ top: 0, behavior: 'smooth' })
@@ -812,7 +759,6 @@ function resetDiagnosis() {
   // 確実にloadingをfalseに設定
   nextTick(() => {
     loading.value = false
-    console.log('Loading set to false after reset'); // デバッグ用
   })
 }
 

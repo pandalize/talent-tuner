@@ -1,5 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
+// SEOユーティリティをインポート
+// import { setupStructuredData } from '../utils/seoUtils'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -184,7 +186,7 @@ const router = createRouter({
 })
 
 // ページ遷移時にメタタグを動的に更新
-router.beforeEach((to, from, next) => {
+router.beforeEach(async (to, from, next) => {
   // タイトルの更新
   if (to.meta.title) {
     document.title = to.meta.title as string
@@ -226,6 +228,51 @@ router.beforeEach((to, from, next) => {
       twitterTitle.setAttribute('content', to.meta.title as string)
     }
   }
+
+  // OGP URLの更新
+  const ogUrl = document.querySelector('meta[property="og:url"]')
+  if (ogUrl) {
+    ogUrl.setAttribute('content', `https://pandalize.com${to.path}`)
+  }
+  
+  const twitterUrl = document.querySelector('meta[property="twitter:url"]')
+  if (twitterUrl) {
+    twitterUrl.setAttribute('content', `https://pandalize.com${to.path}`)
+  }
+
+  // カノニカルURLの設定
+  let canonical = document.querySelector('link[rel="canonical"]')
+  if (!canonical) {
+    canonical = document.createElement('link')
+    canonical.setAttribute('rel', 'canonical')
+    document.head.appendChild(canonical)
+  }
+  canonical.setAttribute('href', `https://pandalize.com${to.path}`)
+  
+  // 構造化データの設定（現在は無効化）
+  // try {
+  //   const { setupStructuredData } = await import('../utils/seoUtils')
+  //   
+  //   if (to.name === 'home') {
+  //     setupStructuredData('home')
+  //   } else if (to.name === 'profession-detail' && to.params.id) {
+  //     // 職業データを読み込んで構造化データを設定
+  //     const { loadProfessionData } = await import('../utils/diagnosisLoader')
+  //     try {
+  //       const professions = await loadProfessionData()
+  //       const professionKey = Object.keys(professions).find(key => 
+  //         professions[key].id === to.params.id
+  //       )
+  //       if (professionKey) {
+  //         setupStructuredData('profession', professions[professionKey])
+  //       }
+  //     } catch (error) {
+  //       console.warn('Failed to load profession data for structured data:', error)
+  //     }
+  //   }
+  // } catch (error) {
+  //   console.warn('Failed to setup structured data:', error)
+  // }
   
   next()
 })
