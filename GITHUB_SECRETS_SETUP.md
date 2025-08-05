@@ -25,7 +25,16 @@ Name: MAIL_PASSWORD
 Secret: Gmailアプリパスワード (例: abcd efgh ijkl mnop)
 
 Name: NOTIFICATION_EMAIL
-Secret: 通知先メールアドレス (例: notify@example.com)
+Secret: 通知先メールアドレス1 (例: notify@example.com)
+
+Name: NOTIFICATION_EMAIL_2
+Secret: 通知先メールアドレス2 (例: admin@example.com)
+
+Name: NOTIFICATION_EMAIL_3
+Secret: 通知先メールアドレス3 (例: dev@example.com)
+
+Name: NOTIFICATION_EMAIL_4
+Secret: 通知先メールアドレス4 (例: manager@example.com)
 ```
 
 ## 🛠️ GitHub Secrets設定手順
@@ -76,12 +85,27 @@ Secret: Gmailアプリパスワード
 ```
 例: `abcd efgh ijkl mnop`
 
-#### NOTIFICATION_EMAIL (通知先アドレス)
+#### NOTIFICATION_EMAIL (メイン通知先)
 ```
 Name: NOTIFICATION_EMAIL
-Secret: 通知先メールアドレス
+Secret: メイン通知先メールアドレス
 ```
-例: `pandalize.info@gmail.com` (同じでもOK)
+例: `pandalize.info@gmail.com`
+
+#### NOTIFICATION_EMAIL_2～4 (追加通知先)
+```
+Name: NOTIFICATION_EMAIL_2
+Secret: 追加通知先メールアドレス2
+
+Name: NOTIFICATION_EMAIL_3  
+Secret: 追加通知先メールアドレス3
+
+Name: NOTIFICATION_EMAIL_4
+Secret: 追加通知先メールアドレス4
+```
+例: `admin@company.com`, `dev@company.com`, `manager@company.com`
+
+**注意**: 不要な通知先がある場合は、そのSecretsを設定しなくてもOKです（空のSecretsは自動でスキップされます）
 
 ## 📧 Gmailアプリパスワード取得手順
 
@@ -114,8 +138,10 @@ Secret: 通知先メールアドレス
 
 ### FTP + メール設定した場合  
 - ✅ 自動ビルド & デプロイ実行
-- 📧 **成功時**: ✅ デプロイ成功メール送信
-- 📧 **失敗時**: ❌ デプロイ失敗メール送信
+- 📧 **成功時**: ✅ デプロイ成功メール送信（全通知先に送信）
+- 📧 **失敗時**: ❌ デプロイ失敗メール送信（全通知先に送信）
+
+**メール送信先**: NOTIFICATION_EMAIL, NOTIFICATION_EMAIL_2, NOTIFICATION_EMAIL_3, NOTIFICATION_EMAIL_4 に設定されたすべてのアドレス
 
 ## 📨 メール通知の内容例
 

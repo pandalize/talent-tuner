@@ -61,7 +61,7 @@ jobs:
           username: ${{ secrets.MAIL_USERNAME }}
           password: ${{ secrets.MAIL_PASSWORD }}
           subject: "✅ pandalize.com デプロイ成功"
-          to: ${{ secrets.NOTIFICATION_EMAIL }}
+          to: ${{ secrets.NOTIFICATION_EMAIL }},${{ secrets.NOTIFICATION_EMAIL_2 }},${{ secrets.NOTIFICATION_EMAIL_3 }},${{ secrets.NOTIFICATION_EMAIL_4 }}
           from: GitHub Actions <${{ secrets.MAIL_USERNAME }}>
           body: |
             🎉 pandalize.com への自動デプロイが成功しました！
@@ -91,7 +91,7 @@ jobs:
           username: ${{ secrets.MAIL_USERNAME }}
           password: ${{ secrets.MAIL_PASSWORD }}
           subject: "❌ pandalize.com デプロイ失敗"
-          to: ${{ secrets.NOTIFICATION_EMAIL }}
+          to: ${{ secrets.NOTIFICATION_EMAIL }},${{ secrets.NOTIFICATION_EMAIL_2 }},${{ secrets.NOTIFICATION_EMAIL_3 }},${{ secrets.NOTIFICATION_EMAIL_4 }}
           from: GitHub Actions <${{ secrets.MAIL_USERNAME }}>
           body: |
             ⚠️ pandalize.com への自動デプロイが失敗しました。
