@@ -89,6 +89,15 @@ const router = createRouter({
       }
     },
     {
+      path: '/chat',
+      name: 'career-chat',
+      component: () => import('../views/CareerChatView.vue'),
+      meta: {
+        title: 'AI進路相談 | ため職',
+        description: 'AI進路相談アシスタントが、あなたの進路・転職の悩みを親身に聞きます。28の職業データベースと連携した具体的なアドバイスを提供。適性診断と合わせてご利用ください。'
+      }
+    },
+    {
       path: '/profession/:id',
       name: 'profession-detail',
       component: () => import('../views/ProfessionDetailView.vue'),

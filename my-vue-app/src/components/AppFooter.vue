@@ -10,6 +10,7 @@
         <h4>サービス</h4>
         <ul>
           <li><router-link to="/diagnosis">診断ページ</router-link></li>
+          <li><router-link to="/chat">AI進路相談</router-link></li>
           <li><router-link to="/about">職業一覧</router-link></li>
           <li><router-link to="/career-guide">キャリアガイド</router-link></li>
           <li><router-link to="/diagnosis-method">診断方法</router-link></li>

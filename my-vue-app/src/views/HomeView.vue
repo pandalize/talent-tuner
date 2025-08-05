@@ -36,6 +36,12 @@
               <path d="M5 12h14M12 5l7 7-7 7"/>
             </svg>
           </router-link>
+          <router-link to="/chat" class="btn btn-chat">
+            <svg class="btn-icon" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12,2A2,2 0 0,1 14,4C14,4.74 13.6,5.39 13,5.73V7A1,1 0 0,0 14,8H18A4,4 0 0,1 22,12V16A4,4 0 0,1 18,20H6A4,4 0 0,1 2,16V12A4,4 0 0,1 6,8H10A1,1 0 0,0 11,7V5.73C10.4,5.39 10,4.74 10,4A2,2 0 0,1 12,2M7.5,13A1.5,1.5 0 0,0 6,14.5A1.5,1.5 0 0,0 7.5,16A1.5,1.5 0 0,0 9,14.5A1.5,1.5 0 0,0 7.5,13M16.5,13A1.5,1.5 0 0,0 15,14.5A1.5,1.5 0 0,0 16.5,16A1.5,1.5 0 0,0 18,14.5A1.5,1.5 0 0,0 16.5,13Z" />
+            </svg>
+            AI進路相談
+          </router-link>
           <router-link to="/about" class="btn btn-secondary">
             職業一覧を見る
           </router-link>
@@ -270,6 +276,19 @@
 .btn-secondary:hover {
   background: var(--primary-navy);
   color: white;
+}
+
+.btn-chat {
+  background: var(--accent-blue);
+  color: white;
+  border-color: var(--accent-blue);
+}
+
+.btn-chat:hover {
+  background: var(--primary-blue);
+  border-color: var(--primary-blue);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
 }
 
 .btn-icon {

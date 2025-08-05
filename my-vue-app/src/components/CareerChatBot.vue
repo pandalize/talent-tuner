@@ -1,0 +1,873 @@
+<template>
+  <div class="career-chat-bot">
+    <div class="chat-header">
+      <div class="bot-avatar">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12,2A2,2 0 0,1 14,4C14,4.74 13.6,5.39 13,5.73V7A1,1 0 0,0 14,8H18A4,4 0 0,1 22,12V16A4,4 0 0,1 18,20H6A4,4 0 0,1 2,16V12A4,4 0 0,1 6,8H10A1,1 0 0,0 11,7V5.73C10.4,5.39 10,4.74 10,4A2,2 0 0,1 12,2M7.5,13A1.5,1.5 0 0,0 6,14.5A1.5,1.5 0 0,0 7.5,16A1.5,1.5 0 0,0 9,14.5A1.5,1.5 0 0,0 7.5,13M16.5,13A1.5,1.5 0 0,0 15,14.5A1.5,1.5 0 0,0 16.5,16A1.5,1.5 0 0,0 18,14.5A1.5,1.5 0 0,0 16.5,13Z" />
+        </svg>
+      </div>
+      <div class="bot-info">
+        <h3>進路相談アシスタント</h3>
+        <p class="bot-status" :class="{ 'typing': isTyping }">
+          {{ isTyping ? 'アドバイス考案中...' : 'オンライン' }}
+        </p>
+      </div>
+      <button class="close-chat" @click="$emit('close')" aria-label="チャットを閉じる">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z" />
+        </svg>
+      </button>
+    </div>
+
+    <div class="chat-messages" ref="messagesContainer">
+      <div class="welcome-message" v-if="messages.length === 0">
+        <div class="message bot-message">
+          <div class="message-content">
+            <p>こんにちは！進路相談アシスタントです。🌟</p>
+            <p>進路や転職について、どのようなことでお悩みですか？お気軽にご相談ください。</p>
+          </div>
+        </div>
+        <div class="quick-options">
+          <button 
+            v-for="option in quickStartOptions" 
+            :key="option.text"
+            @click="sendQuickOption(option)"
+            class="quick-option-btn"
+          >
+            {{ option.text }}
+          </button>
+        </div>
+      </div>
+
+      <div 
+        v-for="(message, index) in messages" 
+        :key="index"
+        class="message"
+        :class="{ 'user-message': message.role === 'user', 'bot-message': message.role === 'assistant' }"
+      >
+        <div class="message-content">
+          <p>{{ message.content }}</p>
+          <span class="message-time">{{ formatTime(message.timestamp) }}</span>
+        </div>
+      </div>
+
+      <!-- 職業提案カード -->
+      <div v-if="suggestedProfessions.length > 0" class="profession-suggestions">
+        <h4>💼 おすすめの職業</h4>
+        <div class="profession-cards">
+          <div 
+            v-for="profession in suggestedProfessions" 
+            :key="profession"
+            class="profession-card"
+            @click="exploreProfession(profession)"
+          >
+            <span class="profession-name">{{ profession }}</span>
+            <svg class="arrow-icon" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M8.59,16.58L13.17,12L8.59,7.41L10,6L16,12L10,18L8.59,16.58Z" />
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      <!-- 次の質問候補 -->
+      <div v-if="nextQuestions.length > 0" class="next-questions">
+        <p class="questions-label">💭 こんなことも聞かせてください：</p>
+        <div class="question-buttons">
+          <button 
+            v-for="question in nextQuestions" 
+            :key="question"
+            @click="askQuestion(question)"
+            class="question-btn"
+          >
+            {{ question }}
+          </button>
+        </div>
+      </div>
+
+      <!-- 診断推奨バナー -->
+      <div v-if="shouldShowDiagnosisRecommendation" class="diagnosis-recommendation">
+        <div class="recommendation-content">
+          <h4>🎯 より詳しく適性を知りたい方へ</h4>
+          <p>科学的な適性診断で、あなたにぴったりの職業を発見しませんか？</p>
+          <div class="recommendation-actions">
+            <router-link to="/diagnosis" class="diagnosis-btn">
+              適性診断を受ける
+            </router-link>
+            <button @click="dismissDiagnosisRecommendation" class="dismiss-btn">
+              後で
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- タイピングインジケーター -->
+      <div v-if="isTyping" class="message bot-message typing-indicator">
+        <div class="message-content">
+          <div class="typing-animation">
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="chat-input">
+      <div class="input-container">
+        <textarea
+          v-model="currentMessage"
+          @keydown="handleKeyDown"
+          @input="adjustTextareaHeight"
+          ref="messageInput"
+          placeholder="進路について相談したいことを入力してください..."
+          rows="1"
+          :disabled="isTyping"
+        ></textarea>
+        <button 
+          @click="sendMessage" 
+          :disabled="!currentMessage.trim() || isTyping"
+          class="send-btn"
+          aria-label="メッセージを送信"
+        >
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M2,21L23,12L2,3V10L17,12L2,14V21Z" />
+          </svg>
+        </button>
+      </div>
+      <p class="input-hint">Shift + Enter で改行、Enter で送信</p>
+    </div>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { ref, nextTick, onMounted } from 'vue';
+import { getClaudeApiClient, type ChatMessage, type CareerAdviceResponse } from '../utils/claudeApiClient';
+import { professionDataManager } from '../utils/professionDataManager';
+
+// Emits
+const emit = defineEmits<{
+  close: [];
+}>();
+
+// リアクティブデータ
+const messages = ref<ChatMessage[]>([]);
+const currentMessage = ref('');
+const isTyping = ref(false);
+const messagesContainer = ref<HTMLElement>();
+const messageInput = ref<HTMLTextAreaElement>();
+
+// Claude APIの回答から抽出した情報
+const suggestedProfessions = ref<string[]>([]);
+const nextQuestions = ref<string[]>([]);
+const shouldShowDiagnosisRecommendation = ref(false);
+
+// クイックスタートオプション
+const quickStartOptions = [
+  { text: '将来何をしたいかわからない', content: '将来何をしたいかわからなくて悩んでいます。どうやって進路を考えればいいでしょうか？' },
+  { text: '転職を考えています', content: '転職を考えているのですが、自分に合う職業がわからず迷っています。' },
+  { text: '今の仕事に不満があります', content: '今の仕事に不満を感じていて、自分に本当に合う職業を見つけたいです。' },
+  { text: '就職活動の相談', content: '就職活動中ですが、どの業界・職種を選べばいいか迷っています。' }
+];
+
+// ユーザープロフィール（会話から推測）
+const userProfile = ref({
+  age: undefined as number | undefined,
+  currentStatus: '',
+  interests: [] as string[],
+  skills: [] as string[],
+  concerns: [] as string[]
+});
+
+/**
+ * コンポーネント初期化
+ */
+onMounted(async () => {
+  try {
+    await professionDataManager.initialize();
+  } catch (error) {
+    console.error('職業データの初期化に失敗:', error);
+  }
+});
+
+/**
+ * クイックオプションを送信
+ */
+function sendQuickOption(option: { text: string, content: string }) {
+  sendUserMessage(option.content);
+}
+
+/**
+ * メッセージを送信
+ */
+async function sendMessage() {
+  if (!currentMessage.value.trim() || isTyping.value) return;
+  
+  await sendUserMessage(currentMessage.value.trim());
+  currentMessage.value = '';
+  resetTextareaHeight();
+}
+
+/**
+ * ユーザーメッセージを送信してAIの回答を取得
+ */
+async function sendUserMessage(content: string) {
+  // ユーザーメッセージを追加
+  const userMessage: ChatMessage = {
+    role: 'user',
+    content,
+    timestamp: new Date()
+  };
+  messages.value.push(userMessage);
+  
+  // 自動スクロール
+  await nextTick();
+  scrollToBottom();
+  
+  // AI回答を取得
+  await getAIResponse();
+}
+
+/**
+ * AIからの回答を取得
+ */
+async function getAIResponse() {
+  isTyping.value = true;
+  
+  try {
+    const claudeClient = getClaudeApiClient();
+    const response: CareerAdviceResponse = await claudeClient.getCareerAdvice({
+      messages: messages.value,
+      userProfile: userProfile.value
+    });
+    
+    // AIメッセージを追加
+    const aiMessage: ChatMessage = {
+      role: 'assistant',
+      content: response.message,
+      timestamp: new Date()
+    };
+    messages.value.push(aiMessage);
+    
+    // 提案情報を更新
+    suggestedProfessions.value = response.suggestedProfessions || [];
+    nextQuestions.value = response.nextQuestions || [];
+    
+    if (response.shouldRecommendDiagnosis) {
+      shouldShowDiagnosisRecommendation.value = true;
+    }
+    
+    // ユーザープロフィールを推測・更新
+    updateUserProfile(messages.value[messages.value.length - 2].content);
+    
+  } catch (error) {
+    console.error('AI回答取得エラー:', error);
+    const errorMessage: ChatMessage = {
+      role: 'assistant',
+      content: 'すみません、一時的にサービスが利用できません。しばらく後にもう一度お試しください。',
+      timestamp: new Date()
+    };
+    messages.value.push(errorMessage);
+  } finally {
+    isTyping.value = false;
+    await nextTick();
+    scrollToBottom();
+  }
+}
+
+/**
+ * 職業を探索
+ */
+function exploreProfession(professionName: string) {
+  sendUserMessage(`${professionName}について詳しく教えてください。`);
+}
+
+/**
+ * 質問を送信
+ */
+function askQuestion(question: string) {
+  sendUserMessage(question);
+  nextQuestions.value = [];
+}
+
+/**
+ * 診断推奨を非表示
+ */
+function dismissDiagnosisRecommendation() {
+  shouldShowDiagnosisRecommendation.value = false;
+}
+
+/**
+ * ユーザープロフィールを更新
+ */
+function updateUserProfile(userMessage: string) {
+  const message = userMessage.toLowerCase();
+  
+  // 年齢を推測
+  const ageMatch = message.match(/(\d{1,2})歳|(\d{1,2})才/);
+  if (ageMatch) {
+    userProfile.value.age = parseInt(ageMatch[1] || ageMatch[2]);
+  }
+  
+  // 現在の状況を推測
+  if (message.includes('学生') || message.includes('大学') || message.includes('高校')) {
+    userProfile.value.currentStatus = '学生';
+  } else if (message.includes('転職') || message.includes('会社員') || message.includes('社会人')) {
+    userProfile.value.currentStatus = '社会人';
+  }
+  
+  // 興味や関心を抽出
+  const interests = ['プログラミング', 'デザイン', '営業', '教育', '医療', '金融', '料理', '美容', 'スポーツ'];
+  interests.forEach(interest => {
+    if (message.includes(interest.toLowerCase()) && !userProfile.value.interests.includes(interest)) {
+      userProfile.value.interests.push(interest);
+    }
+  });
+}
+
+/**
+ * キーボードイベント処理
+ */
+function handleKeyDown(event: KeyboardEvent) {
+  if (event.key === 'Enter' && !event.shiftKey) {
+    event.preventDefault();
+    sendMessage();
+  }
+}
+
+/**
+ * テキストエリアの高さを調整
+ */
+function adjustTextareaHeight() {
+  const textarea = messageInput.value;
+  if (textarea) {
+    textarea.style.height = 'auto';
+    textarea.style.height = Math.min(textarea.scrollHeight, 120) + 'px';
+  }
+}
+
+/**
+ * テキストエリアの高さをリセット
+ */
+function resetTextareaHeight() {
+  const textarea = messageInput.value;
+  if (textarea) {
+    textarea.style.height = 'auto';
+  }
+}
+
+/**
+ * メッセージ領域を最下部にスクロール
+ */
+function scrollToBottom() {
+  const container = messagesContainer.value;
+  if (container) {
+    container.scrollTop = container.scrollHeight;
+  }
+}
+
+/**
+ * 時刻をフォーマット
+ */
+function formatTime(date: Date): string {
+  return date.toLocaleTimeString('ja-JP', { 
+    hour: '2-digit', 
+    minute: '2-digit' 
+  });
+}
+</script>
+
+<style scoped>
+/* ==========================================================================
+   チャットbot基本レイアウト
+   ========================================================================== */
+.career-chat-bot {
+  display: flex;
+  flex-direction: column;
+  height: 600px;
+  max-height: 80vh;
+  width: 100%;
+  max-width: 800px;
+  background: var(--bg-primary);
+  border-radius: 16px;
+  box-shadow: var(--shadow-lg);
+  overflow: hidden;
+  border: 1px solid var(--border-light);
+}
+
+/* ==========================================================================
+   チャットヘッダー
+   ========================================================================== */
+.chat-header {
+  display: flex;
+  align-items: center;
+  padding: var(--space-md);
+  background: var(--primary-navy);
+  color: white;
+  gap: var(--space-sm);
+}
+
+.bot-avatar {
+  width: 40px;
+  height: 40px;
+  background: var(--accent-blue);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.bot-info {
+  flex: 1;
+}
+
+.bot-info h3 {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.bot-status {
+  margin: 0;
+  font-size: 0.875rem;
+  opacity: 0.8;
+  transition: all var(--transition-normal);
+}
+
+.bot-status.typing {
+  opacity: 1;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+.close-chat {
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+  padding: var(--space-xs);
+  border-radius: 6px;
+  transition: background-color var(--transition-fast);
+}
+
+.close-chat:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* ==========================================================================
+   チャットメッセージ
+   ========================================================================== */
+.chat-messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--space-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.message {
+  display: flex;
+  max-width: 80%;
+  animation: slideIn 0.3s ease-out;
+}
+
+.user-message {
+  align-self: flex-end;
+}
+
+.bot-message {
+  align-self: flex-start;
+}
+
+.message-content {
+  background: var(--bg-secondary);
+  padding: var(--space-sm) var(--space-md);
+  border-radius: 18px;
+  position: relative;
+}
+
+.user-message .message-content {
+  background: var(--primary-navy);
+  color: white;
+  border-bottom-right-radius: 6px;
+}
+
+.bot-message .message-content {
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  border-bottom-left-radius: 6px;
+}
+
+.message-content p {
+  margin: 0;
+  line-height: 1.5;
+  word-wrap: break-word;
+}
+
+.message-time {
+  font-size: 0.75rem;
+  opacity: 0.6;
+  display: block;
+  margin-top: var(--space-xs);
+}
+
+/* ==========================================================================
+   ウェルカムメッセージとクイックオプション
+   ========================================================================== */
+.welcome-message {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.quick-options {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.quick-option-btn {
+  background: var(--bg-primary);
+  border: 2px solid var(--border-light);
+  padding: var(--space-sm) var(--space-md);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  text-align: left;
+  font-size: 0.9rem;
+  color: var(--text-primary);
+}
+
+.quick-option-btn:hover {
+  border-color: var(--primary-navy);
+  background: var(--bg-secondary);
+  transform: translateY(-1px);
+}
+
+/* ==========================================================================
+   職業提案カード
+   ========================================================================== */
+.profession-suggestions {
+  margin: var(--space-md) 0;
+  padding: var(--space-md);
+  background: var(--bg-secondary);
+  border-radius: 12px;
+  border: 1px solid var(--border-light);
+}
+
+.profession-suggestions h4 {
+  margin: 0 0 var(--space-sm) 0;
+  color: var(--primary-navy);
+  font-size: 1rem;
+}
+
+.profession-cards {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.profession-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-sm) var(--space-md);
+  background: var(--bg-primary);
+  border: 1px solid var(--border-light);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.profession-card:hover {
+  border-color: var(--primary-navy);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-sm);
+}
+
+.profession-name {
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.arrow-icon {
+  color: var(--text-secondary);
+  transition: transform var(--transition-fast);
+}
+
+.profession-card:hover .arrow-icon {
+  transform: translateX(4px);
+}
+
+/* ==========================================================================
+   次の質問候補
+   ========================================================================== */
+.next-questions {
+  margin: var(--space-md) 0;
+}
+
+.questions-label {
+  margin: 0 0 var(--space-sm) 0;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+.question-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
+}
+
+.question-btn {
+  background: var(--bg-primary);
+  border: 1px solid var(--border-light);
+  padding: var(--space-xs) var(--space-sm);
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  transition: all var(--transition-fast);
+  color: var(--text-primary);
+}
+
+.question-btn:hover {
+  border-color: var(--primary-navy);
+  background: var(--primary-navy);
+  color: white;
+}
+
+/* ==========================================================================
+   診断推奨バナー
+   ========================================================================== */
+.diagnosis-recommendation {
+  margin: var(--space-md) 0;
+  padding: var(--space-md);
+  background: linear-gradient(135deg, var(--accent-blue) 0%, var(--primary-navy) 100%);
+  color: white;
+  border-radius: 12px;
+  box-shadow: var(--shadow-md);
+}
+
+.recommendation-content h4 {
+  margin: 0 0 var(--space-xs) 0;
+  font-size: 1.1rem;
+}
+
+.recommendation-content p {
+  margin: 0 0 var(--space-md) 0;
+  opacity: 0.9;
+  line-height: 1.5;
+}
+
+.recommendation-actions {
+  display: flex;
+  gap: var(--space-sm);
+  flex-wrap: wrap;
+}
+
+.diagnosis-btn {
+  background: white;
+  color: var(--primary-navy);
+  padding: var(--space-sm) var(--space-md);
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 500;
+  transition: all var(--transition-fast);
+  display: inline-block;
+}
+
+.diagnosis-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-sm);
+}
+
+.dismiss-btn {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: white;
+  padding: var(--space-sm) var(--space-md);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.dismiss-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* ==========================================================================
+   タイピングインジケーター
+   ========================================================================== */
+.typing-indicator .message-content {
+  padding: var(--space-md);
+}
+
+.typing-animation {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+
+.typing-animation span {
+  width: 8px;
+  height: 8px;
+  background: var(--text-secondary);
+  border-radius: 50%;
+  animation: typing 1.4s infinite ease-in-out;
+}
+
+.typing-animation span:nth-child(1) { animation-delay: -0.32s; }
+.typing-animation span:nth-child(2) { animation-delay: -0.16s; }
+
+/* ==========================================================================
+   チャット入力
+   ========================================================================== */
+.chat-input {
+  padding: var(--space-md);
+  border-top: 1px solid var(--border-light);
+  background: var(--bg-primary);
+}
+
+.input-container {
+  display: flex;
+  gap: var(--space-sm);
+  align-items: flex-end;
+}
+
+.input-container textarea {
+  flex: 1;
+  border: 2px solid var(--border-light);
+  border-radius: 12px;
+  padding: var(--space-sm) var(--space-md);
+  font-size: 0.9rem;
+  font-family: inherit;
+  line-height: 1.4;
+  resize: none;
+  max-height: 120px;
+  transition: border-color var(--transition-fast);
+  background: var(--bg-primary);
+  color: var(--text-primary);
+}
+
+.input-container textarea:focus {
+  outline: none;
+  border-color: var(--primary-navy);
+}
+
+.input-container textarea:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.send-btn {
+  width: 44px;
+  height: 44px;
+  background: var(--primary-navy);
+  border: none;
+  border-radius: 12px;
+  color: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition-fast);
+  flex-shrink: 0;
+}
+
+.send-btn:hover:not(:disabled) {
+  background: var(--primary-blue);
+  transform: translateY(-1px);
+}
+
+.send-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.input-hint {
+  margin: var(--space-xs) 0 0 0;
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  text-align: center;
+}
+
+/* ==========================================================================
+   アニメーション
+   ========================================================================== */
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.8; }
+  50% { opacity: 1; }
+}
+
+@keyframes typing {
+  0%, 80%, 100% {
+    transform: scale(0);
+    opacity: 0.5;
+  }
+  40% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* ==========================================================================
+   レスポンシブデザイン
+   ========================================================================== */
+@media (max-width: 768px) {
+  .career-chat-bot {
+    height: 100vh;
+    max-height: 100vh;
+    border-radius: 0;
+  }
+
+  .message {
+    max-width: 90%;
+  }
+
+  .profession-cards {
+    gap: var(--space-sm);
+  }
+
+  .recommendation-actions {
+    flex-direction: column;
+  }
+
+  .diagnosis-btn,
+  .dismiss-btn {
+    text-align: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .chat-header {
+    padding: var(--space-sm);
+  }
+
+  .chat-messages {
+    padding: var(--space-sm);
+  }
+
+  .chat-input {
+    padding: var(--space-sm);
+  }
+
+  .bot-info h3 {
+    font-size: 1rem;
+  }
+
+  .input-container textarea {
+    font-size: 16px; /* iOS zoom prevention */
+  }
+}
+</style>
