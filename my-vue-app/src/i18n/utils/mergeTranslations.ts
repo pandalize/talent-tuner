@@ -40,6 +40,7 @@ async function loadTranslationModules(locale: SupportedLocale): Promise<Translat
     'common',
     'navigation', 
     'home',
+    'about',
     'diagnosis',
     'chat'
   ]

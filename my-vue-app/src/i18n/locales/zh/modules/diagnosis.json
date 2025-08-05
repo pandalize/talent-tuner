@@ -5,6 +5,28 @@
     "next": "下一个问题",
     "previous": "上一个问题",
     "submit": "查看诊断结果",
-    "results": "诊断结果"
+    "results": "诊断结果",
+    "progress": "问题 {current} / {total}",
+    "category": {
+      "skill": "技能",
+      "interest": "兴趣",
+      "priority": "优先事项",
+      "balance": "平衡"
+    },
+    "result": {
+      "title": "为您推荐的职业",
+      "subtitle": "根据诊断结果显示适合度高的职业",
+      "score": "适配分数",
+      "salary": "年薪",
+      "description": "职业内容",
+      "match_reason": "匹配原因",
+      "actions": {
+        "retry": "重新诊断",
+        "view_detail": "查看详情",
+        "ai_consultation": "使用AI职业咨询",
+        "share": "分享结果"
+      }
+    },
+    "no_results": "无法显示诊断结果。请重试。"
   }
 }

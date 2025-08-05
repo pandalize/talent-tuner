@@ -53,6 +53,18 @@ export function useTranslation() {
       }
     },
 
+    // 職業一覧関連
+    about: {
+      title: () => t('about.title'),
+      subtitle: () => t('about.subtitle'),
+      description: () => t('about.description'),
+      salaryRange: () => t('about.salary_range'),
+      jobDetails: () => t('about.job_details'),
+      suitableFor: () => t('about.suitable_for'),
+      viewDetail: () => t('about.view_detail'),
+      takeDiagnosis: () => t('about.take_diagnosis')
+    },
+
     // 診断関連
     diagnosis: {
       title: () => t('diagnosis.title'),
@@ -60,7 +72,29 @@ export function useTranslation() {
       next: () => t('diagnosis.next'),
       previous: () => t('diagnosis.previous'),
       submit: () => t('diagnosis.submit'),
-      results: () => t('diagnosis.results')
+      results: () => t('diagnosis.results'),
+      progress: (current: number, total: number) => t('diagnosis.progress', { current, total }),
+      category: {
+        skill: () => t('diagnosis.category.skill'),
+        interest: () => t('diagnosis.category.interest'),
+        priority: () => t('diagnosis.category.priority'),
+        balance: () => t('diagnosis.category.balance')
+      },
+      result: {
+        title: () => t('diagnosis.result.title'),
+        subtitle: () => t('diagnosis.result.subtitle'),
+        score: () => t('diagnosis.result.score'),
+        salary: () => t('diagnosis.result.salary'),
+        description: () => t('diagnosis.result.description'),
+        matchReason: () => t('diagnosis.result.match_reason'),
+        actions: {
+          retry: () => t('diagnosis.result.actions.retry'),
+          viewDetail: () => t('diagnosis.result.actions.view_detail'),
+          aiConsultation: () => t('diagnosis.result.actions.ai_consultation'),
+          share: () => t('diagnosis.result.actions.share')
+        }
+      },
+      noResults: () => t('diagnosis.no_results')
     },
 
     // チャット関連

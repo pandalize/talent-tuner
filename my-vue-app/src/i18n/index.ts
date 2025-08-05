@@ -1,11 +1,14 @@
 /**
- * Vue I18n 多言語対応設定
+ * Vue I18n 多言語対応設定（分割ファイル対応版）
  * グローバル展開対応の国際化システム
  */
 
 import { createI18n } from 'vue-i18n'
 
-// 言語ファイルの動的インポート
+// 分割された翻訳ファイルの動的インポート
+import { loadAllTranslations } from './utils/mergeTranslations'
+
+// フォールバック用の基本翻訳（開発時・エラー時）
 import ja from './locales/ja.json'
 import en from './locales/en.json'
 import zh from './locales/zh.json'
@@ -61,111 +64,241 @@ export function getInitialLanguage(): SupportedLocale {
   return detectBrowserLanguage()
 }
 
-// Vue I18n インスタンス作成
-const i18n = createI18n({
+// Vue I18n インスタンス（非同期読み込み対応）
+let i18n: ReturnType<typeof createI18n>
+
+// 分割された翻訳ファイルを読み込んでi18nインスタンスを初期化
+export async function createI18nInstance() {
+  try {
+    // 分割された翻訳ファイルを読み込み
+    const mergedTranslations = await loadAllTranslations()
+    
+    i18n = createI18n({
+      locale: getInitialLanguage(),
+      fallbackLocale: 'ja',
+      legacy: false, // Composition API対応
+      globalInjection: true,
+      messages: mergedTranslations,
+      // 数値フォーマット設定
+      numberFormats: {
+        ja: {
+          currency: {
+            style: 'currency',
+            currency: 'JPY',
+            notation: 'standard'
+          },
+          decimal: {
+            style: 'decimal',
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 2
+          }
+        },
+        en: {
+          currency: {
+            style: 'currency',
+            currency: 'USD',
+            notation: 'standard'
+          },
+          decimal: {
+            style: 'decimal',
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 2
+          }
+        },
+        zh: {
+          currency: {
+            style: 'currency',
+            currency: 'CNY',
+            notation: 'standard'
+          },
+          decimal: {
+            style: 'decimal',
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 2
+          }
+        }
+      },
+      // 日時フォーマット設定
+      datetimeFormats: {
+        ja: {
+          short: {
+            year: 'numeric',
+            month: 'short',
+            day: 'numeric'
+          },
+          long: {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+            weekday: 'long',
+            hour: 'numeric',
+            minute: 'numeric'
+          }
+        },
+        en: {
+          short: {
+            year: 'numeric',
+            month: 'short',
+            day: 'numeric'
+          },
+          long: {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+            weekday: 'long',
+            hour: 'numeric',
+            minute: 'numeric'
+          }
+        },
+        zh: {
+          short: {
+            year: 'numeric',
+            month: 'short',
+            day: 'numeric'
+          },
+          long: {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+            weekday: 'long',
+            hour: 'numeric',
+            minute: 'numeric'
+          }
+        }
+      }
+    })
+  } catch (error) {
+    console.warn('Failed to load merged translations, using fallback:', error)
+    // フォールバック: 元の単一ファイル翻訳を使用
+    i18n = createI18n({
+      locale: getInitialLanguage(),
+      fallbackLocale: 'ja',
+      legacy: false,
+      globalInjection: true,
+      messages: {
+        ja,
+        en,
+        zh
+      },
+      numberFormats: {
+        ja: {
+          currency: {
+            style: 'currency',
+            currency: 'JPY',
+            notation: 'standard'
+          },
+          decimal: {
+            style: 'decimal',
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 2
+          }
+        },
+        en: {
+          currency: {
+            style: 'currency',
+            currency: 'USD',
+            notation: 'standard'
+          },
+          decimal: {
+            style: 'decimal',
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 2
+          }
+        },
+        zh: {
+          currency: {
+            style: 'currency',
+            currency: 'CNY',
+            notation: 'standard'
+          },
+          decimal: {
+            style: 'decimal',
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 2
+          }
+        }
+      },
+      datetimeFormats: {
+        ja: {
+          short: {
+            year: 'numeric',
+            month: 'short',
+            day: 'numeric'
+          },
+          long: {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+            weekday: 'long',
+            hour: 'numeric',
+            minute: 'numeric'
+          }
+        },
+        en: {
+          short: {
+            year: 'numeric',
+            month: 'short',
+            day: 'numeric'
+          },
+          long: {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+            weekday: 'long',
+            hour: 'numeric',
+            minute: 'numeric'
+          }
+        },
+        zh: {
+          short: {
+            year: 'numeric',
+            month: 'short',
+            day: 'numeric'
+          },
+          long: {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+            weekday: 'long',
+            hour: 'numeric',
+            minute: 'numeric'
+          }
+        }
+      }
+    })
+  }
+  
+  return i18n
+}
+
+// 同期的にアクセスするためのゲッター
+export function getI18nInstance() {
+  if (!i18n) {
+    throw new Error('i18n instance not initialized. Call createI18nInstance() first.')
+  }
+  return i18n
+}
+
+// デフォルトエクスポート（後方互換性のため）
+// 同期的な読み込みのためのフォールバック
+const defaultI18n = createI18n({
   locale: getInitialLanguage(),
   fallbackLocale: 'ja',
-  legacy: false, // Composition API対応
+  legacy: false,
   globalInjection: true,
   messages: {
     ja,
     en,
     zh
-  },
-  // 数値フォーマット設定
-  numberFormats: {
-    ja: {
-      currency: {
-        style: 'currency',
-        currency: 'JPY',
-        notation: 'standard'
-      },
-      decimal: {
-        style: 'decimal',
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 2
-      }
-    },
-    en: {
-      currency: {
-        style: 'currency',
-        currency: 'USD',
-        notation: 'standard'
-      },
-      decimal: {
-        style: 'decimal',
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 2
-      }
-    },
-    zh: {
-      currency: {
-        style: 'currency',
-        currency: 'CNY',
-        notation: 'standard'
-      },
-      decimal: {
-        style: 'decimal',
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 2
-      }
-    }
-  },
-  // 日時フォーマット設定
-  datetimeFormats: {
-    ja: {
-      short: {
-        year: 'numeric',
-        month: 'short',
-        day: 'numeric'
-      },
-      long: {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-        weekday: 'long',
-        hour: 'numeric',
-        minute: 'numeric'
-      }
-    },
-    en: {
-      short: {
-        year: 'numeric',
-        month: 'short',
-        day: 'numeric'
-      },
-      long: {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-        weekday: 'long',
-        hour: 'numeric',
-        minute: 'numeric'
-      }
-    },
-    zh: {
-      short: {
-        year: 'numeric',
-        month: 'short',
-        day: 'numeric'
-      },
-      long: {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-        weekday: 'long',
-        hour: 'numeric',
-        minute: 'numeric'
-      }
-    }
   }
 })
 
-export default i18n
+export default defaultI18n
 
 // 言語変更ユーティリティ関数
 export function changeLanguage(locale: SupportedLocale): void {
-  i18n.global.locale.value = locale
+  const i18nInstance = getI18nInstance()
+  i18nInstance.global.locale.value = locale
   storeLanguage(locale)
   document.documentElement.lang = locale
   
@@ -174,23 +307,25 @@ export function changeLanguage(locale: SupportedLocale): void {
   
   // 言語変更イベントを発火（analytics等で使用）
   window.dispatchEvent(new CustomEvent('language-changed', { 
-    detail: { locale, previousLocale: i18n.global.locale.value } 
+    detail: { locale, previousLocale: i18nInstance.global.locale.value } 
   }))
 }
 
 // ページタイトル更新
 function updatePageTitle(): void {
+  const i18nInstance = getI18nInstance()
   const routeName = window.location.pathname.split('/').pop() || 'home'
   const titleKey = `meta.title.${routeName}`
   
-  if (i18n.global.te(titleKey)) {
-    document.title = i18n.global.t(titleKey)
+  if (i18nInstance.global.te(titleKey)) {
+    document.title = i18nInstance.global.t(titleKey)
   }
 }
 
 // 言語別URLパス生成
 export function getLocalizedPath(path: string, locale?: SupportedLocale): string {
-  const targetLocale = locale || i18n.global.locale.value
+  const i18nInstance = getI18nInstance()
+  const targetLocale = locale || i18nInstance.global.locale.value
   
   // 日本語の場合はパスプレフィックスなし
   if (targetLocale === 'ja') {
@@ -203,6 +338,7 @@ export function getLocalizedPath(path: string, locale?: SupportedLocale): string
 
 // 現在の言語情報を取得
 export function getCurrentLanguageInfo() {
-  const currentLocale = i18n.global.locale.value as SupportedLocale
+  const i18nInstance = getI18nInstance()
+  const currentLocale = i18nInstance.global.locale.value as SupportedLocale
   return SUPPORTED_LOCALES.find(locale => locale.code === currentLocale)
 }
