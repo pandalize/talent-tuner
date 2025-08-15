@@ -121,11 +121,11 @@
           ref="messageInput"
           placeholder="進路について相談したいことを入力してください..."
           rows="1"
-          :disabled="isTyping"
+          :disabled="isTyping || !canSendMessage"
         ></textarea>
         <button 
           @click="sendMessage" 
-          :disabled="!currentMessage.trim() || isTyping"
+          :disabled="!currentMessage.trim() || isTyping || !canSendMessage"
           class="send-btn"
           aria-label="メッセージを送信"
         >
@@ -136,11 +136,36 @@
       </div>
       <p class="input-hint">Shift + Enter で改行、Enter で送信</p>
     </div>
+
+    <!-- 使用状況表示 -->
+    <div class="usage-stats" v-if="usageStats">
+      <div class="usage-bar">
+        <div class="usage-label">メッセージ数: {{ usageStats.sessionMessages }}/{{ RATE_LIMITS.MAX_MESSAGES_PER_SESSION }}</div>
+        <div class="progress-bar">
+          <div 
+            class="progress-fill" 
+            :style="{ width: (usageStats.sessionMessages / RATE_LIMITS.MAX_MESSAGES_PER_SESSION * 100) + '%' }"
+            :class="{ 'warning': usageStats.sessionMessages >= RATE_LIMITS.MAX_MESSAGES_PER_SESSION * 0.8 }"
+          ></div>
+        </div>
+      </div>
+      <div class="usage-limits">
+        <span class="limit-item" :class="{ 'exceeded': usageStats.hourlyMessages >= RATE_LIMITS.MAX_MESSAGES_PER_HOUR }">
+          ⏰ 1時間: {{ usageStats.hourlyMessages }}/{{ RATE_LIMITS.MAX_MESSAGES_PER_HOUR }}
+        </span>
+        <span class="limit-item" :class="{ 'exceeded': usageStats.dailyMessages >= RATE_LIMITS.MAX_MESSAGES_PER_DAY }">
+          📅 本日: {{ usageStats.dailyMessages }}/{{ RATE_LIMITS.MAX_MESSAGES_PER_DAY }}
+        </span>
+      </div>
+      <div v-if="cooldownRemaining > 0" class="cooldown-message">
+        ⏳ {{ cooldownRemaining }}秒後に送信可能
+      </div>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, nextTick, onMounted } from 'vue';
+import { ref, nextTick, onMounted, computed, onUnmounted } from 'vue';
 import { getClaudeApiClient, type ChatMessage, type CareerAdviceResponse } from '../utils/claudeApiClient';
 import { professionDataManager } from '../utils/professionDataManager';
 
@@ -149,12 +174,36 @@ const emit = defineEmits<{
   close: [];
 }>();
 
+// レート制限設定（クライアント表示用）
+const RATE_LIMITS = {
+  MAX_MESSAGES_PER_SESSION: 20,
+  MAX_MESSAGES_PER_HOUR: 10,
+  MAX_MESSAGES_PER_DAY: 30,
+  COOLDOWN_SECONDS: 10
+};
+
 // リアクティブデータ
 const messages = ref<ChatMessage[]>([]);
 const currentMessage = ref('');
 const isTyping = ref(false);
 const messagesContainer = ref<HTMLElement>();
 const messageInput = ref<HTMLTextAreaElement>();
+
+// 使用状況
+const usageStats = ref<{
+  sessionMessages: number;
+  hourlyMessages: number;
+  dailyMessages: number;
+  canSendMessage: boolean;
+  nextAvailableTime?: number;
+} | null>(null);
+const cooldownRemaining = ref(0);
+const cooldownTimer = ref<number | null>(null);
+
+// 送信可能状態
+const canSendMessage = computed(() => {
+  return usageStats.value?.canSendMessage ?? true;
+});
 
 // Claude APIの回答から抽出した情報
 const suggestedProfessions = ref<string[]>([]);
@@ -184,10 +233,47 @@ const userProfile = ref({
 onMounted(async () => {
   try {
     await professionDataManager.initialize();
+    updateUsageStats();
+    startCooldownTimer();
   } catch (error) {
     console.error('職業データの初期化に失敗:', error);
   }
 });
+
+/**
+ * コンポーネント破棄時の処理
+ */
+onUnmounted(() => {
+  if (cooldownTimer.value) {
+    clearInterval(cooldownTimer.value);
+  }
+});
+
+/**
+ * 使用状況を更新
+ */
+function updateUsageStats() {
+  const claudeClient = getClaudeApiClient();
+  usageStats.value = claudeClient.getUsageStats();
+}
+
+/**
+ * クールダウンタイマーを開始
+ */
+function startCooldownTimer() {
+  cooldownTimer.value = window.setInterval(() => {
+    if (usageStats.value?.nextAvailableTime) {
+      const remaining = Math.max(0, Math.ceil((usageStats.value.nextAvailableTime - Date.now()) / 1000));
+      cooldownRemaining.value = remaining;
+      
+      if (remaining === 0) {
+        updateUsageStats();
+      }
+    } else {
+      cooldownRemaining.value = 0;
+    }
+  }, 1000);
+}
 
 /**
  * クイックオプションを送信
@@ -200,7 +286,7 @@ function sendQuickOption(option: { text: string, content: string }) {
  * メッセージを送信
  */
 async function sendMessage() {
-  if (!currentMessage.value.trim() || isTyping.value) return;
+  if (!currentMessage.value.trim() || isTyping.value || !canSendMessage.value) return;
   
   await sendUserMessage(currentMessage.value.trim());
   currentMessage.value = '';
@@ -251,6 +337,9 @@ async function getAIResponse() {
     // 提案情報を更新
     suggestedProfessions.value = response.suggestedProfessions || [];
     nextQuestions.value = response.nextQuestions || [];
+    
+    // 使用状況を更新
+    updateUsageStats();
     
     if (response.shouldRecommendDiagnosis) {
       shouldShowDiagnosisRecommendation.value = true;
@@ -633,6 +722,79 @@ function formatTime(date: Date): string {
   border-color: var(--primary-navy);
   background: var(--primary-navy);
   color: white;
+}
+
+/* ==========================================================================
+   使用状況表示
+   ========================================================================== */
+.usage-stats {
+  padding: var(--space-sm) var(--space-md);
+  background: var(--bg-secondary);
+  border-top: 1px solid var(--border-color);
+}
+
+.usage-bar {
+  margin-bottom: var(--space-xs);
+}
+
+.usage-label {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  margin-bottom: 4px;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 6px;
+  background: var(--bg-primary);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: var(--accent-blue);
+  transition: width 0.3s ease, background-color 0.3s ease;
+}
+
+.progress-fill.warning {
+  background: var(--warning-color, #ff9800);
+}
+
+.usage-limits {
+  display: flex;
+  gap: var(--space-md);
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+.limit-item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.limit-item.exceeded {
+  color: var(--error-color, #f44336);
+  font-weight: 600;
+}
+
+.cooldown-message {
+  margin-top: var(--space-xs);
+  padding: var(--space-xs) var(--space-sm);
+  background: var(--warning-bg, rgba(255, 152, 0, 0.1));
+  color: var(--warning-color, #ff9800);
+  border-radius: 6px;
+  font-size: 0.85rem;
+  text-align: center;
+  animation: pulse 1s ease-in-out infinite;
+}
+
+.input-hint {
+  margin: 0;
+  font-size: 0.75rem;
+  opacity: 0.6;
+  text-align: center;
 }
 
 /* ==========================================================================

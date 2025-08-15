@@ -33,9 +33,194 @@ export interface CareerAdviceResponse {
 export class ClaudeApiClient {
   private apiKey: string;
   private baseUrl = 'https://api.anthropic.com/v1/messages';
+  
+  // レート制限設定
+  private static readonly RATE_LIMITS = {
+    MAX_MESSAGES_PER_SESSION: 20,     // セッションあたり最大メッセージ数
+    MAX_MESSAGES_PER_HOUR: 10,        // 1時間あたり最大メッセージ数
+    MAX_MESSAGES_PER_DAY: 30,         // 1日あたり最大メッセージ数
+    MAX_INPUT_LENGTH: 500,             // 入力文字数制限
+    MAX_OUTPUT_TOKENS: 800,            // 出力トークン制限（コスト管理）
+    COOLDOWN_SECONDS: 10               // メッセージ間のクールダウン時間（秒）
+  };
+
+  // セッション管理
+  private sessionStorage = {
+    messageCount: 0,
+    hourlyMessages: [] as number[],
+    dailyMessages: [] as number[],
+    lastMessageTime: 0,
+    sessionStartTime: Date.now()
+  };
 
   constructor(apiKey: string) {
     this.apiKey = apiKey;
+    this.loadSessionData();
+  }
+
+  /**
+   * セッションデータの読み込み
+   */
+  private loadSessionData(): void {
+    const stored = localStorage.getItem('chatbot_session');
+    if (stored) {
+      try {
+        const data = JSON.parse(stored);
+        this.sessionStorage = {
+          ...this.sessionStorage,
+          ...data,
+          // 古いメッセージをクリーンアップ
+          hourlyMessages: (data.hourlyMessages || []).filter(
+            (time: number) => Date.now() - time < 3600000 // 1時間以内
+          ),
+          dailyMessages: (data.dailyMessages || []).filter(
+            (time: number) => Date.now() - time < 86400000 // 24時間以内
+          )
+        };
+      } catch (e) {
+        console.warn('セッションデータの読み込みに失敗:', e);
+      }
+    }
+  }
+
+  /**
+   * セッションデータの保存
+   */
+  private saveSessionData(): void {
+    localStorage.setItem('chatbot_session', JSON.stringify(this.sessionStorage));
+  }
+
+  /**
+   * レート制限チェック
+   */
+  private checkRateLimit(): { allowed: boolean; reason?: string; waitTime?: number } {
+    const now = Date.now();
+    
+    // クールダウンチェック
+    const timeSinceLastMessage = (now - this.sessionStorage.lastMessageTime) / 1000;
+    if (timeSinceLastMessage < ClaudeApiClient.RATE_LIMITS.COOLDOWN_SECONDS) {
+      const waitTime = Math.ceil(ClaudeApiClient.RATE_LIMITS.COOLDOWN_SECONDS - timeSinceLastMessage);
+      return { 
+        allowed: false, 
+        reason: `少しお待ちください。${waitTime}秒後に送信できます。`,
+        waitTime 
+      };
+    }
+
+    // セッション制限チェック
+    if (this.sessionStorage.messageCount >= ClaudeApiClient.RATE_LIMITS.MAX_MESSAGES_PER_SESSION) {
+      return { 
+        allowed: false, 
+        reason: 'セッションのメッセージ数上限に達しました。ページを更新して新しいセッションを開始してください。' 
+      };
+    }
+
+    // 時間制限チェック
+    const recentHourlyMessages = this.sessionStorage.hourlyMessages.filter(
+      time => now - time < 3600000
+    );
+    if (recentHourlyMessages.length >= ClaudeApiClient.RATE_LIMITS.MAX_MESSAGES_PER_HOUR) {
+      return { 
+        allowed: false, 
+        reason: '1時間あたりのメッセージ数上限に達しました。しばらくお待ちください。' 
+      };
+    }
+
+    // 日次制限チェック
+    const recentDailyMessages = this.sessionStorage.dailyMessages.filter(
+      time => now - time < 86400000
+    );
+    if (recentDailyMessages.length >= ClaudeApiClient.RATE_LIMITS.MAX_MESSAGES_PER_DAY) {
+      return { 
+        allowed: false, 
+        reason: '本日のメッセージ数上限に達しました。明日またお試しください。' 
+      };
+    }
+
+    return { allowed: true };
+  }
+
+  /**
+   * 入力検証
+   */
+  private validateInput(message: string): { valid: boolean; reason?: string } {
+    if (!message || message.trim().length === 0) {
+      return { valid: false, reason: 'メッセージを入力してください。' };
+    }
+
+    if (message.length > ClaudeApiClient.RATE_LIMITS.MAX_INPUT_LENGTH) {
+      return { 
+        valid: false, 
+        reason: `メッセージは${ClaudeApiClient.RATE_LIMITS.MAX_INPUT_LENGTH}文字以内で入力してください。` 
+      };
+    }
+
+    // 不適切なコンテンツのチェック（簡易版）
+    const bannedPatterns = [
+      /\b(hack|exploit|injection|malicious)\b/i,
+      /<script/i,
+      /javascript:/i
+    ];
+    
+    for (const pattern of bannedPatterns) {
+      if (pattern.test(message)) {
+        return { valid: false, reason: '不適切な内容が含まれています。' };
+      }
+    }
+
+    return { valid: true };
+  }
+
+  /**
+   * 使用状況の記録
+   */
+  private recordUsage(): void {
+    const now = Date.now();
+    this.sessionStorage.messageCount++;
+    this.sessionStorage.hourlyMessages.push(now);
+    this.sessionStorage.dailyMessages.push(now);
+    this.sessionStorage.lastMessageTime = now;
+    
+    // 古いエントリをクリーンアップ
+    this.sessionStorage.hourlyMessages = this.sessionStorage.hourlyMessages.filter(
+      time => now - time < 3600000
+    );
+    this.sessionStorage.dailyMessages = this.sessionStorage.dailyMessages.filter(
+      time => now - time < 86400000
+    );
+    
+    this.saveSessionData();
+  }
+
+  /**
+   * 使用状況の取得（UI表示用）
+   */
+  public getUsageStats(): {
+    sessionMessages: number;
+    hourlyMessages: number;
+    dailyMessages: number;
+    canSendMessage: boolean;
+    nextAvailableTime?: number;
+  } {
+    const now = Date.now();
+    const hourlyMessages = this.sessionStorage.hourlyMessages.filter(
+      time => now - time < 3600000
+    ).length;
+    const dailyMessages = this.sessionStorage.dailyMessages.filter(
+      time => now - time < 86400000
+    ).length;
+    
+    const rateCheck = this.checkRateLimit();
+    
+    return {
+      sessionMessages: this.sessionStorage.messageCount,
+      hourlyMessages,
+      dailyMessages,
+      canSendMessage: rateCheck.allowed,
+      nextAvailableTime: rateCheck.waitTime 
+        ? this.sessionStorage.lastMessageTime + (ClaudeApiClient.RATE_LIMITS.COOLDOWN_SECONDS * 1000)
+        : undefined
+    };
   }
 
   /**
@@ -43,212 +228,114 @@ export class ClaudeApiClient {
    */
   async getCareerAdvice(request: CareerAdviceRequest): Promise<CareerAdviceResponse> {
     try {
-      // 本番環境ではPHPプロキシAPIを使用
-      const apiUrl = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
-        ? this.baseUrl  // 開発環境: 直接Claude APIを呼び出し
-        : '/api/chat';   // 本番環境: PHPプロキシ経由
-
+      // 最後のユーザーメッセージを取得
       const lastUserMessage = request.messages
         .filter(msg => msg.role === 'user')
         .pop()?.content || '';
 
+      // 入力検証
+      const validation = this.validateInput(lastUserMessage);
+      if (!validation.valid) {
+        return {
+          message: validation.reason || 'メッセージの送信に失敗しました。',
+          suggestedProfessions: [],
+          nextQuestions: [],
+          shouldRecommendDiagnosis: false
+        };
+      }
+
+      // レート制限チェック
+      const rateCheck = this.checkRateLimit();
+      if (!rateCheck.allowed) {
+        return {
+          message: rateCheck.reason || 'メッセージの送信制限に達しました。',
+          suggestedProfessions: [],
+          nextQuestions: [],
+          shouldRecommendDiagnosis: false
+        };
+      }
+
+      // 開発環境ではNode.jsプロキシ、本番環境ではPHPプロキシを使用
+      const apiUrl = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+        ? '/api/chat-proxy'  // 開発環境: Node.jsプロキシ経由  
+        : '/api/chat-proxy.php';   // 本番環境: PHPプロキシ経由
+
       console.log('API URL:', apiUrl);
       console.log('User message:', lastUserMessage);
 
-      let response;
-      
-      if (apiUrl === this.baseUrl) {
-        // 開発環境: 直接Claude APIを呼び出し
-        const systemPrompt = this.buildSystemPrompt();
-        const messages = this.buildMessages(request.messages, request.userProfile);
+      // プロキシ経由でAPIを呼び出し
+      const response = await fetch(apiUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          message: lastUserMessage,
+          sessionId: this.sessionStorage.sessionStartTime,  // セッション識別用
+          messageCount: this.sessionStorage.messageCount
+        })
+      });
 
-        response = await fetch(this.baseUrl, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'x-api-key': this.apiKey,
-            'anthropic-version': '2023-06-01'
-          },
-          body: JSON.stringify({
-            model: 'claude-3-haiku-20240307',
-            max_tokens: 1000,
-            system: systemPrompt,
-            messages: messages
-          })
-        });
-
-        if (!response.ok) {
-          throw new Error(`Claude API error: ${response.status}`);
-        }
-
-        const data = await response.json();
-        return this.parseResponse(data.content[0].text);
-      } else {
-        // 本番環境: PHPプロキシ経由
-        response = await fetch(apiUrl, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            message: lastUserMessage
-          })
-        });
-
-        if (!response.ok) {
-          throw new Error(`Proxy API error: ${response.status}`);
-        }
-
-        const data = await response.json();
-        
-        if (!data.success) {
-          throw new Error(data.error || 'Unknown API error');
-        }
-
-        return this.parseResponse(data.message);
+      if (!response.ok) {
+        throw new Error(`Proxy API error: ${response.status}`);
       }
+
+      const data = await response.json();
+      
+      if (!data.success) {
+        // レート制限エラーの場合
+        if (data.error?.includes('rate limit') || data.error?.includes('お待ち')) {
+          return {
+            message: data.error,
+            suggestedProfessions: [],
+            nextQuestions: [],
+            shouldRecommendDiagnosis: false
+          };
+        }
+        throw new Error(data.error || 'Unknown API error');
+      }
+
+      // 使用状況を記録
+      this.recordUsage();
+
+      return this.parseResponse(data.message);
     } catch (error) {
       console.error('API呼び出しエラー:', error);
       
-      // エラーの場合はモックレスポンスにフォールバック
-      console.log('エラーのため、モックレスポンスを使用します');
-      return this.getMockResponse(request);
+      // エラー時は運営者への問い合わせ案内を返す
+      return {
+        message: "申し訳ございません。一時的にサービスが利用できない状態です。\n\n技術的な問題が発生している可能性があります。お困りの場合は、以下までお問い合わせください：\n\n📧 pandalize.info@gmail.com\n\nご不便をおかけして申し訳ありません。",
+        suggestedProfessions: [],
+        nextQuestions: [],
+        shouldRecommendDiagnosis: false
+      };
     }
   }
 
-  /**
-   * モックレスポンスを生成（開発・フォールバック用）
-   */
-  private getMockResponse(request: CareerAdviceRequest): Promise<CareerAdviceResponse> {
-    // 最後のユーザーメッセージを取得
-    const lastUserMessage = request.messages
-      .filter(msg => msg.role === 'user')
-      .pop()?.content || '';
-
-    const responses = this.generateMockResponses(lastUserMessage);
-    
-    // ランダムに遅延を追加してリアルな感覚を演出
-    const delay = Math.random() * 1500 + 500; // 0.5-2秒の遅延
-    
-    return new Promise(resolve => {
-      setTimeout(() => {
-        resolve(responses);
-      }, delay);
-    });
-  }
-
-  /**
-   * メッセージに応じたモックレスポンスを生成
-   */
-  private generateMockResponses(userMessage: string): CareerAdviceResponse {
-    const message = userMessage.toLowerCase();
-
-    // 職業別の詳細情報
-    if (message.includes('webデザイナー') || message.includes('webデザイン')) {
-      return {
-        message: "Webデザイナーは、ウェブサイトやWebアプリケーションの見た目やユーザー体験をデザインする職業です。\n\n【主な仕事内容】\n・ウェブサイトのレイアウト・デザイン作成\n・UI/UXデザインの設計\n・HTML/CSS/JavaScriptでのコーディング\n・クライアントとの打ち合わせ・提案\n\n【年収】300万円～700万円（経験により大幅に変動）\n\n【必要スキル】\n・Adobe Creative Suite（Photoshop、Illustrator等）\n・HTML/CSS/JavaScript\n・デザイン理論・色彩理論\n・コミュニケーション能力\n\n【向いている人】\n・創造性とアート感覚がある\n・最新技術やトレンドに敏感\n・細かい作業に集中できる\n・ユーザーの立場で考えられる\n\nWebデザイナーを目指すなら、まずはPhotoshopとHTML/CSSの基礎から始めることをおすすめします！",
-        suggestedProfessions: ["プログラマー", "ゲームクリエイター", "動画編集者"],
-        nextQuestions: ["デザインやクリエイティブな作業は好きですか？", "プログラミングに興味はありますか？", "フリーランスと会社員、どちらに興味がありますか？"],
-        shouldRecommendDiagnosis: false
-      };
-    }
-
-    if (message.includes('プログラマー') || message.includes('プログラミング')) {
-      return {
-        message: "プログラマーは、コンピューターソフトウェアやアプリケーションを作る技術職です。\n\n【主な仕事内容】\n・システム開発・プログラミング\n・バグ修正・テスト\n・仕様書作成・設計\n・チームでの開発プロジェクト\n\n【年収】350万円～1000万円以上\n\n【必要スキル】\n・プログラミング言語（Java、Python、JavaScript等）\n・データベース操作\n・問題解決能力\n・論理的思考力\n\n【向いている人】\n・論理的に考えることが得意\n・新しい技術を学ぶのが好き\n・集中して作業に取り組める\n・問題を解決することに喜びを感じる\n\nIT業界は人手不足で、未経験からでも転職しやすい分野です。まずは基本的なプログラミング言語から始めてみませんか？",
-        suggestedProfessions: ["Webデザイナー", "データサイエンティスト", "ゲームクリエイター"],
-        nextQuestions: ["どのプログラミング言語に興味がありますか？", "Web開発とアプリ開発、どちらに興味がありますか？", "チームワークは得意ですか？"],
-        shouldRecommendDiagnosis: false
-      };
-    }
-
-    if (message.includes('看護師')) {
-      return {
-        message: "看護師は、医療チームの一員として患者さんのケアを行う専門職です。\n\n【主な仕事内容】\n・患者さんの健康状態の観察・記録\n・医師の診療補助\n・薬の管理・投与\n・患者さんや家族への説明・相談\n\n【年収】400万円～600万円\n\n【必要スキル】\n・医学・看護学の専門知識\n・コミュニケーション能力\n・体力・精神力\n・観察力・判断力\n\n【向いている人】\n・人の役に立ちたいという使命感\n・思いやりと共感力がある\n・責任感が強い\n・チームワークを大切にできる\n\n看護師は慢性的に人手不足で、就職率はほぼ100%です。人の命に関わる責任は重いですが、とてもやりがいのある職業です。",
-        suggestedProfessions: ["薬剤師", "カウンセラー・心理士", "教師・講師"],
-        nextQuestions: ["医療分野に興味はありますか？", "人のケアをすることに喜びを感じますか？", "夜勤や不規則な勤務は大丈夫ですか？"],
-        shouldRecommendDiagnosis: false
-      };
-    }
-
-    if (message.includes('カウンセラー') || message.includes('心理士') || message.includes('心理学')) {
-      return {
-        message: "カウンセラー・心理士は、心の悩みを抱えた人の相談に乗り、心理的支援を行う専門職です。\n\n【主な仕事内容】\n・個人やグループカウンセリング\n・心理検査・心理アセスメント\n・治療計画の立案・実施\n・危機介入・緊急対応\n・他職種との連携・コンサルテーション\n\n【年収】300万円～700万円（勤務先により大きく変動）\n\n【必要スキル】\n・心理学・カウンセリング理論の深い知識\n・傾聴・共感・受容のスキル\n・心理検査の実施・解釈能力\n・倫理観と守秘義務の徹底\n・継続的な自己研鑽・スーパービジョン\n\n【向いている人】\n・人の話を聞くことが好き\n・他者の気持ちに共感できる\n・冷静で客観的な判断ができる\n・忍耐強く、継続的に関わることができる\n・自分自身の心の健康を管理できる\n\n【活躍分野】\n・学校（スクールカウンセラー）\n・企業（産業カウンセラー）\n・病院・クリニック\n・心理相談室・開業\n\nメンタルヘルスへの関心が高まる中、需要が増加している分野です。公認心理師や臨床心理士の資格取得には大学院での専門教育が必要です。",
-        suggestedProfessions: ["教師・講師", "看護師", "薬剤師"],
-        nextQuestions: ["人の心理や感情に興味がありますか？", "じっくりと人の話を聞くことは得意ですか？", "学校・企業・医療、どの分野に興味がありますか？"],
-        shouldRecommendDiagnosis: false
-      };
-    }
-
-    if (message.includes('将来') || message.includes('わからない')) {
-      return {
-        message: "将来について悩むのは自然なことですね。まずは、あなたが普段興味を持って取り組んでいることや、得意だと感じることから考えてみましょう。\n\n例えば、人と話すのが好きなら営業やカウンセラー、物を作ることが好きなら技術系やクリエイティブ系の職業が向いているかもしれません。\n\n適性診断を受けることで、より具体的な方向性を見つけることができますよ。",
-        suggestedProfessions: ["マーケティング・営業職", "Webデザイナー", "カウンセラー・心理士"],
-        nextQuestions: ["普段どんなことに興味がありますか？", "得意だと思うことはありますか？", "どんな働き方がしたいですか？"],
-        shouldRecommendDiagnosis: true
-      };
-    }
-
-    if (message.includes('転職')) {
-      return {
-        message: "転職をお考えなんですね。現在のお仕事で培ったスキルや経験を活かせる職業を見つけることが重要です。\n\n転職を成功させるためには、自分の強みを明確にし、それを新しい職場でどう活かせるかを具体的に説明できることが大切です。\n\n今の仕事で何にやりがいを感じ、何に不満を感じているかを整理してみませんか？",
-        suggestedProfessions: ["中小企業診断士", "ファイナンシャルプランナー", "プログラマー"],
-        nextQuestions: ["現在のお仕事は何をされていますか？", "転職で何を重視したいですか？", "どんなスキルをお持ちですか？"],
-        shouldRecommendDiagnosis: false
-      };
-    }
-
-    if (message.includes('学生') || message.includes('就職')) {
-      return {
-        message: "就職活動は人生の大きな節目ですね。学生時代に学んだことや、アルバイトでの経験、そして何より自分の興味関心を大切にして職業を選ぶことをおすすめします。\n\n業界研究も重要ですが、まずは自分がどんな働き方をしたいか、どんな価値観を大切にしたいかを明確にすることから始めましょう。\n\n適性診断で客観的に自分の特性を知ることも、就職活動の強い味方になりますよ。",
-        suggestedProfessions: ["プログラマー", "看護師", "教師・講師"],
-        nextQuestions: ["どんな分野を学んでいますか？", "将来どんな働き方をしたいですか？", "人と関わる仕事と、黙々と作業する仕事、どちらが好きですか？"],
-        shouldRecommendDiagnosis: true
-      };
-    }
-
-    // デフォルトレスポンス
-    return {
-      message: "ご相談ありがとうございます。進路について考えるのは素晴らしいことですね。\n\nあなたの状況をもう少し詳しく教えていただけますか？現在の状況（学生・社会人・転職検討中など）や、どんなことに興味がおありか、お聞かせください。\n\nそれに基づいて、より具体的で役立つアドバイスをさせていただきます。",
-      suggestedProfessions: [],
-      nextQuestions: ["現在の状況を教えてください", "どんなことに興味がありますか？", "理想の働き方はありますか？"],
-      shouldRecommendDiagnosis: false
-    };
-  }
 
   /**
    * システムプロンプトを構築
    */
   private buildSystemPrompt(): string {
     return `あなたは「ため職」という職業適性診断サービスの進路相談AIアシスタントです。
+以下の28の職業から適切な職業を提案し、具体的で実践的なアドバイスを提供してください。
 
-【あなたの役割】
-- 学生や社会人の進路・転職に関する悩みを親身に聞き、具体的で実用的なアドバイスを提供する
-- 28の職業データベース（技術・クリエイティブ系、ビジネス・金融系、医療・福祉・教育系、サービス・接客系、専門職・士業）と連携した提案
-- 適切なタイミングで本格的な適性診断への誘導
+【対応職業一覧】
+プログラマー、Webデザイナー、グラフィックデザイナー、公認会計士、税理士、建設業、製造業、起業家、経営コンサルタント、営業職、建築士、保育士、看護師、教師、社会福祉士、カウンセラー・心理士、研究者、データサイエンティスト、マーケティング、広告・PR、エンジニア、医師、薬剤師、獣医師、弁護士、公務員、金融、不動産
 
-【利用可能な職業カテゴリー】
-1. 技術・クリエイティブ系: プログラマー、Webデザイナー、データサイエンティスト、ゲームクリエイター、動画編集者
-2. ビジネス・金融系: マーケティング・営業職、中小企業診断士、ファイナンシャルプランナー、投資銀行員
-3. 医療・福祉・教育系: 看護師、薬剤師、教師・講師、カウンセラー・心理士
-4. サービス・接客系: 美容師・理容師、シェフ・調理師、ホテル・観光業、スポーツトレーナー
-5. 専門職・士業: 公認会計士、弁護士、税理士、建築士、行政書士
+【回答方針】
+1. 相談者の状況を理解し共感を示す
+2. 具体的な職業を1-3個提案
+3. その理由を明確に説明
+4. 必要なスキルやキャリアパスを説明
+5. 次のステップを具体的に提示
+6. 親しみやすく励ます口調で回答
 
-【対応方針】
-- 温かみのある、親しみやすい語調で応答
+【注意事項】
+- 回答は400文字以内で簡潔にまとめる
 - 具体的で実行可能なアドバイスを提供
-- ユーザーの状況に応じて段階的に質問を深掘り
-- 職業提案時は年収・必要スキル・キャリアパス等の具体的情報を含める
-- 迷いが深い場合は「適性診断」の受診を自然に提案
-
-【回答形式】
-JSON形式で以下の構造で回答してください：
-{
-  "message": "ユーザーへの具体的なアドバイス（300-500文字）",
-  "suggestedProfessions": ["提案する職業名1", "職業名2"],
-  "nextQuestions": ["深掘りのための質問1", "質問2"],
-  "shouldRecommendDiagnosis": false
-}`;
+- 年収や労働環境などの現実的な情報も含める
+- 適性診断の受診も適宜提案する`;
   }
 
   /**
@@ -278,15 +365,6 @@ JSON形式で以下の構造で回答してください：
     }
     
     return apiMessages;
-  }
-
-  /**
-   * メッセージ履歴をフォーマット（レガシー用）
-   */
-  private formatMessages(messages: ChatMessage[]): string {
-    return messages
-      .map(msg => `${msg.role === 'user' ? 'ユーザー' : 'アシスタント'}: ${msg.content}`)
-      .join('\n');
   }
 
   /**
