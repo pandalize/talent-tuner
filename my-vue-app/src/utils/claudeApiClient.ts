@@ -255,129 +255,63 @@ export class ClaudeApiClient {
         };
       }
 
-      // 本番環境ではPHPプロキシAPIを使用
+      // 開発環境ではNode.jsプロキシ、本番環境ではPHPプロキシを使用
       const apiUrl = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
-        ? this.baseUrl  // 開発環境: 直接Claude APIを呼び出し
+        ? '/api/chat-proxy'  // 開発環境: Node.jsプロキシ経由  
         : '/api/chat-proxy.php';   // 本番環境: PHPプロキシ経由
 
       console.log('API URL:', apiUrl);
       console.log('User message:', lastUserMessage);
 
-      let response;
-      
-      if (apiUrl === this.baseUrl) {
-        // 開発環境: 直接Claude APIを呼び出し
-        const systemPrompt = this.buildSystemPrompt();
-        const messages = this.buildMessages(request.messages, request.userProfile);
+      // プロキシ経由でAPIを呼び出し
+      const response = await fetch(apiUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          message: lastUserMessage,
+          sessionId: this.sessionStorage.sessionStartTime,  // セッション識別用
+          messageCount: this.sessionStorage.messageCount
+        })
+      });
 
-        response = await fetch(this.baseUrl, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'x-api-key': this.apiKey,
-            'anthropic-version': '2023-06-01'
-          },
-          body: JSON.stringify({
-            model: 'claude-3-5-haiku-20241022',  // コスト効率の良いHaikuモデル
-            max_tokens: ClaudeApiClient.RATE_LIMITS.MAX_OUTPUT_TOKENS,
-            system: systemPrompt,
-            messages: messages,
-            temperature: 0.7  // より自然な応答のため
-          })
-        });
-
-        if (!response.ok) {
-          throw new Error(`Claude API error: ${response.status}`);
-        }
-
-        const data = await response.json();
-        
-        // 使用状況を記録
-        this.recordUsage();
-        
-        return this.parseResponse(data.content[0].text);
-      } else {
-        // 本番環境: PHPプロキシ経由
-        response = await fetch(apiUrl, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            message: lastUserMessage,
-            sessionId: this.sessionStorage.sessionStartTime,  // セッション識別用
-            messageCount: this.sessionStorage.messageCount
-          })
-        });
-
-        if (!response.ok) {
-          throw new Error(`Proxy API error: ${response.status}`);
-        }
-
-        const data = await response.json();
-        
-        if (!data.success) {
-          // レート制限エラーの場合
-          if (data.error?.includes('rate limit')) {
-            return {
-              message: 'メッセージ送信制限に達しました。しばらくお待ちください。',
-              suggestedProfessions: [],
-              nextQuestions: [],
-              shouldRecommendDiagnosis: false
-            };
-          }
-          throw new Error(data.error || 'Unknown API error');
-        }
-
-        // 使用状況を記録
-        this.recordUsage();
-
-        return this.parseResponse(data.message);
+      if (!response.ok) {
+        throw new Error(`Proxy API error: ${response.status}`);
       }
+
+      const data = await response.json();
+      
+      if (!data.success) {
+        // レート制限エラーの場合
+        if (data.error?.includes('rate limit') || data.error?.includes('お待ち')) {
+          return {
+            message: data.error,
+            suggestedProfessions: [],
+            nextQuestions: [],
+            shouldRecommendDiagnosis: false
+          };
+        }
+        throw new Error(data.error || 'Unknown API error');
+      }
+
+      // 使用状況を記録
+      this.recordUsage();
+
+      return this.parseResponse(data.message);
     } catch (error) {
       console.error('API呼び出しエラー:', error);
       
-      // エラーの場合はモックレスポンスにフォールバック
-      console.log('エラーのため、モックレスポンスを使用します');
-      return this.getMockResponse(request);
+      // エラー時は運営者への問い合わせ案内を返す
+      return {
+        message: "申し訳ございません。一時的にサービスが利用できない状態です。\n\n技術的な問題が発生している可能性があります。お困りの場合は、以下までお問い合わせください：\n\n📧 pandalize.info@gmail.com\n\nご不便をおかけして申し訳ありません。",
+        suggestedProfessions: [],
+        nextQuestions: [],
+        shouldRecommendDiagnosis: false
+      };
     }
   }
 
-  /**
-   * モックレスポンスを生成（開発・フォールバック用）
-   */
-  private getMockResponse(request: CareerAdviceRequest): Promise<CareerAdviceResponse> {
-    // 最後のユーザーメッセージを取得
-    const lastUserMessage = request.messages
-      .filter(msg => msg.role === 'user')
-      .pop()?.content || '';
-
-    const responses = this.generateMockResponses(lastUserMessage);
-    
-    // ランダムに遅延を追加してリアルな感覚を演出
-    const delay = Math.random() * 1500 + 500; // 0.5-2秒の遅延
-    
-    return new Promise(resolve => {
-      setTimeout(() => {
-        resolve(responses);
-      }, delay);
-    });
-  }
-
-  /**
-   * メッセージに応じたモックレスポンスを生成
-   */
-  private generateMockResponses(userMessage: string): CareerAdviceResponse {
-    const message = userMessage.toLowerCase();
-
-    // デフォルトレスポンス
-    return {
-      message: "ご相談ありがとうございます。進路について考えるのは素晴らしいことですね。\n\nあなたの状況をもう少し詳しく教えていただけますか？現在の状況（学生・社会人・転職検討中など）や、どんなことに興味がおありか、お聞かせください。\n\nそれに基づいて、より具体的で役立つアドバイスをさせていただきます。",
-      suggestedProfessions: [],
-      nextQuestions: ["現在の状況を教えてください", "どんなことに興味がありますか？", "理想の働き方はありますか？"],
-      shouldRecommendDiagnosis: false
-    };
-  }
 
   /**
    * システムプロンプトを構築

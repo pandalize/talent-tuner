@@ -20,6 +20,13 @@ export default defineConfig({
   server: {
     fs: {
       allow: ['..']
+    },
+    proxy: {
+      '/api/chat-proxy': {
+        target: 'http://localhost:3001',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api\/chat-proxy/, '/chat')
+      }
     }
   },
   build: {
