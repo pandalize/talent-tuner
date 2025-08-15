@@ -51,7 +51,7 @@
   background-color: var(--text-dark, #333);
   color: var(--background-white, #fff);
   margin-top: auto;
-  @include mixins.section-padding;
+  padding: var(--space-lg) 0;
   width: 100%;
 }
 
@@ -59,20 +59,20 @@
   @include mixins.container(1200px);
   @include mixins.grid-auto-fit(200px);
   grid-template-columns: 2fr 1fr 1fr 1fr;
-  gap: 2rem;
+  gap: var(--space-md);
 }
 
 .footer-section h3 {
   color: var(--background-white, #fff);
   font-size: clamp(18px, 3vw, 24px);
-  margin-bottom: 1rem;
+  margin-bottom: var(--space-sm);
   font-weight: 700;
 }
 
 .footer-section h4 {
   color: var(--background-white, #fff);
   font-size: clamp(14px, 2.5vw, 18px);
-  margin-bottom: 1rem;
+  margin-bottom: var(--space-sm);
   font-weight: 600;
 }
 
@@ -88,7 +88,7 @@
 }
 
 .footer-section li {
-  margin-bottom: 0.5rem;
+  margin-bottom: var(--space-xs);
 }
 
 .footer-section a {
@@ -105,8 +105,8 @@
 
 .footer-bottom {
   max-width: 1200px;
-  margin: 2rem auto 0;
-  padding-top: 2rem;
+  margin: var(--space-md) auto 0;
+  padding-top: var(--space-md);
   border-top: 1px solid #555;
   text-align: center;
 }
@@ -118,42 +118,42 @@
 }
 
 // レスポンシブデザイン
-@include mixins.respond-to('desktop') {
+@media (max-width: 1024px) {
   .footer-content {
     @include mixins.grid-columns(2);
-    gap: 1.5rem;
+    gap: var(--space-md);
   }
   
   .footer-section:first-child {
     grid-column: 1 / -1;
     text-align: center;
-    margin-bottom: 1rem;
+    margin-bottom: var(--space-sm);
   }
 }
 
-@include mixins.respond-to('tablet') {
+@media (max-width: 768px) {
   .app-footer {
-    @include mixins.section-padding(sm);
+    padding: var(--space-md) 0;
   }
   
   .footer-content {
     @include mixins.grid-columns(1);
-    gap: 1rem;
+    gap: var(--space-sm);
     text-align: center;
   }
   
   .footer-section {
     &:first-child {
       grid-column: auto;
-      margin-bottom: 1.5rem;
+      margin-bottom: var(--space-sm);
     }
     
-    margin-bottom: 1.5rem;
+    margin-bottom: var(--space-sm);
   }
   
   .footer-bottom {
-    margin-top: 1.5rem;
-    padding-top: 1.5rem;
+    margin-top: var(--space-sm);
+    padding-top: var(--space-sm);
   }
 }
 </style>
