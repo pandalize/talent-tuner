@@ -888,20 +888,26 @@ function formatTime(date: Date): string {
   padding: var(--space-md);
   border-top: 1px solid var(--border-light);
   background: var(--bg-primary);
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .input-container {
   display: flex;
   gap: var(--space-sm);
   align-items: flex-end;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .input-container textarea {
   flex: 1;
+  min-width: 0;
+  width: 100%;
   border: 2px solid var(--border-light);
   border-radius: 12px;
   padding: var(--space-sm) var(--space-md);
-  font-size: 0.9rem;
+  font-size: clamp(0.85rem, 2.5vw, 0.9rem);
   font-family: inherit;
   line-height: 1.4;
   resize: none;
@@ -909,6 +915,7 @@ function formatTime(date: Date): string {
   transition: border-color var(--transition-fast);
   background: var(--bg-primary);
   color: var(--text-primary);
+  box-sizing: border-box;
 }
 
 .input-container textarea:focus {
@@ -1035,14 +1042,26 @@ function formatTime(date: Date): string {
 @media (max-width: 480px) {
   .chat-header {
     padding: var(--space-sm);
+    width: 100vw;
+    max-width: 100vw;
+    box-sizing: border-box;
   }
 
   .chat-messages {
     padding: var(--space-sm);
+    width: 100vw;
+    max-width: 100vw;
   }
 
   .chat-input {
     padding: var(--space-sm);
+    width: 100vw;
+    max-width: 100vw;
+  }
+
+  .input-container {
+    width: 100%;
+    max-width: calc(100vw - var(--space-md));
   }
 
   .bot-info h3 {
@@ -1051,6 +1070,14 @@ function formatTime(date: Date): string {
 
   .input-container textarea {
     font-size: 16px; /* iOS zoom prevention */
+    width: 100%;
+    min-width: 0;
+  }
+
+  .send-btn {
+    flex-shrink: 0;
+    width: 44px;
+    height: 44px;
   }
 }
 </style>

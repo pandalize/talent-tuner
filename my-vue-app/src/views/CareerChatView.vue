@@ -69,13 +69,18 @@ function handleChatClose() {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: var(--space-md);
+  padding: 0;
+  width: 100vw;
+  max-width: 100vw;
+  box-sizing: border-box;
+  overflow-x: hidden;
 }
 
 .chat-container {
   width: 100%;
-  max-width: 900px;
-  margin: 0 auto;
+  max-width: min(900px, 100vw);
+  margin: 0;
+  box-sizing: border-box;
 }
 
 /* ==========================================================================
@@ -164,6 +169,14 @@ function handleChatClose() {
    レスポンシブデザイン
    ========================================================================== */
 @media (min-width: 769px) {
+  .career-chat-view {
+    padding: var(--space-md);
+  }
+  
+  .chat-container {
+    margin: 0 auto;
+  }
+  
   .chat-intro {
     display: none;
   }
@@ -177,10 +190,13 @@ function handleChatClose() {
   .career-chat-view {
     padding: 0;
     align-items: flex-start;
+    width: 100vw;
+    max-width: 100vw;
   }
 
   .chat-container {
-    max-width: none;
+    width: 100vw;
+    max-width: 100vw;
   }
 
   .intro-content {
