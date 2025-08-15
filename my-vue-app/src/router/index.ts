@@ -185,6 +185,15 @@ const router = createRouter({
       }
     },
     {
+      path: '/sitemap',
+      name: 'sitemap',
+      component: () => import('../views/SitemapView.vue'),
+      meta: {
+        title: 'サイトマップ | ため職',
+        description: 'ため職の全ページをカテゴリー別に整理。25ページの職業適性診断サイトの構造とコンテンツを一目で把握できます。目的のページを素早く見つけることができます。'
+      }
+    },
+    {
       path: '/404',
       name: 'notfound',
       component: () => import('../views/NotFoundView.vue'),

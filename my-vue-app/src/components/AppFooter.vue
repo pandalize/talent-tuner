@@ -22,6 +22,7 @@
         <ul>
           <li><router-link to="/contact">お問い合わせ</router-link></li>
           <li><router-link to="/company">運営者情報</router-link></li>
+          <li><router-link to="/sitemap">サイトマップ</router-link></li>
         </ul>
       </div>
       
