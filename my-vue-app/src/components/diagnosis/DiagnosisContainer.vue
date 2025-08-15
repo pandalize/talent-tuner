@@ -1,0 +1,279 @@
+<!--
+  診断機能のメインコンテナ
+  QuestionNavigatorから分離された軽量版
+-->
+<template>
+  <div class="diagnosis-container" :class="{ 'has-progress': !showResult && questions.length > 0 }">
+    <div class="diagnosis-content">
+      <!-- ローディング状態 -->
+      <div v-if="loading" class="loading-section">
+        <div class="loading-spinner"></div>
+        <h3>診断システムを初期化中</h3>
+        <p>最適な質問をご用意しています...</p>
+      </div>
+      
+      <!-- エラー状態 -->
+      <div v-else-if="error" class="error-section">
+        <div class="error-icon">
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"/>
+            <line x1="12" y1="8" x2="12" y2="12"/>
+            <line x1="12" y1="16" x2="12.01" y2="16"/>
+          </svg>
+        </div>
+        <h3>データの読み込みに失敗しました</h3>
+        <p>{{ error }}</p>
+        <button @click="loadConfig" class="btn reload-button">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M3 12a9 9 0 019-9 9.75 9.75 0 016.74 2.74L21 8"/>
+            <path d="M21 3v5h-5"/>
+            <path d="M21 12a9 9 0 01-9 9 9.75 9.75 0 01-6.74-2.74L3 16"/>
+            <path d="M3 21v-5h5"/>
+          </svg>
+          再読み込み
+        </button>
+      </div>
+      
+      <!-- メインコンテンツ -->
+      <div v-if="!loading && !error">
+        <!-- 診断リセットボタン（開発・テスト用） -->
+        <div v-if="!showResult" class="reset-section">
+          <button @click.prevent="handleResetDiagnosis" class="btn reset-button" type="button">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M3 12a9 9 0 019-9 9.75 9.75 0 016.74 2.74L21 8"/>
+              <path d="M21 3v5h-5"/>
+              <path d="M21 12a9 9 0 01-9 9 9.75 9.75 0 01-6.74-2.74L3 16"/>
+              <path d="M3 21v-5h5"/>
+            </svg>
+            診断をリセット
+          </button>
+        </div>
+        
+        <!-- 質問表示コンポーネント -->
+        <QuestionDisplay 
+          v-if="!showResult && currentQuestion" 
+          :question="currentQuestion"
+          :questionIndex="currentQuestionIndex"
+          :totalQuestions="questions.length"
+          :answers="answers"
+          @select-rating="handleSelectRating"
+          @next-question="goToNextQuestion"
+          @previous-question="goToPreviousQuestion"
+          @calculate-result="calculateResult"
+        />
+        
+        <!-- 結果表示コンポーネント -->
+        <ResultDisplay 
+          v-if="showResult"
+          :professions="displayedProfessions"
+          :maxCategoryScore="maxCategoryScore"
+          :totalQuestions="questions.length"
+          @reset-diagnosis="handleResetDiagnosis"
+          @go-home="goHome"
+        />
+      </div>
+    </div>
+    
+    <!-- プログレス表示（質問中のみ） -->
+    <ProgressIndicator 
+      v-if="!showResult && questions.length > 0"
+      :answeredCount="getAnsweredQuestionsCount()"
+      :totalCount="questions.length"
+    />
+  </div>
+</template>
+
+<script setup lang="ts">
+import { onMounted } from 'vue'
+import { useRouter } from 'vue-router'
+import { useDiagnosis } from '../../composables/useDiagnosis'
+import QuestionDisplay from './QuestionDisplay.vue'
+import ResultDisplay from './ResultDisplay.vue'  
+import ProgressIndicator from './ProgressIndicator.vue'
+
+const router = useRouter()
+
+// 診断状態管理
+const {
+  // 状態
+  loading,
+  error,
+  showResult,
+  questions,
+  currentQuestion,
+  currentQuestionIndex,
+  answers,
+  displayedProfessions,
+  maxCategoryScore,
+  
+  // 関数
+  loadConfig,
+  selectOptionRating,
+  getAnsweredQuestionsCount,
+  goToNextQuestion,
+  goToPreviousQuestion,
+  calculateResult,
+  resetDiagnosis
+} = useDiagnosis()
+
+// === イベントハンドラー ===
+function handleSelectRating(questionId: string, optionLabel: string, rating: number) {
+  selectOptionRating(questionId, optionLabel, rating)
+}
+
+function handleResetDiagnosis() {
+  const userConfirmed = confirm('診断データをすべてリセットしますか？\n※この操作は元に戻せません。')
+  
+  if (userConfirmed) {
+    try {
+      resetDiagnosis()
+      alert('診断データがリセットされました。')
+    } catch (error) {
+      console.error('Reset failed:', error)
+      alert('リセット中にエラーが発生しました。')
+    }
+  }
+}
+
+function goHome() {
+  router.push('/')
+}
+
+// === 初期化 ===
+onMounted(() => {
+  loadConfig()
+})
+</script>
+
+<style lang="scss" scoped>
+@use '@/assets/scss/mixins.scss' as mixins;
+
+// 基本レイアウト
+.diagnosis-container {
+  @include mixins.flex-center;
+  width: 100%;
+  min-height: calc(100vh - 80px);
+  background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+  flex-direction: column;
+  padding: var(--space-md);
+  overflow-x: hidden;
+}
+
+.diagnosis-content {
+  @include mixins.container(900px);
+  @include mixins.card-base;
+  @include mixins.card-shadow(lg);
+  @include mixins.card-padding(lg);
+  margin-bottom: var(--space-lg);
+  position: relative;
+}
+
+// ローディング & エラーセクション
+.loading-section {
+  @include mixins.section-padding;
+  text-align: center;
+  color: var(--text-primary);
+
+  h3 {
+    font-family: var(--font-heading);
+    font-size: var(--fs-h3);
+    color: var(--primary-navy);
+    margin-bottom: var(--space-sm);
+    font-weight: 600;
+  }
+
+  p {
+    color: var(--text-secondary);
+    font-size: var(--fs-body);
+  }
+}
+
+.loading-spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid var(--bg-tertiary);
+  border-top: 3px solid var(--accent-blue);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: 0 auto var(--space-md);
+
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+}
+
+.error-section {
+  @include mixins.section-padding;
+  text-align: center;
+  color: #dc3545;
+
+  h3 {
+    font-family: var(--font-heading);
+    font-size: var(--fs-h3);
+    margin-bottom: var(--space-sm);
+    font-weight: 600;
+  }
+
+  p {
+    color: var(--text-secondary);
+    margin-bottom: var(--space-lg);
+  }
+}
+
+.error-icon {
+  margin-bottom: var(--space-md);
+  color: #dc3545;
+}
+
+.reload-button {
+  @include mixins.button-primary;
+}
+
+.reset-section {
+  text-align: center;
+  padding: var(--space-md);
+  border-bottom: 1px solid var(--border-light);
+  margin-bottom: var(--space-lg);
+}
+
+.reset-button {
+  @include mixins.button-base;
+  background: #f39c12;
+  color: white;
+  font-size: var(--fs-small);
+  padding: var(--space-xs) var(--space-md);
+
+  &:hover {
+    background: #e67e22;
+    transform: translateY(-1px);
+  }
+}
+
+// プログレスバーが表示される時のみ下部パディングを追加
+.diagnosis-container.has-progress {
+  padding-bottom: 100px;
+}
+
+// レスポンシブデザイン
+@include mixins.respond-to('tablet') {
+  .diagnosis-container {
+    padding: var(--space-md) var(--space-sm);
+  }
+
+  .diagnosis-content {
+    @include mixins.card-padding(lg);
+  }
+}
+
+@include mixins.respond-to('mobile') {
+  .diagnosis-container {
+    padding: 1rem;
+  }
+  
+  .diagnosis-content {
+    width: 100%;
+    padding: 1rem;
+  }
+}
+</style>

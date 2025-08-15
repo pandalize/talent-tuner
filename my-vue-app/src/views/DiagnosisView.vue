@@ -1,15 +1,15 @@
 <template>
-  <div class="diagnosis-container">
-    <QuestionNavigator />
+  <div class="diagnosis-view">
+    <DiagnosisContainer />
   </div>
 </template>
 
 <script setup lang="ts">
-import QuestionNavigator from '../components/QuestionNavigator.vue'
+import DiagnosisContainer from '../components/diagnosis/DiagnosisContainer.vue'
 </script>
 
 <style scoped>
-.diagnosis-container {
+.diagnosis-view {
   width: 100%;
 }
 </style>
