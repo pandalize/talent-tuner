@@ -477,9 +477,10 @@ function formatTime(date: Date): string {
   height: 600px;
   max-height: 80vh;
   width: 100%;
-  max-width: 800px;
+  max-width: min(800px, calc(100vw - var(--space-md)));
   border-radius: 16px;
   overflow: hidden;
+  box-sizing: border-box;
 }
 
 /* ==========================================================================
@@ -543,28 +544,36 @@ function formatTime(date: Date): string {
   @include mixins.flex-column(var(--space-md));
   flex: 1;
   overflow-y: auto;
+  overflow-x: hidden;
   padding: var(--space-md);
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .message {
   @include mixins.flex-row;
   @include mixins.fade-in;
-  max-width: 80%;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .user-message {
-  align-self: flex-end;
+  justify-content: flex-end;
 }
 
 .bot-message {
-  align-self: flex-start;
+  justify-content: flex-start;
 }
 
 .message-content {
   @include mixins.card-base;
   @include mixins.card-padding(sm);
+  max-width: min(70%, calc(100% - var(--space-md)));
   border-radius: 18px;
   position: relative;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  box-sizing: border-box;
 }
 
 .user-message .message-content {
@@ -600,15 +609,23 @@ function formatTime(date: Date): string {
 }
 
 .quick-options {
-  @include mixins.flex-column(var(--space-xs));
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2%;
+  width: 100%;
 }
 
 .quick-option-btn {
   @include mixins.button-base;
   @include mixins.button-outline;
+  flex: 1 1 calc(48% - 1%);
+  min-width: 0;
   border-radius: 12px;
-  text-align: left;
-  font-size: 0.9rem;
+  text-align: center;
+  font-size: clamp(0.75rem, 2.5vw, 0.9rem);
+  word-wrap: break-word;
+  white-space: normal;
+  box-sizing: border-box;
 }
 
 .quick-option-btn:hover {
@@ -634,15 +651,21 @@ function formatTime(date: Date): string {
 }
 
 .profession-cards {
-  @include mixins.flex-column(var(--space-xs));
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2%;
+  width: 100%;
 }
 
 .profession-card {
   @include mixins.flex-between;
   @include mixins.card-base;
   @include mixins.card-padding(sm);
+  flex: 1 1 calc(48% - 1%);
+  min-width: 0;
   border-radius: 8px;
   cursor: pointer;
+  box-sizing: border-box;
 }
 
 .profession-card:hover {
@@ -679,16 +702,22 @@ function formatTime(date: Date): string {
 }
 
 .question-buttons {
-  @include mixins.flex-row(var(--space-xs));
-  flex-wrap: wrap;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  width: 100%;
 }
 
 .question-btn {
   @include mixins.button-base;
   @include mixins.button-outline;
-  padding: var(--space-xs) var(--space-sm);
-  border-radius: 20px;
-  font-size: 0.85rem;
+  width: 100%;
+  padding: var(--space-sm) var(--space-md);
+  border-radius: 8px;
+  text-align: left;
+  font-size: clamp(0.8rem, 2.5vw, 0.85rem);
+  word-wrap: break-word;
+  box-sizing: border-box;
 }
 
 .question-btn:hover {
@@ -963,14 +992,34 @@ function formatTime(date: Date): string {
     height: 100vh;
     max-height: 100vh;
     border-radius: 0;
+    width: 100vw;
+    max-width: 100vw;
   }
 
-  .message {
-    max-width: 90%;
+  .chat-messages {
+    padding: var(--space-sm) var(--space-sm);
   }
 
-  .profession-cards {
-    gap: var(--space-sm);
+  .message-content {
+    max-width: min(85%, calc(100vw - var(--space-lg)));
+    padding: var(--space-sm) var(--space-md);
+    font-size: clamp(0.875rem, 3vw, 1rem);
+  }
+
+  .quick-option-btn {
+    flex: 1 1 100%;
+    min-height: 44px;
+    padding: var(--space-sm) var(--space-md);
+  }
+
+  .profession-card {
+    flex: 1 1 100%;
+    min-height: 48px;
+  }
+
+  .question-btn {
+    min-height: 44px;
+    padding: var(--space-sm) var(--space-md);
   }
 
   .recommendation-actions {
