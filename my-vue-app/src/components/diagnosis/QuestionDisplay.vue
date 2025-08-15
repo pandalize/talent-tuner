@@ -252,16 +252,20 @@ function handleSelectRating(questionId: string, optionLabel: string, rating: num
 }
 
 .scale-buttons {
-  @include mixins.flex-between;
-  gap: var(--space-xs);
-  max-width: 300px;
+  display: flex;
+  justify-content: space-between;
+  gap: 2%;
+  width: 100%;
+  max-width: 400px;
   margin: 0 auto;
 }
 
 .rating-button {
   @include mixins.flex-center;
-  width: 50px;
-  height: 50px;
+  flex: 1;
+  aspect-ratio: 1;
+  min-width: 0;
+  max-width: 60px;
   border-radius: 50%;
   border: 2px solid var(--border-light);
   background: var(--bg-primary);
@@ -269,7 +273,7 @@ function handleSelectRating(questionId: string, optionLabel: string, rating: num
   cursor: pointer;
   transition: all var(--transition-fast);
   font-weight: 600;
-  font-size: 1rem;
+  font-size: clamp(0.75rem, 3vw, 1rem);
   pointer-events: auto;
   position: relative;
   z-index: 10;
@@ -337,13 +341,12 @@ function handleSelectRating(questionId: string, optionLabel: string, rating: num
   }
   
   .scale-buttons {
-    max-width: 280px;
+    gap: 1.5%;
   }
   
   .rating-button {
-    width: 45px;
-    height: 45px;
-    font-size: 0.875rem;
+    max-width: 55px;
+    font-size: clamp(0.75rem, 2.8vw, 0.875rem);
   }
 }
 
@@ -393,7 +396,7 @@ function handleSelectRating(questionId: string, optionLabel: string, rating: num
   }
   
   .option-item {
-    @include mixins.card-padding(md);
+    @include mixins.card-padding(sm);
     border-radius: 12px;
     background: linear-gradient(135deg, var(--bg-primary), var(--bg-secondary));
     width: 100%;
@@ -419,21 +422,22 @@ function handleSelectRating(questionId: string, optionLabel: string, rating: num
   }
 
   .scale-buttons {
-    max-width: calc(100% - var(--space-md));
-    gap: 6px;
-    justify-content: center;
+    display: flex;
+    justify-content: space-between;
+    gap: 2%;
+    width: 100%;
     padding: 0;
     flex-wrap: nowrap;
-    margin: 0 auto;
   }
   
   .rating-button {
-    width: 42px;
-    height: 42px;
-    font-size: 0.875rem;
+    flex: 1 1 0;
+    aspect-ratio: 1;
+    min-width: 0;
+    max-width: 50px;
+    font-size: clamp(0.7rem, 2.5vw, 0.875rem);
     font-weight: 700;
     border-width: 2px;
-    flex-shrink: 0;
     
     &:active {
       transform: scale(0.9);
@@ -457,17 +461,17 @@ function handleSelectRating(questionId: string, optionLabel: string, rating: num
     font-size: 0.75rem;
     font-weight: 500;
     margin-bottom: var(--space-sm);
-    padding: 0 var(--space-xs);
+    padding: 0;
     
     .scale-label-left,
     .scale-label-right {
-      padding: var(--space-xs);
+      padding: 2px 4px;
       background: rgba(59, 130, 246, 0.05);
-      border-radius: 6px;
+      border-radius: 4px;
       border: 1px solid rgba(59, 130, 246, 0.1);
-      font-size: 0.6875rem;
+      font-size: 0.625rem;
       text-align: center;
-      max-width: 45%;
+      max-width: 40%;
       word-wrap: break-word;
       line-height: 1.2;
     }
