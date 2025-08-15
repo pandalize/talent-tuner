@@ -267,14 +267,26 @@ function recordUsage() {
 function getApiKey() {
     logDebug("APIキー取得開始");
     
+    // デバッグ: ディレクトリ情報をログ出力
+    logDebug("ディレクトリ情報", [
+        '__DIR__' => __DIR__,
+        'DOCUMENT_ROOT' => $_SERVER['DOCUMENT_ROOT'] ?? 'not_set',
+        'SCRIPT_FILENAME' => $_SERVER['SCRIPT_FILENAME'] ?? 'not_set',
+        'get_current_user()' => get_current_user(),
+        'getcwd()' => getcwd()
+    ]);
+    
     // 1. 複数のパスパターンで.envファイルを検索
     $envPaths = [
-        __DIR__ . '/../../.env',                    // 通常のパス
-        __DIR__ . '/../../../.env',                 // 一つ上のディレクトリ
-        __DIR__ . '/../../../../.env',              // さらに上のディレクトリ
+        __DIR__ . '/.env',                          // 同じディレクトリ
+        __DIR__ . '/../.env',                       // 一つ上（public/）
+        __DIR__ . '/../../.env',                    // 二つ上（pandalize.com/）
+        __DIR__ . '/../../../.env',                 // 三つ上
+        __DIR__ . '/../../../../.env',              // 四つ上
         $_SERVER['DOCUMENT_ROOT'] . '/.env',        // ドキュメントルート
         dirname($_SERVER['SCRIPT_FILENAME']) . '/../../.env',  // スクリプトベース
         '/home/' . get_current_user() . '/public_html/.env',   // 一般的な共用サーバー構造
+        '/home/' . get_current_user() . '/public_html/pandalize.com/.env',   // ドメイン直下
         '/.env',                                    // ルートディレクトリ
         getcwd() . '/.env'                         // 現在の作業ディレクトリ
     ];
