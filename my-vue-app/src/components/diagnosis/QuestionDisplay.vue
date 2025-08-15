@@ -216,6 +216,8 @@ function handleSelectRating(questionId: string, optionLabel: string, rating: num
 .option-header {
   @include mixins.flex-row(var(--space-md));
   align-items: flex-start;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .option-label {
@@ -229,14 +231,18 @@ function handleSelectRating(questionId: string, optionLabel: string, rating: num
   font-weight: 600;
   font-size: 0.875rem;
   flex-shrink: 0;
+  margin-right: var(--space-md);
 }
 
 .option-text {
   flex: 1;
+  min-width: 0;
   font-size: var(--fs-body);
   color: var(--text-primary);
   line-height: 1.6;
   font-weight: 500;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
 // 評価スケール
@@ -322,7 +328,21 @@ function handleSelectRating(questionId: string, optionLabel: string, rating: num
 }
 
 // レスポンシブデザイン
-@include mixins.respond-to('tablet') {
+// デスクトップ（1024px以上）は元のレイアウト維持
+@include mixins.respond-to('desktop') {
+  .option-header {
+    @include mixins.flex-row(var(--space-md));
+    align-items: flex-start;
+    text-align: left;
+    
+    .option-label {
+      margin-right: var(--space-md);
+    }
+  }
+}
+
+// タブレット（768px-1023px）
+@media (min-width: 768px) and (max-width: 1023px) {
   .question-title {
     font-size: 1.5rem;
   }
@@ -338,6 +358,11 @@ function handleSelectRating(questionId: string, optionLabel: string, rating: num
   .option-header {
     @include mixins.flex-column(var(--space-sm));
     text-align: center;
+    
+    .option-label {
+      margin-right: 0;
+      align-self: center;
+    }
   }
   
   .scale-buttons {
