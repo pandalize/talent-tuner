@@ -125,28 +125,64 @@ const confirmLanguageChange = () => {
 }
 
 const executeLanguageChange = (newLocale: SupportedLocale) => {
-  // 言語を変更
-  changeLanguage(newLocale)
-  currentLocale.value = newLocale
+  try {
+    // 言語を変更
+    changeLanguage(newLocale)
+    currentLocale.value = newLocale
 
-  // URLを言語別パスに更新
-  const currentPath = router.currentRoute.value.path
-  const newPath = getLocalizedPath(currentPath, newLocale)
-  
-  if (newPath !== currentPath) {
-    router.push(newPath)
+    // 現在のルート名を取得
+    const currentRoute = router.currentRoute.value
+    const routeName = currentRoute.name as string
+    
+    // パラメータがあれば保持
+    const params = currentRoute.params
+    
+    // 言語切り替え時は基本的に同じページに留まる
+    // 新しい言語でのルート名を生成
+    let targetRouteName = routeName
+    
+    // 既に言語プレフィックスが付いている場合は除去
+    if (routeName && (routeName.endsWith('-en') || routeName.endsWith('-zh'))) {
+      targetRouteName = routeName.replace(/-[a-z]{2}$/, '')
+    }
+    
+    // 新しい言語のルート名を生成（日本語以外の場合）
+    if (newLocale !== 'ja') {
+      targetRouteName = `${targetRouteName}-${newLocale}`
+    }
+    
+    // ルートが存在するかチェック
+    const hasRoute = router.hasRoute(targetRouteName)
+    
+    if (hasRoute) {
+      // 存在する場合はナビゲート
+      router.push({ name: targetRouteName, params })
+    } else {
+      // 存在しない場合はホームページに戻る
+      const homeName = newLocale === 'ja' ? 'home' : `home-${newLocale}`
+      if (router.hasRoute(homeName)) {
+        router.push({ name: homeName })
+      } else {
+        // フォールバック: 基本ホームページ
+        router.push('/')
+      }
+    }
+
+    // Google Analytics言語変更イベント（もしあれば）
+    if (window.gtag) {
+      window.gtag('event', 'language_change', {
+        'language': newLocale,
+        'previous_language': locale.value
+      })
+    }
+
+    // 成功通知
+    showSuccessMessage(newLocale)
+  } catch (error) {
+    console.error('Language change failed:', error)
+    // エラー時はホームページにリダイレクト
+    router.push('/')
   }
-
-  // Google Analytics言語変更イベント（もしあれば）
-  if (window.gtag) {
-    window.gtag('event', 'language_change', {
-      'language': newLocale,
-      'previous_language': locale.value
-    })
-  }
-
-  // 成功通知
-  showSuccessMessage(newLocale)
 }
 
 const closeModal = () => {
@@ -211,29 +247,75 @@ onMounted(() => {
 .language-btn {
   @include mixins.flex-row(0.25rem);
   @include mixins.button-base;
-  @include mixins.button-outline;
   padding: 0.5rem 0.75rem;
   font-size: 0.85rem;
+  border: 2px solid rgba(59, 130, 246, 0.2);
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(10px);
+  position: relative;
+  overflow: hidden;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.1), transparent);
+    transition: left 0.4s ease;
+  }
 }
 
 .language-btn:hover {
-  background: var(--bg-secondary, #f8f9fa);
-  border-color: var(--primary-blue, #007bff);
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(16, 185, 129, 0.08));
+  border-color: var(--accent-blue);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
+  
+  &::before {
+    left: 100%;
+  }
 }
 
 .language-btn.active {
-  background: var(--primary-blue, #007bff);
+  background: linear-gradient(135deg, var(--accent-blue), var(--primary-blue));
   color: white;
-  border-color: var(--primary-blue, #007bff);
+  border-color: var(--accent-blue);
+  box-shadow: 0 4px 16px rgba(59, 130, 246, 0.3);
+  transform: translateY(-1px);
+  
+  &::before {
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  }
+  
+  &:hover::before {
+    left: 100%;
+  }
 }
 
 .language-btn .flag {
-  font-size: 1.1em;
+  font-size: 1.2em;
+  transition: all var(--transition-fast);
 }
 
 .language-btn .code {
-  font-weight: 500;
+  font-weight: 600;
   font-size: 0.8rem;
+  letter-spacing: 0.5px;
+  transition: all var(--transition-fast);
+}
+
+.language-btn:hover .flag {
+  transform: scale(1.1);
+}
+
+.language-btn:hover .code {
+  color: var(--accent-blue);
+}
+
+.language-btn.active:hover .code {
+  color: white;
 }
 
 /* 確認モーダル */

@@ -128,8 +128,11 @@ const { home, nav, common } = useTranslation()
 // ヒーローセクション
 .hero-section {
   @include mixins.hero-section;
-  background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 50%, #f1f5f9 100%);
+  position: relative;
+  overflow: hidden;
   
+  // 動的な背景パターン
   &::before {
     content: '';
     position: absolute;
@@ -137,14 +140,65 @@ const { home, nav, common } = useTranslation()
     right: -50%;
     width: 200%;
     height: 200%;
-    background: radial-gradient(circle, rgba(52, 152, 219, 0.03) 0%, transparent 70%);
-    animation: pulse 20s ease-in-out infinite;
+    background: radial-gradient(circle at 30% 60%, rgba(59, 130, 246, 0.08) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(16, 185, 129, 0.06) 0%, transparent 50%),
+                radial-gradient(circle at 40% 80%, rgba(245, 158, 11, 0.04) 0%, transparent 50%);
+    animation: float 25s ease-in-out infinite;
+  }
+  
+  // 装飾的な幾何学模様
+  &::after {
+    content: '';
+    position: absolute;
+    top: 10%;
+    left: 10%;
+    width: 100px;
+    height: 100px;
+    background: linear-gradient(45deg, rgba(59, 130, 246, 0.1) 0%, transparent 100%);
+    border-radius: 50%;
+    animation: drift 20s ease-in-out infinite;
   }
 }
 
-@keyframes pulse {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.1); }
+// 新しいアニメーション
+@keyframes float {
+  0%, 100% { 
+    transform: translateX(0) translateY(0) rotate(0deg);
+    opacity: 0.6;
+  }
+  25% { 
+    transform: translateX(20px) translateY(-10px) rotate(90deg);
+    opacity: 0.8;
+  }
+  50% { 
+    transform: translateX(-10px) translateY(-20px) rotate(180deg);
+    opacity: 1;
+  }
+  75% { 
+    transform: translateX(-20px) translateY(10px) rotate(270deg);
+    opacity: 0.8;
+  }
+}
+
+@keyframes drift {
+  0%, 100% { 
+    transform: translate(0, 0) scale(1);
+  }
+  33% { 
+    transform: translate(30px, -20px) scale(1.1);
+  }
+  66% { 
+    transform: translate(-20px, 20px) scale(0.9);
+  }
+}
+
+@keyframes shimmer {
+  0% { 
+    background-position: -200% center; 
+  }
+  100% { 
+    background-position: 200% center; 
+  }
 }
 
 .hero-content {
@@ -161,9 +215,21 @@ const { home, nav, common } = useTranslation()
   font-size: var(--fs-h1);
   font-weight: 700;
   color: var(--primary-navy);
-  margin-bottom: var(--space-sm);
+  margin-bottom: var(--space-md);
   letter-spacing: -0.02em;
-  line-height: 1.2;
+  line-height: 1.1;
+  position: relative;
+  
+  // グラデーションテキスト効果
+  background: linear-gradient(135deg, var(--primary-navy) 0%, var(--accent-blue) 50%, var(--primary-navy) 100%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: shimmer 3s ease-in-out infinite;
+  
+  // テキストシャドウで深度を追加
+  filter: drop-shadow(0 2px 4px rgba(26, 35, 50, 0.15));
 }
 
 .hero-subtitle {
@@ -190,21 +256,73 @@ const { home, nav, common } = useTranslation()
 
 .feature-item {
   @include mixins.card-base;
-  @include mixins.card-padding(md);
+  @include mixins.card-padding(lg);
   @include mixins.card-shadow(sm);
+  position: relative;
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  transition: all var(--transition-normal);
+  border: 1px solid rgba(59, 130, 246, 0.1);
+  
+  // グラデーションボーダー効果
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    padding: 2px;
+    background: linear-gradient(135deg, var(--accent-blue), var(--accent-gold), var(--primary-blue));
+    border-radius: inherit;
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask-composite: exclude;
+    opacity: 0;
+    transition: opacity var(--transition-normal);
+  }
 
   &:hover {
-    @include mixins.card-shadow(md);
-    transform: translateY(-4px);
+    @include mixins.card-shadow(lg);
+    transform: translateY(-8px) scale(1.02);
+    border-color: transparent;
+    
+    &::before {
+      opacity: 1;
+    }
   }
 }
 
 .feature-number {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 3rem;
+  height: 3rem;
   font-family: var(--font-mono);
-  font-size: var(--fs-small);
-  color: var(--accent-blue);
-  font-weight: 500;
-  margin-bottom: var(--space-xs);
+  font-size: var(--fs-lg);
+  font-weight: 700;
+  color: white;
+  background: linear-gradient(135deg, var(--accent-blue) 0%, var(--primary-blue) 100%);
+  border-radius: var(--radius-round);
+  margin-bottom: var(--space-md);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+  position: relative;
+  
+  &::after {
+    content: '';
+    position: absolute;
+    inset: -2px;
+    background: linear-gradient(135deg, var(--accent-blue), var(--accent-gold));
+    border-radius: inherit;
+    z-index: -1;
+    opacity: 0;
+    transition: opacity var(--transition-fast);
+  }
+  
+  .feature-item:hover & {
+    transform: scale(1.1) rotate(5deg);
+    
+    &::after {
+      opacity: 0.3;
+    }
+  }
 }
 
 .feature-title {
@@ -247,16 +365,33 @@ const { home, nav, common } = useTranslation()
 }
 
 .btn-primary {
-  background: var(--primary-navy);
+  background: linear-gradient(135deg, var(--primary-navy) 0%, var(--accent-blue) 100%);
   color: white;
-  border-color: var(--primary-navy);
-}
-
-.btn-primary:hover {
-  background: var(--primary-blue);
-  border-color: var(--primary-blue);
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-md);
+  border: 2px solid transparent;
+  background-clip: padding-box;
+  position: relative;
+  overflow: hidden;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.6s;
+  }
+  
+  &:hover {
+    background: linear-gradient(135deg, var(--accent-blue) 0%, var(--primary-blue) 100%);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(59, 130, 246, 0.4);
+    
+    &::before {
+      left: 100%;
+    }
+  }
 }
 
 .btn-secondary {
@@ -271,16 +406,35 @@ const { home, nav, common } = useTranslation()
 }
 
 .btn-chat {
-  background: var(--accent-blue);
+  background: linear-gradient(135deg, var(--accent-gold) 0%, #d4aa00 100%);
   color: white;
-  border-color: var(--accent-blue);
-}
-
-.btn-chat:hover {
-  background: var(--primary-blue);
-  border-color: var(--primary-blue);
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-md);
+  border: 2px solid transparent;
+  position: relative;
+  overflow: hidden;
+  
+  &::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.3) 0%, transparent 70%);
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    transition: all 0.4s ease;
+  }
+  
+  &:hover {
+    background: linear-gradient(135deg, #d4aa00 0%, var(--accent-gold) 100%);
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 8px 25px rgba(184, 134, 11, 0.4);
+    
+    &::after {
+      width: 100px;
+      height: 100px;
+    }
+  }
 }
 
 .btn-icon {
