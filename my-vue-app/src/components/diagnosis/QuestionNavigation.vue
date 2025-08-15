@@ -87,19 +87,8 @@ const isLastQuestion = computed(() => {
   @include mixins.flex-between;
   gap: var(--space-md);
   align-items: center;
-  position: fixed;
-  bottom: var(--space-lg);
-  left: 50%;
-  transform: translateX(-50%);
-  width: calc(100% - var(--space-xl));
-  max-width: 900px;
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(248, 250, 252, 0.98) 100%);
-  backdrop-filter: blur(20px);
-  border: 1px solid var(--border-light);
-  border-radius: 16px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-  padding: var(--space-lg);
-  z-index: 100;
+  margin-top: var(--space-xl);
+  padding: var(--space-lg) 0;
 }
 
 .nav-button {
@@ -157,19 +146,6 @@ const isLastQuestion = computed(() => {
   }
 }
 
-// デスクトップでの固定ナビゲーション
-@include mixins.respond-to('desktop') {
-  .question-navigation {
-    bottom: var(--space-xl);
-    padding: var(--space-md) var(--space-lg);
-    border-radius: 12px;
-  }
-  
-  .nav-button {
-    padding: var(--space-sm) var(--space-lg);
-    font-size: 0.9375rem;
-  }
-}
 
 // レスポンシブデザイン
 @include mixins.respond-to('tablet') {
@@ -189,10 +165,8 @@ const isLastQuestion = computed(() => {
   }
   
   .question-navigation {
-    position: fixed;
-    bottom: var(--space-md);
-    border-radius: 12px;
-    padding: var(--space-md);
+    margin-top: var(--space-lg);
+    padding: var(--space-md) 0;
   }
 
   .progress-dots {
@@ -213,6 +187,7 @@ const isLastQuestion = computed(() => {
     padding: var(--space-lg) var(--space-lg) calc(var(--space-lg) + env(safe-area-inset-bottom));
     z-index: 100;
     gap: var(--space-md);
+    margin-top: 0;
   }
   
   .nav-button {

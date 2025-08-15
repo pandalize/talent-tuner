@@ -134,7 +134,6 @@ onMounted(() => {
   background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
   flex-direction: column;
   padding: var(--space-md);
-  padding-bottom: 140px;
   overflow-x: hidden;
 }
 
@@ -210,21 +209,13 @@ onMounted(() => {
 }
 
 
-// 全画面サイズで固定ナビゲーション分のスペース確保
-.diagnosis-container {
-  padding-bottom: 140px;
+// プログレスバーが表示される時のみ下部パディングを追加
+.diagnosis-container.has-progress {
+  padding-bottom: 120px;
   
-  &.has-progress {
-    padding-bottom: 160px;
-  }
-  
-  // モバイルでは更に大きなスペース確保
+  // モバイルでは固定ナビゲーション分のスペースを追加確保
   @media (max-width: 768px) {
     padding-bottom: 180px;
-    
-    &.has-progress {
-      padding-bottom: 200px;
-    }
   }
 }
 
@@ -241,20 +232,16 @@ onMounted(() => {
 
 @include mixins.respond-to('mobile') {
   .diagnosis-container {
-    padding: var(--space-sm);
-    padding-bottom: 180px;
+    padding: var(--space-sm) var(--space-sm) 140px var(--space-sm);
     min-height: 100vh;
     width: 100%;
     max-width: 100vw;
     overflow-x: hidden;
     box-sizing: border-box;
     
+    // QuestionDisplayが表示される時は、固定ナビゲーション分のスペースを確保
     &.has-question {
-      padding-bottom: 200px;
-    }
-    
-    &.has-progress {
-      padding-bottom: 220px;
+      padding-bottom: 180px;
     }
   }
   
