@@ -142,8 +142,10 @@ onMounted(() => {
   @include mixins.card-base;
   @include mixins.card-shadow(lg);
   @include mixins.card-padding(lg);
+  padding-bottom: 120px;
   margin-bottom: var(--space-lg);
   position: relative;
+  min-height: 500px;
 }
 
 // ローディング & エラーセクション
@@ -249,11 +251,13 @@ onMounted(() => {
     width: 100%;
     max-width: 100%;
     padding: var(--space-md);
+    padding-bottom: 140px;
     border-radius: 12px;
     background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
     margin-bottom: var(--space-lg);
     box-sizing: border-box;
+    min-height: 500px;
   }
 }
 </style>

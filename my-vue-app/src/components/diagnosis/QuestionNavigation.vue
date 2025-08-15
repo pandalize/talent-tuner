@@ -87,8 +87,17 @@ const isLastQuestion = computed(() => {
   @include mixins.flex-between;
   gap: var(--space-md);
   align-items: center;
-  margin-top: var(--space-xl);
-  padding: var(--space-lg) 0;
+  position: absolute;
+  bottom: var(--space-lg);
+  left: var(--space-lg);
+  right: var(--space-lg);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(248, 250, 252, 0.98) 100%);
+  backdrop-filter: blur(15px);
+  border: 1px solid var(--border-light);
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  padding: var(--space-md) var(--space-lg);
+  z-index: 10;
 }
 
 .nav-button {
@@ -167,6 +176,12 @@ const isLastQuestion = computed(() => {
   .question-navigation {
     margin-top: var(--space-lg);
     padding: var(--space-md) 0;
+    position: static;
+    background: none;
+    backdrop-filter: none;
+    border: none;
+    box-shadow: none;
+    border-radius: 0;
   }
 
   .progress-dots {
