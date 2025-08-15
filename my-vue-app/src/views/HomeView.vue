@@ -536,5 +536,251 @@ const { home, nav, common } = useTranslation()
   line-height: 1.6;
 }
 
-/* レスポンシブデザイン省略（既存と同じ） */
+/* ==========================================================================
+   レスポンシブデザイン - モバイル最適化
+   ========================================================================== */
+@media (max-width: 768px) {
+  .hero-content {
+    padding: var(--space-xl) var(--space-md);
+  }
+
+  .hero-title {
+    font-size: 2rem;
+    line-height: 1.2;
+    margin-bottom: var(--space-lg);
+  }
+
+  .hero-subtitle {
+    font-size: 1rem;
+    margin-bottom: var(--space-sm);
+  }
+
+  .hero-description {
+    font-size: 1.125rem;
+    margin-bottom: var(--space-xl);
+  }
+
+  .feature-grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-lg);
+    margin-bottom: var(--space-xl);
+  }
+
+  .feature-item {
+    padding: var(--space-lg);
+    border-radius: 16px;
+    background: linear-gradient(135deg, var(--bg-primary) 0%, rgba(248, 250, 252, 0.8) 100%);
+    border: 1px solid var(--border-light);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+
+  .feature-number {
+    width: 48px;
+    height: 48px;
+    font-size: 1.25rem;
+  }
+
+  .feature-title {
+    font-size: 1.375rem;
+    margin-bottom: var(--space-sm);
+  }
+
+  .feature-desc {
+    font-size: 1rem;
+    line-height: 1.7;
+  }
+
+  .action-buttons {
+    flex-direction: column;
+    gap: var(--space-md);
+    align-items: center;
+    margin-bottom: var(--space-xl);
+  }
+
+  .btn {
+    min-width: 280px;
+    justify-content: center;
+    padding: var(--space-md) var(--space-lg);
+    font-size: 1rem;
+    font-weight: 600;
+    border-radius: 12px;
+    
+    &.btn-primary {
+      order: 1;
+      background: linear-gradient(135deg, var(--accent-blue) 0%, var(--primary-blue) 100%);
+      box-shadow: 0 6px 20px rgba(59, 130, 246, 0.3);
+      min-height: 56px;
+      
+      &:active {
+        transform: translateY(-1px) scale(0.98);
+      }
+    }
+    
+    &.btn-chat {
+      order: 2;
+      min-height: 52px;
+    }
+    
+    &.btn-secondary {
+      order: 3;
+      min-height: 48px;
+      border-color: var(--border-light);
+      background: rgba(255, 255, 255, 0.8);
+    }
+  }
+
+  .btn-icon {
+    width: 24px;
+    height: 24px;
+  }
+
+  .trust-indicators {
+    gap: var(--space-md);
+    margin-bottom: var(--space-lg);
+  }
+
+  .trust-item {
+    font-size: 0.875rem;
+    padding: var(--space-xs) var(--space-sm);
+    background: rgba(59, 130, 246, 0.05);
+    border-radius: 8px;
+    border: 1px solid rgba(59, 130, 246, 0.1);
+  }
+
+  .methodology-section {
+    padding: var(--space-xl) 0;
+  }
+
+  .section-container {
+    width: 95%;
+    padding: 0 var(--space-md);
+  }
+
+  .section-title {
+    font-size: 1.75rem;
+    margin-bottom: var(--space-lg);
+  }
+
+  .methodology-grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-md);
+  }
+
+  .methodology-card {
+    padding: var(--space-xl);
+    border-radius: 16px;
+    background: linear-gradient(135deg, var(--bg-primary) 0%, rgba(248, 250, 252, 0.95) 100%);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  }
+
+  .card-icon {
+    width: 64px;
+    height: 64px;
+    margin-bottom: var(--space-lg);
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(16, 185, 129, 0.08));
+  }
+
+  .methodology-card h3 {
+    font-size: 1.25rem;
+    margin-bottom: var(--space-md);
+  }
+
+  .methodology-card p {
+    font-size: 1rem;
+    line-height: 1.7;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero-content {
+    padding: var(--space-lg) var(--space-sm);
+  }
+
+  .hero-title {
+    font-size: 1.75rem;
+  }
+
+  .hero-subtitle {
+    font-size: 0.9375rem;
+  }
+
+  .hero-description {
+    font-size: 1rem;
+  }
+
+  .feature-item {
+    padding: var(--space-md);
+    text-align: center;
+  }
+
+  .feature-number {
+    width: 40px;
+    height: 40px;
+    font-size: 1rem;
+    margin: 0 auto var(--space-md) auto;
+  }
+
+  .feature-title {
+    font-size: 1.125rem;
+  }
+
+  .feature-desc {
+    font-size: 0.9375rem;
+  }
+
+  .btn {
+    min-width: 100%;
+    font-size: 0.9375rem;
+  }
+
+  .trust-indicators {
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-sm);
+  }
+
+  .trust-item {
+    font-size: 0.8125rem;
+  }
+
+  .methodology-card {
+    padding: var(--space-lg);
+  }
+
+  .card-icon {
+    width: 56px;
+    height: 56px;
+  }
+}
+
+/* タッチデバイス最適化 */
+@media (hover: none) and (pointer: coarse) {
+  .btn:hover {
+    transform: none;
+    box-shadow: initial;
+  }
+
+  .btn:active {
+    transform: scale(0.98);
+    transition: transform 0.1s ease;
+  }
+
+  .feature-item:hover {
+    transform: none;
+  }
+
+  .feature-item:active {
+    transform: scale(0.98);
+    transition: transform 0.1s ease;
+  }
+
+  .methodology-card:hover {
+    transform: none;
+  }
+
+  .methodology-card:active {
+    transform: scale(0.98);
+    transition: transform 0.1s ease;
+  }
+}
 </style>

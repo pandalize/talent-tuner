@@ -3,7 +3,10 @@
   QuestionNavigatorから分離された軽量版
 -->
 <template>
-  <div class="diagnosis-container" :class="{ 'has-progress': !showResult && questions.length > 0 }">
+  <div class="diagnosis-container" :class="{ 
+    'has-progress': !showResult && questions.length > 0,
+    'has-question': !showResult && currentQuestion 
+  }">
     <div class="diagnosis-content">
       <!-- ローディング状態 -->
       <div v-if="loading" class="loading-section">
@@ -224,12 +227,22 @@ onMounted(() => {
 
 @include mixins.respond-to('mobile') {
   .diagnosis-container {
-    padding: 1rem;
+    padding: var(--space-md) var(--space-md) 140px var(--space-md);
+    min-height: 100vh;
   }
   
   .diagnosis-content {
     width: 100%;
-    padding: 1rem;
+    padding: var(--space-lg);
+    border-radius: 16px;
+    background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+    margin-bottom: var(--space-xl);
+  }
+  
+  // QuestionDisplayが表示される時は、固定ナビゲーション分のスペースを確保
+  &.has-question {
+    padding-bottom: 160px;
   }
 }
 </style>

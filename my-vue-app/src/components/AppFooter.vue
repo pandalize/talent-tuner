@@ -133,27 +133,189 @@
 
 @media (max-width: 768px) {
   .app-footer {
-    padding: var(--space-md) 0;
+    padding: var(--space-xl) var(--space-md) var(--space-lg);
+    background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+    box-shadow: inset 0 4px 20px rgba(0, 0, 0, 0.1);
   }
   
   .footer-content {
     @include mixins.grid-columns(1);
-    gap: var(--space-sm);
+    gap: var(--space-lg);
     text-align: center;
+    max-width: 400px;
+    margin: 0 auto;
   }
   
   .footer-section {
+    padding: var(--space-md);
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    
     &:first-child {
       grid-column: auto;
-      margin-bottom: var(--space-sm);
+      margin-bottom: 0;
+      background: linear-gradient(135deg, rgba(52, 152, 219, 0.1), rgba(16, 185, 129, 0.08));
+      border: 1px solid rgba(52, 152, 219, 0.2);
+      
+      h3 {
+        font-size: 1.5rem;
+        background: linear-gradient(135deg, var(--accent-blue), var(--accent-gold));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin-bottom: var(--space-sm);
+      }
+      
+      p {
+        color: #e8f4fd;
+        font-size: 0.9375rem;
+        line-height: 1.6;
+        opacity: 0.9;
+      }
     }
     
-    margin-bottom: var(--space-sm);
+    h4 {
+      font-size: 1.125rem;
+      margin-bottom: var(--space-md);
+      color: #e8f4fd;
+      position: relative;
+      
+      &::after {
+        content: '';
+        position: absolute;
+        bottom: -4px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 40px;
+        height: 2px;
+        background: linear-gradient(90deg, var(--accent-blue), var(--accent-gold));
+        border-radius: 1px;
+      }
+    }
+    
+    ul {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-sm);
+    }
+    
+    li {
+      margin-bottom: 0;
+    }
+    
+    a {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: var(--space-xs) var(--space-sm);
+      color: #bdc3c7;
+      font-size: 0.875rem;
+      border-radius: 8px;
+      transition: all var(--transition-normal);
+      position: relative;
+      overflow: hidden;
+      
+      &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+        transition: left 0.6s ease;
+      }
+      
+      &:hover {
+        color: #ffffff;
+        background: rgba(52, 152, 219, 0.2);
+        transform: translateY(-2px);
+        text-decoration: none;
+        
+        &::before {
+          left: 100%;
+        }
+      }
+      
+      &:active {
+        transform: translateY(0) scale(0.98);
+      }
+    }
+    
+    margin-bottom: 0;
   }
   
   .footer-bottom {
-    margin-top: var(--space-sm);
-    padding-top: var(--space-sm);
+    margin-top: var(--space-xl);
+    padding-top: var(--space-lg);
+    border-top: 1px solid rgba(255, 255, 255, 0.15);
+    
+    p {
+      color: #95a5a6;
+      font-size: 0.75rem;
+      opacity: 0.8;
+      padding: var(--space-xs);
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .app-footer {
+    padding: var(--space-lg) var(--space-sm) var(--space-md);
+  }
+  
+  .footer-content {
+    gap: var(--space-md);
+    max-width: 100%;
+  }
+  
+  .footer-section {
+    padding: var(--space-sm);
+    
+    &:first-child {
+      h3 {
+        font-size: 1.25rem;
+      }
+      
+      p {
+        font-size: 0.875rem;
+      }
+    }
+    
+    h4 {
+      font-size: 1rem;
+      margin-bottom: var(--space-sm);
+    }
+    
+    a {
+      font-size: 0.8125rem;
+      padding: var(--space-xs);
+    }
+  }
+  
+  .footer-bottom {
+    margin-top: var(--space-lg);
+    padding-top: var(--space-md);
+    
+    p {
+      font-size: 0.6875rem;
+    }
+  }
+}
+
+/* タッチデバイス最適化 */
+@media (hover: none) and (pointer: coarse) {
+  .footer-section a:hover {
+    background: transparent;
+    transform: none;
+  }
+  
+  .footer-section a:active {
+    background: rgba(52, 152, 219, 0.3);
+    transform: scale(0.95);
+    transition: all 0.1s ease;
   }
 }
 </style>

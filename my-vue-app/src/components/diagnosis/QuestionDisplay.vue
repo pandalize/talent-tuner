@@ -350,27 +350,88 @@ function handleSelectRating(questionId: string, optionLabel: string, rating: num
 @include mixins.respond-to('mobile') {
   .question-meta {
     @include mixins.flex-column(var(--space-xs));
+    margin-bottom: var(--space-md);
+  }
+
+  .question-header {
+    text-align: center;
+    padding: var(--space-md);
+  }
+  
+  .question-title {
+    font-size: 1.375rem;
+    line-height: 1.3;
+    margin-bottom: var(--space-sm);
+  }
+  
+  .question-subtitle {
+    font-size: 0.875rem;
+    line-height: 1.5;
+  }
+  
+  .options-list {
+    gap: var(--space-lg);
+  }
+  
+  .option-item {
+    @include mixins.card-padding(lg);
+    border-radius: 16px;
+    background: linear-gradient(135deg, var(--bg-primary), var(--bg-secondary));
+  }
+  
+  .option-header {
+    margin-bottom: var(--space-md);
+  }
+  
+  .option-text {
+    font-size: 1rem;
+    line-height: 1.6;
+    margin-bottom: var(--space-md);
   }
 
   .scale-buttons {
-    max-width: 250px;
-    gap: 2px;
+    max-width: none;
+    gap: var(--space-xs);
+    justify-content: space-between;
+    padding: 0 var(--space-sm);
   }
   
   .rating-button {
-    width: 40px;
-    height: 40px;
-    font-size: 0.8125rem;
+    width: 48px;
+    height: 48px;
+    font-size: 1rem;
+    font-weight: 700;
+    border-width: 3px;
+    
+    &:active {
+      transform: scale(0.9);
+    }
+    
+    &.selected {
+      transform: scale(1.1);
+      box-shadow: 0 6px 16px rgba(52, 152, 219, 0.3);
+    }
   }
   
   .option-label {
-    width: 28px;
-    height: 28px;
-    font-size: 0.75rem;
+    width: 32px;
+    height: 32px;
+    font-size: 0.875rem;
+    font-weight: 700;
   }
   
   .scale-labels {
-    font-size: 0.75rem;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    margin-bottom: var(--space-md);
+  }
+  
+  .scale-label-left,
+  .scale-label-right {
+    padding: var(--space-xs) var(--space-sm);
+    background: rgba(59, 130, 246, 0.05);
+    border-radius: 8px;
+    border: 1px solid rgba(59, 130, 246, 0.1);
   }
 }
 
