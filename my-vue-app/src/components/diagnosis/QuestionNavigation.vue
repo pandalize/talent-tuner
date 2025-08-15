@@ -3,10 +3,10 @@
   前へ・次へボタンとプログレス表示
 -->
 <template>
-  <div class="question-navigation">
+  <div class="question-navigation tw-nav-container">
     <button
       @click="$emit('go-previous')"
-      class="btn nav-button prev-button"
+      class="btn nav-button prev-button tw-btn tw-btn-secondary"
       :disabled="!canGoBack"
     >
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -15,15 +15,15 @@
       前へ
     </button>
 
-    <div class="progress-indicator">
-      <div class="progress-dots">
+    <div class="progress-indicator tw-progress">
+      <div class="progress-dots tw-dots-container">
         <div
           v-for="index in totalQuestions"
           :key="index"
-          class="progress-dot"
+          class="progress-dot tw-dot"
           :class="{
-            completed: index <= questionIndex,
-            current: index === questionIndex + 1
+            'completed tw-dot-completed': index <= questionIndex,
+            'current tw-dot-current': index === questionIndex + 1
           }"
         ></div>
       </div>
@@ -32,8 +32,11 @@
     <button
       @click="isLastQuestion && allQuestionsAnswered ? $emit('calculate-result') : $emit('go-next')"
       :disabled="!canProceed"
-      class="btn nav-button next-button"
-      :class="{ 'results-ready': isLastQuestion && allQuestionsAnswered }"
+      class="btn nav-button next-button tw-btn"
+      :class="{ 
+        'results-ready tw-btn-primary tw-btn-gold': isLastQuestion && allQuestionsAnswered,
+        'tw-btn-secondary': !(isLastQuestion && allQuestionsAnswered)
+      }"
     >
       <span v-if="isLastQuestion && allQuestionsAnswered">
         結果を見る

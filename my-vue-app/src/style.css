@@ -1,3 +1,292 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Navigation Container */
+@layer components {
+  .tw-nav-container {
+    @apply flex items-center justify-between gap-4 
+           bg-white/95 backdrop-blur-md 
+           border border-gray-200 rounded-xl 
+           shadow-lg p-4 z-10;
+  }
+
+  /* Buttons */
+  .tw-btn {
+    @apply flex items-center gap-2 px-4 py-2 
+           rounded-lg font-medium transition-all duration-300
+           disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  .tw-btn-secondary {
+    @apply bg-gray-100 text-gray-700 border border-gray-300
+           hover:bg-gray-200 hover:border-gray-400
+           focus:outline-none focus:ring-2 focus:ring-blue-500/20;
+  }
+
+  .tw-btn-primary {
+    @apply bg-blue-600 text-white border border-blue-600
+           hover:bg-blue-700 hover:border-blue-700
+           focus:outline-none focus:ring-2 focus:ring-blue-500/50;
+  }
+
+  .tw-btn-gold {
+    @apply bg-gradient-to-r from-yellow-500 to-yellow-600 text-white
+           hover:from-yellow-600 hover:to-yellow-700
+           hover:-translate-y-0.5 hover:shadow-xl;
+  }
+
+  /* Progress Indicator */
+  .tw-progress {
+    @apply flex-1 flex justify-center;
+  }
+
+  .tw-dots-container {
+    @apply flex items-center gap-2 flex-wrap justify-center max-w-sm;
+  }
+
+  .tw-dot {
+    @apply w-2 h-2 rounded-full bg-gray-300 transition-all duration-300;
+  }
+
+  .tw-dot-completed {
+    @apply bg-blue-500 scale-110;
+  }
+
+  .tw-dot-current {
+    @apply bg-yellow-500 scale-125 shadow-lg;
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .tw-nav-container {
+      @apply fixed bottom-0 left-0 right-0 
+             rounded-t-xl rounded-b-none
+             border-t border-x-0 border-b-0
+             shadow-2xl pb-8;
+      padding-bottom: calc(1rem + env(safe-area-inset-bottom));
+    }
+
+    .tw-btn {
+      @apply min-h-14 text-base font-semibold rounded-xl;
+    }
+
+    .tw-btn:first-child {
+      @apply max-w-32;
+    }
+
+    .tw-btn:last-child {
+      @apply flex-1;
+    }
+
+    .tw-dots-container {
+      @apply gap-3 min-w-32;
+    }
+
+    .tw-dot {
+      @apply w-3 h-3;
+    }
+  }
+
+  /* Tablet */
+  @media (min-width: 768px) and (max-width: 1023px) {
+    .tw-nav-container {
+      @apply flex-col gap-3 w-full;
+    }
+
+    .tw-btn {
+      @apply w-full justify-center;
+    }
+
+    .tw-progress {
+      @apply order-first mb-2;
+    }
+
+    .tw-dots-container {
+      @apply max-w-md;
+    }
+  }
+
+  /* DiagnosisContainer Layout */
+  .tw-diagnosis-layout {
+    @apply flex flex-col min-h-screen w-full
+           bg-gradient-to-br from-slate-50 to-gray-100
+           p-4 overflow-x-hidden;
+  }
+
+  .tw-content-area {
+    @apply max-w-4xl mx-auto w-full
+           bg-white rounded-xl shadow-lg
+           p-6 relative flex-1;
+    min-height: 400px;
+  }
+
+  .tw-sticky-nav {
+    @apply sticky bottom-4 mt-4 mb-2 z-50;
+  }
+
+  /* Mobile Optimizations */
+  @media (max-width: 768px) {
+    .tw-diagnosis-layout {
+      @apply p-2 pb-24;
+    }
+
+    .tw-content-area {
+      @apply p-4 rounded-lg shadow-xl;
+    }
+
+    .tw-sticky-nav {
+      @apply mt-6 mb-0;
+    }
+  }
+
+  /* QuestionDisplay Layout */
+  .tw-question-layout {
+    @apply flex flex-col gap-6 mb-4 relative;
+  }
+
+  .tw-header {
+    @apply text-center;
+  }
+
+  .tw-meta {
+    @apply flex items-center justify-center gap-4 mb-4;
+  }
+
+  .tw-number {
+    @apply text-sm text-gray-600 bg-gray-100 
+           px-3 py-1 rounded-full font-mono;
+  }
+
+  .tw-category {
+    @apply text-sm text-blue-600 bg-blue-50 
+           px-3 py-1 rounded-full font-medium;
+  }
+
+  .tw-title {
+    @apply text-2xl font-bold text-gray-900 
+           mb-3 leading-tight;
+  }
+
+  .tw-subtitle {
+    @apply text-gray-600 text-base mb-0;
+  }
+
+  .tw-card {
+    @apply max-w-4xl mx-auto w-full;
+  }
+
+  .tw-options {
+    @apply flex flex-col gap-6;
+  }
+
+  .tw-option {
+    @apply bg-white border border-gray-200 rounded-lg
+           p-6 transition-all duration-200
+           hover:border-blue-300 hover:shadow-sm;
+  }
+
+  .tw-option-header {
+    @apply flex items-start gap-4 mb-4;
+  }
+
+  .tw-label {
+    @apply flex items-center justify-center
+           w-8 h-8 bg-blue-600 text-white
+           rounded-full font-mono font-bold text-sm
+           flex-shrink-0;
+  }
+
+  .tw-text {
+    @apply flex-1 text-gray-900 font-medium
+           leading-relaxed break-words;
+  }
+
+  .tw-rating {
+    @apply flex flex-col gap-3;
+  }
+
+  .tw-labels {
+    @apply flex justify-between items-center
+           text-sm text-gray-500 mb-2;
+  }
+
+  .tw-buttons {
+    @apply flex justify-between gap-2 max-w-md mx-auto;
+  }
+
+  .tw-rating-btn {
+    @apply flex items-center justify-center
+           flex-1 aspect-square max-w-12
+           border-2 border-gray-300 rounded-full
+           bg-white text-gray-600 cursor-pointer
+           transition-all duration-200 font-semibold
+           hover:border-blue-400 hover:bg-blue-50
+           hover:scale-110 focus:outline-none focus:ring-2
+           focus:ring-blue-500/20 disabled:opacity-50;
+  }
+
+  .tw-selected {
+    @apply border-blue-600 bg-blue-600 text-white
+           scale-110 shadow-md;
+  }
+
+  .tw-rating-1.tw-selected {
+    @apply border-red-500 bg-red-500;
+  }
+
+  .tw-rating-2.tw-selected {
+    @apply border-orange-500 bg-orange-500;
+  }
+
+  .tw-rating-3.tw-selected {
+    @apply border-gray-500 bg-gray-500;
+  }
+
+  .tw-rating-4.tw-selected {
+    @apply border-blue-500 bg-blue-500;
+  }
+
+  .tw-rating-5.tw-selected {
+    @apply border-green-500 bg-green-500;
+  }
+
+  /* Mobile Optimizations */
+  @media (max-width: 768px) {
+    .tw-meta {
+      @apply flex-col gap-2;
+    }
+
+    .tw-title {
+      @apply text-xl;
+    }
+
+    .tw-option {
+      @apply p-4;
+    }
+
+    .tw-option-header {
+      @apply gap-3;
+    }
+
+    .tw-buttons {
+      @apply gap-1.5;
+    }
+
+    .tw-rating-btn {
+      @apply max-w-10 text-sm;
+    }
+
+    .tw-labels {
+      @apply px-2;
+    }
+
+    .tw-label-left,
+    .tw-label-right {
+      @apply text-xs p-1 bg-blue-50 
+             border border-blue-100 rounded
+             max-w-20 text-center break-words;
+    }
+  }
+}

@@ -3,47 +3,47 @@
   5段階評価システムによる質問表示とナビゲーション
 -->
 <template>
-  <div class="question-display">
+  <div class="question-display tw-question-layout">
     <!-- 質問ヘッダー -->
-    <div class="question-header">
-      <div class="question-meta">
-        <span class="question-number">質問 {{ questionIndex + 1 }} / {{ totalQuestions }}</span>
-        <span class="category-badge">{{ getQuestionCategoryName(question) }}</span>
+    <div class="question-header tw-header">
+      <div class="question-meta tw-meta">
+        <span class="question-number tw-number">質問 {{ questionIndex + 1 }} / {{ totalQuestions }}</span>
+        <span class="category-badge tw-category">{{ getQuestionCategoryName(question) }}</span>
       </div>
-      <h2 class="question-title">{{ question.text }}</h2>
-      <p class="question-subtitle">各項目について、あなたにどの程度当てはまるかを5段階で評価してください</p>
+      <h2 class="question-title tw-title">{{ question.text }}</h2>
+      <p class="question-subtitle tw-subtitle">各項目について、あなたにどの程度当てはまるかを5段階で評価してください</p>
     </div>
     
     <!-- 質問カード -->
-    <div class="question-card">
-      <div class="options-list">
+    <div class="question-card tw-card">
+      <div class="options-list tw-options">
         <div
           v-for="(option, index) in question.options"
           :key="option.label"
-          class="option-item"
+          class="option-item tw-option"
         >
           <div class="option-content">
-            <div class="option-header">
-              <div class="option-label">{{ String.fromCharCode(65 + index) }}</div>
-              <div class="option-text">{{ option.text }}</div>
+            <div class="option-header tw-option-header">
+              <div class="option-label tw-label">{{ String.fromCharCode(65 + index) }}</div>
+              <div class="option-text tw-text">{{ option.text }}</div>
             </div>
             
             <!-- 5段階評価スケール -->
-            <div class="rating-scale">
-              <div class="scale-labels">
-                <span class="scale-label-left">全く当てはまらない</span>
-                <span class="scale-label-right">よく当てはまる</span>
+            <div class="rating-scale tw-rating">
+              <div class="scale-labels tw-labels">
+                <span class="scale-label-left tw-label-left">全く当てはまらない</span>
+                <span class="scale-label-right tw-label-right">よく当てはまる</span>
               </div>
-              <div class="scale-buttons">
+              <div class="scale-buttons tw-buttons">
                 <button
                   v-for="rating in [1, 2, 3, 4, 5]"
                   :key="`${option.label}-${rating}`"
                   @click.stop="handleSelectRating(question.id, option.label, rating)"
                   :class="{ 
-                    selected: getLocalOptionRating(question.id, option.label) === rating,
-                    [`rating-${rating}`]: true
+                    'selected tw-selected': getLocalOptionRating(question.id, option.label) === rating,
+                    [`rating-${rating} tw-rating-${rating}`]: true
                   }"
-                  class="rating-button"
+                  class="rating-button tw-rating-btn"
                   :title="getRatingLabel(rating)"
                   style="pointer-events: auto; position: relative; z-index: 10;"
                   type="button"

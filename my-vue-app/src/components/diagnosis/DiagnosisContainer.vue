@@ -3,11 +3,11 @@
   QuestionNavigatorから分離された軽量版
 -->
 <template>
-  <div class="diagnosis-container" :class="{ 
+  <div class="diagnosis-container tw-diagnosis-layout" :class="{ 
     'has-progress': !showResult && questions.length > 0,
     'has-question': !showResult && currentQuestion 
   }">
-    <div class="diagnosis-content">
+    <div class="diagnosis-content tw-content-area">
       <!-- ローディング状態 -->
       <div v-if="loading" class="loading-section">
         <div class="loading-spinner"></div>
@@ -64,7 +64,7 @@
           @go-previous="goToPreviousQuestion"
           @go-next="goToNextQuestion"
           @calculate-result="calculateResult"
-          class="navigation-sticky"
+          class="navigation-sticky tw-sticky-nav"
         />
         
         <!-- 結果表示コンポーネント -->
