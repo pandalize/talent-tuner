@@ -278,7 +278,7 @@ export class ClaudeApiClient {
             'anthropic-version': '2023-06-01'
           },
           body: JSON.stringify({
-            model: 'claude-3-5-sonnet-20241022',  // 最新のSonnetモデルに更新
+            model: 'claude-3-5-haiku-20241022',  // コスト効率の良いHaikuモデル
             max_tokens: ClaudeApiClient.RATE_LIMITS.MAX_OUTPUT_TOKENS,
             system: systemPrompt,
             messages: messages,

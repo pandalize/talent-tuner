@@ -167,7 +167,7 @@ if (!$apiKey) {
 
 // Claude APIへのリクエスト準備
 $claudeData = [
-    'model' => 'claude-3-5-sonnet-20241022',  // 最新のSonnetモデル
+    'model' => 'claude-3-5-haiku-20241022',  // コスト効率の良いHaikuモデル
     'max_tokens' => MAX_OUTPUT_TOKENS,
     'temperature' => 0.7,
     'messages' => [
