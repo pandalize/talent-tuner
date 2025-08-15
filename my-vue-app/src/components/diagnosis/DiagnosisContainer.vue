@@ -211,7 +211,12 @@ onMounted(() => {
 
 // プログレスバーが表示される時のみ下部パディングを追加
 .diagnosis-container.has-progress {
-  padding-bottom: 100px;
+  padding-bottom: 120px;
+  
+  // モバイルでは固定ナビゲーション分のスペースを追加確保
+  @media (max-width: 768px) {
+    padding-bottom: 180px;
+  }
 }
 
 // レスポンシブデザイン
@@ -232,7 +237,7 @@ onMounted(() => {
     
     // QuestionDisplayが表示される時は、固定ナビゲーション分のスペースを確保
     &.has-question {
-      padding-bottom: 160px;
+      padding-bottom: 180px;
     }
   }
   

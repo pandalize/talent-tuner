@@ -176,7 +176,7 @@ const isLastQuestion = computed(() => {
     backdrop-filter: blur(20px);
     border-top: 1px solid var(--border-light);
     box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.1);
-    padding: var(--space-lg);
+    padding: var(--space-lg) var(--space-lg) calc(var(--space-lg) + env(safe-area-inset-bottom));
     z-index: 100;
     gap: var(--space-md);
   }
