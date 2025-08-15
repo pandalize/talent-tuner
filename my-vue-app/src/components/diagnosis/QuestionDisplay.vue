@@ -419,17 +419,17 @@ function handleSelectRating(questionId: string, optionLabel: string, rating: num
   }
 
   .scale-buttons {
-    max-width: 100%;
-    gap: var(--space-xs);
-    justify-content: space-between;
-    padding: 0 var(--space-xs);
+    max-width: calc(100% - var(--space-md));
+    gap: 6px;
+    justify-content: center;
+    padding: 0;
     flex-wrap: nowrap;
-    overflow-x: visible;
+    margin: 0 auto;
   }
   
   .rating-button {
-    width: 44px;
-    height: 44px;
+    width: 42px;
+    height: 42px;
     font-size: 0.875rem;
     font-weight: 700;
     border-width: 2px;
