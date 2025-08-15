@@ -143,6 +143,8 @@ function handleSelectRating(questionId: string, optionLabel: string, rating: num
 
 .question-display {
   @include mixins.flex-column(var(--space-xl));
+  margin-bottom: var(--space-xl);
+  position: relative;
 }
 
 // 質問ヘッダー部分
@@ -330,6 +332,11 @@ function handleSelectRating(questionId: string, optionLabel: string, rating: num
 // レスポンシブデザイン
 // デスクトップ（1024px以上）は元のレイアウト維持
 @include mixins.respond-to('desktop') {
+  .question-display {
+    margin-bottom: var(--space-xxl);
+    padding-bottom: var(--space-lg);
+  }
+  
   .option-header {
     @include mixins.flex-row(var(--space-md));
     align-items: flex-start;
@@ -338,6 +345,10 @@ function handleSelectRating(questionId: string, optionLabel: string, rating: num
     .option-label {
       margin-right: var(--space-md);
     }
+  }
+  
+  .option-item {
+    margin-bottom: var(--space-md);
   }
 }
 

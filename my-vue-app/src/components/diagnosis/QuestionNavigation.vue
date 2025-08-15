@@ -87,6 +87,10 @@ const isLastQuestion = computed(() => {
   @include mixins.flex-between;
   gap: var(--space-md);
   align-items: center;
+  margin-top: var(--space-xl);
+  padding: var(--space-lg) 0;
+  position: relative;
+  z-index: 10;
 }
 
 .nav-button {
@@ -144,6 +148,27 @@ const isLastQuestion = computed(() => {
   }
 }
 
+// デスクトップでの適切な間隔確保
+@include mixins.respond-to('desktop') {
+  .question-navigation {
+    margin-top: var(--space-xxl);
+    padding: var(--space-xl) 0;
+    
+    // オプションとの重なりを防止
+    &::before {
+      content: '';
+      display: block;
+      height: var(--space-lg);
+      width: 100%;
+      position: absolute;
+      top: calc(-1 * var(--space-lg));
+      left: 0;
+      background: transparent;
+      pointer-events: none;
+    }
+  }
+}
+
 // レスポンシブデザイン
 @include mixins.respond-to('tablet') {
   .question-navigation {
@@ -159,6 +184,11 @@ const isLastQuestion = computed(() => {
   .progress-indicator {
     order: -1;
     margin-bottom: var(--space-sm);
+  }
+  
+  .question-navigation {
+    margin-top: var(--space-lg);
+    padding: var(--space-md) 0;
   }
 
   .progress-dots {
