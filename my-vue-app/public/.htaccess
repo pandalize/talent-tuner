@@ -3,13 +3,14 @@
   RewriteEngine On
   RewriteBase /
   
+  # APIディレクトリは直接アクセス許可
+  RewriteCond %{REQUEST_URI} ^/api/
+  RewriteRule ^ - [L]
+  
   # 既存のファイル・ディレクトリは直接配信
   RewriteCond %{REQUEST_FILENAME} -f [OR]
   RewriteCond %{REQUEST_FILENAME} -d
   RewriteRule ^ - [L]
-  
-  # APIリクエストは対応するPHPファイルへ
-  RewriteRule ^api/chat$ api/chat-proxy.php [L]
   
   # その他のリクエストはindex.htmlへ（SPA対応）
   RewriteRule . /index.html [L]
