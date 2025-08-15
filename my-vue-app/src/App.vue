@@ -1,18 +1,10 @@
 <script setup lang="ts">
-import { RouterLink, RouterView, useRoute } from 'vue-router'
-import { computed } from 'vue'
+import { RouterLink, RouterView } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import AppFooter from './components/AppFooter.vue'
-import Breadcrumb from './components/Breadcrumb.vue'
 import LanguageSwitcher from './components/LanguageSwitcher.vue'
 
-const route = useRoute()
 const { t } = useI18n()
-
-// パンくずリストを表示しないページ
-const hideBreadcrumbPages = computed(() => {
-  return route.name === 'home' || route.name === 'notfound'
-})
 </script>
 
 <template>
@@ -40,9 +32,6 @@ const hideBreadcrumbPages = computed(() => {
     </header>
     
     <main class="app-content">
-      <div v-if="!hideBreadcrumbPages" class="breadcrumb-container">
-        <Breadcrumb />
-      </div>
       <RouterView />
     </main>
     

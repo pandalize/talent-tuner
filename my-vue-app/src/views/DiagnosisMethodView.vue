@@ -20,7 +20,7 @@
             <div class="stat-label">診断軸</div>
           </div>
           <div class="stat-item">
-            <div class="stat-number">16</div>
+            <div class="stat-number">4</div>
             <div class="stat-label">質問項目</div>
           </div>
           <div class="stat-item">
@@ -102,9 +102,14 @@
               <li>技術的・専門的能力</li>
               <li>リーダーシップと組織運営能力</li>
             </ul>
-            <h4>質問例</h4>
-            <p>「複雑な問題を論理的に分析して解決することが得意ですか？」</p>
-            <p>「新しいアイデアを考え出すことに喜びを感じますか？」</p>
+            <h4>実際の質問</h4>
+            <p>「あなたの最も得意なスキルはどれですか？」</p>
+            <div class="question-options">
+              <span class="option">• 計画的かつ継続的に物事を進める集中力</span>
+              <span class="option">• 人前で話したり、アイデアを分かりやすく伝える力</span>
+              <span class="option">• 体力と器用さを活かした現場での実践的な作業</span>
+              <span class="option">• 瞬時の判断力と大胆な行動力</span>
+            </div>
             <h4>職業マッチングへの影響</h4>
             <p>プログラマー、デザイナー、営業職、管理職など、職業に必要な基本的な能力特性を測定し、適性度を判定します。</p>
           </div>
@@ -124,9 +129,14 @@
               <li>問題解決・改善への欲求</li>
               <li>学習・研究への意欲</li>
             </ul>
-            <h4>質問例</h4>
-            <p>「データを分析して傾向やパターンを見つけることに興味がありますか？」</p>
-            <p>「人の成長や成功をサポートすることにやりがいを感じますか？」</p>
+            <h4>実際の質問</h4>
+            <p>「あなたが最も興味を持つ活動はどれですか？」</p>
+            <div class="question-options">
+              <span class="option">• 論理的思考や分析を必要とする複雑な問題解決</span>
+              <span class="option">• 創造性を活かして人を驚かせたり楽しませること</span>
+              <span class="option">• 手を動かして実際に物を作ったり構築すること</span>
+              <span class="option">• 市場やお金の動きを分析して投資判断すること</span>
+            </div>
             <h4>職業マッチングへの影響</h4>
             <p>内発的動機を測定し、長期的に満足感を得られる職業を特定します。興味と職業内容の一致度が高いほど、仕事への継続的なモチベーションが期待できます。</p>
           </div>
@@ -146,9 +156,14 @@
               <li>職場環境・人間関係の優先度</li>
               <li>自由度・裁量権への価値観</li>
             </ul>
-            <h4>質問例</h4>
-            <p>「収入の安定性は職業選択において重要な要素ですか？」</p>
-            <p>「社会に貢献できる仕事であることを重視しますか？」</p>
+            <h4>実際の質問</h4>
+            <p>「仕事で最も重視したいことは何ですか？」</p>
+            <div class="question-options">
+              <span class="option">• 専門的な知識とスキルを極めて、その道のプロになること</span>
+              <span class="option">• 多くの人に影響を与え、注目される存在になること</span>
+              <span class="option">• 社会に役立つものを作って、人々の生活を支えること</span>
+              <span class="option">• 短期間で大きな利益を得て、経済的自由を手に入れること</span>
+            </div>
             <h4>職業マッチングへの影響</h4>
             <p>個人の価値観と職業特性のマッチングを行い、満足度の高いキャリア選択をサポートします。年収、成長性、社会意義などの要素を総合的に評価します。</p>
           </div>
@@ -168,9 +183,14 @@
               <li>転勤・出張への適応度</li>
               <li>チームワーク vs 個人作業の嗜好</li>
             </ul>
-            <h4>質問例</h4>
-            <p>「責任のある立場で多少のストレスがあっても、やりがいのある仕事を選びたいですか？」</p>
-            <p>「プライベートの時間を確実に確保できることを重視しますか？」</p>
+            <h4>実際の質問</h4>
+            <p>「理想的な働き方・ライフスタイルはどれですか？」</p>
+            <div class="question-options">
+              <span class="option">• 規則正しい生活リズムで、仕事とプライベートを明確に分ける</span>
+              <span class="option">• 自分のペースで自由に働き、好きなことを仕事にする</span>
+              <span class="option">• チームで協力しながら、大きなプロジェクトを達成する</span>
+              <span class="option">• 高いリスクを取ってでも、大きなリターンを狙う</span>
+            </div>
             <h4>職業マッチングへの影響</h4>
             <p>働き方の希望と職業の特性を照合し、持続可能なキャリアを提案します。労働環境、勤務形態、ストレスレベルなどを考慮した適性判定を行います。</p>
           </div>
@@ -814,6 +834,56 @@ section {
   font-size: var(--fs-body);
 }
 
+/* 質問選択肢表示 */
+.question-options {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  margin: var(--space-md) 0;
+  padding: var(--space-lg);
+  background: linear-gradient(135deg, var(--bg-secondary), var(--bg-tertiary));
+  border-radius: 12px;
+  border: 1px solid var(--border-light);
+  box-shadow: var(--shadow-sm);
+}
+
+.option {
+  padding: var(--space-md);
+  background: var(--bg-primary);
+  border-radius: 8px;
+  border: 1px solid var(--border-light);
+  font-size: var(--fs-body);
+  color: var(--text-secondary);
+  line-height: 1.6;
+  transition: all var(--transition-normal);
+  position: relative;
+  overflow: hidden;
+}
+
+.option::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 4px;
+  background: var(--accent-blue);
+  transform: scaleY(0);
+  transition: transform var(--transition-normal);
+  transform-origin: bottom;
+}
+
+.option:hover {
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.05), rgba(16, 185, 129, 0.05));
+  border-color: var(--accent-blue);
+  transform: translateX(4px);
+  box-shadow: var(--shadow-md);
+}
+
+.option:hover::before {
+  transform: scaleY(1);
+}
+
 /* レスポンシブ対応 */
 @media (max-width: 768px) {
   .hero-section {
@@ -921,6 +991,15 @@ section {
   
   .link-card {
     padding: var(--space-lg);
+  }
+  
+  .question-options {
+    padding: var(--space-md);
+  }
+  
+  .option {
+    padding: var(--space-sm) var(--space-md);
+    font-size: 0.9375rem;
   }
 }
 </style>
