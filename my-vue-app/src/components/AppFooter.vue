@@ -46,18 +46,18 @@
 </script>
 
 <style lang="scss" scoped>
-@import '@/assets/scss/mixins.scss';
+@use '@/assets/scss/mixins.scss' as mixins;
 .app-footer {
   background-color: var(--text-dark, #333);
   color: var(--background-white, #fff);
   margin-top: auto;
-  @include section-padding;
+  @include mixins.section-padding;
   width: 100%;
 }
 
 .footer-content {
-  @include container(1200px);
-  @include grid-auto-fit(200px);
+  @include mixins.container(1200px);
+  @include mixins.grid-auto-fit(200px);
   grid-template-columns: 2fr 1fr 1fr 1fr;
   gap: 2rem;
 }
@@ -84,7 +84,7 @@
 }
 
 .footer-section ul {
-  @include list-reset;
+  @include mixins.list-reset;
 }
 
 .footer-section li {
@@ -118,9 +118,9 @@
 }
 
 // レスポンシブデザイン
-@include respond-to('desktop') {
+@include mixins.respond-to('desktop') {
   .footer-content {
-    @include grid-columns(2);
+    @include mixins.grid-columns(2);
     gap: 1.5rem;
   }
   
@@ -131,13 +131,13 @@
   }
 }
 
-@include respond-to('tablet') {
+@include mixins.respond-to('tablet') {
   .app-footer {
-    @include section-padding(sm);
+    @include mixins.section-padding(sm);
   }
   
   .footer-content {
-    @include grid-columns(1);
+    @include mixins.grid-columns(1);
     gap: 1rem;
     text-align: center;
   }

@@ -170,37 +170,32 @@ onMounted(() => {
 })
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+@use '@/assets/scss/mixins.scss' as mixins;
 .language-switcher {
   position: relative;
 }
 
 /* モバイル用ドロップダウン */
 .mobile-switcher {
-  display: flex;
-  align-items: center;
+  @include mixins.flex-row;
 }
 
 .language-select {
+  @include mixins.button-base;
+  @include mixins.button-outline;
   background: var(--bg-primary, #fff);
-  border: 1px solid var(--border-light, #e1e5e9);
-  border-radius: 6px;
-  padding: 0.5rem 1rem;
   font-size: 0.9rem;
-  cursor: pointer;
   min-width: 120px;
 }
 
 .language-select:focus {
-  outline: 2px solid var(--primary-blue, #007bff);
-  outline-offset: 2px;
+  @include mixins.focus-ring;
 }
 
 /* デスクトップ用ボタンリスト */
 .desktop-switcher {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
+  @include mixins.flex-row(0.5rem);
 }
 
 .language-label {
@@ -210,20 +205,14 @@ onMounted(() => {
 }
 
 .language-buttons {
-  display: flex;
-  gap: 0.25rem;
+  @include mixins.flex-row(0.25rem);
 }
 
 .language-btn {
-  display: flex;
-  align-items: center;
-  gap: 0.25rem;
+  @include mixins.flex-row(0.25rem);
+  @include mixins.button-base;
+  @include mixins.button-outline;
   padding: 0.5rem 0.75rem;
-  border: 1px solid var(--border-light, #e1e5e9);
-  border-radius: 6px;
-  background: var(--bg-primary, #fff);
-  cursor: pointer;
-  transition: all 0.2s ease;
   font-size: 0.85rem;
 }
 
@@ -249,25 +238,23 @@ onMounted(() => {
 
 /* 確認モーダル */
 .modal-overlay {
+  @include mixins.flex-center;
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
   background: rgba(0, 0, 0, 0.5);
-  display: flex;
-  align-items: center;
-  justify-content: center;
   z-index: 1000;
 }
 
 .modal-content {
-  background: var(--bg-primary, #fff);
+  @include mixins.card-base;
+  @include mixins.card-padding(lg);
+  @include mixins.card-shadow(lg);
   border-radius: 8px;
-  padding: 2rem;
   max-width: 400px;
   margin: 1rem;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
 }
 
 .modal-content h3 {
@@ -282,24 +269,21 @@ onMounted(() => {
 }
 
 .modal-actions {
-  display: flex;
-  gap: 1rem;
+  @include mixins.flex-row(1rem);
   justify-content: flex-end;
 }
 
 .btn-confirm,
 .btn-cancel {
+  @include mixins.button-base;
   padding: 0.5rem 1rem;
   border-radius: 6px;
   border: none;
-  cursor: pointer;
   font-weight: 500;
-  transition: all 0.2s ease;
 }
 
 .btn-confirm {
-  background: var(--primary-blue, #007bff);
-  color: white;
+  @include mixins.button-primary;
 }
 
 .btn-confirm:hover {
@@ -307,9 +291,7 @@ onMounted(() => {
 }
 
 .btn-cancel {
-  background: var(--bg-secondary, #f8f9fa);
-  color: var(--text-primary, #333);
-  border: 1px solid var(--border-light, #e1e5e9);
+  @include mixins.button-secondary;
 }
 
 .btn-cancel:hover {

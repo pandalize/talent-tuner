@@ -465,44 +465,39 @@ function formatTime(date: Date): string {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+@use '@/assets/scss/mixins.scss' as mixins;
 /* ==========================================================================
    チャットbot基本レイアウト
    ========================================================================== */
 .career-chat-bot {
-  display: flex;
-  flex-direction: column;
+  @include mixins.flex-column;
+  @include mixins.card-base;
+  @include mixins.card-shadow(lg);
   height: 600px;
   max-height: 80vh;
   width: 100%;
   max-width: 800px;
-  background: var(--bg-primary);
   border-radius: 16px;
-  box-shadow: var(--shadow-lg);
   overflow: hidden;
-  border: 1px solid var(--border-light);
 }
 
 /* ==========================================================================
    チャットヘッダー
    ========================================================================== */
 .chat-header {
-  display: flex;
-  align-items: center;
-  padding: var(--space-md);
+  @include mixins.flex-row(var(--space-sm));
+  @include mixins.section-padding(sm);
   background: var(--primary-navy);
   color: white;
-  gap: var(--space-sm);
 }
 
 .bot-avatar {
+  @include mixins.flex-center;
   width: 40px;
   height: 40px;
   background: var(--accent-blue);
   border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   flex-shrink: 0;
 }
 
@@ -529,13 +524,12 @@ function formatTime(date: Date): string {
 }
 
 .close-chat {
+  @include mixins.button-base;
   background: none;
   border: none;
   color: white;
-  cursor: pointer;
   padding: var(--space-xs);
   border-radius: 6px;
-  transition: background-color var(--transition-fast);
 }
 
 .close-chat:hover {
@@ -546,18 +540,16 @@ function formatTime(date: Date): string {
    チャットメッセージ
    ========================================================================== */
 .chat-messages {
+  @include mixins.flex-column(var(--space-md));
   flex: 1;
   overflow-y: auto;
   padding: var(--space-md);
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-md);
 }
 
 .message {
-  display: flex;
+  @include mixins.flex-row;
+  @include mixins.fade-in;
   max-width: 80%;
-  animation: slideIn 0.3s ease-out;
 }
 
 .user-message {
@@ -569,8 +561,8 @@ function formatTime(date: Date): string {
 }
 
 .message-content {
-  background: var(--bg-secondary);
-  padding: var(--space-sm) var(--space-md);
+  @include mixins.card-base;
+  @include mixins.card-padding(sm);
   border-radius: 18px;
   position: relative;
 }
@@ -604,27 +596,19 @@ function formatTime(date: Date): string {
    ウェルカムメッセージとクイックオプション
    ========================================================================== */
 .welcome-message {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-md);
+  @include mixins.flex-column(var(--space-md));
 }
 
 .quick-options {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-xs);
+  @include mixins.flex-column(var(--space-xs));
 }
 
 .quick-option-btn {
-  background: var(--bg-primary);
-  border: 2px solid var(--border-light);
-  padding: var(--space-sm) var(--space-md);
+  @include mixins.button-base;
+  @include mixins.button-outline;
   border-radius: 12px;
-  cursor: pointer;
-  transition: all var(--transition-fast);
   text-align: left;
   font-size: 0.9rem;
-  color: var(--text-primary);
 }
 
 .quick-option-btn:hover {
@@ -637,11 +621,10 @@ function formatTime(date: Date): string {
    職業提案カード
    ========================================================================== */
 .profession-suggestions {
+  @include mixins.card-base;
+  @include mixins.card-padding(md);
   margin: var(--space-md) 0;
-  padding: var(--space-md);
-  background: var(--bg-secondary);
   border-radius: 12px;
-  border: 1px solid var(--border-light);
 }
 
 .profession-suggestions h4 {
@@ -651,27 +634,21 @@ function formatTime(date: Date): string {
 }
 
 .profession-cards {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-xs);
+  @include mixins.flex-column(var(--space-xs));
 }
 
 .profession-card {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: var(--space-sm) var(--space-md);
-  background: var(--bg-primary);
-  border: 1px solid var(--border-light);
+  @include mixins.flex-between;
+  @include mixins.card-base;
+  @include mixins.card-padding(sm);
   border-radius: 8px;
   cursor: pointer;
-  transition: all var(--transition-fast);
 }
 
 .profession-card:hover {
+  @include mixins.card-shadow(sm);
   border-color: var(--primary-navy);
   transform: translateY(-1px);
-  box-shadow: var(--shadow-sm);
 }
 
 .profession-name {
@@ -702,20 +679,16 @@ function formatTime(date: Date): string {
 }
 
 .question-buttons {
-  display: flex;
+  @include mixins.flex-row(var(--space-xs));
   flex-wrap: wrap;
-  gap: var(--space-xs);
 }
 
 .question-btn {
-  background: var(--bg-primary);
-  border: 1px solid var(--border-light);
+  @include mixins.button-base;
+  @include mixins.button-outline;
   padding: var(--space-xs) var(--space-sm);
   border-radius: 20px;
-  cursor: pointer;
   font-size: 0.85rem;
-  transition: all var(--transition-fast);
-  color: var(--text-primary);
 }
 
 .question-btn:hover {
@@ -728,7 +701,7 @@ function formatTime(date: Date): string {
    使用状況表示
    ========================================================================== */
 .usage-stats {
-  padding: var(--space-sm) var(--space-md);
+  @include mixins.card-padding(sm);
   background: var(--bg-secondary);
   border-top: 1px solid var(--border-color);
 }
@@ -762,8 +735,7 @@ function formatTime(date: Date): string {
 }
 
 .usage-limits {
-  display: flex;
-  gap: var(--space-md);
+  @include mixins.flex-row(var(--space-md));
   font-size: 0.85rem;
   color: var(--text-secondary);
 }

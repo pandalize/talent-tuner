@@ -114,7 +114,7 @@ const { home, nav, common } = useTranslation()
 </script>
 
 <style lang="scss" scoped>
-@import '@/assets/scss/mixins.scss';
+@use '@/assets/scss/mixins.scss' as mixins;
 // =====================================================
 // Home Page - SCSS版
 // =====================================================
@@ -127,7 +127,7 @@ const { home, nav, common } = useTranslation()
 
 // ヒーローセクション
 .hero-section {
-  @include hero-section;
+  @include mixins.hero-section;
   background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
   
   &::before {
@@ -148,7 +148,7 @@ const { home, nav, common } = useTranslation()
 }
 
 .hero-content {
-  @include container;
+  @include mixins.container;
   width: 90%;
   padding: var(--space-xl) var(--space-lg);
   text-align: center;
@@ -184,17 +184,17 @@ const { home, nav, common } = useTranslation()
 
 // 特徴グリッド - 共通コンポーネントを使用
 .feature-grid {
-  @include grid-auto-fit(250px);
+  @include mixins.grid-auto-fit(250px);
   margin-bottom: var(--space-xl);
 }
 
 .feature-item {
-  @include card-base;
-  @include card-padding(md);
-  @include card-shadow(sm);
+  @include mixins.card-base;
+  @include mixins.card-padding(md);
+  @include mixins.card-shadow(sm);
 
   &:hover {
-    @include card-shadow(md);
+    @include mixins.card-shadow(md);
     transform: translateY(-4px);
   }
 }

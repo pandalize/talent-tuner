@@ -155,29 +155,25 @@ onMounted(() => {
 })
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+@use '@/assets/scss/mixins.scss' as mixins;
 .breadcrumb-nav {
+  @include mixins.section-padding(sm);
   background: var(--bg-secondary);
   border-bottom: 1px solid var(--border-light);
-  padding: var(--space-sm) 0;
   margin-bottom: var(--space-lg);
 }
 
 .breadcrumb-list {
-  display: flex;
-  align-items: center;
-  gap: var(--space-xs);
-  max-width: 1200px;
-  margin: 0 auto;
+  @include mixins.flex-row(var(--space-xs));
+  @include mixins.container(1200px);
+  @include mixins.list-reset;
   padding: 0 var(--space-md);
-  list-style: none;
   font-size: var(--fs-small);
 }
 
 .breadcrumb-item {
-  display: flex;
-  align-items: center;
-  gap: var(--space-xs);
+  @include mixins.flex-row(var(--space-xs));
 }
 
 .breadcrumb-link {
@@ -220,7 +216,7 @@ onMounted(() => {
 
 @media (max-width: 480px) {
   .breadcrumb-nav {
-    padding: var(--space-xs) 0;
+    @include mixins.section-padding(xs);
   }
   
   .breadcrumb-list {

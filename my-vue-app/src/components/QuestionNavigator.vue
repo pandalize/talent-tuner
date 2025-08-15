@@ -965,14 +965,14 @@ onMounted(() => {
 </script>
 
 <style lang="scss" scoped>
-@import '@/assets/scss/mixins.scss';
+@use '@/assets/scss/mixins.scss' as mixins;
 // =====================================================
 // 診断コンポーネント - SCSS最適化版
 // =====================================================
 
 // 基本レイアウト
 .diagnosis-container {
-  @include flex-center;
+  @include mixins.flex-center;
   width: 100%;
   min-height: calc(100vh - 80px); // ヘッダー分を差し引き
   background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
@@ -982,17 +982,17 @@ onMounted(() => {
 }
 
 .diagnosis-content {
-  @include container(900px);
-  @include card-base;
-  @include card-shadow(lg);
-  @include card-padding(lg);
+  @include mixins.container(900px);
+  @include mixins.card-base;
+  @include mixins.card-shadow(lg);
+  @include mixins.card-padding(lg);
   margin-bottom: var(--space-lg);
   position: relative;
 }
 
 // ローディング & エラーセクション
 .loading-section {
-  @include section-padding;
+  @include mixins.section-padding;
   text-align: center;
   color: var(--text-primary);
 
@@ -1026,7 +1026,7 @@ onMounted(() => {
 }
 
 .error-section {
-  @include section-padding;
+  @include mixins.section-padding;
   text-align: center;
   color: #dc3545;
 
@@ -1049,7 +1049,7 @@ onMounted(() => {
 }
 
 .reload-button {
-  @include button-primary;
+  @include mixins.button-primary;
 }
 
 .reset-section {
@@ -1060,7 +1060,7 @@ onMounted(() => {
 }
 
 .reset-button {
-  @include button-base;
+  @include mixins.button-base;
   background: #f39c12;
   color: white;
   font-size: var(--fs-small);
@@ -1079,7 +1079,7 @@ onMounted(() => {
 }
 
 .question-meta {
-  @include flex-center;
+  @include mixins.flex-center;
   gap: var(--space-md);
   margin-bottom: var(--space-md);
 }
@@ -1123,51 +1123,51 @@ onMounted(() => {
 }
 
 .options-list {
-  @include flex-column(var(--space-lg));
-  @include container(900px);
+  @include mixins.flex-column(var(--space-lg));
+  @include mixins.container(900px);
 }
 
 .option-item {
-  @include card-base;
-  @include card-padding(lg);
+  @include mixins.card-base;
+  @include mixins.card-padding(lg);
   transition: all var(--transition-fast);
 
   &:hover {
     border-color: var(--accent-blue);
-    @include card-shadow(sm);
+    @include mixins.card-shadow(sm);
   }
 }
 
 .option-content {
-  @include flex-column(var(--space-md));
+  @include mixins.flex-column(var(--space-md));
 }
 
 .option-header {
-  @include flex-row(var(--space-md));
+  @include mixins.flex-row(var(--space-md));
   align-items: flex-start;
 }
 
 // 評価スケール
 .rating-scale {
-  @include flex-column(var(--space-sm));
+  @include mixins.flex-column(var(--space-sm));
 }
 
 .scale-labels {
-  @include flex-between;
+  @include mixins.flex-between;
   font-size: var(--fs-small);
   color: var(--text-secondary);
   margin-bottom: var(--space-xs);
 }
 
 .scale-buttons {
-  @include flex-between;
+  @include mixins.flex-between;
   gap: var(--space-xs);
   max-width: 300px;
   margin: 0 auto;
 }
 
 .rating-button {
-  @include flex-center;
+  @include mixins.flex-center;
   width: 50px;
   height: 50px;
   border-radius: 50%;
@@ -1190,7 +1190,7 @@ onMounted(() => {
     background: var(--accent-blue);
     color: white;
     transform: scale(1.15);
-    @include card-shadow(md);
+    @include mixins.card-shadow(md);
   }
 }
 
@@ -1223,7 +1223,7 @@ onMounted(() => {
 }
 
 .option-label {
-  @include flex-center;
+  @include mixins.flex-center;
   width: 32px;
   height: 32px;
   background: var(--accent-blue);
@@ -1245,12 +1245,12 @@ onMounted(() => {
 
 // ナビゲーション部分
 .navigation-section {
-  @include flex-between;
+  @include mixins.flex-between;
   gap: var(--space-md);
 }
 
 .nav-button {
-  @include button-secondary;
+  @include mixins.button-secondary;
   
   &:disabled {
     opacity: 0.5;
@@ -1258,18 +1258,18 @@ onMounted(() => {
   }
 
   &.results-ready {
-    @include button-primary;
+    @include mixins.button-primary;
   }
 }
 
 // プログレス表示
 .progress-indicator {
   flex: 1;
-  @include flex-center;
+  @include mixins.flex-center;
 }
 
 .progress-dots {
-  @include flex-row(var(--space-xs));
+  @include mixins.flex-row(var(--space-xs));
   align-items: center;
 }
 
@@ -1306,8 +1306,8 @@ onMounted(() => {
 }
 
 .progress-content {
-  @include container(900px);
-  @include flex-row(var(--space-md));
+  @include mixins.container(900px);
+  @include mixins.flex-row(var(--space-md));
   align-items: center;
 
   p {
@@ -1335,13 +1335,13 @@ onMounted(() => {
 }
 
 // メインレスポンシブデザイン
-@include respond-to('tablet') {
+@include mixins.respond-to('tablet') {
   .diagnosis-container {
     padding: var(--space-md) var(--space-sm);
   }
 
   .diagnosis-content {
-    @include card-padding(lg);
+    @include mixins.card-padding(lg);
   }
 
   .question-title {
@@ -1354,11 +1354,11 @@ onMounted(() => {
   }
   
   .option-item {
-    @include card-padding(md);
+    @include mixins.card-padding(md);
   }
   
   .option-header {
-    @include flex-column(var(--space-sm));
+    @include mixins.flex-column(var(--space-sm));
     text-align: center;
   }
   
@@ -1373,7 +1373,7 @@ onMounted(() => {
   }
 
   .navigation-section {
-    @include flex-column(var(--space-sm));
+    @include mixins.flex-column(var(--space-sm));
     width: 100%;
   }
 
@@ -1388,9 +1388,9 @@ onMounted(() => {
   }
 }
 
-@include respond-to('mobile') {
+@include mixins.respond-to('mobile') {
   .question-meta {
-    @include flex-column(var(--space-xs));
+    @include mixins.flex-column(var(--space-xs));
   }
 
   // 極小画面での5段階評価対応
@@ -1416,7 +1416,7 @@ onMounted(() => {
   }
 
   .progress-content {
-    @include flex-column(var(--space-xs));
+    @include mixins.flex-column(var(--space-xs));
     text-align: center;
 
     p {
@@ -1446,12 +1446,12 @@ onMounted(() => {
 
 // 結果表示画面
 .result-section {
-  @include container(1000px);
+  @include mixins.container(1000px);
 }
 
 // 結果ヘッダー
 .result-header {
-  @include section-padding;
+  @include mixins.section-padding;
   text-align: center;
   margin-bottom: var(--space-xxl);
   background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
@@ -1460,7 +1460,7 @@ onMounted(() => {
 }
 
 .completion-badge {
-  @include flex-row(var(--space-xs));
+  @include mixins.flex-row(var(--space-xs));
   background: var(--accent-blue);
   color: white;
   padding: var(--space-xs) var(--space-md);
@@ -1487,20 +1487,20 @@ onMounted(() => {
 
 // 結果カードグリッド
 .results-grid {
-  @include flex-column(var(--space-xl));
+  @include mixins.flex-column(var(--space-xl));
   margin-bottom: var(--space-xxl);
 }
 
 .profession-card {
-  @include card-base;
-  @include card-shadow(md);
-  @include card-padding(xl);
+  @include mixins.card-base;
+  @include mixins.card-shadow(md);
+  @include mixins.card-padding(xl);
   transition: all var(--transition-normal);
   position: relative;
 
   &.rank-1 {
     border-left: 4px solid var(--accent-gold);
-    @include card-shadow(lg);
+    @include mixins.card-shadow(lg);
   }
 
   &.rank-2 {
@@ -1514,17 +1514,17 @@ onMounted(() => {
 
 // カードヘッダー
 .card-header {
-  @include flex-between;
+  @include mixins.flex-between;
   margin-bottom: var(--space-lg);
 }
 
 .rank-section {
-  @include flex-row(var(--space-md));
+  @include mixins.flex-row(var(--space-md));
   align-items: center;
 }
 
 .rank-badge {
-  @include flex-center;
+  @include mixins.flex-center;
   width: 40px;
   height: 40px;
   background: var(--accent-blue);
@@ -1540,7 +1540,7 @@ onMounted(() => {
 }
 
 .rank-label {
-  @include flex-column;
+  @include mixins.flex-column;
 }
 
 .rank-title {
@@ -1552,12 +1552,12 @@ onMounted(() => {
 // スコア円グラフ
 .score-circle {
   position: relative;
-  @include flex-center;
+  @include mixins.flex-center;
 }
 
 .score-text {
   position: absolute;
-  @include flex-center;
+  @include mixins.flex-center;
   flex-direction: column;
   text-align: center;
 }
@@ -1591,7 +1591,7 @@ onMounted(() => {
 }
 
 .analysis-title {
-  @include flex-row(var(--space-xs));
+  @include mixins.flex-row(var(--space-xs));
   font-size: 1.125rem;
   color: var(--primary-navy);
   margin-bottom: var(--space-md);
@@ -1599,7 +1599,7 @@ onMounted(() => {
 }
 
 .category-grid {
-  @include grid-columns(1);
+  @include mixins.grid-columns(1);
   gap: var(--space-md);
 }
 
@@ -1610,7 +1610,7 @@ onMounted(() => {
 }
 
 .category-header {
-  @include flex-between;
+  @include mixins.flex-between;
   margin-bottom: var(--space-xs);
 }
 
@@ -1721,31 +1721,31 @@ onMounted(() => {
 // シェア機能
 .share-section {
   margin-bottom: var(--space-xxl);
-  @include card-padding(xl);
+  @include mixins.card-padding(xl);
   background: var(--bg-secondary);
   border-radius: 12px;
 }
 
 .share-grid {
-  @include grid-auto-fit(250px);
+  @include mixins.grid-auto-fit(250px);
   gap: var(--space-md);
 }
 
 .share-card {
-  @include card-base;
-  @include flex-row(var(--space-md));
-  @include card-padding(lg);
+  @include mixins.card-base;
+  @include mixins.flex-row(var(--space-md));
+  @include mixins.card-padding(lg);
   text-align: left;
   cursor: pointer;
   
   &:hover {
-    @include card-shadow(md);
+    @include mixins.card-shadow(md);
     transform: translateY(-2px);
   }
 }
 
 .share-icon {
-  @include flex-center;
+  @include mixins.flex-center;
   width: 48px;
   height: 48px;
   border-radius: 8px;
@@ -1782,7 +1782,7 @@ onMounted(() => {
   background: linear-gradient(135deg, var(--primary-navy) 0%, var(--primary-blue) 100%);
   color: white;
   border-radius: 12px;
-  @include card-padding(xl);
+  @include mixins.card-padding(xl);
   position: relative;
   overflow: hidden;
 
@@ -1800,12 +1800,12 @@ onMounted(() => {
 }
 
 .premium-header {
-  @include flex-row(var(--space-lg));
+  @include mixins.flex-row(var(--space-lg));
   margin-bottom: var(--space-lg);
 }
 
 .premium-icon {
-  @include flex-center;
+  @include mixins.flex-center;
   width: 60px;
   height: 60px;
   background: rgba(255, 255, 255, 0.1);
@@ -1847,20 +1847,20 @@ onMounted(() => {
 }
 
 .premium-features {
-  @include grid-columns(1);
+  @include mixins.grid-columns(1);
   gap: var(--space-sm);
   margin-bottom: var(--space-xl);
 }
 
 .feature-item {
-  @include flex-row(var(--space-sm));
+  @include mixins.flex-row(var(--space-sm));
   font-size: var(--fs-body);
 }
 
 .premium-button {
-  @include button-base;
+  @include mixins.button-base;
   width: 100%;
-  @include flex-center;
+  @include mixins.flex-center;
   gap: var(--space-sm);
   background: white;
   color: var(--primary-navy);
@@ -1880,42 +1880,42 @@ onMounted(() => {
 }
 
 .action-grid {
-  @include grid-auto-fit(200px);
+  @include mixins.grid-auto-fit(200px);
   gap: var(--space-md);
 }
 
 .action-button {
-  @include button-secondary;
-  @include flex-row(var(--space-sm));
+  @include mixins.button-secondary;
+  @include mixins.flex-row(var(--space-sm));
   justify-content: center;
   
   &.primary-action {
-    @include button-primary;
+    @include mixins.button-primary;
   }
 
   &:hover {
     transform: translateY(-2px);
-    @include card-shadow(md);
+    @include mixins.card-shadow(md);
   }
 }
 
 // 結果表示のレスポンシブデザイン
-@include respond-to('tablet') {
+@include mixins.respond-to('tablet') {
   .result-header {
-    @include card-padding(lg);
+    @include mixins.card-padding(lg);
   }
 
   .card-header {
-    @include flex-column(var(--space-md));
+    @include mixins.flex-column(var(--space-md));
     text-align: center;
   }
 
   .share-grid {
-    @include grid-columns(1);
+    @include mixins.grid-columns(1);
   }
 
   .premium-header {
-    @include flex-column(var(--space-md));
+    @include mixins.flex-column(var(--space-md));
     text-align: center;
   }
 
@@ -1924,21 +1924,21 @@ onMounted(() => {
   }
 }
 
-@include respond-to('mobile') {
+@include mixins.respond-to('mobile') {
   .profession-card {
-    @include card-padding(lg);
+    @include mixins.card-padding(lg);
   }
 
   .share-card {
-    @include card-padding(md);
+    @include mixins.card-padding(md);
   }
 
   .premium-card {
-    @include card-padding(lg);
+    @include mixins.card-padding(lg);
   }
 
   .action-grid {
-    @include grid-columns(1);
+    @include mixins.grid-columns(1);
   }
 }
 

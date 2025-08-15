@@ -1,46 +1,46 @@
 // =====================================================
-// SCSS Components Library for Talent-Tuner
+// SCSS Components Library for Talent-Tuner - Modern @use Version
 // 共通コンポーネントスタイル
 // =====================================================
 
-@import './mixins.scss';
+@use './mixins.scss' as mixins;
 
 // =====================================================
 // ボタンコンポーネント
 // =====================================================
 
 .btn {
-  @include button-base;
-  @include focus-ring;
+  @include mixins.button-base;
+  @include mixins.focus-ring;
 
   // サイズバリエーション
   &--small {
-    @include button-size(small);
+    @include mixins.button-size(small);
   }
 
   &--large {
-    @include button-size(large);
+    @include mixins.button-size(large);
   }
 
   &--xl {
-    @include button-size(xl);
+    @include mixins.button-size(xl);
   }
 
   // スタイルバリエーション
   &-primary {
-    @include button-primary;
+    @include mixins.button-primary;
   }
 
   &-secondary {
-    @include button-secondary;
+    @include mixins.button-secondary;
   }
 
   &-outline {
-    @include button-outline;
+    @include mixins.button-outline;
   }
 
   &-chat {
-    @include button-base;
+    @include mixins.button-base;
     background: linear-gradient(135deg, var(--accent-gold), #d4aa00);
     color: white;
     box-shadow: var(--shadow-sm);
@@ -54,7 +54,7 @@
 
   // アイコン付きボタン
   &-icon {
-    @include flex-row(0.5rem);
+    @include mixins.flex-row(0.5rem);
 
     svg {
       width: 1rem;
@@ -73,32 +73,32 @@
 // =====================================================
 
 .card {
-  @include card-base;
+  @include mixins.card-base;
 
   // バリエーション
   &--shadow-sm {
-    @include card-shadow(sm);
+    @include mixins.card-shadow(sm);
   }
 
   &--shadow-md {
-    @include card-shadow(md);
+    @include mixins.card-shadow(md);
   }
 
   &--shadow-lg {
-    @include card-shadow(lg);
+    @include mixins.card-shadow(lg);
   }
 
   // パディングバリエーション
   &--padding-sm {
-    @include card-padding(sm);
+    @include mixins.card-padding(sm);
   }
 
   &--padding-md {
-    @include card-padding(md);
+    @include mixins.card-padding(md);
   }
 
   &--padding-lg {
-    @include card-padding(lg);
+    @include mixins.card-padding(lg);
   }
 
   // 特殊カード
@@ -109,10 +109,10 @@
 
   &--interactive {
     cursor: pointer;
-    @include card-shadow(sm);
+    @include mixins.card-shadow(sm);
 
     &:hover {
-      @include card-shadow(md);
+      @include mixins.card-shadow(md);
       transform: translateY(-2px);
     }
   }
@@ -140,22 +140,22 @@
 // =====================================================
 
 .section {
-  @include section-padding;
+  @include mixins.section-padding;
 
   &--sm {
-    @include section-padding(sm);
+    @include mixins.section-padding(sm);
   }
 
   &--lg {
-    @include section-padding(lg);
+    @include mixins.section-padding(lg);
   }
 
   &--hero {
-    @include hero-section;
+    @include mixins.hero-section;
   }
 
   &__container {
-    @include container;
+    @include mixins.container;
   }
 
   &__title {
@@ -196,19 +196,19 @@
 // =====================================================
 
 .feature-grid {
-  @include grid-auto-fit(280px);
+  @include mixins.grid-auto-fit(280px);
   margin: var(--space-xl) 0;
 }
 
 .feature-item {
-  @include card-base;
-  @include card-padding(md);
-  @include card-shadow(sm);
+  @include mixins.card-base;
+  @include mixins.card-padding(md);
+  @include mixins.card-shadow(sm);
   text-align: center;
   position: relative;
 
   &:hover {
-    @include card-shadow(md);
+    @include mixins.card-shadow(md);
     transform: translateY(-4px);
   }
 
@@ -357,18 +357,18 @@
 // =====================================================
 
 .trust-indicators {
-  @include flex-row(1.5rem);
+  @include mixins.flex-row(1.5rem);
   justify-content: center;
   flex-wrap: wrap;
   margin-top: var(--space-lg);
 
-  @include respond-to('mobile') {
+  @include mixins.respond-to('mobile') {
     gap: 2rem;
   }
 }
 
 .trust-item {
-  @include flex-row(0.5rem);
+  @include mixins.flex-row(0.5rem);
   color: rgba(255, 255, 255, 0.9);
   font-size: 0.875rem;
   font-weight: 500;
@@ -436,7 +436,7 @@
   transition: border-color var(--transition-normal);
 
   &:focus {
-    @include focus-ring;
+    @include mixins.focus-ring;
     border-color: var(--accent-blue);
   }
 
@@ -462,8 +462,8 @@
 
 .tabs {
   &__list {
-    @include list-reset;
-    @include flex-row(0);
+    @include mixins.list-reset;
+    @include mixins.flex-row(0);
     border-bottom: 2px solid var(--border-light);
     margin-bottom: var(--space-lg);
   }
@@ -487,6 +487,6 @@
   }
 
   &__content {
-    @include fade-in;
+    @include mixins.fade-in;
   }
 }
