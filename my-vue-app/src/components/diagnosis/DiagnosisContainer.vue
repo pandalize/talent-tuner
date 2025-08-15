@@ -229,6 +229,11 @@ onMounted(() => {
   .diagnosis-container {
     padding: var(--space-md) var(--space-md) 140px var(--space-md);
     min-height: 100vh;
+    
+    // QuestionDisplayが表示される時は、固定ナビゲーション分のスペースを確保
+    &.has-question {
+      padding-bottom: 160px;
+    }
   }
   
   .diagnosis-content {
@@ -238,11 +243,6 @@ onMounted(() => {
     background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
     margin-bottom: var(--space-xl);
-  }
-  
-  // QuestionDisplayが表示される時は、固定ナビゲーション分のスペースを確保
-  &.has-question {
-    padding-bottom: 160px;
   }
 }
 </style>
