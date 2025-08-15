@@ -87,10 +87,19 @@ const isLastQuestion = computed(() => {
   @include mixins.flex-between;
   gap: var(--space-md);
   align-items: center;
-  margin-top: var(--space-xl);
-  padding: var(--space-lg) 0;
-  position: relative;
-  z-index: 10;
+  position: fixed;
+  bottom: var(--space-lg);
+  left: 50%;
+  transform: translateX(-50%);
+  width: calc(100% - var(--space-xl));
+  max-width: 900px;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(248, 250, 252, 0.98) 100%);
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--border-light);
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  padding: var(--space-lg);
+  z-index: 100;
 }
 
 .nav-button {
@@ -148,24 +157,17 @@ const isLastQuestion = computed(() => {
   }
 }
 
-// デスクトップでの適切な間隔確保
+// デスクトップでの固定ナビゲーション
 @include mixins.respond-to('desktop') {
   .question-navigation {
-    margin-top: var(--space-xxl);
-    padding: var(--space-xl) 0;
-    
-    // オプションとの重なりを防止
-    &::before {
-      content: '';
-      display: block;
-      height: var(--space-lg);
-      width: 100%;
-      position: absolute;
-      top: calc(-1 * var(--space-lg));
-      left: 0;
-      background: transparent;
-      pointer-events: none;
-    }
+    bottom: var(--space-xl);
+    padding: var(--space-md) var(--space-lg);
+    border-radius: 12px;
+  }
+  
+  .nav-button {
+    padding: var(--space-sm) var(--space-lg);
+    font-size: 0.9375rem;
   }
 }
 
@@ -187,8 +189,10 @@ const isLastQuestion = computed(() => {
   }
   
   .question-navigation {
-    margin-top: var(--space-lg);
-    padding: var(--space-md) 0;
+    position: fixed;
+    bottom: var(--space-md);
+    border-radius: 12px;
+    padding: var(--space-md);
   }
 
   .progress-dots {
