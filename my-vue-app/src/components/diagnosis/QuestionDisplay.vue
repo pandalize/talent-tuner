@@ -57,17 +57,6 @@
       </div>
     </div>
     
-    <!-- ナビゲーション -->
-    <QuestionNavigation
-      :questionIndex="questionIndex"
-      :totalQuestions="totalQuestions"
-      :canGoBack="questionIndex > 0"
-      :canProceed="isCurrentQuestionCompletedLocal"
-      :allQuestionsAnswered="isAllQuestionsAnsweredLocal"
-      @go-previous="$emit('previous-question')"
-      @go-next="$emit('next-question')"
-      @calculate-result="$emit('calculate-result')"
-    />
   </div>
 </template>
 
@@ -143,7 +132,7 @@ function handleSelectRating(questionId: string, optionLabel: string, rating: num
 
 .question-display {
   @include mixins.flex-column(var(--space-xl));
-  margin-bottom: var(--space-xl);
+  margin-bottom: var(--space-md);
   position: relative;
 }
 
@@ -333,8 +322,8 @@ function handleSelectRating(questionId: string, optionLabel: string, rating: num
 // デスクトップ（1024px以上）は元のレイアウト維持
 @include mixins.respond-to('desktop') {
   .question-display {
-    margin-bottom: var(--space-xxl);
-    padding-bottom: var(--space-lg);
+    margin-bottom: 240px;
+    padding-bottom: 0;
   }
   
   .option-header {

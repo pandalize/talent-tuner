@@ -53,6 +53,20 @@
           @calculate-result="calculateResult"
         />
         
+        <!-- ナビゲーション（診断中のみ） -->
+        <QuestionNavigation
+          v-if="!showResult && currentQuestion"
+          :questionIndex="currentQuestionIndex"
+          :totalQuestions="questions.length"
+          :canGoBack="currentQuestionIndex > 0"
+          :canProceed="isCurrentQuestionCompleted"
+          :allQuestionsAnswered="isAllQuestionsAnswered"
+          @go-previous="goToPreviousQuestion"
+          @go-next="goToNextQuestion"
+          @calculate-result="calculateResult"
+          class="navigation-sticky"
+        />
+        
         <!-- 結果表示コンポーネント -->
         <ResultDisplay 
           v-if="showResult"
@@ -79,6 +93,7 @@ import { onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useDiagnosis } from '../../composables/useDiagnosis'
 import QuestionDisplay from './QuestionDisplay.vue'
+import QuestionNavigation from './QuestionNavigation.vue'
 import ResultDisplay from './ResultDisplay.vue'  
 import ProgressIndicator from './ProgressIndicator.vue'
 
@@ -104,7 +119,11 @@ const {
   goToNextQuestion,
   goToPreviousQuestion,
   calculateResult,
-  resetDiagnosis
+  resetDiagnosis,
+  
+  // 計算プロパティ
+  isCurrentQuestionCompleted,
+  isAllQuestionsAnswered
 } = useDiagnosis()
 
 // === イベントハンドラー ===
@@ -142,10 +161,17 @@ onMounted(() => {
   @include mixins.card-base;
   @include mixins.card-shadow(lg);
   @include mixins.card-padding(lg);
-  padding-bottom: 120px;
+  padding-bottom: var(--space-lg);
   margin-bottom: var(--space-lg);
   position: relative;
-  min-height: 500px;
+  min-height: 400px;
+}
+
+.navigation-sticky {
+  position: sticky;
+  bottom: var(--space-md);
+  margin: var(--space-md) 0 var(--space-sm) 0;
+  z-index: 100;
 }
 
 // ローディング & エラーセクション
@@ -251,13 +277,13 @@ onMounted(() => {
     width: 100%;
     max-width: 100%;
     padding: var(--space-md);
-    padding-bottom: 140px;
+    padding-bottom: 200px;
     border-radius: 12px;
     background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
     margin-bottom: var(--space-lg);
     box-sizing: border-box;
-    min-height: 500px;
+    min-height: 600px;
   }
 }
 </style>
