@@ -255,15 +255,13 @@ export class ClaudeApiClient {
         };
       }
 
-      // 開発環境ではNode.jsプロキシ、本番環境ではPHPプロキシを使用
-      const apiUrl = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
-        ? '/api/chat-proxy'  // 開発環境: Node.jsプロキシ経由  
-        : '/api/chat-proxy.php';   // 本番環境: PHPプロキシ経由
+      // 開発・本番環境統一: PHPプロキシ経由
+      const apiUrl = '/api/chat-proxy.php';
 
       console.log('API URL:', apiUrl);
       console.log('User message:', lastUserMessage);
 
-      // プロキシ経由でAPIを呼び出し
+      // PHPプロキシ経由でAPI呼び出し
       const response = await fetch(apiUrl, {
         method: 'POST',
         headers: {
@@ -271,13 +269,13 @@ export class ClaudeApiClient {
         },
         body: JSON.stringify({
           message: lastUserMessage,
-          sessionId: this.sessionStorage.sessionStartTime,  // セッション識別用
+          sessionId: this.sessionStorage.sessionStartTime,
           messageCount: this.sessionStorage.messageCount
         })
       });
 
       if (!response.ok) {
-        throw new Error(`Proxy API error: ${response.status}`);
+        throw new Error(`API error: ${response.status}`);
       }
 
       const data = await response.json();

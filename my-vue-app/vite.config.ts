@@ -22,10 +22,9 @@ export default defineConfig({
       allow: ['..']
     },
     proxy: {
-      '/api/chat-proxy': {
-        target: 'http://localhost:3001',
-        changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api\/chat-proxy/, '/chat')
+      '/api': {
+        target: 'http://localhost:8000', // PHP built-in server
+        changeOrigin: true
       }
     }
   },

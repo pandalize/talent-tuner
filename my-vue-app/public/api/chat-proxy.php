@@ -1,12 +1,8 @@
 <?php
 /**
- * Claude API プロキシ - 修正版
- * システムメッセージを正しいtop-level parameterに配置
+ * Claude API プロキシ
+ * 開発・本番環境統一版
  */
-
-// エラーロギング設定
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
 
 // CORS設定
 header('Content-Type: application/json; charset=utf-8');
@@ -70,7 +66,7 @@ if (!$apiKey) {
     exit;
 }
 
-// Claude APIへのリクエスト準備（修正版）
+// Claude APIへのリクエスト準備
 $claudeData = [
     'model' => 'claude-3-5-haiku-20241022',
     'max_tokens' => MAX_OUTPUT_TOKENS,
@@ -129,18 +125,13 @@ curl_close($ch);
 // エラーハンドリング
 if ($error) {
     http_response_code(500);
-    echo json_encode(['success' => false, 'error' => 'ネットワークエラー', 'debug' => $error]);
+    echo json_encode(['success' => false, 'error' => 'ネットワークエラーが発生しました']);
     exit;
 }
 
 if ($httpCode !== 200) {
     http_response_code(500);
-    echo json_encode([
-        'success' => false, 
-        'error' => 'API呼び出しエラー',
-        'http_code' => $httpCode,
-        'debug_response' => substr($response, 0, 500)
-    ]);
+    echo json_encode(['success' => false, 'error' => 'AIサービスで一時的な問題が発生しました']);
     exit;
 }
 
@@ -148,7 +139,7 @@ if ($httpCode !== 200) {
 $responseData = json_decode($response, true);
 if (!$responseData || !isset($responseData['content'][0]['text'])) {
     http_response_code(500);
-    echo json_encode(['success' => false, 'error' => 'レスポンス解析エラー']);
+    echo json_encode(['success' => false, 'error' => 'AIサービスからの応答を解析できませんでした']);
     exit;
 }
 
