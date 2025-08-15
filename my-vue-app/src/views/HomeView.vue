@@ -113,41 +113,33 @@ import { useTranslation } from '../composables/useTranslation'
 const { home, nav, common } = useTranslation()
 </script>
 
-<style scoped>
-/* 既存のスタイルはそのまま維持 */
-/* ==========================================================================
-   ホームページ - 知的でプロフェッショナルなデザイン
-   ========================================================================== */
+<style lang="scss" scoped>
+@import '@/assets/scss/mixins.scss';
+// =====================================================
+// Home Page - SCSS版
+// =====================================================
 
-/* メインコンテナ */
 .home-main {
   width: 100%;
   min-height: 100vh;
   background: var(--bg-primary);
 }
 
-/* ==========================================================================
-   ヒーローセクション
-   ========================================================================== */
+// ヒーローセクション
 .hero-section {
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  @include hero-section;
   background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
-  position: relative;
-  overflow: hidden;
-}
-
-.hero-section::before {
-  content: '';
-  position: absolute;
-  top: -50%;
-  right: -50%;
-  width: 200%;
-  height: 200%;
-  background: radial-gradient(circle, rgba(52, 152, 219, 0.03) 0%, transparent 70%);
-  animation: pulse 20s ease-in-out infinite;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(52, 152, 219, 0.03) 0%, transparent 70%);
+    animation: pulse 20s ease-in-out infinite;
+  }
 }
 
 @keyframes pulse {
@@ -156,7 +148,7 @@ const { home, nav, common } = useTranslation()
 }
 
 .hero-content {
-  max-width: 1200px;
+  @include container;
   width: 90%;
   padding: var(--space-xl) var(--space-lg);
   text-align: center;
@@ -190,28 +182,21 @@ const { home, nav, common } = useTranslation()
   line-height: 1.8;
 }
 
-/* ==========================================================================
-   特徴グリッド
-   ========================================================================== */
+// 特徴グリッド - 共通コンポーネントを使用
 .feature-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: var(--space-lg);
+  @include grid-auto-fit(250px);
   margin-bottom: var(--space-xl);
 }
 
 .feature-item {
-  background: var(--bg-primary);
-  padding: var(--space-lg);
-  border-radius: 8px;
-  box-shadow: var(--shadow-sm);
-  transition: all var(--transition-normal);
-  border: 1px solid var(--border-light);
-}
+  @include card-base;
+  @include card-padding(md);
+  @include card-shadow(sm);
 
-.feature-item:hover {
-  transform: translateY(-4px);
-  box-shadow: var(--shadow-md);
+  &:hover {
+    @include card-shadow(md);
+    transform: translateY(-4px);
+  }
 }
 
 .feature-number {

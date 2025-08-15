@@ -45,19 +45,19 @@
 // アプリケーションフッターコンポーネント
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+@import '@/assets/scss/mixins.scss';
 .app-footer {
   background-color: var(--text-dark, #333);
   color: var(--background-white, #fff);
   margin-top: auto;
-  padding: 3rem 1rem 1rem;
+  @include section-padding;
   width: 100%;
 }
 
 .footer-content {
-  max-width: 1200px;
-  margin: 0 auto;
-  display: grid;
+  @include container(1200px);
+  @include grid-auto-fit(200px);
   grid-template-columns: 2fr 1fr 1fr 1fr;
   gap: 2rem;
 }
@@ -84,9 +84,7 @@
 }
 
 .footer-section ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
+  @include list-reset;
 }
 
 .footer-section li {
@@ -119,10 +117,10 @@
   margin: 0;
 }
 
-/* タブレット向け */
-@media (max-width: 1024px) {
+// レスポンシブデザイン
+@include respond-to('desktop') {
   .footer-content {
-    grid-template-columns: 1fr 1fr;
+    @include grid-columns(2);
     gap: 1.5rem;
   }
   
@@ -133,24 +131,23 @@
   }
 }
 
-/* スマートフォン向け */
-@media (max-width: 768px) {
+@include respond-to('tablet') {
   .app-footer {
-    padding: 2rem 1rem 1rem;
+    @include section-padding(sm);
   }
   
   .footer-content {
-    grid-template-columns: 1fr;
+    @include grid-columns(1);
     gap: 1rem;
     text-align: center;
   }
   
-  .footer-section:first-child {
-    grid-column: auto;
-    margin-bottom: 1.5rem;
-  }
-  
   .footer-section {
+    &:first-child {
+      grid-column: auto;
+      margin-bottom: 1.5rem;
+    }
+    
     margin-bottom: 1.5rem;
   }
   
