@@ -36,18 +36,6 @@
       
       <!-- メインコンテンツ -->
       <div v-if="!loading && !error">
-        <!-- 診断リセットボタン（開発・テスト用） -->
-        <div v-if="!showResult" class="reset-section">
-          <button @click.prevent="handleResetDiagnosis" class="btn reset-button" type="button">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M3 12a9 9 0 019-9 9.75 9.75 0 016.74 2.74L21 8"/>
-              <path d="M21 3v5h-5"/>
-              <path d="M21 12a9 9 0 01-9 9 9.75 9.75 0 01-6.74-2.74L3 16"/>
-              <path d="M3 21v-5h5"/>
-            </svg>
-            診断をリセット
-          </button>
-        </div>
         
         <!-- 質問表示コンポーネント -->
         <QuestionDisplay 
@@ -121,19 +109,6 @@ function handleSelectRating(questionId: string, optionLabel: string, rating: num
   selectOptionRating(questionId, optionLabel, rating)
 }
 
-function handleResetDiagnosis() {
-  const userConfirmed = confirm('診断データをすべてリセットしますか？\n※この操作は元に戻せません。')
-  
-  if (userConfirmed) {
-    try {
-      resetDiagnosis()
-      alert('診断データがリセットされました。')
-    } catch (error) {
-      console.error('Reset failed:', error)
-      alert('リセット中にエラーが発生しました。')
-    }
-  }
-}
 
 function goHome() {
   router.push('/')
@@ -230,25 +205,6 @@ onMounted(() => {
   @include mixins.button-primary;
 }
 
-.reset-section {
-  text-align: center;
-  padding: var(--space-md);
-  border-bottom: 1px solid var(--border-light);
-  margin-bottom: var(--space-lg);
-}
-
-.reset-button {
-  @include mixins.button-base;
-  background: #f39c12;
-  color: white;
-  font-size: var(--fs-small);
-  padding: var(--space-xs) var(--space-md);
-
-  &:hover {
-    background: #e67e22;
-    transform: translateY(-1px);
-  }
-}
 
 // プログレスバーが表示される時のみ下部パディングを追加
 .diagnosis-container.has-progress {

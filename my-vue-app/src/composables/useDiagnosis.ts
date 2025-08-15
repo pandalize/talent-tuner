@@ -244,6 +244,8 @@ export function useDiagnosis() {
 
   // === リセット機能 ===
   function resetDiagnosis() {
+    console.log('診断リセット開始')
+    
     answers.value = {}
     showResult.value = false
     topProfessions.value = []
@@ -253,7 +255,16 @@ export function useDiagnosis() {
     try {
       Object.values(STORAGE_KEYS).forEach(key => {
         localStorage.removeItem(key)
+        console.log(`Removed localStorage key: ${key}`)
       })
+      
+      // 初期値を明示的にlocalStorageに保存
+      saveToStorage(STORAGE_KEYS.ANSWERS, {})
+      saveToStorage(STORAGE_KEYS.SHOW_RESULT, false)
+      saveToStorage(STORAGE_KEYS.TOP_PROFESSIONS, [])
+      saveToStorage(STORAGE_KEYS.CURRENT_QUESTION_INDEX, 0)
+      
+      console.log('診断データが完全にリセットされました')
     } catch (storageError) {
       console.error('Failed to clear localStorage:', storageError)
     }

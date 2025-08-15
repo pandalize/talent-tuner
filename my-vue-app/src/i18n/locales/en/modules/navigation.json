@@ -1,9 +1,10 @@
 {
   "nav": {
     "home": "Home",
-    "diagnosis": "Assessment",
+    "diagnosis": "Start Assessment",
+    "chat": "AI Career Counseling",
     "about": "Professions",
     "career_guide": "Career Guide",
-    "ai_counseling": "AI Counseling"
+    "language": "Language"
   }
 }

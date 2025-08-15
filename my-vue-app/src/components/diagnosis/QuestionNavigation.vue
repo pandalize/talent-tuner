@@ -30,12 +30,12 @@
     </div>
 
     <button
-      @click="allQuestionsAnswered ? $emit('calculate-result') : $emit('go-next')"
+      @click="isLastQuestion && allQuestionsAnswered ? $emit('calculate-result') : $emit('go-next')"
       :disabled="!canProceed"
       class="btn nav-button next-button"
-      :class="{ 'results-ready': allQuestionsAnswered }"
+      :class="{ 'results-ready': isLastQuestion && allQuestionsAnswered }"
     >
-      <span v-if="allQuestionsAnswered">
+      <span v-if="isLastQuestion && allQuestionsAnswered">
         結果を見る
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <path d="M9 18l6-6-6-6"/>
@@ -52,6 +52,8 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue'
+
 // Props
 interface Props {
   questionIndex: number
@@ -61,7 +63,7 @@ interface Props {
   allQuestionsAnswered: boolean
 }
 
-defineProps<Props>()
+const props = defineProps<Props>()
 
 // Emits
 interface Emits {
@@ -71,6 +73,11 @@ interface Emits {
 }
 
 defineEmits<Emits>()
+
+// Computed
+const isLastQuestion = computed(() => {
+  return props.questionIndex === props.totalQuestions - 1
+})
 </script>
 
 <style lang="scss" scoped>

@@ -1,9 +1,10 @@
 {
   "nav": {
     "home": "首页",
-    "diagnosis": "诊断",
+    "diagnosis": "开始诊断",
+    "chat": "AI职业咨询",
     "about": "职业列表",
     "career_guide": "职业指南",
-    "ai_counseling": "AI咨询"
+    "language": "语言"
   }
 }

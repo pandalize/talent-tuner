@@ -39,8 +39,9 @@
 
     <!-- アクションボタン -->
     <div class="action-section">
+      
       <div class="action-grid">
-        <button @click="$emit('reset-diagnosis')" class="action-button secondary-action" type="button">
+        <button @click="handleInstantReset" class="action-button secondary-action" type="button">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M3 12a9 9 0 019-9 9.75 9.75 0 016.74 2.74L21 8"/>
             <path d="M21 3v5h-5"/>
@@ -81,7 +82,25 @@ interface Emits {
   'go-home': []
 }
 
-defineEmits<Emits>()
+const emit = defineEmits<Emits>()
+
+// 即座にリセット処理（確認なし）
+function handleInstantReset() {
+  try {
+    // localStorage完全削除
+    const keys = ['diagnosis_answers', 'diagnosis_show_result', 'diagnosis_top_professions', 'diagnosis_current_question_index']
+    keys.forEach(key => {
+      localStorage.removeItem(key)
+    })
+    
+    // ページリロード
+    window.location.reload()
+  } catch (error) {
+    console.error('リセット失敗:', error)
+    // エラーが発生してもページをリロード
+    window.location.reload()
+  }
+}
 </script>
 
 <style lang="scss" scoped>

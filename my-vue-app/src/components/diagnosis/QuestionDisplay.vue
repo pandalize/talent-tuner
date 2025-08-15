@@ -38,13 +38,15 @@
                 <button
                   v-for="rating in [1, 2, 3, 4, 5]"
                   :key="`${option.label}-${rating}`"
-                  @click="handleSelectRating(question.id, option.label, rating)"
+                  @click.stop="handleSelectRating(question.id, option.label, rating)"
                   :class="{ 
-                    selected: getOptionRating(question.id, option.label) === rating,
+                    selected: getLocalOptionRating(question.id, option.label) === rating,
                     [`rating-${rating}`]: true
                   }"
                   class="rating-button"
                   :title="getRatingLabel(rating)"
+                  style="pointer-events: auto; position: relative; z-index: 10;"
+                  type="button"
                 >
                   {{ rating }}
                 </button>
@@ -98,8 +100,7 @@ const emit = defineEmits<Emits>()
 // Composable
 const {
   getQuestionCategoryName,
-  getRatingLabel,
-  getOptionRating
+  getRatingLabel
 } = useDiagnosis()
 
 // 計算プロパティ
@@ -121,6 +122,15 @@ const isAllQuestionsAnsweredLocal = computed(() => {
   // 簡略化のためここで実装
   return Object.keys(props.answers).length >= props.totalQuestions
 })
+
+// ローカル関数
+function getLocalOptionRating(questionId: string, optionLabel: string): number | null {
+  const questionAnswers = props.answers[questionId]
+  if (!questionAnswers || typeof questionAnswers === 'string') return null
+  
+  const rating = questionAnswers[optionLabel]
+  return (typeof rating === 'number' && rating >= 1 && rating <= 5) ? rating : null
+}
 
 // イベントハンドラー
 function handleSelectRating(questionId: string, optionLabel: string, rating: number) {
@@ -260,6 +270,9 @@ function handleSelectRating(questionId: string, optionLabel: string, rating: num
   transition: all var(--transition-fast);
   font-weight: 600;
   font-size: 1rem;
+  pointer-events: auto;
+  position: relative;
+  z-index: 10;
 
   &:hover {
     border-color: var(--accent-blue);
