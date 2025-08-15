@@ -77,7 +77,13 @@ my-vue-app/
 1. **機能開発**: `feature/` ブランチで開発
 2. **品質確認**: `npm run lint && npm run type-check`
 3. **テスト**: `npm run dev` でローカル確認
-4. **デプロイ**: `develop` → `main` マージでGitHub Actions自動デプロイ
+4. **デプロイ**: `develop` → `main` マージで**GitHub Actions自動デプロイ**
+
+### ⚠️ 重要：自動デプロイ設定
+- **mainブランチにpushすると自動的に本番環境にデプロイされます**
+- `.github/workflows/deploy.yml` でGitHub Actions設定済み
+- お名前.comサーバーへのFTPアップロードが自動実行
+- mainマージ前に必ずテストを完了させること
 
 ## 重要な注意事項
 
