@@ -232,8 +232,12 @@ onMounted(() => {
 
 @include mixins.respond-to('mobile') {
   .diagnosis-container {
-    padding: var(--space-md) var(--space-md) 140px var(--space-md);
+    padding: var(--space-sm) var(--space-sm) 140px var(--space-sm);
     min-height: 100vh;
+    width: 100%;
+    max-width: 100vw;
+    overflow-x: hidden;
+    box-sizing: border-box;
     
     // QuestionDisplayが表示される時は、固定ナビゲーション分のスペースを確保
     &.has-question {
@@ -243,11 +247,13 @@ onMounted(() => {
   
   .diagnosis-content {
     width: 100%;
-    padding: var(--space-lg);
-    border-radius: 16px;
+    max-width: 100%;
+    padding: var(--space-md);
+    border-radius: 12px;
     background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
-    margin-bottom: var(--space-xl);
+    margin-bottom: var(--space-lg);
+    box-sizing: border-box;
   }
 }
 </style>
