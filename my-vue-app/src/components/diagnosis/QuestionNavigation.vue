@@ -173,16 +173,6 @@ const isLastQuestion = computed(() => {
     margin-bottom: var(--space-sm);
   }
   
-  .question-navigation {
-    margin-top: var(--space-lg);
-    padding: var(--space-md) 0;
-    position: static;
-    background: none;
-    backdrop-filter: none;
-    border: none;
-    box-shadow: none;
-    border-radius: 0;
-  }
 
   .progress-dots {
     max-width: 400px;
