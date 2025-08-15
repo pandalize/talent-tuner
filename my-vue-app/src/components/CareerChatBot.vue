@@ -477,10 +477,18 @@ function formatTime(date: Date): string {
   height: 600px;
   max-height: 80vh;
   width: 100%;
-  max-width: min(800px, calc(100vw - var(--space-md)));
+  max-width: 100%;
   border-radius: 16px;
   overflow: hidden;
   box-sizing: border-box;
+  
+  &.full-width-chat {
+    height: 100%;
+    max-height: 100%;
+    width: 100%;
+    max-width: 100%;
+    border-radius: 0;
+  }
 }
 
 /* ==========================================================================
@@ -996,11 +1004,18 @@ function formatTime(date: Date): string {
    ========================================================================== */
 @media (max-width: 768px) {
   .career-chat-bot {
-    height: 100vh;
-    max-height: 100vh;
+    height: 100%;
+    max-height: 100%;
     border-radius: 0;
-    width: 100vw;
-    max-width: 100vw;
+    width: 100%;
+    max-width: 100%;
+    
+    &.full-width-chat {
+      height: 100%;
+      max-height: 100%;
+      width: 100%;
+      max-width: 100%;
+    }
   }
 
   .chat-messages {

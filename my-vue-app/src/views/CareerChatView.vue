@@ -1,8 +1,6 @@
 <template>
   <div class="career-chat-view">
-    <div class="chat-container">
-      <CareerChatBot @close="handleChatClose" />
-    </div>
+    <CareerChatBot @close="handleChatClose" class="full-width-chat" />
     
     <!-- チャット紹介セクション（モバイル用） -->
     <div class="chat-intro" v-if="showIntro">
@@ -64,23 +62,26 @@ function handleChatClose() {
    チャットビュー基本レイアウト
    ========================================================================== */
 .career-chat-view {
-  min-height: 100vh;
+  min-height: calc(100vh - 80px);
   background: var(--bg-secondary);
   display: flex;
-  align-items: center;
-  justify-content: center;
+  align-items: stretch;
+  justify-content: stretch;
   padding: 0;
-  width: 100vw;
-  max-width: 100vw;
+  width: 100%;
+  max-width: 100%;
   box-sizing: border-box;
   overflow-x: hidden;
+  position: relative;
 }
 
-.chat-container {
+.full-width-chat {
   width: 100%;
-  max-width: min(900px, 100vw);
+  max-width: 100%;
+  height: calc(100vh - 80px);
   margin: 0;
   box-sizing: border-box;
+  border-radius: 0;
 }
 
 /* ==========================================================================
@@ -171,9 +172,15 @@ function handleChatClose() {
 @media (min-width: 769px) {
   .career-chat-view {
     padding: var(--space-md);
+    align-items: center;
+    justify-content: center;
   }
   
-  .chat-container {
+  .full-width-chat {
+    max-width: 900px;
+    height: auto;
+    max-height: 80vh;
+    border-radius: 16px;
     margin: 0 auto;
   }
   
@@ -189,14 +196,16 @@ function handleChatClose() {
 @media (max-width: 768px) {
   .career-chat-view {
     padding: 0;
-    align-items: flex-start;
-    width: 100vw;
-    max-width: 100vw;
+    align-items: stretch;
+    justify-content: stretch;
+    min-height: calc(100vh - 80px);
   }
 
-  .chat-container {
-    width: 100vw;
-    max-width: 100vw;
+  .full-width-chat {
+    width: 100%;
+    height: calc(100vh - 80px);
+    max-height: none;
+    border-radius: 0;
   }
 
   .intro-content {
