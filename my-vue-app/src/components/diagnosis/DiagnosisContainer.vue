@@ -3,11 +3,18 @@
   QuestionNavigatorから分離された軽量版
 -->
 <template>
-  <div class="diagnosis-container tw-diagnosis-layout" :class="{ 
-    'has-progress': !showResult && questions.length > 0,
-    'has-question': !showResult && currentQuestion 
-  }">
-    <div class="diagnosis-content tw-content-area">
+  <div 
+    class="diagnosis-container tw-diagnosis-layout" 
+    :class="{ 
+      'has-progress': !showResult && questions.length > 0,
+      'has-question': !showResult && currentQuestion 
+    }"
+    style="width: 100vw; max-width: 100vw; overflow-x: hidden; box-sizing: border-box; padding-left: 4px; padding-right: 4px;"
+  >
+    <div 
+      class="diagnosis-content tw-content-area"
+      style="width: 100%; max-width: calc(100vw - 16px); margin: 0 auto; box-sizing: border-box;"
+    >
       <!-- ローディング状態 -->
       <div v-if="loading" class="loading-section">
         <div class="loading-spinner"></div>

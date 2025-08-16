@@ -41,7 +41,12 @@
     </div>
 
     <!-- 職業名 -->
-    <h3 class="tw-profession-name">{{ profession.name }}</h3>
+    <h3 
+      class="tw-profession-name" 
+      style="word-wrap: break-word; overflow-wrap: break-word; max-width: 100%; line-height: 1.3;"
+    >
+      {{ profession.name }}
+    </h3>
     
     <!-- カテゴリー別スコア -->
     <div 
@@ -62,7 +67,7 @@
           v-for="(score, category) in profession.categories"
           :key="category"
           class="tw-category-item"
-          style="width: 100%; min-width: 0; box-sizing: border-box; overflow-x: hidden;"
+          style="width: 95%; max-width: 95%; min-width: 0; box-sizing: border-box; overflow-x: hidden; margin: 0 auto;"
         >
           <div 
             class="tw-category-header" 
@@ -83,7 +88,7 @@
           </div>
           <div 
             class="tw-category-bar" 
-            style="height: 8px; background: #e5e7eb; border-radius: 4px; overflow: hidden; width: 100%;"
+            style="height: 8px; background: #e5e7eb; border-radius: 4px; overflow: hidden; width: 95%; max-width: 95%;"
           >
             <div 
               class="tw-category-fill" 

@@ -18,7 +18,7 @@ const closeMobileMenu = () => {
 </script>
 
 <template>
-  <div id="app">
+  <div id="app" style="width: 100vw; max-width: 100vw; overflow-x: hidden; box-sizing: border-box;">
     <header class="app-header">
       <!-- ロゴ部分 -->
       <RouterLink to="/" class="logo" @click="closeMobileMenu">
