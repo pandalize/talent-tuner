@@ -21,7 +21,10 @@
     </div>
 
     <!-- 職業カードリスト -->
-    <div class="results-grid w-full space-y-6 overflow-x-hidden">
+    <div 
+      class="results-grid" 
+      style="width: 100%; max-width: 100vw; overflow-x: hidden; box-sizing: border-box; padding: 0; margin: 0;"
+    >
       <ProfessionCard
         v-for="(profession, index) in professions"
         :key="profession.name"

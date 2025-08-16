@@ -3,7 +3,11 @@
   各職業の詳細情報を表示
 -->
 <template>
-  <div class="tw-profession-card" :class="`rank-${rank}`">
+  <div 
+    class="tw-profession-card" 
+    :class="`rank-${rank}`"
+    style="width: 100%; max-width: 100vw; overflow-x: hidden; box-sizing: border-box; margin-left: 0; margin-right: 0;"
+  >
     <!-- カードヘッダー -->
     <div class="tw-card-header">
       <div class="tw-rank-section">
@@ -40,27 +44,56 @@
     <h3 class="tw-profession-name">{{ profession.name }}</h3>
     
     <!-- カテゴリー別スコア -->
-    <div class="tw-category-analysis">
+    <div 
+      class="tw-category-analysis" 
+      style="width: 100%; overflow-x: hidden; box-sizing: border-box;"
+    >
       <h4 class="tw-analysis-title">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
         </svg>
         適性分析
       </h4>
-      <div class="tw-category-grid">
+      <div 
+        class="tw-category-grid" 
+        style="width: 100%; box-sizing: border-box;"
+      >
         <div
           v-for="(score, category) in profession.categories"
           :key="category"
           class="tw-category-item"
+          style="width: 100%; min-width: 0; box-sizing: border-box; overflow-x: hidden;"
         >
-          <div class="tw-category-header">
-            <span class="tw-category-name">{{ getCategoryName(category) }}</span>
-            <span class="tw-category-score">{{ score.toFixed(1) }}pt</span>
+          <div 
+            class="tw-category-header" 
+            style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; margin-bottom: 8px;"
+          >
+            <span 
+              class="tw-category-name" 
+              style="font-size: 14px; font-weight: 500; color: #374151; min-width: 0; flex: 1; word-wrap: break-word;"
+            >
+              {{ getCategoryName(category) }}
+            </span>
+            <span 
+              class="tw-category-score" 
+              style="font-size: 14px; font-weight: 600; color: #2563eb; font-family: monospace; flex-shrink: 0;"
+            >
+              {{ score.toFixed(1) }}pt
+            </span>
           </div>
-          <div class="tw-category-bar">
+          <div 
+            class="tw-category-bar" 
+            style="height: 8px; background: #e5e7eb; border-radius: 4px; overflow: hidden; width: 100%;"
+          >
             <div 
               class="tw-category-fill" 
-              :style="{ width: `${(score / maxCategoryScore) * 100}%` }"
+              :style="{ 
+                width: `${(score / maxCategoryScore) * 100}%`,
+                height: '100%',
+                background: 'linear-gradient(90deg, #3b82f6, #eab308)',
+                borderRadius: '4px',
+                transition: 'width 0.3s ease'
+              }"
               :data-category="category"
             ></div>
           </div>
@@ -69,22 +102,28 @@
     </div>
 
     <!-- 職業詳細情報 -->
-    <div class="tw-profession-details">
+    <div 
+      class="tw-profession-details" 
+      style="width: 100%; overflow-x: hidden; box-sizing: border-box;"
+    >
       <!-- コメント -->
-      <div class="tw-detail-section">
+      <div class="tw-detail-section" style="margin-bottom: 16px;">
         <h4 class="tw-detail-title">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/>
           </svg>
           適性コメント
         </h4>
-        <p class="tw-detail-content">
+        <p 
+          class="tw-detail-content" 
+          style="word-wrap: break-word; overflow-wrap: break-word; line-height: 1.6; color: #374151;"
+        >
           {{ profession.comment || 'あなたの回答から分析した結果、この職業があなたの特性や価値観に適している可能性が高いことがわかりました。ぜひチャレンジを検討してみてください。' }}
         </p>
       </div>
       
       <!-- 年収情報 -->
-      <div v-if="profession.annualIncome" class="tw-detail-section">
+      <div v-if="profession.annualIncome" class="tw-detail-section" style="margin-bottom: 16px;">
         <h4 class="tw-detail-title">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <line x1="12" y1="1" x2="12" y2="23"/>
@@ -92,11 +131,13 @@
           </svg>
           年収目安
         </h4>
-        <p class="tw-income-value">{{ profession.annualIncome }}</p>
+        <p class="tw-income-value" style="font-weight: 600; color: #eab308; font-family: monospace;">
+          {{ profession.annualIncome }}
+        </p>
       </div>
       
       <!-- 仕事内容 -->
-      <div v-if="profession.jobDetails" class="tw-detail-section">
+      <div v-if="profession.jobDetails" class="tw-detail-section" style="margin-bottom: 16px;">
         <h4 class="tw-detail-title">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
@@ -105,7 +146,12 @@
           </svg>
           業務内容
         </h4>
-        <p class="tw-detail-content">{{ profession.jobDetails }}</p>
+        <p 
+          class="tw-detail-content" 
+          style="word-wrap: break-word; overflow-wrap: break-word; line-height: 1.6; color: #374151;"
+        >
+          {{ profession.jobDetails }}
+        </p>
       </div>
     </div>
     
