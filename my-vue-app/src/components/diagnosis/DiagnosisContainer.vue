@@ -131,6 +131,9 @@ function handleSelectRating(questionId: string, optionLabel: string, rating: num
   selectOptionRating(questionId, optionLabel, rating)
 }
 
+function handleResetDiagnosis() {
+  resetDiagnosis()
+}
 
 function goHome() {
   router.push('/')
