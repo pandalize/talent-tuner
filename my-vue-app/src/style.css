@@ -112,46 +112,46 @@
   .tw-diagnosis-layout {
     @apply flex flex-col min-h-screen w-full
            bg-gradient-to-br from-slate-50 to-gray-100
-           p-4 overflow-x-hidden;
+           px-4 py-8 overflow-x-hidden;
   }
 
   .tw-content-area {
     @apply max-w-4xl mx-auto w-full
            bg-white rounded-xl shadow-lg
-           p-6 relative flex-1;
-    min-height: 400px;
+           px-8 py-10 relative flex-1;
+    min-height: 500px;
   }
 
   .tw-sticky-nav {
-    @apply sticky bottom-4 mt-4 mb-2 z-50;
+    @apply sticky bottom-6 mt-8 mb-4 z-50;
   }
 
   /* Mobile Optimizations */
   @media (max-width: 768px) {
     .tw-diagnosis-layout {
-      @apply p-2 pb-24;
+      @apply px-3 py-6 pb-28;
     }
 
     .tw-content-area {
-      @apply p-4 rounded-lg shadow-xl;
+      @apply px-6 py-8 rounded-xl shadow-xl;
     }
 
     .tw-sticky-nav {
-      @apply mt-6 mb-0;
+      @apply mt-8 mb-0;
     }
   }
 
   /* QuestionDisplay Layout */
   .tw-question-layout {
-    @apply flex flex-col gap-6 mb-4 relative;
+    @apply flex flex-col gap-8 mb-6 relative;
   }
 
   .tw-header {
-    @apply text-center;
+    @apply text-center mb-8;
   }
 
   .tw-meta {
-    @apply flex items-center justify-center gap-4 mb-4;
+    @apply flex items-center justify-center gap-6 mb-6;
   }
 
   .tw-number {
@@ -165,12 +165,12 @@
   }
 
   .tw-title {
-    @apply text-2xl font-bold text-gray-900 
-           mb-3 leading-tight;
+    @apply text-3xl font-bold text-gray-900 
+           mb-4 leading-tight;
   }
 
   .tw-subtitle {
-    @apply text-gray-600 text-base mb-0;
+    @apply text-gray-600 text-lg mb-0 max-w-2xl mx-auto;
   }
 
   .tw-card {
@@ -178,53 +178,56 @@
   }
 
   .tw-options {
-    @apply flex flex-col gap-6;
+    @apply flex flex-col gap-8;
   }
 
   .tw-option {
-    @apply bg-white border border-gray-200 rounded-lg
-           p-6 transition-all duration-200
-           hover:border-blue-300 hover:shadow-sm;
+    @apply bg-gradient-to-r from-white to-gray-50
+           border border-gray-200 rounded-xl
+           p-8 transition-all duration-300
+           hover:border-blue-300 hover:shadow-md
+           hover:from-blue-50 hover:to-white;
   }
 
   .tw-option-header {
-    @apply flex items-start gap-4 mb-4;
+    @apply flex items-start gap-6 mb-6;
   }
 
   .tw-label {
     @apply flex items-center justify-center
-           w-8 h-8 bg-blue-600 text-white
-           rounded-full font-mono font-bold text-sm
-           flex-shrink-0;
+           w-12 h-12 bg-gradient-to-br from-blue-600 to-blue-700 
+           text-white rounded-full font-mono font-bold text-lg
+           flex-shrink-0 shadow-md;
   }
 
   .tw-text {
-    @apply flex-1 text-gray-900 font-medium
+    @apply flex-1 text-gray-900 font-medium text-lg
            leading-relaxed break-words;
   }
 
   .tw-rating {
-    @apply flex flex-col gap-3;
+    @apply flex flex-col gap-4;
   }
 
   .tw-labels {
     @apply flex justify-between items-center
-           text-sm text-gray-500 mb-2;
+           text-base text-gray-600 mb-4;
   }
 
   .tw-buttons {
-    @apply flex justify-between gap-2 max-w-md mx-auto;
+    @apply flex justify-between gap-3 max-w-lg mx-auto;
   }
 
   .tw-rating-btn {
     @apply flex items-center justify-center
-           flex-1 aspect-square max-w-12
+           flex-1 aspect-square max-w-16
            border-2 border-gray-300 rounded-full
-           bg-white text-gray-600 cursor-pointer
-           transition-all duration-200 font-semibold
+           bg-white text-gray-700 cursor-pointer
+           transition-all duration-300 font-bold text-lg
            hover:border-blue-400 hover:bg-blue-50
-           hover:scale-110 focus:outline-none focus:ring-2
-           focus:ring-blue-500/20 disabled:opacity-50;
+           hover:scale-110 focus:outline-none focus:ring-4
+           focus:ring-blue-500/20 disabled:opacity-50
+           shadow-sm hover:shadow-md;
   }
 
   .tw-selected {
@@ -255,27 +258,39 @@
   /* Mobile Optimizations */
   @media (max-width: 768px) {
     .tw-meta {
-      @apply flex-col gap-2;
+      @apply flex-col gap-3;
     }
 
     .tw-title {
-      @apply text-xl;
+      @apply text-2xl;
+    }
+
+    .tw-subtitle {
+      @apply text-base;
     }
 
     .tw-option {
-      @apply p-4;
+      @apply p-6;
     }
 
     .tw-option-header {
-      @apply gap-3;
+      @apply gap-4;
+    }
+
+    .tw-label {
+      @apply w-10 h-10 text-base;
+    }
+
+    .tw-text {
+      @apply text-base;
     }
 
     .tw-buttons {
-      @apply gap-1.5;
+      @apply gap-2 max-w-md;
     }
 
     .tw-rating-btn {
-      @apply max-w-10 text-sm;
+      @apply max-w-12 text-base;
     }
 
     .tw-labels {
