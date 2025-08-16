@@ -3,7 +3,7 @@
   職業カード、シェア機能、プレミアム機能を統合
 -->
 <template>
-  <div class="result-display">
+  <div class="tw-result-container">
     <!-- 結果ヘッダー -->
     <div class="result-header">
       <div class="completion-badge">
@@ -21,7 +21,7 @@
     </div>
 
     <!-- 職業カードリスト -->
-    <div class="results-grid">
+    <div class="results-grid w-full space-y-6 overflow-x-hidden">
       <ProfessionCard
         v-for="(profession, index) in professions"
         :key="profession.name"

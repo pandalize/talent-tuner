@@ -126,18 +126,152 @@
     @apply sticky bottom-6 mt-8 mb-4 z-50;
   }
 
+  /* ResultDisplay & ProfessionCard Layout */
+  .tw-result-container {
+    @apply w-full max-w-none overflow-x-hidden;
+  }
+
+  .tw-profession-card {
+    @apply w-full max-w-none bg-white rounded-xl border border-gray-200 shadow-md
+           p-6 mb-6 overflow-x-hidden;
+  }
+
+  .tw-card-header {
+    @apply flex flex-col sm:flex-row sm:items-center sm:justify-between
+           gap-4 mb-6;
+  }
+
+  .tw-rank-section {
+    @apply flex items-center gap-4;
+  }
+
+  .tw-rank-badge {
+    @apply flex items-center justify-center w-12 h-12
+           bg-blue-600 text-white rounded-full
+           text-lg font-bold font-mono flex-shrink-0;
+  }
+
+  .tw-total-score {
+    @apply flex-shrink-0;
+  }
+
+  .tw-profession-name {
+    @apply text-2xl font-bold text-gray-900 mb-6;
+  }
+
+  .tw-category-analysis {
+    @apply mb-6 w-full overflow-x-hidden;
+  }
+
+  .tw-analysis-title {
+    @apply flex items-center gap-2 text-lg font-semibold
+           text-gray-900 mb-4;
+  }
+
+  .tw-category-grid {
+    @apply space-y-4 w-full;
+  }
+
+  .tw-category-item {
+    @apply bg-gray-50 rounded-lg p-4 w-full min-w-0;
+  }
+
+  .tw-category-header {
+    @apply flex justify-between items-center mb-2
+           flex-wrap gap-2;
+  }
+
+  .tw-category-name {
+    @apply text-sm font-medium text-gray-700 min-w-0;
+  }
+
+  .tw-category-score {
+    @apply text-sm font-semibold text-blue-600
+           font-mono flex-shrink-0;
+  }
+
+  .tw-category-bar {
+    @apply h-2 bg-gray-200 rounded-full overflow-hidden;
+  }
+
+  .tw-category-fill {
+    @apply h-full bg-gradient-to-r from-blue-500 to-yellow-500
+           rounded-full transition-all duration-300;
+  }
+
+  .tw-profession-details {
+    @apply mb-6 space-y-4 w-full min-w-0;
+  }
+
+  .tw-detail-section {
+    @apply space-y-2;
+  }
+
+  .tw-detail-title {
+    @apply flex items-center gap-2 text-base font-semibold
+           text-gray-900;
+  }
+
+  .tw-detail-content {
+    @apply text-gray-700 leading-relaxed break-words;
+  }
+
+  .tw-income-value {
+    @apply text-lg font-semibold text-yellow-600 font-mono;
+  }
+
+  .tw-detail-link {
+    @apply inline-flex items-center gap-2 text-blue-600
+           font-medium px-4 py-2 border border-blue-600
+           rounded-lg hover:bg-blue-600 hover:text-white
+           transition-all duration-200;
+  }
+
   /* Mobile Optimizations */
   @media (max-width: 768px) {
     .tw-diagnosis-layout {
-      @apply px-3 py-6 pb-28;
+      @apply px-2 py-4 pb-28;
     }
 
     .tw-content-area {
-      @apply px-6 py-8 rounded-xl shadow-xl;
+      @apply px-4 py-6 rounded-xl shadow-xl;
     }
 
     .tw-sticky-nav {
       @apply mt-8 mb-0;
+    }
+
+    .tw-profession-card {
+      @apply p-4 mx-0;
+      margin-left: 0;
+      margin-right: 0;
+      max-width: 100vw;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    .tw-card-header {
+      @apply flex-col gap-3;
+    }
+
+    .tw-profession-name {
+      @apply text-xl;
+    }
+
+    .tw-category-header {
+      @apply flex-col items-start gap-1;
+    }
+
+    .tw-category-name {
+      @apply text-xs;
+    }
+
+    .tw-category-score {
+      @apply text-xs;
+    }
+
+    .tw-detail-content {
+      @apply text-sm;
     }
   }
 
