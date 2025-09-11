@@ -915,15 +915,32 @@ function formatTime(date: Date): string {
   border: 2px solid var(--border-light);
   border-radius: 12px;
   padding: var(--space-sm) var(--space-md);
-  font-size: clamp(0.85rem, 2.5vw, 0.9rem);
+  font-size: clamp(0.75rem, 2vw, 0.875rem);
   font-family: inherit;
-  line-height: 1.4;
+  line-height: 1.5;
   resize: none;
+  min-height: 44px; /* 最小高さを設定 */
   max-height: 120px;
   transition: border-color var(--transition-fast);
   background: var(--bg-primary);
   color: var(--text-primary);
   box-sizing: border-box;
+  overflow-y: hidden; /* 初期状態でスクロールバーを非表示 */
+}
+
+/* テキスト入力時のみスクロール可能に */
+.input-container textarea:not(:placeholder-shown) {
+  overflow-y: auto;
+}
+
+/* プレースホルダーのスタイル調整 */
+.input-container textarea::placeholder {
+  font-size: clamp(0.7rem, 1.8vw, 0.85rem);
+  color: var(--text-secondary);
+  opacity: 0.7;
+  white-space: nowrap; /* 改行を防ぐ */
+  overflow: hidden;
+  text-overflow: ellipsis; /* 長すぎる場合は省略 */
 }
 
 .input-container textarea:focus {
@@ -1002,6 +1019,19 @@ function formatTime(date: Date): string {
 /* ==========================================================================
    レスポンシブデザイン
    ========================================================================== */
+/* 小さめタブレット用 (481px - 768px) */
+@media (max-width: 768px) and (min-width: 481px) {
+  .input-container textarea {
+    font-size: 15px;
+    min-height: 42px;
+  }
+  
+  .input-container textarea::placeholder {
+    font-size: calc(11px + 0.4vw);
+  }
+}
+
+/* タブレット以下全般 */
 @media (max-width: 768px) {
   .career-chat-bot {
     height: 100%;
@@ -1084,15 +1114,45 @@ function formatTime(date: Date): string {
   }
 
   .input-container textarea {
-    font-size: 16px; /* iOS zoom prevention */
+    font-size: 14px;
     width: 100%;
     min-width: 0;
+    min-height: 40px;
+    padding: 10px 12px;
+    line-height: 1.3;
+  }
+  
+  /* モバイル用プレースホルダー調整 - 画面幅に応じて動的に調整 */
+  .input-container textarea::placeholder {
+    font-size: calc(10px + 0.5vw); /* 320px: 11.6px, 375px: 11.875px, 414px: 12.07px */
+    letter-spacing: -0.02em; /* 文字間を少し詰める */
   }
 
   .send-btn {
     flex-shrink: 0;
     width: 44px;
     height: 44px;
+  }
+}
+
+/* 極小スマートフォン (320px - 360px) */
+@media (max-width: 360px) {
+  .input-container textarea {
+    font-size: 13px;
+    min-height: 38px;
+    padding: 8px 10px;
+  }
+  
+  .input-container textarea::placeholder {
+    font-size: 10.5px; /* 固定サイズで確実に収める */
+  }
+}
+
+/* 超極小スマートフォン (320px以下) */
+@media (max-width: 320px) {
+  .input-container textarea::placeholder {
+    font-size: 10px; /* さらに小さく */
+    letter-spacing: -0.03em; /* 文字間をさらに詰める */
   }
 }
 </style>
