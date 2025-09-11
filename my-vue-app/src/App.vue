@@ -4,9 +4,11 @@ import { useI18n } from 'vue-i18n'
 import { ref } from 'vue'
 import AppFooter from './components/AppFooter.vue'
 import LanguageSwitcher from './components/LanguageSwitcher.vue'
+import CareerChatBotDemo from './components/CareerChatBotDemo.vue'
 
 const { t } = useI18n()
 const isMobileMenuOpen = ref(false)
+const isDemoChatOpen = ref(false)
 
 const toggleMobileMenu = () => {
   isMobileMenuOpen.value = !isMobileMenuOpen.value
@@ -14,6 +16,15 @@ const toggleMobileMenu = () => {
 
 const closeMobileMenu = () => {
   isMobileMenuOpen.value = false
+}
+
+const showDemoChat = () => {
+  isDemoChatOpen.value = true
+  closeMobileMenu()
+}
+
+const closeDemoChat = () => {
+  isDemoChatOpen.value = false
 }
 </script>
 
@@ -33,6 +44,12 @@ const closeMobileMenu = () => {
         <RouterLink to="/about" class="nav-item">{{ $t('nav.about') }}</RouterLink>
         <RouterLink to="/career-guide" class="nav-item">{{ $t('nav.career_guide') }}</RouterLink>
         <RouterLink to="/diagnosis-method" class="nav-item">診断について</RouterLink>
+        <button 
+          class="nav-item demo-chat-desktop-btn" 
+          @click="showDemoChat"
+        >
+          AI進路相談
+        </button>
       </nav>
 
       <!-- ヘッダーコントロール -->
@@ -125,16 +142,15 @@ const closeMobileMenu = () => {
           {{ $t('nav.career_guide') }}
         </RouterLink>
         
-        <RouterLink 
-          to="/chat" 
-          class="mobile-nav-item" 
-          @click="closeMobileMenu"
+        <button 
+          class="mobile-nav-item demo-chat-btn" 
+          @click="showDemoChat"
         >
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/>
           </svg>
-          {{ $t('nav.chat') }}
-        </RouterLink>
+          AI進路相談
+        </button>
         
         <RouterLink 
           to="/diagnosis-method" 
@@ -156,6 +172,13 @@ const closeMobileMenu = () => {
     </main>
     
     <AppFooter />
+
+    <!-- デモチャットモーダル -->
+    <div v-if="isDemoChatOpen" class="demo-chat-overlay" @click="closeDemoChat">
+      <div class="demo-chat-modal" @click.stop>
+        <CareerChatBotDemo @close="closeDemoChat" />
+      </div>
+    </div>
   </div>
 </template>
 
@@ -736,6 +759,109 @@ html, body {
   
   .mobile-menu-toggle:active {
     background: rgba(59, 130, 246, 0.15);
+  }
+}
+
+/* ==========================================================================
+   デモチャットモーダル
+   ========================================================================== */
+.demo-chat-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(8px);
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-md);
+  animation: fadeIn 0.3s ease;
+}
+
+.demo-chat-modal {
+  width: 100%;
+  max-width: 800px;
+  max-height: 90vh;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  animation: slideUp 0.3s ease;
+}
+
+.demo-chat-btn {
+  background: linear-gradient(135deg, var(--accent-gold), #f39c12) !important;
+  color: white !important;
+  font-weight: 600 !important;
+  border: none !important;
+  width: 100%;
+  text-align: left;
+  
+  &::before {
+    display: none !important;
+  }
+  
+  &:hover {
+    background: linear-gradient(135deg, #e67e22, #d35400) !important;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(243, 156, 18, 0.4);
+  }
+  
+  svg {
+    position: relative;
+    
+    circle {
+      fill: rgba(255, 255, 255, 0.9);
+    }
+  }
+}
+
+.demo-chat-desktop-btn {
+  background: linear-gradient(135deg, var(--accent-gold), #f39c12) !important;
+  color: white !important;
+  font-weight: 600 !important;
+  border: none !important;
+  cursor: pointer;
+  
+  &::before {
+    display: none !important;
+  }
+  
+  &::after {
+    display: none !important;
+  }
+  
+  &:hover {
+    background: linear-gradient(135deg, #e67e22, #d35400) !important;
+    color: white !important;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(243, 156, 18, 0.4);
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 768px) {
+  .demo-chat-overlay {
+    padding: 0;
+  }
+  
+  .demo-chat-modal {
+    width: 100%;
+    height: 100%;
+    max-height: 100vh;
+    border-radius: 0;
   }
 }
 </style>
