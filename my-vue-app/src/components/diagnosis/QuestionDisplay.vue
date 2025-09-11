@@ -1,6 +1,7 @@
 <!--
   質問表示コンポーネント
   5段階評価システムによる質問表示とナビゲーション
+  スワイプ式2値回答モードをサポート
 -->
 <template>
   <div class="question-display tw-question-layout">
@@ -11,49 +12,83 @@
         <span class="category-badge tw-category">{{ getQuestionCategoryName(question) }}</span>
       </div>
       <h2 class="question-title tw-title">{{ question.text }}</h2>
-      <p class="question-subtitle tw-subtitle">各項目について、あなたにどの程度当てはまるかを5段階で評価してください</p>
+      <p class="question-subtitle tw-subtitle">
+        <template v-if="isSwipeMode">
+          各項目について、左右にスワイプして回答してください
+        </template>
+        <template v-else>
+          各項目について、あなたにどの程度当てはまるかを5段階で評価してください
+        </template>
+      </p>
+    </div>
+    
+    <!-- モード切り替えボタン -->
+    <div class="mode-toggle">
+      <button @click="toggleMode" class="mode-toggle-btn">
+        <svg v-if="isSwipeMode" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M3 5h18v2H3V5zm0 4h18v2H3V9zm0 4h18v2H3v-2zm0 4h18v2H3v-2z"/>
+        </svg>
+        <svg v-else width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M5 8l4 4 4-4M5 16l4-4 4 4M13 8l4 4 4-4M13 16l4-4 4 4"/>
+        </svg>
+        <span>{{ isSwipeMode ? '通常モードに切り替え' : 'スワイプモードに切り替え' }}</span>
+      </button>
     </div>
     
     <!-- 質問カード -->
     <div class="question-card tw-card">
       <div class="options-list tw-options">
-        <div
-          v-for="(option, index) in question.options"
-          :key="option.label"
-          class="option-item tw-option"
-        >
-          <div class="option-content">
-            <div class="option-header tw-option-header">
-              <div class="option-label tw-label">{{ String.fromCharCode(65 + index) }}</div>
-              <div class="option-text tw-text">{{ option.text }}</div>
-            </div>
-            
-            <!-- 5段階評価スケール -->
-            <div class="rating-scale tw-rating">
-              <div class="scale-labels tw-labels">
-                <span class="scale-label-left tw-label-left">全く当てはまらない</span>
-                <span class="scale-label-right tw-label-right">よく当てはまる</span>
+        <!-- スワイプモード -->
+        <template v-if="isSwipeMode">
+          <SwipeAnswer
+            v-for="option in question.options"
+            :key="option.label"
+            :question-id="question.id"
+            :option="option"
+            :current-rating="getLocalOptionRating(question.id, option.label)"
+            @select-rating="handleSelectRating"
+          />
+        </template>
+        
+        <!-- 通常モード（5段階評価） -->
+        <template v-else>
+          <div
+            v-for="option in question.options"
+            :key="option.label"
+            class="option-item tw-option"
+          >
+            <div class="option-content">
+              <div class="option-header tw-option-header">
+                <div class="option-text tw-text">{{ option.text }}</div>
               </div>
-              <div class="scale-buttons tw-buttons">
-                <button
-                  v-for="rating in [1, 2, 3, 4, 5]"
-                  :key="`${option.label}-${rating}`"
-                  @click.stop="handleSelectRating(question.id, option.label, rating)"
-                  :class="{ 
-                    'selected tw-selected': getLocalOptionRating(question.id, option.label) === rating,
-                    [`rating-${rating} tw-rating-${rating}`]: true
-                  }"
-                  class="rating-button tw-rating-btn"
-                  :title="getRatingLabel(rating)"
-                  style="pointer-events: auto; position: relative; z-index: 10;"
-                  type="button"
-                >
-                  {{ rating }}
-                </button>
+              
+              <!-- 5段階評価スケール -->
+              <div class="rating-scale tw-rating">
+                <div class="scale-labels tw-labels">
+                  <span class="scale-label-left tw-label-left">全く当てはまらない</span>
+                  <span class="scale-label-right tw-label-right">よく当てはまる</span>
+                </div>
+                <div class="scale-buttons tw-buttons">
+                  <button
+                    v-for="rating in [1, 2, 3, 4, 5]"
+                    :key="`${option.label}-${rating}`"
+                    @click.stop="handleSelectRating(question.id, option.label, rating)"
+                    :class="{ 
+                      'selected tw-selected': getLocalOptionRating(question.id, option.label) === rating,
+                      [`rating-${rating} tw-rating-${rating}`]: true
+                    }"
+                    class="rating-button tw-rating-btn"
+                    :title="getRatingLabel(rating)"
+                    style="pointer-events: auto; position: relative; z-index: 10;"
+                    type="button"
+                  >
+                    {{ rating }}
+                  </button>
+                </div>
               </div>
             </div>
           </div>
-        </div>
+        </template>
       </div>
     </div>
     
@@ -61,10 +96,10 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
+import { ref } from 'vue'
 import { useDiagnosis } from '../../composables/useDiagnosis'
 import type { Question } from '../../utils/diagnosisLoader'
-import QuestionNavigation from './QuestionNavigation.vue'
+import SwipeAnswer from './SwipeAnswer.vue'
 
 // Props
 interface Props {
@@ -92,25 +127,21 @@ const {
   getRatingLabel
 } = useDiagnosis()
 
-// 計算プロパティ
-const isCurrentQuestionCompletedLocal = computed(() => {
-  const questionId = props.question.id
-  const answer = props.answers[questionId]
-  
-  if (!answer || typeof answer !== 'object') return false
-  
-  const answerObj = answer as Record<string, number>
-  return props.question.options.every(option => {
-    const rating = answerObj[option.label]
-    return rating >= 1 && rating <= 5
-  })
-})
+// リアクティブデータ
+const isSwipeMode = ref(false)
 
-const isAllQuestionsAnsweredLocal = computed(() => {
-  // この計算は親コンポーネントで行う方が適切だが、
-  // 簡略化のためここで実装
-  return Object.keys(props.answers).length >= props.totalQuestions
-})
+// モード切り替え
+function toggleMode() {
+  isSwipeMode.value = !isSwipeMode.value
+  // モードを localStorage に保存
+  localStorage.setItem('diagnosisMode', isSwipeMode.value ? 'swipe' : 'normal')
+}
+
+// 初期化時にモードを復元
+if (typeof window !== 'undefined') {
+  const savedMode = localStorage.getItem('diagnosisMode')
+  isSwipeMode.value = savedMode === 'swipe'
+}
 
 // ローカル関数
 function getLocalOptionRating(questionId: string, optionLabel: string): number | null {
@@ -180,13 +211,52 @@ function handleSelectRating(questionId: string, optionLabel: string, rating: num
   margin-bottom: 0;
 }
 
+// モード切り替えボタン
+.mode-toggle {
+  display: flex;
+  justify-content: center;
+  margin: var(--space-lg) 0;
+}
+
+.mode-toggle-btn {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-lg);
+  background: white;
+  border: 2px solid var(--border-light);
+  border-radius: 12px;
+  font-size: var(--fs-small);
+  font-weight: 500;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  
+  &:hover {
+    background: var(--bg-secondary);
+    border-color: var(--accent-blue);
+    color: var(--accent-blue);
+  }
+  
+  svg {
+    width: 20px;
+    height: 20px;
+  }
+}
+
 // 質問カード - 5段階評価形式
 .question-card {
   @include mixins.container(900px);
+  
+  // スワイプモードの場合は幅を100%に
+  .options-list:has(.swipe-answer-container) & {
+    max-width: 100%;
+  }
 }
 
 .options-list {
   @include mixins.flex-column(var(--space-lg));
+  width: 100%;
 }
 
 .option-item {
@@ -206,29 +276,16 @@ function handleSelectRating(questionId: string, optionLabel: string, rating: num
 
 .option-header {
   @include mixins.flex-row(var(--space-md));
-  align-items: flex-start;
+  align-items: center;
   width: 100%;
   box-sizing: border-box;
-}
-
-.option-label {
-  @include mixins.flex-center;
-  width: 32px;
-  height: 32px;
-  background: var(--accent-blue);
-  color: white;
-  border-radius: 50%;
-  font-family: var(--font-mono);
-  font-weight: 600;
-  font-size: 0.875rem;
-  flex-shrink: 0;
-  margin-right: var(--space-md);
+  padding: var(--space-sm) 0;
 }
 
 .option-text {
   flex: 1;
   min-width: 0;
-  font-size: var(--fs-body);
+  font-size: 1.125rem;
   color: var(--text-primary);
   line-height: 1.6;
   font-weight: 500;
