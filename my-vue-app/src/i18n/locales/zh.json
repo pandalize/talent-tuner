@@ -18,7 +18,9 @@
     "chat": "AI职业咨询",
     "about": "职业列表",
     "career_guide": "职业指南",
-    "language": "语言"
+    "language": "语言",
+    "open_menu": "打开菜单",
+    "close_menu": "关闭菜单"
   },
   "common": {
     "loading": "加载中...",

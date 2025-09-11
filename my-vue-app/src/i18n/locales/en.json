@@ -18,7 +18,9 @@
     "chat": "AI Career Counseling",
     "about": "Professions",
     "career_guide": "Career Guide",
-    "language": "Language"
+    "language": "Language",
+    "open_menu": "Open menu",
+    "close_menu": "Close menu"
   },
   "common": {
     "loading": "Loading...",

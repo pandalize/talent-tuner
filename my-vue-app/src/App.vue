@@ -44,7 +44,8 @@ const closeMobileMenu = () => {
           class="mobile-menu-toggle"
           @click="toggleMobileMenu"
           :class="{ 'menu-open': isMobileMenuOpen }"
-          aria-label="メニュー"
+          :aria-label="isMobileMenuOpen ? t('nav.close_menu') : t('nav.open_menu')"
+          :aria-expanded="isMobileMenuOpen"
         >
           <span class="hamburger-line"></span>
           <span class="hamburger-line"></span>
@@ -64,6 +65,22 @@ const closeMobileMenu = () => {
         class="mobile-nav"
         :class="{ 'mobile-nav-open': isMobileMenuOpen }"
       >
+        <!-- 閉じるボタン -->
+        <div class="mobile-nav-header">
+          <span class="mobile-nav-title">メニュー</span>
+          <button 
+            class="mobile-nav-close"
+            @click="closeMobileMenu"
+            :aria-label="t('nav.close_menu')"
+          >
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M18 6L6 18M6 6l12 12"/>
+            </svg>
+          </button>
+        </div>
+        
+        <!-- ナビゲーションコンテンツ -->
+        <div class="mobile-nav-content">
         <RouterLink 
           to="/" 
           class="mobile-nav-item" 
@@ -109,6 +126,17 @@ const closeMobileMenu = () => {
         </RouterLink>
         
         <RouterLink 
+          to="/chat" 
+          class="mobile-nav-item" 
+          @click="closeMobileMenu"
+        >
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/>
+          </svg>
+          {{ $t('nav.chat') }}
+        </RouterLink>
+        
+        <RouterLink 
           to="/diagnosis-method" 
           class="mobile-nav-item" 
           @click="closeMobileMenu"
@@ -119,6 +147,7 @@ const closeMobileMenu = () => {
           </svg>
           診断について
         </RouterLink>
+        </div>
       </nav>
     </header>
     
@@ -404,6 +433,8 @@ html, body {
   left: 0;
   right: 0;
   bottom: 0;
+  width: 100vw;
+  height: 100vh;
   background: rgba(0, 0, 0, 0.5);
   z-index: 998;
   backdrop-filter: blur(4px);
@@ -420,8 +451,13 @@ html, body {
   position: fixed;
   top: 0;
   right: -100%;
-  width: 280px;
-  height: 100vh;
+  bottom: 0;
+  left: auto;
+  width: 65vw; /* 画面幅の65% */
+  min-width: 280px; /* 最小幅を保証 */
+  max-width: 420px; /* 最大幅を制限 */
+  height: 100vh; /* ビューポート高さ100% */
+  height: 100dvh; /* 動的ビューポート高さ（モバイル対応） */
   background: linear-gradient(135deg, var(--bg-primary) 0%, rgba(248, 250, 252, 0.98) 100%);
   backdrop-filter: blur(20px);
   border-left: 1px solid var(--border-light);
@@ -429,18 +465,80 @@ html, body {
   z-index: 999;
   transition: right var(--transition-normal);
   overflow-y: auto;
-  padding: var(--space-xxl) 0 var(--space-xl) 0;
+  overflow-x: hidden;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
   
   &.mobile-nav-open {
     right: 0;
   }
 }
 
+/* モバイルメニューヘッダー */
+.mobile-nav-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-lg) var(--space-xl);
+  border-bottom: 1px solid var(--border-light);
+  background: rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(10px);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  flex-shrink: 0; /* ヘッダーが縮まないように */
+}
+
+.mobile-nav-title {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--primary-navy);
+  font-family: var(--font-heading);
+}
+
+.mobile-nav-close {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: 2px solid var(--border-light);
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  color: var(--text-secondary);
+  
+  &:hover {
+    background: var(--bg-secondary);
+    border-color: var(--accent-blue);
+    color: var(--accent-blue);
+    transform: rotate(90deg);
+  }
+  
+  &:active {
+    transform: rotate(90deg) scale(0.9);
+  }
+  
+  svg {
+    width: 20px;
+    height: 20px;
+  }
+}
+
+/* モバイルナビコンテンツ */
+.mobile-nav-content {
+  flex: 1;
+  overflow-y: auto;
+  padding-bottom: var(--space-xl);
+}
+
 .mobile-nav-item {
   display: flex;
   align-items: center;
   gap: var(--space-md);
-  padding: var(--space-md) var(--space-xl);
+  padding: var(--space-lg) var(--space-xl);
   color: var(--text-primary);
   text-decoration: none;
   font-weight: 500;
@@ -593,7 +691,7 @@ html, body {
   }
   
   .mobile-nav {
-    width: 100vw;
+    width: 70vw; /* 小さい画面では70% */
     right: -100vw;
     
     &.mobile-nav-open {
@@ -603,7 +701,7 @@ html, body {
   
   .mobile-nav-item {
     padding: var(--space-lg) var(--space-xl);
-    font-size: 1.125rem;
+    font-size: 1.0625rem;
     
     &.diagnosis-highlight {
       margin: var(--space-lg) var(--space-md);
