@@ -568,6 +568,7 @@ html, body {
   font-size: 1rem;
   transition: all var(--transition-normal);
   position: relative;
+  white-space: nowrap;
   
   &::before {
     content: '';
@@ -696,7 +697,7 @@ html, body {
   }
 
   .logo-sub {
-    font-size: 0.5625rem;
+    display: none;
   }
 }
 
