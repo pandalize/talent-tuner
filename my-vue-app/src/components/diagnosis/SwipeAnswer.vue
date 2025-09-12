@@ -405,7 +405,6 @@ function resetForNextCard() {
     top: 50%;
     transform: translate(-50%, -50%);
   }
-}
   
   .card-content {
     padding: var(--space-xxl) var(--space-xl);
