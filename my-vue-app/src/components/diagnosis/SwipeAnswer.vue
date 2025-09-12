@@ -401,6 +401,8 @@ function resetForNextCard() {
     min-height: auto !important;
     max-height: none !important;
     padding: 0;
+    left: 50%;
+    transform: translateX(-50%);
   }
   
   .card-content {
@@ -425,21 +427,20 @@ function resetForNextCard() {
   }
   
   .swipe-card {
-    width: 90vw !important; // 横幅を広く
-    max-width: 90vw !important;
-    min-width: 90vw !important;
-    height: 65vh !important; // より縦長に変更: 画面高の65%
-    min-height: 65vh !important;
-    max-height: 65vh !important;
-    aspect-ratio: none !important;
+    width: 80vw !important; // 4:3比率に適した横幅
+    max-width: 80vw !important;
+    min-width: 80vw !important;
+    height: 60vw !important; // 4:3比率: width * 3/4
+    min-height: 60vw !important;
+    max-height: 60vw !important;
+    aspect-ratio: 4/3 !important;
     padding: 0;
     border-radius: 20px;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
     margin: 0 auto;
     position: relative;
-    left: auto;
-    top: auto;
-    transform: none;
+    left: 50%;
+    transform: translateX(-50%); // 画面中央に配置
   }
   
   .card-content {
@@ -484,12 +485,15 @@ function resetForNextCard() {
   }
   
   .swipe-card {
-    width: 90vw !important; // 小画面では横幅を最大化
-    max-width: 90vw !important;
-    min-width: 90vw !important;
-    height: 50vh !important; // 高さを調整
-    min-height: 50vh !important;
-    max-height: 50vh !important;
+    width: 85vw !important; // 4:3比率に最適化
+    max-width: 85vw !important;
+    min-width: 85vw !important;
+    height: calc(85vw * 3 / 4) !important; // 4:3比率維持
+    min-height: calc(85vw * 3 / 4) !important;
+    max-height: calc(85vw * 3 / 4) !important;
+    aspect-ratio: 4/3 !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
   }
   
   .option-text {
@@ -511,6 +515,8 @@ function resetForNextCard() {
     min-height: auto !important;
     max-height: none !important;
     padding: 0;
+    left: 50%;
+    transform: translateX(-50%);
   }
   
   .card-content {
