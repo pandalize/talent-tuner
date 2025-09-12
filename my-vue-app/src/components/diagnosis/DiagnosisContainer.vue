@@ -117,9 +117,12 @@ const {
   isAllQuestionsAnswered
 } = useDiagnosis()
 
-// カテゴリー情報マッピング（4問ごとのカテゴリー）
+// カテゴリー情報マッピング（質問1-4で各カテゴリーを紹介）
 const categoryMap = {
   0: { name: "興味・関心", description: "あなたの興味や関心について質問します", icon: "💭" },
+  1: { name: "スキル・得意分野", description: "あなたのスキルや得意分野について質問します", icon: "🛠️" },
+  2: { name: "価値観・優先度", description: "あなたの価値観や優先度について質問します", icon: "⭐" },
+  3: { name: "ワークライフバランス", description: "働き方やライフスタイルについて質問します", icon: "⚖️" },
   4: { name: "スキル・得意分野", description: "あなたのスキルや得意分野について質問します", icon: "🛠️" },
   8: { name: "価値観・優先度", description: "あなたの価値観や優先度について質問します", icon: "⭐" },
   12: { name: "ワークライフバランス", description: "働き方やライフスタイルについて質問します", icon: "⚖️" }
@@ -134,7 +137,10 @@ const shouldShowCategoryTutorial = computed(() => {
   const isNotInitialTutorial = questionIndex > 0
   const notShownYet = !categoryTutorialShown.value.has(questionIndex)
   
-  return isCategoryStart && isNotInitialTutorial && notShownYet
+  // 質問2-4では各質問でチュートリアル、5問目以降は4問ごと
+  const isFirstFourQuestions = questionIndex >= 1 && questionIndex <= 3
+  
+  return (isCategoryStart || isFirstFourQuestions) && isNotInitialTutorial && notShownYet
 })
 
 // 現在のカテゴリー情報
