@@ -26,7 +26,7 @@
       @mouseup="handleMouseUp"
       @mouseleave="handleMouseUp"
       :style="{
-        transform: isVisible ? `translateX(calc(-50% + ${translateX}px)) rotate(${rotation}deg)` : 'translateX(-50%) scale(0.8) translateY(30px)',
+        transform: isVisible ? `translate(calc(-50% + ${translateX}px), -50%) rotate(${rotation}deg)` : 'translate(-50%, -50%) scale(0.8) translateY(30px)',
         transition: isSwiping ? 'none' : (isAnimatingNo || isAnimatingYes) ? 'all 0.8s cubic-bezier(0.43, 0.13, 0.23, 0.96)' : isVisible ? 'all 0.3s ease' : 'opacity 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94), transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94)'
       }"
     >
@@ -396,14 +396,16 @@ function resetForNextCard() {
 // タブレット最適化
 @media (min-width: 769px) and (max-width: 1024px) {
   .swipe-card {
-    aspect-ratio: 4 / 3 !important;
+    aspect-ratio: 3 / 4 !important;
     height: auto !important;
     min-height: auto !important;
     max-height: none !important;
     padding: 0;
     left: 50%;
-    transform: translateX(-50%);
+    top: 50%;
+    transform: translate(-50%, -50%);
   }
+}
   
   .card-content {
     padding: var(--space-xxl) var(--space-xl);
@@ -427,20 +429,21 @@ function resetForNextCard() {
   }
   
   .swipe-card {
-    width: 80vw !important; // 4:3比率に適した横幅
-    max-width: 80vw !important;
-    min-width: 80vw !important;
-    height: 60vw !important; // 4:3比率: width * 3/4
-    min-height: 60vw !important;
-    max-height: 60vw !important;
-    aspect-ratio: 4/3 !important;
+    width: 75vw !important; // 3:4比率に適した横幅
+    max-width: 75vw !important;
+    min-width: 75vw !important;
+    height: 100vw !important; // 3:4比率: width * 4/3
+    min-height: 100vw !important;
+    max-height: 100vw !important;
+    aspect-ratio: 3/4 !important;
     padding: 0;
     border-radius: 20px;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
     margin: 0 auto;
-    position: relative;
+    position: absolute;
     left: 50%;
-    transform: translateX(-50%); // 画面中央に配置
+    top: 50%;
+    transform: translate(-50%, -50%); // 初期位置は画面中央、スワイプで動的に変更
   }
   
   .card-content {
@@ -485,15 +488,16 @@ function resetForNextCard() {
   }
   
   .swipe-card {
-    width: 85vw !important; // 4:3比率に最適化
-    max-width: 85vw !important;
-    min-width: 85vw !important;
-    height: calc(85vw * 3 / 4) !important; // 4:3比率維持
-    min-height: calc(85vw * 3 / 4) !important;
-    max-height: calc(85vw * 3 / 4) !important;
-    aspect-ratio: 4/3 !important;
+    width: 80vw !important; // 3:4比率に最適化
+    max-width: 80vw !important;
+    min-width: 80vw !important;
+    height: calc(80vw * 4 / 3) !important; // 3:4比率維持
+    min-height: calc(80vw * 4 / 3) !important;
+    max-height: calc(80vw * 4 / 3) !important;
+    aspect-ratio: 3/4 !important;
     left: 50% !important;
-    transform: translateX(-50%) !important;
+    top: 50% !important;
+    transform: translate(-50%, -50%) !important;
   }
   
   .option-text {
@@ -510,13 +514,14 @@ function resetForNextCard() {
 // 大画面最適化
 @media (min-width: 1025px) {
   .swipe-card {
-    aspect-ratio: 4 / 3 !important;
+    aspect-ratio: 3 / 4 !important;
     height: auto !important;
     min-height: auto !important;
     max-height: none !important;
     padding: 0;
     left: 50%;
-    transform: translateX(-50%);
+    top: 50%;
+    transform: translate(-50%, -50%);
   }
   
   .card-content {

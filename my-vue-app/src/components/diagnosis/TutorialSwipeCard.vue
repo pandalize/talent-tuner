@@ -25,7 +25,7 @@
       @mouseup="handleMouseUp"
       @mouseleave="handleMouseUp"
       :style="{
-        transform: isVisible ? `translateX(calc(-50% + ${translateX}px)) rotate(${rotation}deg)` : 'translateX(-50%) scale(0.8) translateY(30px)',
+        transform: isVisible ? `translate(calc(-50% + ${translateX}px), -50%) rotate(${rotation}deg)` : 'translate(-50%, -50%) scale(0.8) translateY(30px)',
         transition: isSwiping ? 'none' : (isAnimatingNo || isAnimatingYes) ? 'all 0.8s cubic-bezier(0.43, 0.13, 0.23, 0.96)' : isVisible ? 'all 0.3s ease' : 'opacity 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94), transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94)'
       }"
     >
@@ -250,25 +250,25 @@ function completeTutorial() {
   user-select: none;
   touch-action: pan-y;
   will-change: transform, opacity;
-  width: 80vw;
-  max-width: 80vw;
-  height: 60vw; // 4:3比率: width * 3/4
-  min-height: 60vw;
-  max-height: 60vw;
-  aspect-ratio: 4/3;
+  width: 75vw;
+  max-width: 75vw;
+  height: 100vw; // 3:4比率: width * 4/3
+  min-height: 100vw;
+  max-height: 100vw;
+  aspect-ratio: 3/4;
   display: flex;
   align-items: center;
   justify-content: center;
   box-sizing: border-box;
   overflow: hidden;
   left: 50%;
-  top: auto;
-  transform: translateX(-50%); // 画面中央に配置
+  top: 50%;
+  transform: translate(-50%, -50%); // 初期位置は画面中央
   margin: 0;
   
   // 初期状態（非表示）
   opacity: 0;
-  transform: translateX(-50%) scale(0.8) translateY(30px);
+  transform: translate(-50%, -50%) scale(0.8) translateY(30px);
   transition: opacity 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94), 
               transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94),
               background 0.3s ease;
@@ -276,7 +276,7 @@ function completeTutorial() {
   // 表示状態（ディゾルブイン）
   &.visible {
     opacity: 1;
-    transform: translateX(-50%) scale(1);
+    transform: translate(-50%, -50%) scale(1);
   }
   
   &.swiping {
@@ -441,14 +441,15 @@ function completeTutorial() {
   }
   
   .tutorial-swipe-card {
-    width: 85vw !important;
-    max-width: 85vw !important;
-    height: calc(85vw * 3 / 4) !important; // 4:3比率維持
-    min-height: calc(85vw * 3 / 4) !important;
-    max-height: calc(85vw * 3 / 4) !important;
-    aspect-ratio: 4/3 !important;
+    width: 80vw !important;
+    max-width: 80vw !important;
+    height: calc(80vw * 4 / 3) !important; // 3:4比率維持
+    min-height: calc(80vw * 4 / 3) !important;
+    max-height: calc(80vw * 4 / 3) !important;
+    aspect-ratio: 3/4 !important;
     left: 50% !important;
-    transform: translateX(-50%) !important;
+    top: 50% !important;
+    transform: translate(-50%, -50%) !important;
   }
   
   .tutorial-card-content {
@@ -463,14 +464,15 @@ function completeTutorial() {
   }
   
   .tutorial-swipe-card {
-    width: 90vw !important;
-    max-width: 90vw !important;
-    height: calc(90vw * 3 / 4) !important; // 4:3比率維持
-    min-height: calc(90vw * 3 / 4) !important;
-    max-height: calc(90vw * 3 / 4) !important;
-    aspect-ratio: 4/3 !important;
+    width: 85vw !important;
+    max-width: 85vw !important;
+    height: calc(85vw * 4 / 3) !important; // 3:4比率維持
+    min-height: calc(85vw * 4 / 3) !important;
+    max-height: calc(85vw * 4 / 3) !important;
+    aspect-ratio: 3/4 !important;
     left: 50% !important;
-    transform: translateX(-50%) !important;
+    top: 50% !important;
+    transform: translate(-50%, -50%) !important;
   }
   
   .tutorial-card-content {
