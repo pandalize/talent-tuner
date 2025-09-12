@@ -241,7 +241,7 @@ function completeTutorial() {
 
 // チュートリアルスワイプカード
 .tutorial-swipe-card {
-  position: relative;
+  position: absolute;
   background: white;
   border-radius: 20px;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
@@ -268,7 +268,7 @@ function completeTutorial() {
   
   // 初期状態（非表示）
   opacity: 0;
-  transform: translate(-50%, -50%) scale(0.8) translateY(30px);
+  // transform は動的スタイルバインディングで制御
   transition: opacity 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94), 
               transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94),
               background 0.3s ease;
@@ -276,7 +276,7 @@ function completeTutorial() {
   // 表示状態（ディゾルブイン）
   &.visible {
     opacity: 1;
-    transform: translate(-50%, -50%) scale(1);
+    // transform は動的スタイルバインディングで制御
   }
   
   &.swiping {
@@ -437,12 +437,13 @@ function completeTutorial() {
 // 小画面最適化
 @media (max-width: 480px) {
   .tutorial-swipe-container {
-    min-height: 65vh;
+    min-height: 65vh; // 小画面では少し小さく
   }
   
   .tutorial-swipe-card {
-    width: 80vw !important;
+    width: 80vw !important; // 3:4比率に最適化
     max-width: 80vw !important;
+    min-width: 80vw !important;
     height: calc(80vw * 4 / 3) !important; // 3:4比率維持
     min-height: calc(80vw * 4 / 3) !important;
     max-height: calc(80vw * 4 / 3) !important;
@@ -457,19 +458,20 @@ function completeTutorial() {
   }
 }
 
-// 極小画面最適化
+// 極小画面最適化（Galaxy Fold等）
 @media (max-width: 320px) {
   .tutorial-swipe-container {
     min-height: 60vh;
   }
   
   .tutorial-swipe-card {
-    width: 85vw !important;
-    max-width: 85vw !important;
-    height: calc(85vw * 4 / 3) !important; // 3:4比率維持
-    min-height: calc(85vw * 4 / 3) !important;
-    max-height: calc(85vw * 4 / 3) !important;
-    aspect-ratio: 3/4 !important;
+    width: 95vw !important;
+    max-width: 95vw !important;
+    min-width: 95vw !important;
+    height: 45vh !important;
+    min-height: 45vh !important;
+    max-height: 45vh !important;
+    border-radius: 16px;
     left: 50% !important;
     top: 50% !important;
     // transform は動的スタイルバインディングで制御
