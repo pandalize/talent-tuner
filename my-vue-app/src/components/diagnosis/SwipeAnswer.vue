@@ -425,22 +425,21 @@ function resetForNextCard() {
   }
   
   .swipe-card {
-    width: 85vw !important; // 横幅を少し狭く
-    max-width: 85vw !important;
-    min-width: 85vw !important;
-    height: 55vh !important; // 縦長に変更: 画面高の55%
-    min-height: 55vh !important;
-    max-height: 55vh !important;
+    width: 90vw !important; // 横幅を広く
+    max-width: 90vw !important;
+    min-width: 90vw !important;
+    height: 65vh !important; // より縦長に変更: 画面高の65%
+    min-height: 65vh !important;
+    max-height: 65vh !important;
     aspect-ratio: none !important;
     padding: 0;
     border-radius: 20px;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
     margin: 0 auto;
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    top: 20%;
-    transform: translate(-50%, -50%);
+    position: relative;
+    left: auto;
+    top: auto;
+    transform: none;
   }
   
   .card-content {

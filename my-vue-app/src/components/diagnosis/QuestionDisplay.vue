@@ -23,39 +23,38 @@
       
     </div>
     
-    <!-- モバイル版: チュートリアルスワイプカード（枠の上に配置） -->
-    <template v-if="shouldShowTutorial">
-      <div class="tutorial-card-container">
-        <TutorialSwipeCard
-          :main-question="question.text"
-          :question-index="questionIndex"
-          :total-questions="totalQuestions"
-          :category-info="shouldShowCategoryTutorialDisplay ? currentCategoryInfo : null"
-          @tutorial-completed="handleTutorialCompleted"
-        />
-      </div>
-    </template>
-    
-    <!-- モバイル版: スワイプモードのカード（枠の上に配置） -->
-    <template v-if="shouldShowSwipeOption">
-      <!-- スワイプカード（進捗表示を内包） -->
-      <div class="swipe-card-container">
-        <SwipeAnswer
-          :key="currentOption.label"
-          :question-id="question.id"
-          :option="currentOption"
-          :current-rating="getLocalOptionRating(question.id, currentOption.label)"
-          :current-index="currentOptionIndex"
-          :total-count="question.options.length"
-          @select-rating="handleSelectRating"
-          @answer-completed="handleAnswerCompleted"
-        />
-      </div>
-    </template>
-    
-    <!-- PC版: 通常の質問カード -->
-    <div v-if="!effectiveSwipeMode" class="question-card tw-card">
-      <div class="options-list tw-options">
+    <!-- PC版 & モバイル版共通: 質問カード -->
+    <div class="question-card tw-card">
+      <!-- モバイル版: チュートリアルスワイプカード（枠内最上部） -->
+      <template v-if="shouldShowTutorial && effectiveSwipeMode">
+        <div class="tutorial-card-container">
+          <TutorialSwipeCard
+            :main-question="question.text"
+            :question-index="questionIndex"
+            :total-questions="totalQuestions"
+            :category-info="shouldShowCategoryTutorialDisplay ? currentCategoryInfo : null"
+            @tutorial-completed="handleTutorialCompleted"
+          />
+        </div>
+      </template>
+      
+      <!-- モバイル版: スワイプモードのカード（枠内最上部） -->
+      <template v-if="shouldShowSwipeOption && effectiveSwipeMode">
+        <div class="swipe-card-container">
+          <SwipeAnswer
+            :key="currentOption.label"
+            :question-id="question.id"
+            :option="currentOption"
+            :current-rating="getLocalOptionRating(question.id, currentOption.label)"
+            :current-index="currentOptionIndex"
+            :total-count="question.options.length"
+            @select-rating="handleSelectRating"
+            @answer-completed="handleAnswerCompleted"
+          />
+        </div>
+      </template>
+      
+      <div v-if="!effectiveSwipeMode" class="options-list tw-options">
         <!-- PC版: 5段階評価モード -->
           <div
             v-for="option in question.options"
@@ -584,8 +583,10 @@ function handleAnswerCompleted() {
     width: 100%;
     max-width: 100%;
     margin: 0;
-    padding: 0;
+    padding: var(--space-xs);
     box-sizing: border-box;
+    position: relative;
+    min-height: 70vh; // スワイプカードのための十分な高さを確保
   }
   
   .options-list {
@@ -793,36 +794,26 @@ function handleAnswerCompleted() {
   }
 }
 
-// チュートリアルカードコンテナ（画面上部に配置）
+// チュートリアルカードコンテナ（枠内最上部に配置）
 .tutorial-card-container {
   width: 100%;
   display: flex;
   justify-content: center;
-  margin-bottom: var(--space-lg);
+  align-items: flex-start;
   position: relative;
+  margin: 0;
+  padding: var(--space-xs) 0;
 }
 
-// スワイプカードコンテナ（画面上部に配置）
+// スワイプカードコンテナ（枠内最上部に配置）
 .swipe-card-container {
   width: 100%;
   display: flex;
   justify-content: center;
   align-items: flex-start;
+  position: relative;
   margin: 0;
-  padding: var(--space-sm) 0 0 0;
-  min-height: calc(100vh - 200px);
-}
-
-
-// チュートリアルカードコンテナ（スワイプカードと同じ位置に配置）
-.tutorial-card-container {
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  margin: 0;
-  padding: var(--space-sm) 0 0 0;
-  min-height: calc(100vh - 200px);
+  padding: var(--space-xs) 0;
 }
 
 // モバイル版チュートリアル最適化

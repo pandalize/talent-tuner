@@ -241,7 +241,7 @@ function completeTutorial() {
 
 // チュートリアルスワイプカード
 .tutorial-swipe-card {
-  position: absolute;
+  position: relative;
   background: white;
   border-radius: 20px;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
@@ -250,23 +250,24 @@ function completeTutorial() {
   user-select: none;
   touch-action: pan-y;
   will-change: transform, opacity;
-  width: 85vw;
-  max-width: 85vw;
-  height: 55vh;
-  min-height: 55vh;
-  max-height: 55vh;
+  width: 90vw;
+  max-width: 90vw;
+  height: 65vh;
+  min-height: 65vh;
+  max-height: 65vh;
   display: flex;
   align-items: center;
   justify-content: center;
   box-sizing: border-box;
   overflow: hidden;
-  left: 50%;
-  top: 30%;
-  transform: translate(-50%, -50%);
+  left: auto;
+  top: auto;
+  transform: none;
+  margin: 0 auto;
   
   // 初期状態（非表示）
   opacity: 0;
-  transform: translate(-50%, -50%) scale(0.8) translateY(30px);
+  transform: scale(0.8) translateY(30px);
   transition: opacity 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94), 
               transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94),
               background 0.3s ease;
@@ -274,7 +275,7 @@ function completeTutorial() {
   // 表示状態（ディゾルブイン）
   &.visible {
     opacity: 1;
-    transform: translate(-50%, -50%) scale(1);
+    transform: scale(1);
   }
   
   &.swiping {
@@ -439,11 +440,11 @@ function completeTutorial() {
   }
   
   .tutorial-swipe-card {
-    width: 90vw !important;
-    max-width: 90vw !important;
-    height: 50vh !important;
-    min-height: 50vh !important;
-    max-height: 50vh !important;
+    width: 92vw !important;
+    max-width: 92vw !important;
+    height: 60vh !important;
+    min-height: 60vh !important;
+    max-height: 60vh !important;
   }
   
   .tutorial-card-content {
@@ -460,9 +461,9 @@ function completeTutorial() {
   .tutorial-swipe-card {
     width: 95vw !important;
     max-width: 95vw !important;
-    height: 45vh !important;
-    min-height: 45vh !important;
-    max-height: 45vh !important;
+    height: 55vh !important;
+    min-height: 55vh !important;
+    max-height: 55vh !important;
   }
   
   .tutorial-card-content {
