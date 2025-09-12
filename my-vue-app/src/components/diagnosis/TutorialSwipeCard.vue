@@ -263,7 +263,7 @@ function completeTutorial() {
   overflow: hidden;
   left: 50%;
   top: 50%;
-  transform: translate(-50%, -50%); // 初期位置は画面中央
+  // transform は動的スタイルバインディングで制御
   margin: 0;
   
   // 初期状態（非表示）
@@ -449,7 +449,7 @@ function completeTutorial() {
     aspect-ratio: 3/4 !important;
     left: 50% !important;
     top: 50% !important;
-    transform: translate(-50%, -50%) !important;
+    // transform は動的スタイルバインディングで制御
   }
   
   .tutorial-card-content {
@@ -472,7 +472,7 @@ function completeTutorial() {
     aspect-ratio: 3/4 !important;
     left: 50% !important;
     top: 50% !important;
-    transform: translate(-50%, -50%) !important;
+    // transform は動的スタイルバインディングで制御
   }
   
   .tutorial-card-content {

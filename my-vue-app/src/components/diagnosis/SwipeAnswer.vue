@@ -266,23 +266,23 @@ function resetForNextCard() {
   left: 0;
   right: 0;
   
+  // 初期状態（非表示）
+  opacity: 0;
+  // transform は動的スタイルバインディングで制御
+  transition: opacity 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94), 
+              transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+              background 0.3s ease;
+  
   // aspect-ratio未対応ブラウザ向けフォールバック
   @supports not (aspect-ratio: 4 / 3) {
     height: 71.25vw; // 95vw × 0.75 = 3:4の比率
     max-height: 750px;
   }
   
-  // 初期状態（非表示）
-  opacity: 0;
-  transform: scale(0.8) translateY(30px);
-  transition: opacity 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94), 
-              transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94),
-              background 0.3s ease;
-  
   // 表示状態（ディゾルブイン）
   &.visible {
     opacity: 1;
-    transform: scale(1) translateY(0);
+    // transform は動的スタイルバインディングで制御
   }
   
   &.swiping {
@@ -403,7 +403,7 @@ function resetForNextCard() {
     padding: 0;
     left: 50%;
     top: 50%;
-    transform: translate(-50%, -50%);
+    // transform は動的スタイルバインディングで制御
   }
   
   .card-content {
@@ -442,7 +442,7 @@ function resetForNextCard() {
     position: absolute;
     left: 50%;
     top: 50%;
-    transform: translate(-50%, -50%); // 初期位置は画面中央、スワイプで動的に変更
+    // transform は動的スタイルバインディングで制御
   }
   
   .card-content {
@@ -496,7 +496,7 @@ function resetForNextCard() {
     aspect-ratio: 3/4 !important;
     left: 50% !important;
     top: 50% !important;
-    transform: translate(-50%, -50%) !important;
+    // transform は動的スタイルバインディングで制御
   }
   
   .option-text {
@@ -520,7 +520,7 @@ function resetForNextCard() {
     padding: 0;
     left: 50%;
     top: 50%;
-    transform: translate(-50%, -50%);
+    // transform は動的スタイルバインディングで制御
   }
   
   .card-content {
