@@ -31,6 +31,11 @@
       }"
     >
       <div class="card-content">
+        <!-- 進捗表示 -->
+        <div v-if="currentIndex !== undefined && totalCount !== undefined" class="progress-header">
+          <div class="progress-text">{{ currentIndex + 1 }} / {{ totalCount }}</div>
+        </div>
+        
         <div class="option-header">
           <div class="option-text">{{ option.text }}</div>
         </div>
@@ -51,6 +56,8 @@ interface Props {
     text: string
   }
   currentRating: number | null
+  currentIndex?: number
+  totalCount?: number
 }
 
 const props = defineProps<Props>()
@@ -340,6 +347,23 @@ function resetForNextCard() {
   box-sizing: border-box;
 }
 
+.progress-header {
+  position: absolute;
+  top: clamp(12px, 3vw, 20px);
+  right: clamp(12px, 3vw, 20px);
+  z-index: 3;
+}
+
+.progress-text {
+  font-size: clamp(0.7rem, 2vw, 0.9rem);
+  color: var(--text-secondary, #666);
+  background: rgba(255, 255, 255, 0.9);
+  padding: var(--space-xs, 4px) var(--space-sm, 8px);
+  border-radius: 20px;
+  font-weight: 500;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
 .option-header {
   display: flex;
   align-items: center;
@@ -388,11 +412,11 @@ function resetForNextCard() {
   }
 }
 
-// モバイル最適化
+// モバイル最適化 - 縦長カードで大きな画面占有率
 @media (max-width: 768px) {
   .swipe-answer-container {
     width: 100%;
-    min-height: 320px;
+    min-height: 70vh; // 画面高の70%を使用
     padding: var(--space-xs) 0;
     display: flex;
     align-items: center;
@@ -401,20 +425,22 @@ function resetForNextCard() {
   }
   
   .swipe-card {
-    width: 90vw !important;
-    max-width: 90vw !important;
-    min-width: 90vw !important;
-    height: 67.5vw !important; // 90vw × 0.75 = 横幅の75%
-    min-height: 67.5vw !important;
-    max-height: 67.5vw !important;
+    width: 85vw !important; // 横幅を少し狭く
+    max-width: 85vw !important;
+    min-width: 85vw !important;
+    height: 55vh !important; // 縦長に変更: 画面高の55%
+    min-height: 55vh !important;
+    max-height: 55vh !important;
     aspect-ratio: none !important;
     padding: 0;
-    border-radius: 16px;
-    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.1);
-    margin: var(--space-sm) auto 0;
+    border-radius: 20px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+    margin: 0 auto;
     position: absolute;
     left: 50%;
     transform: translateX(-50%);
+    top: 20%;
+    transform: translate(-50%, -50%);
   }
   
   .card-content {
@@ -454,6 +480,19 @@ function resetForNextCard() {
 
 // 小画面モバイル最適化（iPhone SE等）
 @media (max-width: 480px) {
+  .swipe-answer-container {
+    min-height: 65vh; // 小画面では少し小さく
+  }
+  
+  .swipe-card {
+    width: 90vw !important; // 小画面では横幅を最大化
+    max-width: 90vw !important;
+    min-width: 90vw !important;
+    height: 50vh !important; // 高さを調整
+    min-height: 50vh !important;
+    max-height: 50vh !important;
+  }
+  
   .option-text {
     // より小さい画面用の動的フォントサイズ: 最小0.9rem、推奨3.5vw、最大1.4rem
     font-size: clamp(0.9rem, 3.5vw, 1.4rem) !important;
@@ -494,6 +533,20 @@ function resetForNextCard() {
 
 // 非常に小さな画面（Galaxy Fold等）
 @media (max-width: 320px) {
+  .swipe-answer-container {
+    min-height: 60vh;
+  }
+  
+  .swipe-card {
+    width: 95vw !important;
+    max-width: 95vw !important;
+    min-width: 95vw !important;
+    height: 45vh !important;
+    min-height: 45vh !important;
+    max-height: 45vh !important;
+    border-radius: 16px;
+  }
+  
   .option-text {
     font-size: clamp(0.8rem, 3vw, 1.2rem) !important;
     line-height: 1.2;

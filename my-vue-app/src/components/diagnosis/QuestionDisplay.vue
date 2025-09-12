@@ -7,44 +7,56 @@
   <div class="question-display tw-question-layout">
     <!-- 質問ヘッダー -->
     <div class="question-header tw-header">
-      <div class="question-meta tw-meta">
-        <span class="question-number tw-number">
-          質問 {{ questionIndex + 1 }} / {{ totalQuestions }}
-          <template v-if="isSwipeMode">
-            - {{ currentOptionIndex + 1 }} / {{ question.options.length }}
-          </template>
-        </span>
-        <span class="category-badge tw-category">{{ getQuestionCategoryName(question) }}</span>
-      </div>
-      <h2 class="question-title tw-title">{{ question.text }}</h2>
-      <p class="question-subtitle tw-subtitle">
-        <template v-if="isSwipeMode">
-          各項目について、左右にスワイプして回答してください
-        </template>
-        <template v-else>
+      <!-- PC版のみヘッダー表示 -->
+      <template v-if="!effectiveSwipeMode">
+        <div class="question-meta tw-meta">
+          <span class="question-number tw-number">
+            質問 {{ questionIndex + 1 }} / {{ totalQuestions }}
+          </span>
+          <span class="category-badge tw-category">{{ getQuestionCategoryName(question) }}</span>
+        </div>
+        <h2 class="question-title tw-title">{{ question.text }}</h2>
+        <p class="question-subtitle tw-subtitle">
           各項目について、あなたにどの程度当てはまるかを5段階で評価してください
-        </template>
-      </p>
+        </p>
+      </template>
+      
     </div>
     
+    <!-- モバイル版: チュートリアルスワイプカード（枠の上に配置） -->
+    <template v-if="shouldShowTutorial">
+      <div class="tutorial-card-container">
+        <TutorialSwipeCard
+          :main-question="question.text"
+          :question-index="questionIndex"
+          :total-questions="totalQuestions"
+          :category-info="shouldShowCategoryTutorialDisplay ? currentCategoryInfo : null"
+          @tutorial-completed="handleTutorialCompleted"
+        />
+      </div>
+    </template>
     
-    <!-- 質問カード -->
-    <div class="question-card tw-card">
+    <!-- モバイル版: スワイプモードのカード（枠の上に配置） -->
+    <template v-if="shouldShowSwipeOption">
+      <!-- スワイプカード（進捗表示を内包） -->
+      <div class="swipe-card-container">
+        <SwipeAnswer
+          :key="currentOption.label"
+          :question-id="question.id"
+          :option="currentOption"
+          :current-rating="getLocalOptionRating(question.id, currentOption.label)"
+          :current-index="currentOptionIndex"
+          :total-count="question.options.length"
+          @select-rating="handleSelectRating"
+          @answer-completed="handleAnswerCompleted"
+        />
+      </div>
+    </template>
+    
+    <!-- PC版: 通常の質問カード -->
+    <div v-if="!effectiveSwipeMode" class="question-card tw-card">
       <div class="options-list tw-options">
-        <!-- スワイプモード（一つずつ表示） -->
-        <template v-if="effectiveSwipeMode && currentOption">
-          <SwipeAnswer
-            :key="currentOption.label"
-            :question-id="question.id"
-            :option="currentOption"
-            :current-rating="getLocalOptionRating(question.id, currentOption.label)"
-            @select-rating="handleSelectRating"
-            @answer-completed="handleAnswerCompleted"
-          />
-        </template>
-        
-        <!-- 通常モード（5段階評価） -->
-        <template v-else>
+        <!-- PC版: 5段階評価モード -->
           <div
             v-for="option in question.options"
             :key="option.label"
@@ -81,7 +93,6 @@
               </div>
             </div>
           </div>
-        </template>
       </div>
     </div>
     
@@ -94,6 +105,7 @@ import { useBreakpoints } from '@vueuse/core'
 import { useDiagnosis } from '../../composables/useDiagnosis'
 import type { Question } from '../../utils/diagnosisLoader'
 import SwipeAnswer from './SwipeAnswer.vue'
+import TutorialSwipeCard from './TutorialSwipeCard.vue'
 
 // Props
 interface Props {
@@ -101,6 +113,13 @@ interface Props {
   questionIndex: number
   totalQuestions: number
   answers: Record<string, Record<string, number>>
+  tutorialCompleted: boolean
+  shouldShowCategoryTutorial: boolean
+  currentCategoryInfo: {
+    name: string
+    description: string
+    icon: string
+  } | null
 }
 
 const props = defineProps<Props>()
@@ -112,6 +131,8 @@ interface Emits {
   'previous-question': []
   'calculate-result': []
   'swipe-answer-completed': []
+  'tutorial-completed': []
+  'category-tutorial-completed': []
 }
 
 const emit = defineEmits<Emits>()
@@ -136,6 +157,46 @@ const effectiveSwipeMode = computed(() => {
   return isMobile.value
 })
 
+// 初回チュートリアル表示の判定（最初の質問でスワイプモードの場合）
+const shouldShowInitialTutorial = computed(() => {
+  return effectiveSwipeMode.value && props.questionIndex === 0 && currentOptionIndex.value === 0 && !props.tutorialCompleted
+})
+
+// カテゴリーチュートリアル表示の判定（4問ごとのカテゴリー紹介）
+const shouldShowCategoryTutorialDisplay = computed(() => {
+  return effectiveSwipeMode.value && props.shouldShowCategoryTutorial && currentOptionIndex.value === 0
+})
+
+// いずれかのチュートリアルを表示するか
+const shouldShowTutorial = computed(() => {
+  return shouldShowInitialTutorial.value || shouldShowCategoryTutorialDisplay.value
+})
+
+// チュートリアル完了後の質問表示判定（使用しない）
+// const shouldShowQuestionAfterTutorial = computed(() => {
+//   return effectiveSwipeMode.value && props.questionIndex === 0 && currentOptionIndex.value === 0 && tutorialCompleted.value
+// })
+
+// スワイプモードでオプション表示すべきか判定
+const shouldShowSwipeOption = computed(() => {
+  // モバイル版でない場合はfalse
+  if (!effectiveSwipeMode.value) return false
+  
+  // オプションが存在しない場合はfalse
+  if (!currentOption.value) return false
+  
+  // チュートリアル表示中はfalse
+  if (shouldShowTutorial.value) return false
+  
+  // 最初の質問の場合はチュートリアル完了後のみ
+  if (props.questionIndex === 0) {
+    return props.tutorialCompleted
+  }
+  
+  // 2問目以降は常にスワイプモード
+  return true
+})
+
 // 現在表示中のオプションを取得
 const currentOption = computed(() => {
   return props.question.options[currentOptionIndex.value] || null
@@ -157,6 +218,19 @@ function handleSelectRating(questionId: string, optionLabel: string, rating: num
   emit('select-rating', questionId, optionLabel, rating)
 }
 
+// チュートリアル完了処理（即座回答開始）
+function handleTutorialCompleted() {
+  if (shouldShowInitialTutorial.value) {
+    // 初回チュートリアル完了
+    emit('tutorial-completed')
+  } else if (shouldShowCategoryTutorialDisplay.value) {
+    // カテゴリーチュートリアル完了
+    emit('category-tutorial-completed')
+  }
+  // チュートリアル完了後、即座に最初のオプションで回答開始
+  currentOptionIndex.value = 0
+}
+
 // スワイプ回答完了時の処理
 function handleAnswerCompleted() {
   // 次のオプションに進む
@@ -168,6 +242,7 @@ function handleAnswerCompleted() {
     emit('swipe-answer-completed')
     // 次の質問用にリセット
     currentOptionIndex.value = 0
+    // tutorialCompletedは一度完了したら永続的に保持（リセットしない）
   }
 }
 </script>
@@ -560,4 +635,169 @@ function handleAnswerCompleted() {
     }
   }
 }
+
+// チュートリアルセクション
+.tutorial-section {
+  text-align: center;
+  padding: var(--space-md) 0;
+  
+  .tutorial-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--space-lg);
+  }
+  
+  .tutorial-title {
+    font-family: var(--font-heading);
+    font-size: var(--fs-h2);
+    color: var(--primary-navy);
+    font-weight: 600;
+    margin: 0;
+  }
+  
+  .tutorial-progress {
+    font-size: var(--fs-small);
+    color: var(--text-secondary);
+    background: var(--bg-tertiary);
+    padding: var(--space-xs) var(--space-sm);
+    border-radius: 20px;
+  }
+}
+
+.tutorial-content {
+  .tutorial-main-text {
+    font-size: var(--fs-h3);
+    color: var(--text-primary);
+    font-weight: 500;
+    margin-bottom: var(--space-xl);
+    line-height: 1.4;
+  }
+  
+  .tutorial-instructions {
+    background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-tertiary) 100%);
+    border-radius: 16px;
+    padding: var(--space-lg);
+    margin-bottom: var(--space-lg);
+  }
+  
+  .tutorial-swipe-demo {
+    margin-bottom: var(--space-md);
+  }
+  
+  .swipe-demo-card {
+    background: white;
+    border-radius: 12px;
+    padding: var(--space-lg) var(--space-md);
+    margin: 0 auto;
+    max-width: 280px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  }
+  
+  .swipe-arrows {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .swipe-left,
+  .swipe-right {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-xs);
+    
+    span {
+      font-size: 2rem;
+      font-weight: bold;
+    }
+    
+    small {
+      font-size: var(--fs-small);
+      color: var(--text-secondary);
+    }
+  }
+  
+  .swipe-left span {
+    color: #ff6b6b;
+  }
+  
+  .swipe-right span {
+    color: #51cf66;
+  }
+  
+  .tutorial-instruction-text {
+    font-size: var(--fs-body);
+    color: var(--text-primary);
+    font-weight: 500;
+    margin: 0;
+  }
+}
+
+// スワイプカードコンテナ（画面上部に配置）
+.swipe-card-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  margin: 0;
+  padding: var(--space-sm) 0 0 0;
+  min-height: calc(100vh - 200px);
+}
+
+
+// チュートリアルカードコンテナ（スワイプカードと同じ位置に配置）
+.tutorial-card-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  margin: 0;
+  padding: var(--space-sm) 0 0 0;
+  min-height: calc(100vh - 200px);
+}
+
+// モバイル版チュートリアル最適化
+@include mixins.respond-to('mobile') {
+  .tutorial-section {
+    padding: var(--space-sm) 0;
+    
+    .tutorial-header {
+      margin-bottom: var(--space-md);
+    }
+    
+    .tutorial-title {
+      font-size: var(--fs-h3);
+    }
+  }
+  
+  .tutorial-content {
+    .tutorial-main-text {
+      font-size: var(--fs-h4);
+      margin-bottom: var(--space-lg);
+    }
+    
+    .tutorial-instructions {
+      padding: var(--space-md);
+      margin-bottom: var(--space-md);
+    }
+    
+    .swipe-demo-card {
+      max-width: 240px;
+      padding: var(--space-md) var(--space-sm);
+    }
+    
+    .swipe-arrows {
+      span {
+        font-size: 1.5rem;
+      }
+    }
+    
+    .tutorial-instruction-text {
+      font-size: var(--fs-small);
+    }
+  }
+}
+
+// 中間画面のスタイルを削除（不要になったため）
 </style>

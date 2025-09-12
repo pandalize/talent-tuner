@@ -50,11 +50,16 @@
           :questionIndex="currentQuestionIndex"
           :totalQuestions="questions.length"
           :answers="answers"
+          :tutorial-completed="tutorialCompleted"
+          :should-show-category-tutorial="shouldShowCategoryTutorial"
+          :current-category-info="currentCategoryInfo"
           @select-rating="handleSelectRating"
           @next-question="goToNextQuestion"
           @previous-question="goToPreviousQuestion"
           @calculate-result="calculateResult"
           @swipe-answer-completed="handleSwipeAnswerCompleted"
+          @tutorial-completed="handleTutorialCompleted"
+          @category-tutorial-completed="handleCategoryTutorialCompleted"
         />
         
         
@@ -74,13 +79,18 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted } from 'vue'
+import { onMounted, ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { useDiagnosis } from '../../composables/useDiagnosis'
 import QuestionDisplay from './QuestionDisplay.vue'
 import ResultDisplay from './ResultDisplay.vue'
 
 const router = useRouter()
+
+// チュートリアル状態管理（DiagnosisContainerで管理）
+const tutorialCompleted = ref(false)
+// カテゴリーチュートリアル管理（4問ごとに表示）
+const categoryTutorialShown = ref(new Set<number>())
 
 // 診断状態管理
 const {
@@ -107,6 +117,32 @@ const {
   isAllQuestionsAnswered
 } = useDiagnosis()
 
+// カテゴリー情報マッピング（4問ごとのカテゴリー）
+const categoryMap = {
+  0: { name: "興味・関心", description: "あなたの興味や関心について質問します", icon: "💭" },
+  4: { name: "スキル・得意分野", description: "あなたのスキルや得意分野について質問します", icon: "🛠️" },
+  8: { name: "価値観・優先度", description: "あなたの価値観や優先度について質問します", icon: "⭐" },
+  12: { name: "ワークライフバランス", description: "働き方やライフスタイルについて質問します", icon: "⚖️" }
+}
+
+// 現在の質問でカテゴリーチュートリアルを表示すべきかの判定
+const shouldShowCategoryTutorial = computed(() => {
+  if (!currentQuestion.value) return false
+  
+  const questionIndex = currentQuestionIndex.value
+  const isCategoryStart = questionIndex % 4 === 0
+  const isNotInitialTutorial = questionIndex > 0
+  const notShownYet = !categoryTutorialShown.value.has(questionIndex)
+  
+  return isCategoryStart && isNotInitialTutorial && notShownYet
+})
+
+// 現在のカテゴリー情報
+const currentCategoryInfo = computed(() => {
+  const questionIndex = currentQuestionIndex.value
+  return categoryMap[questionIndex as keyof typeof categoryMap] || null
+})
+
 // === イベントハンドラー ===
 function handleSelectRating(questionId: string, optionLabel: string, rating: number) {
   selectOptionRating(questionId, optionLabel, rating)
@@ -123,8 +159,19 @@ function handleSwipeAnswerCompleted() {
   }
 }
 
+function handleTutorialCompleted() {
+  tutorialCompleted.value = true
+}
+
+function handleCategoryTutorialCompleted() {
+  categoryTutorialShown.value.add(currentQuestionIndex.value)
+}
+
 function handleResetDiagnosis() {
   resetDiagnosis()
+  // 診断リセット時はチュートリアル状態もリセット
+  tutorialCompleted.value = false
+  categoryTutorialShown.value.clear()
 }
 
 function goHome() {
