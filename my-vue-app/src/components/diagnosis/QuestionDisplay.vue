@@ -96,6 +96,43 @@
       </div>
     </div>
     
+    <!-- PC版: ナビゲーションボタン（質問カードの外に配置） -->
+    <div v-if="!effectiveSwipeMode" class="question-navigation">
+      <button
+        v-if="questionIndex > 0"
+        @click="emit('previous-question')"
+        class="nav-button prev-button"
+        type="button"
+      >
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="15,18 9,12 15,6"></polyline>
+        </svg>
+        前の質問
+      </button>
+      
+      <div class="spacer"></div>
+      
+      <button
+        @click="handleNextQuestion"
+        class="nav-button next-button"
+        :disabled="!isCurrentQuestionAnswered"
+        type="button"
+      >
+        <template v-if="questionIndex < totalQuestions - 1">
+          次の質問
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="9,18 15,12 9,6"></polyline>
+          </svg>
+        </template>
+        <template v-else>
+          結果を見る
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="9,18 15,12 9,6"></polyline>
+          </svg>
+        </template>
+      </button>
+    </div>
+    
   </div>
 </template>
 
@@ -140,7 +177,8 @@ const emit = defineEmits<Emits>()
 // Composable
 const {
   getQuestionCategoryName,
-  getRatingLabel
+  getRatingLabel,
+  isCurrentQuestionCompleted
 } = useDiagnosis()
 
 // ブレークポイント設定
@@ -202,6 +240,17 @@ const currentOption = computed(() => {
   return props.question.options[currentOptionIndex.value] || null
 })
 
+// PC版: 現在の質問がすべて回答済みかどうか
+const isCurrentQuestionAnswered = computed(() => {
+  if (!props.question) return false
+  
+  // すべてのオプションに回答があるかチェック
+  return props.question.options.every(option => {
+    const rating = getLocalOptionRating(props.question.id, option.label)
+    return rating !== null && rating >= 1 && rating <= 5
+  })
+})
+
 
 
 // ローカル関数
@@ -216,6 +265,16 @@ function getLocalOptionRating(questionId: string, optionLabel: string): number |
 // イベントハンドラー
 function handleSelectRating(questionId: string, optionLabel: string, rating: number) {
   emit('select-rating', questionId, optionLabel, rating)
+}
+
+// PC版: 次の質問へ移動
+function handleNextQuestion() {
+  if (props.questionIndex < props.totalQuestions - 1) {
+    emit('next-question')
+  } else {
+    // 最後の質問の場合は結果計算
+    emit('calculate-result')
+  }
 }
 
 // チュートリアル完了処理（即座回答開始）
@@ -796,6 +855,79 @@ function handleAnswerCompleted() {
     .tutorial-instruction-text {
       font-size: var(--fs-small);
     }
+  }
+}
+
+// PC版ナビゲーションボタン
+.question-navigation {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: var(--space-xl);
+  padding: var(--space-md) 0;
+  width: 100%;
+}
+
+.nav-button {
+  @include mixins.button-base;
+  @include mixins.flex-center;
+  gap: var(--space-xs);
+  padding: var(--space-md) var(--space-lg);
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: var(--fs-body);
+  transition: all var(--transition-fast);
+  min-width: 140px;
+
+  &.prev-button {
+    background: var(--bg-secondary);
+    color: var(--text-secondary);
+    border: 2px solid var(--border-light);
+
+    &:hover {
+      background: var(--bg-tertiary);
+      color: var(--text-primary);
+      border-color: var(--accent-blue);
+    }
+  }
+
+  &.next-button {
+    @include mixins.button-primary;
+    background: linear-gradient(135deg, var(--accent-blue), var(--primary-navy));
+    
+    &:hover:not(:disabled) {
+      transform: translateY(-2px);
+      @include mixins.card-shadow(md);
+    }
+    
+    &:disabled {
+      background: var(--bg-tertiary);
+      color: var(--text-secondary);
+      cursor: not-allowed;
+      opacity: 0.6;
+      transform: none;
+      box-shadow: none;
+      
+      &:hover {
+        transform: none;
+        background: var(--bg-tertiary);
+      }
+    }
+  }
+
+  svg {
+    flex-shrink: 0;
+  }
+}
+
+.spacer {
+  flex: 1;
+}
+
+// モバイル版ではナビゲーションを非表示（768px未満で非表示）
+@media (max-width: 767px) {
+  .question-navigation {
+    display: none !important;
   }
 }
 
