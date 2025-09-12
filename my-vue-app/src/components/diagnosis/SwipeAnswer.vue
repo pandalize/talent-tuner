@@ -351,8 +351,9 @@ function resetForNextCard() {
 }
 
 .option-text {
-  font-size: 2rem;
-  line-height: 1.5;
+  // デスクトップ基準のフォントサイズ
+  font-size: clamp(1.5rem, 2vw, 2rem);
+  line-height: clamp(1.4, 1.5, 1.6);
   color: var(--text-primary);
   text-align: center;
   font-weight: 500;
@@ -361,8 +362,11 @@ function resetForNextCard() {
   white-space: normal;
   max-height: 100%;
   overflow: visible;
-  display: block;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   overflow-wrap: break-word;
+  transition: font-size 0.3s ease;
 }
 
 // タブレット最適化
@@ -414,62 +418,50 @@ function resetForNextCard() {
   }
   
   .card-content {
-    padding: var(--space-lg) var(--space-md);
-  }
-  
-  .option-text {
-    font-size: 1.5rem;
-    overflow: visible;
-    display: block;
-    -webkit-line-clamp: none;
-    -webkit-box-orient: initial;
+    padding: clamp(12px, 3vw, 20px) clamp(8px, 2vw, 16px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
   }
   
   .option-header {
-    padding: 0 var(--space-sm);
+    padding: 0;
     max-width: 100%;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
   
   .option-text {
-    font-size: 1.2rem;
-    line-height: 1.45;
+    // 動的フォントサイズ: 最小1rem、推奨4vw、最大1.8rem
+    font-size: clamp(1rem, 4vw, 1.8rem) !important;
+    line-height: clamp(1.3, 1.4, 1.5);
     word-break: keep-all;
     overflow-wrap: break-word;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    padding: clamp(4px, 1vw, 12px);
+    box-sizing: border-box;
   }
 }
 
-// 小画面モバイル最適化
+// 小画面モバイル最適化（iPhone SE等）
 @media (max-width: 480px) {
-  .swipe-card {
-    width: 90vw !important;
-    max-width: 90vw !important;
-    min-width: 90vw !important;
-    height: 67.5vw !important; // 90vw × 0.75 = 横幅の75%
-    min-height: 67.5vw !important;
-    max-height: 67.5vw !important;
-    aspect-ratio: none !important;
-    padding: 0;
-    margin: var(--space-xs) auto 0;
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
+  .option-text {
+    // より小さい画面用の動的フォントサイズ: 最小0.9rem、推奨3.5vw、最大1.4rem
+    font-size: clamp(0.9rem, 3.5vw, 1.4rem) !important;
+    line-height: clamp(1.25, 1.35, 1.45);
   }
   
   .card-content {
-    padding: var(--space-md) var(--space-sm);
-  }
-  
-  .option-text {
-    font-size: 1.3rem;
-    overflow: visible;
-    display: block;
-    -webkit-line-clamp: none;
-    -webkit-box-orient: initial;
-  }
-  
-  .option-text {
-    font-size: 1.1rem;
-    line-height: 1.4;
+    padding: clamp(8px, 2vw, 16px) clamp(4px, 1.5vw, 12px);
   }
 }
 
@@ -488,8 +480,28 @@ function resetForNextCard() {
   }
   
   .option-text {
-    font-size: 2rem;
+    font-size: clamp(1.8rem, 2.5vw, 2.2rem);
     line-height: 1.5;
+  }
+}
+
+// 非常に大きな画面での上限設定
+@media (min-width: 1400px) {
+  .option-text {
+    font-size: 2.2rem !important;
+  }
+}
+
+// 非常に小さな画面（Galaxy Fold等）
+@media (max-width: 320px) {
+  .option-text {
+    font-size: clamp(0.8rem, 3vw, 1.2rem) !important;
+    line-height: 1.2;
+    padding: clamp(2px, 0.5vw, 8px);
+  }
+  
+  .card-content {
+    padding: clamp(6px, 1.5vw, 12px) clamp(3px, 1vw, 8px);
   }
 }
 
