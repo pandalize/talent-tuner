@@ -27,24 +27,12 @@
       </p>
     </div>
     
-    <!-- モード切り替えボタン -->
-    <div class="mode-toggle">
-      <button @click="toggleMode" class="mode-toggle-btn">
-        <svg v-if="isSwipeMode" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-          <path d="M3 5h18v2H3V5zm0 4h18v2H3V9zm0 4h18v2H3v-2zm0 4h18v2H3v-2z"/>
-        </svg>
-        <svg v-else width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-          <path d="M5 8l4 4 4-4M5 16l4-4 4 4M13 8l4 4 4-4M13 16l4-4 4 4"/>
-        </svg>
-        <span>{{ isSwipeMode ? '通常モードに切り替え' : 'スワイプモードに切り替え' }}</span>
-      </button>
-    </div>
     
     <!-- 質問カード -->
     <div class="question-card tw-card">
       <div class="options-list tw-options">
         <!-- スワイプモード（一つずつ表示） -->
-        <template v-if="isSwipeMode && currentOption">
+        <template v-if="effectiveSwipeMode && currentOption">
           <SwipeAnswer
             :key="currentOption.label"
             :question-id="question.id"
@@ -102,6 +90,7 @@
 
 <script setup lang="ts">
 import { ref, computed } from 'vue'
+import { useBreakpoints } from '@vueuse/core'
 import { useDiagnosis } from '../../composables/useDiagnosis'
 import type { Question } from '../../utils/diagnosisLoader'
 import SwipeAnswer from './SwipeAnswer.vue'
@@ -133,31 +122,26 @@ const {
   getRatingLabel
 } = useDiagnosis()
 
+// ブレークポイント設定
+const breakpoints = useBreakpoints({
+  mobile: 768,
+})
+const isMobile = breakpoints.smaller('mobile')
+
 // リアクティブデータ
-const isSwipeMode = ref(false)
 const currentOptionIndex = ref(0)
+
+// 実際に使用するモード（自動切り替えのみ）
+const effectiveSwipeMode = computed(() => {
+  return isMobile.value
+})
 
 // 現在表示中のオプションを取得
 const currentOption = computed(() => {
   return props.question.options[currentOptionIndex.value] || null
 })
 
-// モード切り替え
-function toggleMode() {
-  isSwipeMode.value = !isSwipeMode.value
-  // モードを localStorage に保存
-  localStorage.setItem('diagnosisMode', isSwipeMode.value ? 'swipe' : 'normal')
-  // スワイプモードに切り替えた時は最初のオプションから開始
-  if (isSwipeMode.value) {
-    currentOptionIndex.value = 0
-  }
-}
 
-// 初期化時にモードを復元
-if (typeof window !== 'undefined') {
-  const savedMode = localStorage.getItem('diagnosisMode')
-  isSwipeMode.value = savedMode === 'swipe'
-}
 
 // ローカル関数
 function getLocalOptionRating(questionId: string, optionLabel: string): number | null {
@@ -241,38 +225,6 @@ function handleAnswerCompleted() {
   margin-bottom: 0;
 }
 
-// モード切り替えボタン
-.mode-toggle {
-  display: flex;
-  justify-content: center;
-  margin: var(--space-xs) 0;
-}
-
-.mode-toggle-btn {
-  display: flex;
-  align-items: center;
-  gap: var(--space-sm);
-  padding: var(--space-xs) var(--space-lg);
-  background: white;
-  border: 2px solid var(--border-light);
-  border-radius: 12px;
-  font-size: var(--fs-small);
-  font-weight: 500;
-  color: var(--text-secondary);
-  cursor: pointer;
-  transition: all var(--transition-fast);
-  
-  &:hover {
-    background: var(--bg-secondary);
-    border-color: var(--accent-blue);
-    color: var(--accent-blue);
-  }
-  
-  svg {
-    width: 20px;
-    height: 20px;
-  }
-}
 
 // 質問カード - 5段階評価形式
 .question-card {
