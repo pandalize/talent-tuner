@@ -793,6 +793,15 @@ function handleAnswerCompleted() {
   }
 }
 
+// チュートリアルカードコンテナ（画面上部に配置）
+.tutorial-card-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-bottom: var(--space-lg);
+  position: relative;
+}
+
 // スワイプカードコンテナ（画面上部に配置）
 .swipe-card-container {
   width: 100%;
