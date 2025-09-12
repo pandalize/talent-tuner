@@ -14,7 +14,8 @@
         'swipe-right': swipeDirection === 'right',
         'answered': hasAnswered,
         'selected-no': isAnimatingNo,
-        'selected-yes': isAnimatingYes
+        'selected-yes': isAnimatingYes,
+        'visible': isVisible
       }"
       ref="swipeCardRef"
       @touchstart="handleTouchStart"
@@ -25,8 +26,8 @@
       @mouseup="handleMouseUp"
       @mouseleave="handleMouseUp"
       :style="{
-        transform: `translateX(${translateX}px) rotate(${rotation}deg)`,
-        transition: isSwiping ? 'none' : 'all 0.3s ease'
+        transform: isVisible ? `translateX(calc(-50% + ${translateX}px)) rotate(${rotation}deg)` : 'translateX(-50%) scale(0.8) translateY(30px)',
+        transition: isSwiping ? 'none' : (isAnimatingNo || isAnimatingYes) ? 'all 0.8s cubic-bezier(0.43, 0.13, 0.23, 0.96)' : isVisible ? 'all 0.3s ease' : 'opacity 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94), transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94)'
       }"
     >
       <div class="card-content">
@@ -40,7 +41,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from 'vue'
+import { ref, watch, onMounted } from 'vue'
 
 // Props
 interface Props {
@@ -57,6 +58,7 @@ const props = defineProps<Props>()
 // Emits
 interface Emits {
   'select-rating': [questionId: string, optionLabel: string, rating: number]
+  'answer-completed': []
 }
 
 const emit = defineEmits<Emits>()
@@ -71,6 +73,7 @@ const swipeDirection = ref<'left' | 'right' | null>(null)
 const hasAnswered = ref(false)
 const isAnimatingNo = ref(false)
 const isAnimatingYes = ref(false)
+const isVisible = ref(false)
 
 // スワイプの閾値
 const SWIPE_THRESHOLD = 100
@@ -79,6 +82,23 @@ const ROTATION_FACTOR = 0.2
 // 回答状態の監視
 watch(() => props.currentRating, (newVal) => {
   hasAnswered.value = newVal !== null
+})
+
+// 質問・オプションの変更監視
+watch(() => [props.questionId, props.option.label], () => {
+  // 新しい質問/オプションが表示される時にディゾルブ効果を再実行
+  isVisible.value = false
+  setTimeout(() => {
+    isVisible.value = true
+  }, 150)
+}, { deep: true })
+
+// ディゾルブ効果（マウント後に表示）
+onMounted(() => {
+  // 少し遅延してからフェードイン開始
+  setTimeout(() => {
+    isVisible.value = true
+  }, 100)
 })
 
 // タッチイベントハンドラー
@@ -145,11 +165,6 @@ function endSwipe() {
   if (Math.abs(translateX.value) > SWIPE_THRESHOLD) {
     const rating = translateX.value < 0 ? 1 : 5
     selectAnswer(rating)
-    
-    // アニメーション後にリセット
-    setTimeout(() => {
-      resetCard()
-    }, 300)
   } else {
     // 閾値未満なら元に戻す
     resetCard()
@@ -166,42 +181,58 @@ function resetCard() {
 function selectAnswer(rating: number) {
   hasAnswered.value = true
   
-  // 色変更アニメーション
+  // 現在の位置と回転を保持（ユーザーがスワイプした位置から開始）
+  const currentX = translateX.value
+  const currentRotation = rotation.value
+  
+  // 色変更とアニメーション開始
   if (rating === 1) {
     isAnimatingNo.value = true
-    translateX.value = -200
-    rotation.value = -30
+    // 現在位置から左へ飛ばす
+    translateX.value = currentX - window.innerWidth * 1.5
+    rotation.value = currentRotation - 60
   } else {
     isAnimatingYes.value = true
-    translateX.value = 200
-    rotation.value = 30
+    // 現在位置から右へ飛ばす
+    translateX.value = currentX + window.innerWidth * 1.5
+    rotation.value = currentRotation + 60
   }
   
-  // 少し遅延してから回答を送信
+  // 回答を送信
+  emit('select-rating', props.questionId, props.option.label, rating)
+  
+  // 排出アニメーション完了後に次の質問へ進む
   setTimeout(() => {
-    emit('select-rating', props.questionId, props.option.label, rating)
-    
-    // アニメーション後にリセット
-    setTimeout(() => {
-      resetCard()
-      isAnimatingNo.value = false
-      isAnimatingYes.value = false
-    }, 200)
-  }, 300)
+    // 次のカード用にリセット
+    resetForNextCard()
+    emit('answer-completed')
+  }, 800)
+}
+
+// 次のカード用のリセット処理
+function resetForNextCard() {
+  isVisible.value = false
+  hasAnswered.value = false
+  isAnimatingNo.value = false
+  isAnimatingYes.value = false
+  translateX.value = 0
+  rotation.value = 0
+  swipeDirection.value = null
 }
 </script>
 
 <style lang="scss" scoped>
 .swipe-answer-container {
+  position: relative;
+  width: 100%;
+  min-height: 400px;
   display: flex;
   flex-direction: column;
-  gap: var(--space-lg);
-  padding: var(--space-sm);
-  position: relative;
-  min-height: 350px;
-  width: 95%;
-  max-width: 900px;
+  align-items: center;
+  justify-content: flex-start;
+  padding: var(--space-sm) 0;
   margin: 0 auto;
+  box-sizing: border-box;
 }
 
 // スワイプカード
@@ -210,16 +241,42 @@ function selectAnswer(rating: number) {
   background: white;
   border-radius: 20px;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
-  padding: var(--space-xxl) var(--space-xl);
+  padding: 0;
   cursor: grab;
   user-select: none;
   touch-action: pan-y;
-  will-change: transform;
-  width: 100%;
-  min-height: 280px;
+  will-change: transform, opacity;
+  width: 95%;
+  max-width: 1000px;
+  aspect-ratio: 4 / 3;
+  height: auto;
   display: flex;
   align-items: center;
   justify-content: center;
+  box-sizing: border-box;
+  overflow: hidden;
+  margin: var(--space-md) auto 0;
+  left: 0;
+  right: 0;
+  
+  // aspect-ratio未対応ブラウザ向けフォールバック
+  @supports not (aspect-ratio: 4 / 3) {
+    height: 71.25vw; // 95vw × 0.75 = 3:4の比率
+    max-height: 750px;
+  }
+  
+  // 初期状態（非表示）
+  opacity: 0;
+  transform: scale(0.8) translateY(30px);
+  transition: opacity 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94), 
+              transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+              background 0.3s ease;
+  
+  // 表示状態（ディゾルブイン）
+  &.visible {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
   
   &.swiping {
     cursor: grabbing;
@@ -250,7 +307,8 @@ function selectAnswer(rating: number) {
   &.selected-no {
     background: linear-gradient(135deg, #ff6b6b, #ff8787) !important;
     border: 2px solid #ff5252;
-    animation: pulseRed 0.5s ease;
+    box-shadow: 0 12px 48px rgba(255, 107, 107, 0.6);
+    opacity: 0.9;
     
     .option-text {
       color: white;
@@ -260,7 +318,8 @@ function selectAnswer(rating: number) {
   &.selected-yes {
     background: linear-gradient(135deg, #51cf66, #69db7c) !important;
     border: 2px solid #40c057;
-    animation: pulseGreen 0.5s ease;
+    box-shadow: 0 12px 48px rgba(81, 207, 102, 0.6);
+    opacity: 0.9;
     
     .option-text {
       color: white;
@@ -271,81 +330,167 @@ function selectAnswer(rating: number) {
 .card-content {
   position: relative;
   z-index: 2;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: visible;
+  padding: var(--space-xl) var(--space-lg);
+  box-sizing: border-box;
 }
 
 .option-header {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 0 var(--space-lg);
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
 }
 
 .option-text {
-  font-size: 1.5rem;
-  line-height: 1.7;
+  font-size: 2rem;
+  line-height: 1.5;
   color: var(--text-primary);
   text-align: center;
   font-weight: 500;
   letter-spacing: 0.02em;
+  word-break: keep-all;
+  white-space: normal;
+  max-height: 100%;
+  overflow: visible;
+  display: block;
+  overflow-wrap: break-word;
+}
+
+// タブレット最適化
+@media (min-width: 769px) and (max-width: 1024px) {
+  .swipe-card {
+    aspect-ratio: 4 / 3 !important;
+    height: auto !important;
+    min-height: auto !important;
+    max-height: none !important;
+    padding: 0;
+  }
+  
+  .card-content {
+    padding: var(--space-xxl) var(--space-xl);
+  }
+  
+  .option-text {
+    font-size: 1.6rem;
+  }
 }
 
 // モバイル最適化
 @media (max-width: 768px) {
   .swipe-answer-container {
-    width: 98%;
-    padding: var(--space-xs);
-    min-height: 300px;
+    width: 100%;
+    min-height: 320px;
+    padding: var(--space-xs) 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
   }
   
   .swipe-card {
-    padding: var(--space-xl) var(--space-lg);
-    min-height: 240px;
+    width: 90vw !important;
+    max-width: 90vw !important;
+    min-width: 90vw !important;
+    height: 67.5vw !important; // 90vw × 0.75 = 横幅の75%
+    min-height: 67.5vw !important;
+    max-height: 67.5vw !important;
+    aspect-ratio: none !important;
+    padding: 0;
+    border-radius: 16px;
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.1);
+    margin: var(--space-sm) auto 0;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  
+  .card-content {
+    padding: var(--space-lg) var(--space-md);
   }
   
   .option-text {
-    font-size: 1.25rem;
-    line-height: 1.6;
+    font-size: 1.5rem;
+    overflow: visible;
+    display: block;
+    -webkit-line-clamp: none;
+    -webkit-box-orient: initial;
+  }
+  
+  .option-header {
+    padding: 0 var(--space-sm);
+    max-width: 100%;
+  }
+  
+  .option-text {
+    font-size: 1.2rem;
+    line-height: 1.45;
+    word-break: keep-all;
+    overflow-wrap: break-word;
   }
 }
 
-// アニメーション
-@keyframes swipeLeft {
-  to {
-    transform: translateX(-150%) rotate(-30deg);
-    opacity: 0;
+// 小画面モバイル最適化
+@media (max-width: 480px) {
+  .swipe-card {
+    width: 90vw !important;
+    max-width: 90vw !important;
+    min-width: 90vw !important;
+    height: 67.5vw !important; // 90vw × 0.75 = 横幅の75%
+    min-height: 67.5vw !important;
+    max-height: 67.5vw !important;
+    aspect-ratio: none !important;
+    padding: 0;
+    margin: var(--space-xs) auto 0;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  
+  .card-content {
+    padding: var(--space-md) var(--space-sm);
+  }
+  
+  .option-text {
+    font-size: 1.3rem;
+    overflow: visible;
+    display: block;
+    -webkit-line-clamp: none;
+    -webkit-box-orient: initial;
+  }
+  
+  .option-text {
+    font-size: 1.1rem;
+    line-height: 1.4;
   }
 }
 
-@keyframes swipeRight {
-  to {
-    transform: translateX(150%) rotate(30deg);
-    opacity: 0;
+// 大画面最適化
+@media (min-width: 1025px) {
+  .swipe-card {
+    aspect-ratio: 4 / 3 !important;
+    height: auto !important;
+    min-height: auto !important;
+    max-height: none !important;
+    padding: 0;
+  }
+  
+  .card-content {
+    padding: var(--space-xxxl) var(--space-xxl);
+  }
+  
+  .option-text {
+    font-size: 2rem;
+    line-height: 1.5;
   }
 }
 
-@keyframes pulseRed {
-  0% {
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
-  }
-  50% {
-    box-shadow: 0 8px 40px rgba(255, 107, 107, 0.5);
-    transform: scale(1.02);
-  }
-  100% {
-    box-shadow: 0 8px 32px rgba(255, 107, 107, 0.3);
-  }
-}
-
-@keyframes pulseGreen {
-  0% {
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
-  }
-  50% {
-    box-shadow: 0 8px 40px rgba(81, 207, 102, 0.5);
-    transform: scale(1.02);
-  }
-  100% {
-    box-shadow: 0 8px 32px rgba(81, 207, 102, 0.3);
-  }
-}
 </style>

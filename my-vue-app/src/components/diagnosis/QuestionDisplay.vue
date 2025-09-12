@@ -8,7 +8,12 @@
     <!-- 質問ヘッダー -->
     <div class="question-header tw-header">
       <div class="question-meta tw-meta">
-        <span class="question-number tw-number">質問 {{ questionIndex + 1 }} / {{ totalQuestions }}</span>
+        <span class="question-number tw-number">
+          質問 {{ questionIndex + 1 }} / {{ totalQuestions }}
+          <template v-if="isSwipeMode">
+            - {{ currentOptionIndex + 1 }} / {{ question.options.length }}
+          </template>
+        </span>
         <span class="category-badge tw-category">{{ getQuestionCategoryName(question) }}</span>
       </div>
       <h2 class="question-title tw-title">{{ question.text }}</h2>
@@ -38,15 +43,15 @@
     <!-- 質問カード -->
     <div class="question-card tw-card">
       <div class="options-list tw-options">
-        <!-- スワイプモード -->
-        <template v-if="isSwipeMode">
+        <!-- スワイプモード（一つずつ表示） -->
+        <template v-if="isSwipeMode && currentOption">
           <SwipeAnswer
-            v-for="option in question.options"
-            :key="option.label"
+            :key="currentOption.label"
             :question-id="question.id"
-            :option="option"
-            :current-rating="getLocalOptionRating(question.id, option.label)"
+            :option="currentOption"
+            :current-rating="getLocalOptionRating(question.id, currentOption.label)"
             @select-rating="handleSelectRating"
+            @answer-completed="handleAnswerCompleted"
           />
         </template>
         
@@ -96,7 +101,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { useDiagnosis } from '../../composables/useDiagnosis'
 import type { Question } from '../../utils/diagnosisLoader'
 import SwipeAnswer from './SwipeAnswer.vue'
@@ -117,6 +122,7 @@ interface Emits {
   'next-question': []
   'previous-question': []
   'calculate-result': []
+  'swipe-answer-completed': []
 }
 
 const emit = defineEmits<Emits>()
@@ -129,12 +135,22 @@ const {
 
 // リアクティブデータ
 const isSwipeMode = ref(false)
+const currentOptionIndex = ref(0)
+
+// 現在表示中のオプションを取得
+const currentOption = computed(() => {
+  return props.question.options[currentOptionIndex.value] || null
+})
 
 // モード切り替え
 function toggleMode() {
   isSwipeMode.value = !isSwipeMode.value
   // モードを localStorage に保存
   localStorage.setItem('diagnosisMode', isSwipeMode.value ? 'swipe' : 'normal')
+  // スワイプモードに切り替えた時は最初のオプションから開始
+  if (isSwipeMode.value) {
+    currentOptionIndex.value = 0
+  }
 }
 
 // 初期化時にモードを復元
@@ -155,6 +171,20 @@ function getLocalOptionRating(questionId: string, optionLabel: string): number |
 // イベントハンドラー
 function handleSelectRating(questionId: string, optionLabel: string, rating: number) {
   emit('select-rating', questionId, optionLabel, rating)
+}
+
+// スワイプ回答完了時の処理
+function handleAnswerCompleted() {
+  // 次のオプションに進む
+  if (currentOptionIndex.value < props.question.options.length - 1) {
+    // まだ回答していないオプションがある場合は次のオプションへ
+    currentOptionIndex.value++
+  } else {
+    // すべてのオプションが完了したら次の質問へ
+    emit('swipe-answer-completed')
+    // 次の質問用にリセット
+    currentOptionIndex.value = 0
+  }
 }
 </script>
 
@@ -215,14 +245,14 @@ function handleSelectRating(questionId: string, optionLabel: string, rating: num
 .mode-toggle {
   display: flex;
   justify-content: center;
-  margin: var(--space-lg) 0;
+  margin: var(--space-xs) 0;
 }
 
 .mode-toggle-btn {
   display: flex;
   align-items: center;
   gap: var(--space-sm);
-  padding: var(--space-sm) var(--space-lg);
+  padding: var(--space-xs) var(--space-lg);
   background: white;
   border: 2px solid var(--border-light);
   border-radius: 12px;

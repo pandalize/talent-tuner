@@ -5,10 +5,6 @@
 <template>
   <div 
     class="diagnosis-container tw-diagnosis-layout" 
-    :class="{ 
-      'has-progress': !showResult && questions.length > 0,
-      'has-question': !showResult && currentQuestion 
-    }"
     style="width: 100vw; max-width: 100vw; overflow-x: hidden; box-sizing: border-box; padding-left: 4px; padding-right: 4px;"
   >
     <div 
@@ -58,21 +54,9 @@
           @next-question="goToNextQuestion"
           @previous-question="goToPreviousQuestion"
           @calculate-result="calculateResult"
+          @swipe-answer-completed="handleSwipeAnswerCompleted"
         />
         
-        <!-- ナビゲーション（診断中のみ） -->
-        <QuestionNavigation
-          v-if="!showResult && currentQuestion"
-          :questionIndex="currentQuestionIndex"
-          :totalQuestions="questions.length"
-          :canGoBack="currentQuestionIndex > 0"
-          :canProceed="isCurrentQuestionCompleted()"
-          :allQuestionsAnswered="isAllQuestionsAnswered()"
-          @go-previous="goToPreviousQuestion"
-          @go-next="goToNextQuestion"
-          @calculate-result="calculateResult"
-          class="navigation-sticky tw-sticky-nav"
-        />
         
         <!-- 結果表示コンポーネント -->
         <ResultDisplay 
@@ -86,12 +70,6 @@
       </div>
     </div>
     
-    <!-- プログレス表示（質問中のみ） -->
-    <ProgressIndicator 
-      v-if="!showResult && questions.length > 0"
-      :answeredCount="getAnsweredQuestionsCount()"
-      :totalCount="questions.length"
-    />
   </div>
 </template>
 
@@ -100,9 +78,7 @@ import { onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useDiagnosis } from '../../composables/useDiagnosis'
 import QuestionDisplay from './QuestionDisplay.vue'
-import QuestionNavigation from './QuestionNavigation.vue'
-import ResultDisplay from './ResultDisplay.vue'  
-import ProgressIndicator from './ProgressIndicator.vue'
+import ResultDisplay from './ResultDisplay.vue'
 
 const router = useRouter()
 
@@ -122,20 +98,29 @@ const {
   // 関数
   loadConfig,
   selectOptionRating,
-  getAnsweredQuestionsCount,
   goToNextQuestion,
   goToPreviousQuestion,
   calculateResult,
   resetDiagnosis,
   
   // 計算プロパティ
-  isCurrentQuestionCompleted,
   isAllQuestionsAnswered
 } = useDiagnosis()
 
 // === イベントハンドラー ===
 function handleSelectRating(questionId: string, optionLabel: string, rating: number) {
   selectOptionRating(questionId, optionLabel, rating)
+}
+
+function handleSwipeAnswerCompleted() {
+  // すべての質問が完了したかチェック
+  if (isAllQuestionsAnswered()) {
+    // 結果計算へ
+    calculateResult()
+  } else {
+    // 次の質問へ
+    goToNextQuestion()
+  }
 }
 
 function handleResetDiagnosis() {
@@ -177,12 +162,6 @@ onMounted(() => {
   min-height: 400px;
 }
 
-.navigation-sticky {
-  position: sticky;
-  bottom: var(--space-md);
-  margin: var(--space-md) 0 var(--space-sm) 0;
-  z-index: 100;
-}
 
 // ローディング & エラーセクション
 .loading-section {
@@ -247,15 +226,6 @@ onMounted(() => {
 }
 
 
-// プログレスバーが表示される時のみ下部パディングを追加
-.diagnosis-container.has-progress {
-  padding-bottom: 120px;
-  
-  // モバイルでは固定ナビゲーション分のスペースを追加確保
-  @media (max-width: 768px) {
-    padding-bottom: 180px;
-  }
-}
 
 // レスポンシブデザイン
 @include mixins.respond-to('tablet') {
@@ -270,24 +240,20 @@ onMounted(() => {
 
 @include mixins.respond-to('mobile') {
   .diagnosis-container {
-    padding: var(--space-sm) var(--space-sm) 140px var(--space-sm);
+    padding: var(--space-sm);
     min-height: 100vh;
     width: 100%;
     max-width: 100vw;
     overflow-x: hidden;
     box-sizing: border-box;
     
-    // QuestionDisplayが表示される時は、固定ナビゲーション分のスペースを確保
-    &.has-question {
-      padding-bottom: 180px;
-    }
   }
   
   .diagnosis-content {
     width: 100%;
     max-width: 100%;
     padding: var(--space-md);
-    padding-bottom: 200px;
+    padding-bottom: var(--space-lg);
     border-radius: 12px;
     background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
