@@ -8,9 +8,6 @@
       </div>
       <div class="bot-info">
         <h3>AI進路相談アシスタント</h3>
-        <p class="bot-status" :class="{ 'typing': isTyping }">
-          {{ isTyping ? 'アドバイス考案中...' : 'オンライン' }}
-        </p>
       </div>
       <button class="close-chat" @click="$emit('close')" aria-label="チャットを閉じる">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
@@ -23,8 +20,7 @@
       <div class="welcome-message" v-if="messages.length === 0">
         <div class="message bot-message">
           <div class="message-content">
-            <p>こんにちは！AI進路相談アシスタントです。🌟</p>
-            <p>以下のよくある質問をクリックして、進路相談を始めてみてください。</p>
+            <p>こんにちは！進路相談アシスタントです！</p>
           </div>
         </div>
         <div class="quick-options">
@@ -134,7 +130,6 @@
           </svg>
         </button>
       </div>
-      <p class="input-hint">※ デモ版では事前定義された回答のみ表示されます</p>
     </div>
   </div>
 </template>
@@ -1025,7 +1020,7 @@ function resetTextareaHeight() {
   }
   
   .message-content {
-    padding: var(--space-sm) var(--space-md);
+    padding: var(--space-sm) var(--space-sm);
   }
   
   .quick-option-btn {

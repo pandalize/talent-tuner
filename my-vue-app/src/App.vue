@@ -662,7 +662,7 @@ html, body {
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
-    padding: var(--space-md) var(--space-lg);
+    padding: var(--space-sm) var(--space-md);
     
     &::before {
       height: 2px;
@@ -702,10 +702,6 @@ html, body {
 }
 
 @media (max-width: 480px) {
-  .app-header {
-    padding: var(--space-md) var(--space-md);
-  }
-
   .logo-main {
     font-size: 1.375rem;
   }

@@ -13,32 +13,32 @@
         <div class="feature-grid">
           <div class="feature-item">
             <div class="feature-number">01</div>
-            <h3 class="feature-title">{{ home.features.analysis.title() }}</h3>
-            <p class="feature-desc">{{ home.features.analysis.description() }}</p>
+            <div class="feature-content">
+              <h3 class="feature-title">{{ home.features.analysis.title() }}</h3>
+              <p class="feature-desc">{{ home.features.analysis.description() }}</p>
+            </div>
           </div>
           <div class="feature-item">
             <div class="feature-number">02</div>
-            <h3 class="feature-title">{{ home.features.evidence.title() }}</h3>
-            <p class="feature-desc">{{ home.features.evidence.description() }}</p>
+            <div class="feature-content">
+              <h3 class="feature-title">{{ home.features.evidence.title() }}</h3>
+              <p class="feature-desc">{{ home.features.evidence.description() }}</p>
+            </div>
           </div>
           <div class="feature-item">
             <div class="feature-number">03</div>
-            <h3 class="feature-title">{{ home.features.instant.title() }}</h3>
-            <p class="feature-desc">{{ home.features.instant.description() }}</p>
+            <div class="feature-content">
+              <h3 class="feature-title">{{ home.features.instant.title() }}</h3>
+              <p class="feature-desc">{{ home.features.instant.description() }}</p>
+            </div>
           </div>
         </div>
 
         <div class="action-buttons">
           <router-link to="/diagnosis" class="btn btn-primary">
             {{ home.cta.startDiagnosis() }}
-            <svg class="btn-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M5 12h14M12 5l7 7-7 7"/>
-            </svg>
           </router-link>
           <router-link to="/chat" class="btn btn-chat">
-            <svg class="btn-icon" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M12,2A2,2 0 0,1 14,4C14,4.74 13.6,5.39 13,5.73V7A1,1 0 0,0 14,8H18A4,4 0 0,1 22,12V16A4,4 0 0,1 18,20H6A4,4 0 0,1 2,16V12A4,4 0 0,1 6,8H10A1,1 0 0,0 11,7V5.73C10.4,5.39 10,4.74 10,4A2,2 0 0,1 12,2M7.5,13A1.5,1.5 0 0,0 6,14.5A1.5,1.5 0 0,0 7.5,16A1.5,1.5 0 0,0 9,14.5A1.5,1.5 0 0,0 7.5,13M16.5,13A1.5,1.5 0 0,0 15,14.5A1.5,1.5 0 0,0 16.5,16A1.5,1.5 0 0,0 18,14.5A1.5,1.5 0 0,0 16.5,13Z" />
-            </svg>
             {{ home.cta.aiCounseling() }}
           </router-link>
           <router-link to="/about" class="btn btn-secondary">
@@ -541,28 +541,28 @@ const { home, nav, common } = useTranslation()
    ========================================================================== */
 @media (max-width: 768px) {
   .hero-content {
-    padding: var(--space-xl) var(--space-md);
+    padding: var(--space-lg) var(--space-md);
   }
 
   .hero-title {
     font-size: 2rem;
-    line-height: 1.2;
-    margin-bottom: var(--space-lg);
-  }
-
-  .hero-subtitle {
-    font-size: 1rem;
+    line-height: 1.1;
     margin-bottom: var(--space-sm);
   }
 
-  .hero-description {
+  .hero-subtitle {
     font-size: 1.125rem;
-    margin-bottom: var(--space-xl);
+    margin-bottom: var(--space-xs);
+  }
+
+  .hero-description {
+    display: none;
   }
 
   .feature-grid {
     grid-template-columns: 1fr;
-    gap: var(--space-lg);
+    gap: var(--space-sm);
+    margin-top: var(--space-xs);
     margin-bottom: var(--space-xl);
   }
 
@@ -587,38 +587,65 @@ const { home, nav, common } = useTranslation()
 
   .feature-desc {
     font-size: 1rem;
-    line-height: 1.7;
+    line-height: 1.3;
   }
 
   .action-buttons {
-    flex-direction: column;
-    gap: var(--space-md);
+    flex-direction: row;
+    gap: var(--space-sm);
     align-items: center;
+    justify-content: center;
     margin-bottom: var(--space-xl);
+    flex-wrap: wrap;
   }
 
   .btn {
-    min-width: 280px;
+    width: 130px;
     justify-content: center;
-    padding: var(--space-md) var(--space-lg);
-    font-size: 1rem;
+    padding: var(--space-md) var(--space-sm);
+    font-size: 0.9rem;
     font-weight: 600;
-    border-radius: 12px;
+    border-radius: 50px;
+    border: 2px solid transparent;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    transition: all 0.3s ease;
+    text-decoration: none;
     
     &.btn-primary {
       order: 1;
       background: linear-gradient(135deg, var(--accent-blue) 0%, var(--primary-blue) 100%);
-      box-shadow: 0 6px 20px rgba(59, 130, 246, 0.3);
-      min-height: 56px;
-      
+      border: 2px solid var(--accent-blue);
+      box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+      color: white;
+      min-height: 48px;
+
+      &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(59, 130, 246, 0.5);
+      }
+
       &:active {
-        transform: translateY(-1px) scale(0.98);
+        transform: translateY(0);
+        box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
       }
     }
-    
+
     &.btn-chat {
       order: 2;
-      min-height: 52px;
+      background: linear-gradient(135deg, var(--accent-gold) 0%, #fbbf24 100%);
+      border: 2px solid var(--accent-gold);
+      color: var(--primary-navy);
+      min-height: 48px;
+
+      &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 18px rgba(245, 158, 11, 0.4);
+      }
+
+      &:active {
+        transform: translateY(0);
+        box-shadow: 0 3px 10px rgba(245, 158, 11, 0.3);
+      }
     }
     
     &.btn-secondary {
@@ -626,6 +653,9 @@ const { home, nav, common } = useTranslation()
       min-height: 48px;
       border-color: var(--border-light);
       background: rgba(255, 255, 255, 0.8);
+      width: 100%;
+      max-width: 320px;
+      margin-top: var(--space-sm);
     }
   }
 
@@ -698,26 +728,31 @@ const { home, nav, common } = useTranslation()
 
   .hero-title {
     font-size: 1.75rem;
+    line-height: 1.1;
   }
 
-  .hero-subtitle {
-    font-size: 0.9375rem;
-  }
 
-  .hero-description {
-    font-size: 1rem;
-  }
 
   .feature-item {
-    padding: var(--space-md);
+    padding: var(--space-sm);
     text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-md);
+  }
+
+  .feature-content {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .feature-title {
+    margin-bottom: var(--space-xs);
   }
 
   .feature-number {
-    width: 40px;
-    height: 40px;
-    font-size: 1rem;
-    margin: 0 auto var(--space-md) auto;
+    display: none;
   }
 
   .feature-title {
@@ -725,13 +760,9 @@ const { home, nav, common } = useTranslation()
   }
 
   .feature-desc {
-    font-size: 0.9375rem;
+    display: none;
   }
 
-  .btn {
-    min-width: 100%;
-    font-size: 0.9375rem;
-  }
 
   .trust-indicators {
     flex-direction: column;

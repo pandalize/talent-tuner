@@ -8,10 +8,10 @@
     "features": {
       "analysis": {
         "title": "4つの観点から多角的分析",
-        "description": "スキル・興味・価値観・ライフスタイルを総合評価"
+        "description": "スキル/興味/価値観/ライフスタイルを総合評価"
       },
       "evidence": {
-        "title": "根拠に基づく推奨",
+        "title": "科学的根拠に基づく推奨",
         "description": "統計データと心理測定学理論による科学的診断"
       },
       "instant": {
@@ -20,7 +20,7 @@
       }
     },
     "cta": {
-      "start_diagnosis": "診断を始める",
+      "start_diagnosis": "今すぐ診断",
       "ai_counseling": "AI進路相談",
       "view_professions": "職業一覧を見る"
     },

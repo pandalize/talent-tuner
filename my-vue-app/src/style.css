@@ -125,20 +125,7 @@ html, body {
     }
   }
 
-  /* DiagnosisContainer Layout */
-  .tw-diagnosis-layout {
-    @apply flex flex-col min-h-screen w-full
-           bg-gradient-to-br from-slate-50 to-gray-100
-           px-4 py-8 overflow-x-hidden;
-  }
 
-  .tw-content-area {
-    @apply max-w-4xl mx-auto w-full
-           rounded-xl shadow-lg
-           px-8 py-10 relative flex-1;
-    background-color: white;
-    min-height: 500px;
-  }
 
   .tw-sticky-nav {
     @apply sticky bottom-6 mt-8 mb-4 z-50;
@@ -257,20 +244,7 @@ html, body {
 
   /* Mobile Optimizations */
   @media (max-width: 768px) {
-    .tw-diagnosis-layout {
-      @apply px-1 py-4 pb-28;
-      width: 100vw;
-      max-width: 100vw;
-      overflow-x: hidden;
-    }
 
-    .tw-content-area {
-      @apply px-3 py-6 rounded-xl shadow-xl;
-      width: 100%;
-      max-width: calc(100vw - 8px);
-      margin: 0 auto;
-      box-sizing: border-box;
-    }
 
     .tw-sticky-nav {
       @apply mt-8 mb-0;

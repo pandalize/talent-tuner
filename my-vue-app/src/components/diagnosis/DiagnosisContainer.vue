@@ -3,78 +3,67 @@
   QuestionNavigatorから分離された軽量版
 -->
 <template>
-  <div 
-    class="diagnosis-container tw-diagnosis-layout" 
+  <div
+    class="diagnosis-container"
     style="width: 100vw; max-width: 100vw; overflow-x: hidden; box-sizing: border-box; padding-left: 4px; padding-right: 4px;"
   >
-    <div 
-      class="diagnosis-content tw-content-area"
-      style="width: 100%; max-width: calc(100vw - 16px); margin: 0 auto; box-sizing: border-box;"
-    >
-      <!-- ローディング状態 -->
-      <div v-if="loading" class="loading-section">
-        <div class="loading-spinner"></div>
-        <h3>診断システムを初期化中</h3>
-        <p>最適な質問をご用意しています...</p>
-      </div>
-      
-      <!-- エラー状態 -->
-      <div v-else-if="error" class="error-section">
-        <div class="error-icon">
-          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <circle cx="12" cy="12" r="10"/>
-            <line x1="12" y1="8" x2="12" y2="12"/>
-            <line x1="12" y1="16" x2="12.01" y2="16"/>
-          </svg>
-        </div>
-        <h3>データの読み込みに失敗しました</h3>
-        <p>{{ error }}</p>
-        <button @click="loadConfig" class="btn reload-button">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M3 12a9 9 0 019-9 9.75 9.75 0 016.74 2.74L21 8"/>
-            <path d="M21 3v5h-5"/>
-            <path d="M21 12a9 9 0 01-9 9 9.75 9.75 0 01-6.74-2.74L3 16"/>
-            <path d="M3 21v-5h5"/>
-          </svg>
-          再読み込み
-        </button>
-      </div>
-      
-      <!-- メインコンテンツ -->
-      <div v-if="!loading && !error">
-        
-        <!-- 質問表示コンポーネント -->
-        <QuestionDisplay 
-          v-if="!showResult && currentQuestion" 
-          :question="currentQuestion"
-          :questionIndex="currentQuestionIndex"
-          :totalQuestions="questions.length"
-          :answers="answers"
-          :tutorial-completed="tutorialCompleted"
-          :should-show-category-tutorial="shouldShowCategoryTutorial"
-          :current-category-info="currentCategoryInfo"
-          @select-rating="handleSelectRating"
-          @next-question="goToNextQuestion"
-          @previous-question="goToPreviousQuestion"
-          @calculate-result="calculateResult"
-          @swipe-answer-completed="handleSwipeAnswerCompleted"
-          @tutorial-completed="handleTutorialCompleted"
-          @category-tutorial-completed="handleCategoryTutorialCompleted"
-        />
-        
-        
-        <!-- 結果表示コンポーネント -->
-        <ResultDisplay 
-          v-if="showResult"
-          :professions="displayedProfessions"
-          :maxCategoryScore="maxCategoryScore"
-          :totalQuestions="questions.length"
-          @reset-diagnosis="handleResetDiagnosis"
-          @go-home="goHome"
-        />
-      </div>
+    <!-- ローディング状態 -->
+    <div v-if="loading" class="loading-section">
+      <div class="loading-spinner"></div>
+      <h3>診断システムを初期化中</h3>
+      <p>最適な質問をご用意しています...</p>
     </div>
-    
+
+    <!-- エラー状態 -->
+    <div v-else-if="error" class="error-section">
+      <div class="error-icon">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"/>
+          <line x1="12" y1="8" x2="12" y2="12"/>
+          <line x1="12" y1="16" x2="12.01" y2="16"/>
+        </svg>
+      </div>
+      <h3>データの読み込みに失敗しました</h3>
+      <p>{{ error }}</p>
+      <button @click="loadConfig" class="btn reload-button">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M3 12a9 9 0 019-9 9.75 9.75 0 016.74 2.74L21 8"/>
+          <path d="M21 3v5h-5"/>
+          <path d="M21 12a9 9 0 01-9 9 9.75 9.75 0 01-6.74-2.74L3 16"/>
+          <path d="M3 21v-5h5"/>
+        </svg>
+        再読み込み
+      </button>
+    </div>
+
+    <!-- 質問表示コンポーネント -->
+    <QuestionDisplay
+      v-if="!loading && !error && !showResult && currentQuestion"
+      :question="currentQuestion"
+      :questionIndex="currentQuestionIndex"
+      :totalQuestions="questions.length"
+      :answers="answers"
+      :tutorial-completed="tutorialCompleted"
+      :should-show-category-tutorial="shouldShowCategoryTutorial"
+      :current-category-info="currentCategoryInfo"
+      @select-rating="handleSelectRating"
+      @next-question="goToNextQuestion"
+      @previous-question="goToPreviousQuestion"
+      @calculate-result="calculateResult"
+      @swipe-answer-completed="handleSwipeAnswerCompleted"
+      @tutorial-completed="handleTutorialCompleted"
+      @category-tutorial-completed="handleCategoryTutorialCompleted"
+    />
+
+    <!-- 結果表示コンポーネント -->
+    <ResultDisplay
+      v-if="!loading && !error && showResult"
+      :professions="displayedProfessions"
+      :maxCategoryScore="maxCategoryScore"
+      :totalQuestions="questions.length"
+      @reset-diagnosis="handleResetDiagnosis"
+      @go-home="goHome"
+    />
   </div>
 </template>
 
@@ -196,23 +185,28 @@ onMounted(() => {
 // 基本レイアウト
 .diagnosis-container {
   @include mixins.flex-center;
+  @include mixins.container(900px);
+  @include mixins.card-base;
+  @include mixins.card-shadow(lg);
+  @include mixins.card-padding(lg);
   width: 100%;
   min-height: calc(100vh - 80px);
   background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
   flex-direction: column;
   padding: var(--space-md);
-  overflow-x: hidden;
-}
-
-.diagnosis-content {
-  @include mixins.container(900px);
-  @include mixins.card-base;
-  @include mixins.card-shadow(lg);
-  @include mixins.card-padding(lg);
   padding-bottom: var(--space-lg);
   margin-bottom: var(--space-lg);
   position: relative;
   min-height: 400px;
+  overflow-x: hidden;
+
+  // 子要素の直接配置用設定
+  > * {
+    width: 100%;
+    max-width: calc(100vw - 16px);
+    margin: 0 auto;
+    box-sizing: border-box;
+  }
 }
 
 
@@ -286,7 +280,7 @@ onMounted(() => {
     padding: var(--space-md) var(--space-sm);
   }
 
-  .diagnosis-content {
+  .diagnosis-container {
     @include mixins.card-padding(lg);
   }
 }
@@ -302,7 +296,7 @@ onMounted(() => {
     
   }
   
-  .diagnosis-content {
+  .diagnosis-container {
     width: 100%;
     max-width: 100%;
     padding: var(--space-md);
@@ -313,6 +307,12 @@ onMounted(() => {
     margin-bottom: var(--space-lg);
     box-sizing: border-box;
     min-height: 600px;
+
+    > * {
+      width: 100%;
+      max-width: 100%;
+      margin: 0;
+    }
   }
 }
 </style>

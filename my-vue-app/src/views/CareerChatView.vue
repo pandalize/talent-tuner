@@ -1,12 +1,12 @@
 <template>
   <div class="career-chat-view">
-    <CareerChatBot @close="handleChatClose" class="full-width-chat" />
+    <CareerChatBotDemo @close="handleChatClose" class="full-width-chat" />
   </div>
 </template>
 
 <script setup lang="ts">
 import { useRouter } from 'vue-router';
-import CareerChatBot from '../components/CareerChatBot.vue';
+import CareerChatBotDemo from '../components/CareerChatBotDemo.vue';
 
 const router = useRouter();
 

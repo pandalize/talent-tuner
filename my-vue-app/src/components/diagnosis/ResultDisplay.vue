@@ -173,4 +173,19 @@ function handleInstantReset() {
     @include mixins.grid-columns(1);
   }
 }
+
+// モバイル版のタイトルサイズ調整
+@media (max-width: 768px) {
+  .result-title {
+    font-size: 2rem;
+    line-height: 1.1;
+  }
+}
+
+@media (max-width: 480px) {
+  .result-title {
+    font-size: 1.75rem;
+    line-height: 1.1;
+  }
+}
 </style>

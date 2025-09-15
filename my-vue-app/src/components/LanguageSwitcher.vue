@@ -393,6 +393,15 @@ onMounted(() => {
   }
 }
 
+/* モバイル最適化 */
+@media (max-width: 768px) {
+  .language-select {
+    padding: var(--space-xs) var(--space-sm);
+    min-width: 100px;
+    font-size: 0.85rem;
+  }
+}
+
 /* ダークモード対応 */
 @media (prefers-color-scheme: dark) {
   .language-select,
@@ -401,7 +410,7 @@ onMounted(() => {
     border-color: var(--border-dark, #4a5568);
     color: var(--text-dark, #e2e8f0);
   }
-  
+
   .modal-content {
     background: var(--bg-dark, #2d3748);
     color: var(--text-dark, #e2e8f0);
