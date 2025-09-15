@@ -66,61 +66,91 @@ function handleClick(event: MouseEvent) {
 </script>
 
 <style scoped>
-@layer components {
-  .tw-base-btn {
-    @apply flex items-center justify-center gap-2 
-           font-medium transition-all duration-300
-           border rounded-lg cursor-pointer
-           focus:outline-none focus:ring-2 focus:ring-offset-2
-           disabled:opacity-50 disabled:cursor-not-allowed;
+/* Base button style */
+.tw-base-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-weight: 700 !important;
+  font-family: Noto Sans JP, Helvetica Neue, Helvetica, Arial, sans-serif;
+  transition: all 0.3s ease;
+  border-radius: 50px;
+  border: 2px solid transparent;
+  cursor: pointer;
+  text-decoration: none;
+  min-height: 48px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  background: #f3f4f6;
+  color: #222;
+  outline: none;
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
   }
+}
 
-  /* Variants */
-  .tw-btn-primary {
-    @apply bg-accent-blue text-white border-accent-blue
-           hover:bg-blue-700 hover:border-blue-700
-           focus:ring-blue-500/50;
+/* Variants */
+.tw-btn-primary {
+  background: linear-gradient(135deg, var(--accent-blue) 0%, var(--primary-blue) 100%);
+  border: 2px solid var(--accent-blue);
+  color: #fff;
+  box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(59, 130, 246, 0.5);
   }
+  &:active {
+    transform: translateY(0);
+    box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+  }
+}
 
-  .tw-btn-secondary {
-    @apply bg-gray-100 text-gray-700 border-gray-300
-           hover:bg-gray-200 hover:border-gray-400
-           focus:ring-gray-500/20;
+.tw-btn-gold {
+  background: linear-gradient(135deg, #fbbf24 0%, var(--accent-gold) 100%);
+  border: 2px solid var(--accent-gold);
+  color: var(--primary-navy);
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(245, 158, 11, 0.4);
   }
+  &:active {
+    transform: translateY(0);
+    box-shadow: 0 3px 10px rgba(245, 158, 11, 0.3);
+  }
+}
 
-  .tw-btn-gold {
-    @apply bg-gradient-to-r from-accent-gold to-yellow-600 text-white
-           border-accent-gold hover:from-yellow-600 hover:to-yellow-700
-           hover:-translate-y-0.5 hover:shadow-xl
-           focus:ring-yellow-500/50;
+.tw-btn-secondary {
+  background: #f3f4f6;
+  color: var(--primary-navy);
+  border: 2px solid var(--primary-navy);
+  &:hover {
+    background: var(--primary-navy);
+    color: #fff;
   }
+}
 
-  .tw-btn-danger {
-    @apply bg-red-600 text-white border-red-600
-           hover:bg-red-700 hover:border-red-700
-           focus:ring-red-500/50;
-  }
+/* Sizes */
+.tw-btn-sm {
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+}
+.tw-btn-md {
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+}
+.tw-btn-lg {
+  padding: 1rem 2rem;
+  font-size: 1.15rem;
+}
 
-  /* Sizes */
-  .tw-btn-sm {
-    @apply px-3 py-1.5 text-sm;
-  }
-
-  .tw-btn-md {
-    @apply px-4 py-2 text-base;
-  }
-
-  .tw-btn-lg {
-    @apply px-6 py-3 text-lg;
-  }
-
-  /* States */
-  .tw-btn-loading {
-    @apply cursor-wait;
-  }
-
-  .tw-btn-block {
-    @apply w-full;
-  }
+/* States */
+.tw-btn-loading {
+  cursor: wait;
+}
+.tw-btn-block {
+  width: 100%;
 }
 </style>

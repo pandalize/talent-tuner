@@ -4,6 +4,18 @@ export default {
     "./index.html",
     "./src/**/*.{vue,js,ts,jsx,tsx}",
   ],
+  safelist: [
+    'tw-base-btn',
+    'tw-btn-primary',
+    'tw-btn-secondary',
+    'tw-btn-gold',
+    'tw-btn-danger',
+    'tw-btn-sm',
+    'tw-btn-md',
+    'tw-btn-lg',
+    'tw-btn-loading',
+    'tw-btn-block'
+  ],
   theme: {
     extend: {
       colors: {

@@ -16,33 +16,33 @@
       <p class="section-subtitle">友人や家族と結果を共有して、キャリアについて話し合ってみましょう</p>
     </div>
     <div class="share-grid">
-      <button @click="shareToLine" class="share-card line-card">
+      <div @click="shareToLine" class="share-card line-card" role="button" tabindex="0" @keydown.enter="shareToLine" @keydown.space="shareToLine">
         <div class="share-icon">
           <img src="/image/LINE.png" alt="LINE" class="platform-icon">
         </div>
         <div class="share-content">
-          <h4>LINEでシェア</h4>
-          <p>友達やグループに結果を送信</p>
+          <span class="share-title">LINEでシェア</span>
+          <span class="share-description">友達やグループに結果を送信</span>
         </div>
-      </button>
-      <button @click="shareToX" class="share-card x-card">
+      </div>
+      <div @click="shareToX" class="share-card x-card" role="button" tabindex="0" @keydown.enter="shareToX" @keydown.space="shareToX">
         <div class="share-icon">
           <img src="/image/X.png" alt="X (Twitter)" class="platform-icon">
         </div>
         <div class="share-content">
-          <h4>Xでシェア</h4>
-          <p>フォロワーと診断結果を共有</p>
+          <span class="share-title">Xでシェア</span>
+          <span class="share-description">フォロワーと診断結果を共有</span>
         </div>
-      </button>
-      <button @click="shareToInstagram" class="share-card instagram-card">
+      </div>
+      <div @click="shareToInstagram" class="share-card instagram-card" role="button" tabindex="0" @keydown.enter="shareToInstagram" @keydown.space="shareToInstagram">
         <div class="share-icon">
           <img src="/image/Instagram.png" alt="Instagram" class="platform-icon">
         </div>
         <div class="share-content">
-          <h4>Instagramでシェア</h4>
-          <p>ストーリーズで結果を投稿</p>
+          <span class="share-title">Instagramでシェア</span>
+          <span class="share-description">ストーリーズで結果を投稿</span>
         </div>
-      </button>
+      </div>
     </div>
   </div>
 </template>
@@ -263,19 +263,19 @@ async function fallbackInstagramShare(text: string) {
 
 .share-content {
   flex: 1;
+  display: flex;
+  flex-direction: column;
 
-  h4 {
+  .share-title {
     font-size: 1rem;
     color: var(--primary-navy);
     margin-bottom: var(--space-xs);
     font-weight: 600;
-    margin-top: 0;
   }
 
-  p {
+  .share-description {
     font-size: var(--fs-small);
     color: var(--text-secondary);
-    margin: 0;
     line-height: 1.4;
   }
 }
@@ -297,15 +297,126 @@ async function fallbackInstagramShare(text: string) {
 }
 
 // レスポンシブデザイン
-@include mixins.respond-to('tablet') {
+@media (min-width: 769px) and (max-width: 1024px) {
+  .share-section {
+    padding: var(--space-lg);
+  }
+
+  .section-header {
+    margin-bottom: var(--space-lg);
+  }
+
   .share-grid {
-    @include mixins.grid-columns(1);
+    gap: var(--space-md);
   }
 }
 
-@include mixins.respond-to('mobile') {
+@media (max-width: 768px) {
+  .share-section {
+    padding: 0;
+    margin: var(--space-sm) 0;
+  }
+
+  .section-header {
+    margin-bottom: var(--space-md);
+    text-align: center;
+  }
+
+  .section-title {
+    font-size: var(--fs-h3);
+    margin-bottom: var(--space-xs);
+  }
+
+  .section-subtitle {
+    font-size: var(--fs-small);
+    line-height: 1.4;
+  }
+
+  .share-grid {
+    gap: var(--space-xs);
+    grid-template-columns: 1fr;
+  }
+
   .share-card {
-    @include mixins.card-padding(md);
+    padding: var(--space-xs);
+    flex-direction: row;
+    align-items: center;
+    text-align: left;
+
+    .share-title {
+      font-size: var(--fs-body);
+      margin-bottom: 2px;
+    }
+
+    .share-description {
+      font-size: var(--fs-small);
+    }
+  }
+
+  .share-icon {
+    margin-right: var(--space-sm);
+    margin-bottom: 0;
+  }
+
+  .platform-icon {
+    width: 32px;
+    height: 32px;
+  }
+}
+
+@media (max-width: 480px) {
+  .share-section {
+    padding: 0;
+    margin: var(--space-xs) 0;
+  }
+
+  .section-header {
+    margin-bottom: var(--space-sm);
+  }
+
+  .section-title {
+    font-size: 1rem;
+    margin-bottom: 4px;
+  }
+
+  .section-subtitle {
+    display: none;
+  }
+
+  .share-grid {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: var(--space-lg);
+  }
+
+  .share-card {
+    padding: var(--space-xs);
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-width: 60px;
+    background: transparent;
+    border: none;
+    box-shadow: none;
+
+    .share-title {
+      display: none;
+    }
+
+    .share-description {
+      display: none;
+    }
+  }
+
+  .share-icon {
+    margin-right: 0;
+    margin-bottom: 0;
+  }
+
+  .platform-icon {
+    width: 50px;
+    height: 50px;
   }
 }
 </style>
