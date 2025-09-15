@@ -6,32 +6,29 @@
   <div 
     class="tw-profession-card" 
     :class="`rank-${rank}`"
-    style="width: 100%; max-width: 100vw; overflow-x: hidden; box-sizing: border-box; margin-left: 0; margin-right: 0;"
+    style="width: 100%; max-width: 100vw; overflow-x: hidden; box-sizing: border-box; margin-left: 0; margin-right: 0; padding: 1rem 1.5rem;"
   >
     <!-- カードヘッダー -->
     <div class="tw-card-header">
       <div class="tw-rank-section">
-        <div class="tw-rank-badge" :class="rank === 1 ? 'bg-yellow-500' : 'bg-blue-600'">{{ rank }}</div>
+        <div class="tw-rank-badge" :class="rank === 1 ? 'bg-yellow-500' : 'bg-blue-600'">{{ rank }}位</div>
+        <!-- 職業名 -->
+        <h3 class="tw-profession-name">
+          {{ profession.name }}
+        </h3>
       </div>
-      <!-- 職業名 -->
-      <h3
-        class="tw-profession-name"
-        style="word-wrap: break-word; overflow-wrap: break-word; max-width: 100%; line-height: 1.3;"
-      >
-        {{ profession.name }}
-      </h3>
       <div class="tw-total-score">
         <div class="score-circle">
-          <svg class="score-ring" width="60" height="60">
-            <circle cx="30" cy="30" r="25" fill="none" stroke="var(--bg-tertiary)" stroke-width="4"/>
+          <svg class="score-ring" width="120" height="120">
+            <circle cx="60" cy="60" r="48" fill="none" stroke="var(--bg-tertiary)" stroke-width="7"/>
             <circle
-              cx="30" cy="30" r="25" fill="none"
+              cx="60" cy="60" r="48" fill="none"
               stroke="var(--accent-blue)"
-              stroke-width="4"
+              stroke-width="7"
               stroke-linecap="round"
-              :stroke-dasharray="`${2 * Math.PI * 25}`"
-              :stroke-dashoffset="`${2 * Math.PI * 25 * (1 - profession.score / 100)}`"
-              transform="rotate(-90 30 30)"
+              :stroke-dasharray="`${2 * Math.PI * 48}`"
+              :stroke-dashoffset="`${2 * Math.PI * 48 * (1 - profession.score / 100)}`"
+              transform="rotate(-90 60 60)"
             />
           </svg>
           <div class="score-text">
@@ -61,7 +58,7 @@
           v-for="(score, category) in profession.categories"
           :key="category"
           class="tw-category-item"
-          style="width: 95%; max-width: 95%; min-width: 0; box-sizing: border-box; overflow-x: hidden; margin: 0 auto;"
+          style="width: 95%; max-width: 95%; min-width: 0; box-sizing: border-box; overflow-x: hidden; margin: 0 auto 1.5rem auto;"
         >
           <div 
             class="tw-category-header" 
@@ -73,9 +70,9 @@
             >
               {{ getCategoryName(category) }}
             </span>
-            <span 
-              class="tw-category-score" 
-              style="font-size: 14px; font-weight: 600; color: #2563eb; font-family: monospace; flex-shrink: 0;"
+            <span
+              class="tw-category-score"
+              style="font-size: 14px; color: #000000; font-family: Noto Sans JP; flex-shrink: 0;"
             >
               {{ score.toFixed(1) }}pt
             </span>
@@ -203,14 +200,29 @@ const { getCategoryName } = useDiagnosis()
 // 各要素の上下マージン設定
 .tw-rank-badge {
   margin: var(--space-sm) 0;
+  border-radius: 15px !important;
+  width: 50px !important;
+  height: 30px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-size: 0.875rem !important;
 }
 
 .rank-title {
   margin: var(--space-sm) 0;
 }
 
+.tw-rank-section {
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+}
+
 .tw-profession-name {
-  margin: var(--space-md) 0;
+  margin: 0 !important;
+  display: inline-block !important;
+  font-weight: 700 !important;
 }
 
 .tw-analyze-title {
@@ -218,23 +230,25 @@ const { getCategoryName } = useDiagnosis()
 }
 
 .tw-analysis-title {
-  margin: var(--space-md) 0;
+  margin: var(--space-md) 0 var(--space-sm) 0;
+  font-weight: 700 !important;
 }
 
 .tw-category-item {
-  margin: var(--space-xs) 0;
-}
-
-.tw-detail-title {
   margin: var(--space-md) 0;
 }
 
+.tw-detail-title {
+  margin: var(--space-md) 0 var(--space-sm) 0;
+  font-weight: 700 !important;
+}
+
 .tw-detail-content {
-  margin: var(--space-sm) 0;
+  margin: 0 0 var(--space-sm) 0;
 }
 
 .tw-income-value {
-  margin: var(--space-sm) 0;
+  margin: 0;
 }
 
 // スコア円グラフ（Tailwindで管理困難な部分のみ）
@@ -243,7 +257,7 @@ const { getCategoryName } = useDiagnosis()
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: var(--space-md) 0;
+  margin: 0;
 }
 
 .score-text {

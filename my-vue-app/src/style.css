@@ -206,7 +206,7 @@ html, body {
   }
 
   .tw-category-score {
-    @apply text-sm font-semibold text-blue-600
+    @apply text-sm font-semibold text-black
            font-mono flex-shrink-0;
   }
 
@@ -304,7 +304,7 @@ html, body {
     }
 
     .tw-category-score {
-      @apply text-xs font-bold;
+      @apply text-xs font-bold text-black;
       flex-shrink: 0;
     }
 
