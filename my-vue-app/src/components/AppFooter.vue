@@ -36,7 +36,7 @@
     </div>
     
     <div class="footer-bottom">
-      <p>&copy; 2025 ため職. All rights reserved.</p>
+      <p>&copy; 2025 Pandalize. All rights reserved.</p>
     </div>
   </footer>
 </template>
@@ -139,18 +139,19 @@
   }
   
   .footer-content {
-    @include mixins.grid-columns(1);
-    gap: var(--space-lg);
+    @include mixins.grid-columns(2);
     text-align: center;
     max-width: 400px;
     margin: 0 auto;
   }
+
+  .footer-section:nth-child(1),
+  .footer-section:nth-child(2) {
+    display: none;
+  }
   
   .footer-section {
     padding: var(--space-md);
-    background: rgba(255, 255, 255, 0.05);
-    border-radius: 12px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
     backdrop-filter: blur(10px);
     
     &:first-child {
@@ -178,7 +179,6 @@
     
     h4 {
       font-size: 1.125rem;
-      margin-bottom: var(--space-md);
       color: #e8f4fd;
       position: relative;
       
@@ -198,7 +198,6 @@
     ul {
       display: flex;
       flex-direction: column;
-      gap: var(--space-sm);
     }
     
     li {
@@ -263,12 +262,13 @@
 
 @media (max-width: 480px) {
   .app-footer {
-    padding: var(--space-lg) var(--space-sm) var(--space-md);
+    padding: var(--space-md) var(--space-sm) var(--space-md);
   }
   
   .footer-content {
-    gap: var(--space-md);
+    padding: 0;
     max-width: 100%;
+    gap: 0;
   }
   
   .footer-section {
@@ -291,13 +291,13 @@
     
     a {
       font-size: 0.8125rem;
-      padding: var(--space-xs);
+      padding: 0;
     }
   }
   
   .footer-bottom {
-    margin-top: var(--space-lg);
-    padding-top: var(--space-md);
+    margin-top: 0;
+    padding-top: 0;
     
     p {
       font-size: 0.6875rem;

@@ -396,9 +396,12 @@ onMounted(() => {
 /* モバイル最適化 */
 @media (max-width: 768px) {
   .language-select {
-    padding: var(--space-xs) var(--space-sm);
-    min-width: 100px;
+    padding: var(--space-xs) 0;
+    min-width: 80px;
+    width: 80px;
     font-size: 0.85rem;
+    border: none;
+    background: transparent;
   }
 }
 

@@ -9,7 +9,7 @@
         <p class="hero-description">
           {{ home.hero.description() }}
         </p>
-        
+
         <div class="feature-grid">
           <div class="feature-item">
             <div class="feature-number">01</div>
@@ -121,13 +121,17 @@ const { home, nav, common } = useTranslation()
 
 .home-main {
   width: 100%;
-  min-height: 100vh;
+  height: 380px;
+  // min-height: 100vh;
   background: var(--bg-primary);
 }
 
 // ヒーローセクション
 .hero-section {
-  @include mixins.hero-section;
+  @include mixins.flex-center;
+  min-height: 420px;
+  height: 420px;
+  padding: var(--space-xl) 0;
   background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 50%, #f1f5f9 100%);
   position: relative;
   overflow: hidden;
@@ -561,17 +565,19 @@ const { home, nav, common } = useTranslation()
 
   .feature-grid {
     grid-template-columns: 1fr;
-    gap: var(--space-sm);
+    gap: 0;
     margin-top: var(--space-xs);
-    margin-bottom: var(--space-xl);
+    margin-bottom: var(--space-sm);
   }
 
   .feature-item {
-    padding: var(--space-lg);
-    border-radius: 16px;
-    background: linear-gradient(135deg, var(--bg-primary) 0%, rgba(248, 250, 252, 0.8) 100%);
-    border: 1px solid var(--border-light);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    padding: 0;
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    min-height: auto;
+    height: 50px;
+    margin-bottom: 0;
   }
 
   .feature-number {
@@ -632,7 +638,7 @@ const { home, nav, common } = useTranslation()
 
     &.btn-chat {
       order: 2;
-      background: linear-gradient(135deg, var(--accent-gold) 0%, #fbbf24 100%);
+      background: linear-gradient(135deg, #fbbf24 0%, var(--accent-gold) 100%);
       border: 2px solid var(--accent-gold);
       color: var(--primary-navy);
       min-height: 48px;
@@ -649,13 +655,7 @@ const { home, nav, common } = useTranslation()
     }
     
     &.btn-secondary {
-      order: 3;
-      min-height: 48px;
-      border-color: var(--border-light);
-      background: rgba(255, 255, 255, 0.8);
-      width: 100%;
-      max-width: 320px;
-      margin-top: var(--space-sm);
+      display: none;
     }
   }
 
@@ -665,20 +665,11 @@ const { home, nav, common } = useTranslation()
   }
 
   .trust-indicators {
-    gap: var(--space-md);
-    margin-bottom: var(--space-lg);
-  }
-
-  .trust-item {
-    font-size: 0.875rem;
-    padding: var(--space-xs) var(--space-sm);
-    background: rgba(59, 130, 246, 0.05);
-    border-radius: 8px;
-    border: 1px solid rgba(59, 130, 246, 0.1);
+    display: none;
   }
 
   .methodology-section {
-    padding: var(--space-xl) 0;
+    display: none;
   }
 
   .section-container {
@@ -727,7 +718,7 @@ const { home, nav, common } = useTranslation()
   }
 
   .hero-title {
-    font-size: 1.75rem;
+    font-size: 1.60rem;
     line-height: 1.1;
   }
 

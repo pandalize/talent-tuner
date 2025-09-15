@@ -33,8 +33,11 @@ const closeDemoChat = () => {
     <header class="app-header">
       <!-- ロゴ部分 -->
       <RouterLink to="/" class="logo" @click="closeMobileMenu">
-        <span class="logo-main">ため職</span>
-        <span class="logo-sub">Professional Career Assessment</span>
+        <img src="/favicon.ico" alt="ため職" class="logo-icon">
+        <div class="logo-text">
+          <span class="logo-main">ため職</span>
+          <span class="logo-sub">Professional Career Assessment</span>
+        </div>
       </RouterLink>
 
       <!-- デスクトップナビゲーション -->
@@ -256,7 +259,8 @@ html, body {
    ========================================================================== */
 .logo {
   display: flex;
-  flex-direction: column;
+  align-items: center;
+  gap: var(--space-xs);
   text-decoration: none;
   color: var(--primary-navy);
   transition: all var(--transition-normal);
@@ -283,6 +287,17 @@ html, body {
   &:hover {
     transform: translateY(-1px);
   }
+}
+
+.logo-icon {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+}
+
+.logo-text {
+  display: flex;
+  flex-direction: column;
 }
 
 .logo-main {
@@ -601,25 +616,34 @@ html, body {
       background: var(--accent-gold);
     }
   }
-  
+
   &.diagnosis-highlight {
     background: linear-gradient(135deg, var(--accent-blue), var(--primary-blue));
-    color: white;
-    font-weight: 600;
-    margin: var(--space-md) var(--space-lg);
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(52, 152, 219, 0.3);
+    font-weight: 600 !important;
+    color: white !important;
+    border: none !important;
+    width: 100%;
+    text-align: left;
     
     &::before {
-      display: none;
+      display: none !important;
     }
     
     &:hover {
-      background: linear-gradient(135deg, #2980b9, #1e3a8a);
+      background: linear-gradient(135deg, #2980b9, #1e3a8a) !important;
       transform: translateY(-2px);
-      box-shadow: 0 6px 16px rgba(52, 152, 219, 0.4);
+      box-shadow: 0 6px 16px rgba(243, 156, 18, 0.4);
+    }
+    
+    svg {
+      position: relative;
+      
+      circle {
+        fill: rgba(255, 255, 255, 0.9);
+      }
     }
   }
+
   
   svg {
     flex-shrink: 0;
@@ -638,7 +662,7 @@ html, body {
 .app-content {
   width: 100%;
   max-width: 100vw;
-  flex: 1;
+  height: 420px;
   overflow-x: hidden;
 }
 
@@ -723,10 +747,6 @@ html, body {
     padding: var(--space-lg) var(--space-xl);
     font-size: 1.0625rem;
     
-    &.diagnosis-highlight {
-      margin: var(--space-lg) var(--space-md);
-      padding: var(--space-lg) var(--space-xl);
-    }
   }
 }
 
