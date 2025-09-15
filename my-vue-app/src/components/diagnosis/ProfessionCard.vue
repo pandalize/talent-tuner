@@ -12,19 +12,21 @@
     <div class="tw-card-header">
       <div class="tw-rank-section">
         <div class="tw-rank-badge" :class="rank === 1 ? 'bg-yellow-500' : 'bg-blue-600'">{{ rank }}</div>
-        <div class="rank-label">
-          <span v-if="rank === 1" class="rank-title">最適職業</span>
-          <span v-else-if="rank === 2" class="rank-title">次点候補</span>
-          <span v-else class="rank-title">候補職業</span>
-        </div>
       </div>
+      <!-- 職業名 -->
+      <h3
+        class="tw-profession-name"
+        style="word-wrap: break-word; overflow-wrap: break-word; max-width: 100%; line-height: 1.3;"
+      >
+        {{ profession.name }}
+      </h3>
       <div class="tw-total-score">
         <div class="score-circle">
           <svg class="score-ring" width="60" height="60">
             <circle cx="30" cy="30" r="25" fill="none" stroke="var(--bg-tertiary)" stroke-width="4"/>
-            <circle 
-              cx="30" cy="30" r="25" fill="none" 
-              stroke="var(--accent-blue)" 
+            <circle
+              cx="30" cy="30" r="25" fill="none"
+              stroke="var(--accent-blue)"
               stroke-width="4"
               stroke-linecap="round"
               :stroke-dasharray="`${2 * Math.PI * 25}`"
@@ -39,14 +41,6 @@
         </div>
       </div>
     </div>
-
-    <!-- 職業名 -->
-    <h3 
-      class="tw-profession-name" 
-      style="word-wrap: break-word; overflow-wrap: break-word; max-width: 100%; line-height: 1.3;"
-    >
-      {{ profession.name }}
-    </h3>
     
     <!-- カテゴリー別スコア -->
     <div 
@@ -195,15 +189,52 @@ const { getCategoryName } = useDiagnosis()
 
 // ランクバッジの背景色のみSCSSで管理
 .rank-1 .tw-rank-badge {
-  background: var(--accent-gold) !important;
+  background: linear-gradient(135deg, #ffd700, #ffed4e) !important; /* 金色 */
 }
 
 .rank-2 .tw-rank-badge {
-  background: #c0c0c0 !important;
+  background: linear-gradient(135deg, #c0c0c0, #e5e5e5) !important; /* 銀色 */
 }
 
 .rank-3 .tw-rank-badge {
-  background: #cd7f32 !important;
+  background: linear-gradient(135deg, #e9a660, #f4bc7a) !important; /* 明るい銅色 */
+}
+
+// 各要素の上下マージン設定
+.tw-rank-badge {
+  margin: var(--space-sm) 0;
+}
+
+.rank-title {
+  margin: var(--space-sm) 0;
+}
+
+.tw-profession-name {
+  margin: var(--space-md) 0;
+}
+
+.tw-analyze-title {
+  margin: var(--space-md) 0;
+}
+
+.tw-analysis-title {
+  margin: var(--space-md) 0;
+}
+
+.tw-category-item {
+  margin: var(--space-xs) 0;
+}
+
+.tw-detail-title {
+  margin: var(--space-md) 0;
+}
+
+.tw-detail-content {
+  margin: var(--space-sm) 0;
+}
+
+.tw-income-value {
+  margin: var(--space-sm) 0;
 }
 
 // スコア円グラフ（Tailwindで管理困難な部分のみ）
@@ -212,6 +243,7 @@ const { getCategoryName } = useDiagnosis()
   display: flex;
   align-items: center;
   justify-content: center;
+  margin: var(--space-md) 0;
 }
 
 .score-text {
@@ -242,9 +274,4 @@ const { getCategoryName } = useDiagnosis()
   flex-direction: column;
 }
 
-.rank-title {
-  font-size: var(--fs-small);
-  color: var(--text-secondary);
-  font-weight: 500;
-}
 </style>

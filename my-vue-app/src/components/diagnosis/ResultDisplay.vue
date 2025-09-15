@@ -6,14 +6,6 @@
   <div class="tw-result-container">
     <!-- 結果ヘッダー -->
     <div class="result-header">
-      <div class="completion-badge">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M9 11l3 3l8-8"/>
-          <path d="M21 12c-.3 1.5-1.1 2.9-2.3 4"/>
-          <path d="M3 12c0-4.2 3.4-7.6 7.6-7.6"/>
-        </svg>
-        診断完了
-      </div>
       <h1 class="result-title">あなたの適職診断結果</h1>
       <p class="result-subtitle">
         {{ totalQuestions }}問の質問から分析した、あなたに最適な職業をランキング形式でご紹介します
@@ -116,25 +108,13 @@ function handleInstantReset() {
 
 // 結果ヘッダー
 .result-header {
-  @include mixins.section-padding;
+  padding: calc(var(--space-xxl) / 2) var(--space-lg);
   text-align: center;
   background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
   border-radius: 12px;
   border: 1px solid var(--border-light);
 }
 
-.completion-badge {
-  @include mixins.flex-row(var(--space-xs));
-  @include mixins.flex-center;
-  background: var(--accent-blue);
-  color: white;
-  padding: var(--space-xs) var(--space-md);
-  border-radius: 20px;
-  font-size: var(--fs-small);
-  font-weight: 500;
-  margin-bottom: var(--space-md);
-  display: inline-flex;
-}
 
 .result-title {
   font-family: var(--font-heading);
@@ -153,7 +133,7 @@ function handleInstantReset() {
 
 // 結果カードグリッド
 .results-grid {
-  @include mixins.flex-column(var(--space-xl));
+  @include mixins.flex-column(var(--space-xxl));
 }
 
 // アクション機能

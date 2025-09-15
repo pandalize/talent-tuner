@@ -382,7 +382,7 @@ function resetForNextCard() {
   text-align: center;
   font-weight: 500;
   letter-spacing: 0.02em;
-  word-break: keep-all;
+  word-break: break-word;
   white-space: normal;
   max-height: 100%;
   overflow: visible;
@@ -446,7 +446,7 @@ function resetForNextCard() {
   }
   
   .card-content {
-    padding: clamp(12px, 3vw, 20px) clamp(8px, 2vw, 16px);
+    padding: clamp(16px, 4vw, 28px) clamp(20px, 5vw, 32px);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -464,10 +464,10 @@ function resetForNextCard() {
   }
   
   .option-text {
-    // 動的フォントサイズ: 最小1rem、推奨4vw、最大1.8rem
-    font-size: clamp(1rem, 4vw, 1.8rem) !important;
+    // 動的フォントサイズ: 最小1.4rem、推奨5.5vw、最大2.2rem（大きく調整）
+    font-size: clamp(1.4rem, 5.5vw, 2.2rem) !important;
     line-height: clamp(1.3, 1.4, 1.5);
-    word-break: keep-all;
+    word-break: break-word;
     overflow-wrap: break-word;
     text-align: center;
     display: flex;
@@ -500,13 +500,13 @@ function resetForNextCard() {
   }
   
   .option-text {
-    // より小さい画面用の動的フォントサイズ: 最小0.9rem、推奨3.5vw、最大1.4rem
-    font-size: clamp(0.9rem, 3.5vw, 1.4rem) !important;
+    // より小さい画面用の動的フォントサイズ: 最小1.2rem、推奨5vw、最大1.8rem（大きく調整）
+    font-size: clamp(1.2rem, 5vw, 1.8rem) !important;
     line-height: clamp(1.25, 1.35, 1.45);
   }
   
   .card-content {
-    padding: clamp(8px, 2vw, 16px) clamp(4px, 1.5vw, 12px);
+    padding: clamp(12px, 3vw, 20px) clamp(16px, 4.5vw, 24px);
   }
 }
 
@@ -557,13 +557,13 @@ function resetForNextCard() {
   }
   
   .option-text {
-    font-size: clamp(0.8rem, 3vw, 1.2rem) !important;
+    font-size: clamp(1.1rem, 4.5vw, 1.6rem) !important;
     line-height: 1.2;
     padding: clamp(2px, 0.5vw, 8px);
   }
   
   .card-content {
-    padding: clamp(6px, 1.5vw, 12px) clamp(3px, 1vw, 8px);
+    padding: clamp(10px, 2.5vw, 16px) clamp(14px, 3vw, 20px);
   }
 }
 
