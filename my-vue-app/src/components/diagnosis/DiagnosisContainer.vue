@@ -186,12 +186,9 @@ onMounted(() => {
 .diagnosis-container {
   @include mixins.flex-center;
   @include mixins.container(900px);
-  @include mixins.card-base;
-  @include mixins.card-shadow(lg);
   @include mixins.card-padding(lg);
   width: 100%;
   min-height: calc(100vh - 80px);
-  background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
   flex-direction: column;
   padding: var(--space-md);
   padding-bottom: var(--space-lg);
@@ -199,6 +196,8 @@ onMounted(() => {
   position: relative;
   min-height: 400px;
   overflow-x: hidden;
+
+  border: none !important;
 
   // 子要素の直接配置用設定
   > * {
@@ -301,9 +300,6 @@ onMounted(() => {
     max-width: 100%;
     padding: var(--space-md);
     padding-bottom: var(--space-lg);
-    border-radius: 12px;
-    background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
     margin-bottom: var(--space-lg);
     box-sizing: border-box;
     min-height: 600px;

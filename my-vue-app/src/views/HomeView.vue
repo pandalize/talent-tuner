@@ -1,3 +1,4 @@
+
 <template>
   <main class="home-main">
     <div class="hero-section">
@@ -343,111 +344,6 @@ const { home, nav, common } = useTranslation()
   line-height: 1.6;
 }
 
-/* ==========================================================================
-   アクションボタン
-   ========================================================================== */
-.action-buttons {
-  display: flex;
-  gap: var(--space-md);
-  justify-content: center;
-  margin-bottom: var(--space-xl);
-  flex-wrap: wrap;
-}
-
-.btn {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-xs);
-  padding: var(--space-sm) var(--space-lg);
-  font-size: var(--fs-body);
-  font-weight: 500;
-  text-decoration: none;
-  border-radius: 6px;
-  transition: all var(--transition-fast);
-  cursor: pointer;
-  border: 2px solid transparent;
-}
-
-.btn-primary {
-  background: linear-gradient(135deg, var(--primary-navy) 0%, var(--accent-blue) 100%);
-  color: white;
-  border: 2px solid transparent;
-  background-clip: padding-box;
-  position: relative;
-  overflow: hidden;
-  
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-    transition: left 0.6s;
-  }
-  
-  &:hover {
-    background: linear-gradient(135deg, var(--accent-blue) 0%, var(--primary-blue) 100%);
-    transform: translateY(-3px);
-    box-shadow: 0 8px 25px rgba(59, 130, 246, 0.4);
-    
-    &::before {
-      left: 100%;
-    }
-  }
-}
-
-.btn-secondary {
-  background: transparent;
-  color: var(--primary-navy);
-  border-color: var(--primary-navy);
-}
-
-.btn-secondary:hover {
-  background: var(--primary-navy);
-  color: white;
-}
-
-.btn-chat {
-  background: linear-gradient(135deg, var(--accent-gold) 0%, #d4aa00 100%);
-  color: white;
-  border: 2px solid transparent;
-  position: relative;
-  overflow: hidden;
-  
-  &::after {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 0;
-    height: 0;
-    background: radial-gradient(circle, rgba(255, 255, 255, 0.3) 0%, transparent 70%);
-    transform: translate(-50%, -50%);
-    border-radius: 50%;
-    transition: all 0.4s ease;
-  }
-  
-  &:hover {
-    background: linear-gradient(135deg, #d4aa00 0%, var(--accent-gold) 100%);
-    transform: translateY(-3px) scale(1.05);
-    box-shadow: 0 8px 25px rgba(184, 134, 11, 0.4);
-    
-    &::after {
-      width: 100px;
-      height: 100px;
-    }
-  }
-}
-
-.btn-icon {
-  transition: transform var(--transition-fast);
-}
-
-.btn:hover .btn-icon {
-  transform: translateX(4px);
-}
 
 /* ==========================================================================
    信頼性指標
@@ -597,12 +493,18 @@ const { home, nav, common } = useTranslation()
   }
 
   .action-buttons {
+    display: flex;
     flex-direction: row;
     gap: var(--space-sm);
     align-items: center;
     justify-content: center;
     margin-bottom: var(--space-xl);
     flex-wrap: wrap;
+  }
+
+  // アクションボタンの間隔を確実に空ける
+  .action-buttons > *:not(:last-child) {
+    margin-right: var(--space-md, 1rem);
   }
 
   .btn {
@@ -713,16 +615,31 @@ const { home, nav, common } = useTranslation()
 }
 
 @media (max-width: 480px) {
+  .action-buttons {
+    gap: 20px !important;
+  }
+  .action-buttons > *:not(:last-child) {
+    margin-right: unset !important;
+  }
+
+  .home-main {
+    min-height: 60vh;
+    height: auto;
+  }
+  .hero-section {
+    min-height: 60vh;
+    height: auto;
+  }
+
   .hero-content {
     padding: var(--space-lg) var(--space-sm);
+    min-height: 60vh;
   }
 
   .hero-title {
     font-size: 1.60rem;
     line-height: 1.1;
   }
-
-
 
   .feature-item {
     padding: var(--space-sm);

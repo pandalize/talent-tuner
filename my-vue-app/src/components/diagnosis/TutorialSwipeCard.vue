@@ -262,7 +262,7 @@ function completeTutorial() {
   box-sizing: border-box;
   overflow: hidden;
   left: 50%;
-  top: 50%;
+  top: 45%;
   // transform は動的スタイルバインディングで制御
   margin: 0;
   
@@ -441,15 +441,14 @@ function completeTutorial() {
   }
   
   .tutorial-swipe-card {
-    width: 80vw !important; // 3:4比率に最適化
+    width: 80vw !important;
     max-width: 80vw !important;
     min-width: 80vw !important;
-    height: calc(80vw * 4 / 3) !important; // 3:4比率維持
-    min-height: calc(80vw * 4 / 3) !important;
-    max-height: calc(80vw * 4 / 3) !important;
-    aspect-ratio: 3/4 !important;
-    left: 50% !important;
-    top: 50% !important;
+    height: 65vh !important;
+    min-height: 65vh !important;
+    max-height: 65vh !important;
+  left: 50% !important;
+  top: 45% !important;
     // transform は動的スタイルバインディングで制御
   }
   
@@ -468,12 +467,12 @@ function completeTutorial() {
     width: 95vw !important;
     max-width: 95vw !important;
     min-width: 95vw !important;
-    height: 45vh !important;
-    min-height: 45vh !important;
-    max-height: 45vh !important;
+    height: 65vh !important;
+    min-height: 65vh !important;
+    max-height: 65vh !important;
     border-radius: 16px;
-    left: 50% !important;
-    top: 50% !important;
+  left: 50% !important;
+  top: 45% !important;
     // transform は動的スタイルバインディングで制御
   }
   

@@ -1,3 +1,4 @@
+
 <!--
   質問表示コンポーネント
   5段階評価システムによる質問表示とナビゲーション
@@ -362,6 +363,9 @@ function handleAnswerCompleted() {
 // 質問カード - 5段階評価形式
 .question-card {
   @include mixins.container(900px);
+  
+  // 通常質問時は上方向に余白を追加してカードを上げる
+  margin-top: 4vh;
   
   // スワイプモードの場合は幅を100%に
   .options-list:has(.swipe-answer-container) & {
@@ -803,6 +807,10 @@ function handleAnswerCompleted() {
   position: relative;
   margin: 0;
   padding: var(--space-xs) 0;
+  /* チュートリアル時はmargin-topを0にして上詰め */
+  .tutorial-card-container & {
+    margin-top: 0 !important;
+  }
 }
 
 // スワイプカードコンテナ（枠内最上部に配置）
@@ -926,6 +934,12 @@ function handleAnswerCompleted() {
 
 // モバイル版ではナビゲーションを非表示（768px未満で非表示）
 @media (max-width: 767px) {
+
+  .question-card {
+    min-height: 85vh;
+  }
+  
+
   .question-navigation {
     display: none !important;
   }

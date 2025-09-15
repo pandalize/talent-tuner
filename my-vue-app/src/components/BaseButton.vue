@@ -71,21 +71,23 @@ function handleClick(event: MouseEvent) {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 0.5rem;
-  font-weight: 700 !important;
+  gap: var(--space-xs, 0.5rem);
+  font-weight: 600;
   font-family: Noto Sans JP, Helvetica Neue, Helvetica, Arial, sans-serif;
   transition: all 0.3s ease;
-  border-radius: 50px;
+  border-radius: 6px;
   border: 2px solid transparent;
   cursor: pointer;
   text-decoration: none;
+  min-width: 130px;
   min-height: 48px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-  padding: 0.75rem 1.5rem;
-  font-size: 1rem;
+  padding: var(--space-md, 0.75rem) var(--space-lg, 1.5rem);
+  font-size: 0.9rem;
   background: #f3f4f6;
   color: #222;
   outline: none;
+  /* HomeViewの.btnの見た目を反映 */
   &:disabled {
     opacity: 0.5;
     cursor: not-allowed;
@@ -94,13 +96,35 @@ function handleClick(event: MouseEvent) {
 
 /* Variants */
 .tw-btn-primary {
-  background: linear-gradient(135deg, var(--accent-blue) 0%, var(--primary-blue) 100%);
-  border: 2px solid var(--accent-blue);
+  background: linear-gradient(135deg, var(--primary-navy) 0%, var(--accent-blue) 100%);
   color: #fff;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+  position: relative;
+  overflow: hidden;
+  min-width: 130px;
+  min-height: 48px;
   box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+  font-size: 0.9rem;
+  font-weight: 600;
+  /* HomeViewの.btn-primaryの見た目を反映 */
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.6s;
+  }
   &:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(59, 130, 246, 0.5);
+    background: linear-gradient(135deg, var(--accent-blue) 0%, var(--primary-blue) 100%);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(59, 130, 246, 0.4);
+    &::before {
+      left: 100%;
+    }
   }
   &:active {
     transform: translateY(0);

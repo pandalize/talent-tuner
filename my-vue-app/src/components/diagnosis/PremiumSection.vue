@@ -1,3 +1,10 @@
+<style scoped>
+@media (max-width: 768px) {
+  .premium-card {
+    display: none !important;
+  }
+}
+</style>
 <!--
   プレミアム機能コンポーネント
   詳細診断レポート購入（Stripe決済統合）

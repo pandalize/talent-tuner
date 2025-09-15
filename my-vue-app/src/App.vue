@@ -1,10 +1,26 @@
+
 <script setup lang="ts">
-import { RouterLink, RouterView } from 'vue-router'
+import { RouterLink, RouterView, useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { ref } from 'vue'
 import AppFooter from './components/AppFooter.vue'
 import LanguageSwitcher from './components/LanguageSwitcher.vue'
 import CareerChatBotDemo from './components/CareerChatBotDemo.vue'
+
+import { onMounted, onUnmounted } from 'vue'
+
+const route = useRoute()
+const isMobile = ref(false)
+function checkMobile() {
+  isMobile.value = window.innerWidth <= 768
+}
+onMounted(() => {
+  checkMobile()
+  window.addEventListener('resize', checkMobile)
+})
+onUnmounted(() => {
+  window.removeEventListener('resize', checkMobile)
+})
 
 const { t } = useI18n()
 const isMobileMenuOpen = ref(false)
@@ -174,7 +190,7 @@ const closeDemoChat = () => {
       <RouterView />
     </main>
     
-    <AppFooter />
+  <AppFooter v-if="!(route.path.startsWith('/diagnosis') && isMobile)" />
 
     <!-- デモチャットモーダル -->
     <div v-if="isDemoChatOpen" class="demo-chat-overlay" @click="closeDemoChat">
@@ -189,12 +205,13 @@ const closeDemoChat = () => {
 /* ==========================================================================
    グローバルスタイル & リセット
    ========================================================================== */
+
 html, body {
   margin: 0;
   padding: 0;
   width: 100%;
-  height: 100%;
   overflow-x: hidden; /* 横スクロールを完全に防止 */
+  overflow-y: auto;
 }
 
 #app {
@@ -207,8 +224,8 @@ html, body {
   align-items: center;
   padding: 0;
   background-color: var(--bg-primary);
-  min-height: 100vh;
   overflow-x: hidden;
+  overflow-y: auto;
 }
 
 /* ==========================================================================
@@ -662,7 +679,6 @@ html, body {
 .app-content {
   width: 100%;
   max-width: 100vw;
-  height: 420px;
   overflow-x: hidden;
 }
 
@@ -722,6 +738,10 @@ html, body {
 
   .logo-sub {
     display: none;
+  }
+
+  .result-subtitle {
+    display: none !important;
   }
 }
 

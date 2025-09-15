@@ -7,7 +7,7 @@
         </svg>
       </div>
       <div class="bot-info">
-        <h3>AI進路相談アシスタント</h3>
+  <h3>進路相談アシスタント</h3>
       </div>
       <button class="close-chat" @click="$emit('close')" aria-label="チャットを閉じる">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
@@ -166,8 +166,8 @@ const showNextQuestions = ref(false)
 // クイックスタートオプション
 const quickStartOptions = [
   { text: '将来何をしたいかわからない', content: '将来何をしたいかわからなくて悩んでいます。どうやって進路を考えればいいでしょうか？' },
-  { text: '転職を考えています', content: '転職を考えているのですが、自分に合う職業がわからず迷っています。' },
-  { text: '今の仕事に不満があります', content: '今の仕事に不満を感じていて、自分に本当に合う職業を見つけたいです。' },
+  { text: '部活やサークルでの悩み', content: '部活やサークル活動での人間関係や役割について悩んでいます。どうしたら良いでしょうか？' },
+  { text: '進路選択で迷っています', content: '文系・理系や将来の進路選択で迷っています。どのように考えれば良いでしょうか？' },
   { text: '就職活動の相談', content: '就職活動中ですが、どの業界・職種を選べばいいか迷っています。' }
 ]
 
