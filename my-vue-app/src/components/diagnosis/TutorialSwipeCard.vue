@@ -31,14 +31,7 @@
     >
       <div class="tutorial-card-content">
         <div class="tutorial-header">
-          <h2 class="tutorial-title">
-            <template v-if="categoryInfo">
-              {{ categoryInfo.icon }} {{ categoryInfo.name }}
-            </template>
-            <template v-else>
-              使い方
-            </template>
-          </h2>
+          <h2 class="tutorial-title">使い方</h2>
           <div class="tutorial-progress">質問 {{ questionIndex + 1 }} / {{ totalQuestions }}</div>
         </div>
         
