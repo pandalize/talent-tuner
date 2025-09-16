@@ -380,6 +380,7 @@ function completeTutorial() {
   font-weight: 500;
   margin-bottom: var(--space-lg);
   line-height: 1.4;
+  padding: 0 var(--space-sm);
 }
 
 .tutorial-swipe-demo {
@@ -432,10 +433,16 @@ function completeTutorial() {
   font-weight: 500;
   margin: 0;
   line-height: 1.4;
+  padding: 0 var(--space-sm);
 }
 
 // 小画面最適化
 @media (max-width: 480px) {
+  .tutorial-header {
+    padding-top: 10px;
+    padding-left: 8px;
+    padding-right: 8px;
+  }
   .tutorial-swipe-container {
     min-height: 65vh; // 小画面では少し小さく
   }
