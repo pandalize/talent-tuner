@@ -623,17 +623,17 @@ const { home, nav, common } = useTranslation()
   }
 
   .home-main {
-    min-height: 60vh;
+    min-height: 80vh;
     height: auto;
   }
   .hero-section {
-    min-height: 60vh;
+    min-height: 80vh;
     height: auto;
   }
 
   .hero-content {
     padding: var(--space-lg) var(--space-sm);
-    min-height: 60vh;
+    min-height: 80vh;
   }
 
   .hero-title {
