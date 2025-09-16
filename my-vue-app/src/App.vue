@@ -2,6 +2,7 @@
 import { RouterLink, RouterView, useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { ref } from 'vue'
+import ResultDisplay from './components/diagnosis/ResultDisplay.vue'
 import AppFooter from './components/AppFooter.vue'
 import LanguageSwitcher from './components/LanguageSwitcher.vue'
 import CareerChatBotDemo from './components/CareerChatBotDemo.vue'
@@ -24,6 +25,37 @@ onUnmounted(() => {
 const { t } = useI18n()
 const isMobileMenuOpen = ref(false)
 const isDemoChatOpen = ref(false)
+const isDemoResultOpen = ref(false)
+
+// デモ診断結果データ
+const demoProfessions = [
+  {
+    name: 'Webデザイナー',
+    score: 86,
+    categories: { skill: 22, interest: 22, priority: 21, balance: 21 },
+  annualIncome: '350万円〜600万円',
+  jobDetails: 'Webサイトやバナー、UI/UXデザインなどを担当し、クライアントや自社サービスのデザイン業務を行います。HTML/CSSやFigma、Photoshopなどのツールを活用します。',
+  comment: 'あなたはクリエイティブな発想力とデザインへの関心が高く、細部までこだわる力があります。Webデザイナーとして多様な案件で活躍できる素質があります。'
+  },
+  {
+    name: 'インフルエンサー',
+    score: 83,
+    categories: { skill: 20, interest: 22, priority: 21, balance: 20 },
+  annualIncome: '100万円〜1,000万円以上',
+  jobDetails: 'SNSやYouTubeなどで情報発信し、フォロワーや企業案件、広告収入などで収益を得ます。企画力や発信力、セルフブランディングが重要です。',
+  comment: 'あなたは新しいことに挑戦する意欲と発信力があり、SNSで自分の世界観を表現するのが得意です。インフルエンサーとして多くの人に影響を与えられるでしょう。'
+  },
+  {
+    name: 'マーケティング',
+    score: 77,
+    categories: { skill: 19, interest: 20, priority: 19, balance: 19 },
+  annualIncome: '400万円〜800万円',
+  jobDetails: '市場調査や広告運用、SNS運用、プロモーション企画などを通じて、商品やサービスの売上拡大を目指します。分析力やコミュニケーション力が求められます。',
+  comment: 'あなたは情報収集や分析が得意で、戦略的に物事を考える力があります。マーケティング分野で企画やプロモーションに携わる適性が高いです。'
+  }
+]
+const demoMaxCategoryScore = 25
+const demoTotalQuestions = 16
 
 const toggleMobileMenu = () => {
   isMobileMenuOpen.value = !isMobileMenuOpen.value
@@ -40,6 +72,14 @@ const showDemoChat = () => {
 
 const closeDemoChat = () => {
   isDemoChatOpen.value = false
+}
+
+const showDemoResult = () => {
+  isDemoResultOpen.value = true
+  closeMobileMenu()
+}
+const closeDemoResult = () => {
+  isDemoResultOpen.value = false
 }
 </script>
 
@@ -183,6 +223,18 @@ const closeDemoChat = () => {
           </svg>
           診断について
         </RouterLink>
+        <!-- デモ診断結果ボタン -->
+        <RouterLink
+          to="/demo-result"
+          class="mobile-nav-item demo-result-btn"
+          style="margin-top: 1.5rem; font-weight: bold; color: #fff; background: linear-gradient(90deg, #3b82f6, #eab308); border-radius: 8px;"
+          @click="closeMobileMenu"
+        >
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 8px;">
+            <path d="M12 20h9"/><path d="M12 4v16m0 0l-4-4m4 4l4-4"/>
+          </svg>
+          診断結果を見たい
+        </RouterLink>
         </div>
       </nav>
     </header>
@@ -199,6 +251,7 @@ const closeDemoChat = () => {
         <CareerChatBotDemo @close="closeDemoChat" />
       </div>
     </div>
+    <!-- デモ診断結果モーダルは廃止（ページ遷移に変更） -->
   </div>
 </template>
 
@@ -827,6 +880,9 @@ html, body {
   overflow: hidden;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
   animation: slideUp 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
 }
 
 .demo-chat-btn {
@@ -894,12 +950,12 @@ html, body {
   .demo-chat-overlay {
     padding: 0;
   }
-  
   .demo-chat-modal {
     width: 100%;
     height: 100%;
     max-height: 100vh;
     border-radius: 0;
+    overflow-y: auto;
   }
 }
 </style>
