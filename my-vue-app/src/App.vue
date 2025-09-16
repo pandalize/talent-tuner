@@ -190,7 +190,7 @@ const closeDemoChat = () => {
       <RouterView />
     </main>
     
-  <AppFooter v-if="!(route.path.startsWith('/diagnosis') && isMobile)" />
+  <AppFooter v-if="!(route.path.startsWith('/diagnosis') && isMobile) && !(isMobile && isDemoChatOpen)" />
 
     <!-- デモチャットモーダル -->
     <div v-if="isDemoChatOpen" class="demo-chat-overlay" @click="closeDemoChat">
