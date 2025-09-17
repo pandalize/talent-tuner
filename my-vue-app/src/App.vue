@@ -223,18 +223,6 @@ const closeDemoResult = () => {
           </svg>
           診断について
         </RouterLink>
-        <!-- デモ診断結果ボタン -->
-        <RouterLink
-          to="/demo-result"
-          class="mobile-nav-item demo-result-btn"
-          style="margin-top: 1.5rem; font-weight: bold; color: #fff; background: linear-gradient(90deg, #3b82f6, #eab308); border-radius: 8px;"
-          @click="closeMobileMenu"
-        >
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 8px;">
-            <path d="M12 20h9"/><path d="M12 4v16m0 0l-4-4m4 4l4-4"/>
-          </svg>
-          診断結果を見たい
-        </RouterLink>
         </div>
       </nav>
     </header>

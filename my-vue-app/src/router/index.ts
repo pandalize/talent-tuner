@@ -1,4 +1,3 @@
-import DemoResultView from '../views/DemoResultView.vue'
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import { createMultilingualRoutes, getMetaForRoute } from './multilingual'
@@ -18,17 +17,6 @@ const router = createRouter({
   routes: [
     // 多言語対応ルート
     ...createMultilingualRoutes(),
-
-    // デモ診断結果ページ
-    {
-      path: '/demo-result',
-      name: 'demo-result',
-      component: DemoResultView,
-      meta: {
-        title: 'デモ診断結果 | ため職',
-        description: 'デモ用の診断結果をサンプルとしてご覧いただけます。Webデザイナー、インフルエンサー、マーケティングのランキングと詳細を表示。'
-      }
-    },
 
     // 従来のルート（後方互換性のため残す）
     {
