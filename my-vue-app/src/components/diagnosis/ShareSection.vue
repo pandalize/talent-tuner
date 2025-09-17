@@ -198,8 +198,6 @@ async function fallbackInstagramShare(text: string) {
 
 .share-section {
   @include mixins.card-padding(xl);
-  background: var(--bg-secondary);
-  border-radius: 12px;
 }
 
 .section-header {

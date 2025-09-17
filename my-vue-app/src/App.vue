@@ -1,14 +1,61 @@
 <script setup lang="ts">
-import { RouterLink, RouterView } from 'vue-router'
+import { RouterLink, RouterView, useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { ref } from 'vue'
+import ResultDisplay from './components/diagnosis/ResultDisplay.vue'
 import AppFooter from './components/AppFooter.vue'
 import LanguageSwitcher from './components/LanguageSwitcher.vue'
-import CareerChatBotDemo from './components/CareerChatBotDemo.vue'
+import CareerChatBot from './components/CareerChatBot.vue'
+
+import { onMounted, onUnmounted } from 'vue'
+
+const route = useRoute()
+const isMobile = ref(false)
+function checkMobile() {
+  isMobile.value = window.innerWidth <= 768
+}
+onMounted(() => {
+  checkMobile()
+  window.addEventListener('resize', checkMobile)
+})
+onUnmounted(() => {
+  window.removeEventListener('resize', checkMobile)
+})
 
 const { t } = useI18n()
 const isMobileMenuOpen = ref(false)
 const isDemoChatOpen = ref(false)
+const isDemoResultOpen = ref(false)
+
+// デモ診断結果データ
+const demoProfessions = [
+  {
+    name: 'Webデザイナー',
+    score: 86,
+    categories: { skill: 22, interest: 22, priority: 21, balance: 21 },
+  annualIncome: '350万円〜600万円',
+  jobDetails: 'Webサイトやバナー、UI/UXデザインなどを担当し、クライアントや自社サービスのデザイン業務を行います。HTML/CSSやFigma、Photoshopなどのツールを活用します。',
+  comment: 'あなたはクリエイティブな発想力とデザインへの関心が高く、細部までこだわる力があります。Webデザイナーとして多様な案件で活躍できる素質があります。'
+  },
+  {
+    name: 'インフルエンサー',
+    score: 83,
+    categories: { skill: 20, interest: 22, priority: 21, balance: 20 },
+  annualIncome: '100万円〜1,000万円以上',
+  jobDetails: 'SNSやYouTubeなどで情報発信し、フォロワーや企業案件、広告収入などで収益を得ます。企画力や発信力、セルフブランディングが重要です。',
+  comment: 'あなたは新しいことに挑戦する意欲と発信力があり、SNSで自分の世界観を表現するのが得意です。インフルエンサーとして多くの人に影響を与えられるでしょう。'
+  },
+  {
+    name: 'マーケティング',
+    score: 77,
+    categories: { skill: 19, interest: 20, priority: 19, balance: 19 },
+  annualIncome: '400万円〜800万円',
+  jobDetails: '市場調査や広告運用、SNS運用、プロモーション企画などを通じて、商品やサービスの売上拡大を目指します。分析力やコミュニケーション力が求められます。',
+  comment: 'あなたは情報収集や分析が得意で、戦略的に物事を考える力があります。マーケティング分野で企画やプロモーションに携わる適性が高いです。'
+  }
+]
+const demoMaxCategoryScore = 25
+const demoTotalQuestions = 16
 
 const toggleMobileMenu = () => {
   isMobileMenuOpen.value = !isMobileMenuOpen.value
@@ -25,6 +72,14 @@ const showDemoChat = () => {
 
 const closeDemoChat = () => {
   isDemoChatOpen.value = false
+}
+
+const showDemoResult = () => {
+  isDemoResultOpen.value = true
+  closeMobileMenu()
+}
+const closeDemoResult = () => {
+  isDemoResultOpen.value = false
 }
 </script>
 
@@ -145,15 +200,17 @@ const closeDemoChat = () => {
           {{ $t('nav.career_guide') }}
         </RouterLink>
         
-        <button 
-          class="mobile-nav-item demo-chat-btn" 
-          @click="showDemoChat"
+        
+        <RouterLink 
+          to="/chat"
+          class="mobile-nav-item demo-chat-btn"
+            @click="() => { showDemoChat(); closeMobileMenu(); }"
         >
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/>
           </svg>
           AI進路相談
-        </button>
+        </RouterLink>
         
         <RouterLink 
           to="/diagnosis-method" 
@@ -171,17 +228,18 @@ const closeDemoChat = () => {
     </header>
     
     <main class="app-content">
-      <RouterView />
+      <RouterView @show-demo-chat="showDemoChat" />
     </main>
     
-    <AppFooter />
+  <AppFooter v-if="!(route.path.startsWith('/diagnosis') && isMobile) && !(isMobile && isDemoChatOpen)" />
 
     <!-- デモチャットモーダル -->
     <div v-if="isDemoChatOpen" class="demo-chat-overlay" @click="closeDemoChat">
       <div class="demo-chat-modal" @click.stop>
-        <CareerChatBotDemo @close="closeDemoChat" />
+        <CareerChatBot @close="closeDemoChat" />
       </div>
     </div>
+    <!-- デモ診断結果モーダルは廃止（ページ遷移に変更） -->
   </div>
 </template>
 
@@ -189,12 +247,13 @@ const closeDemoChat = () => {
 /* ==========================================================================
    グローバルスタイル & リセット
    ========================================================================== */
+
 html, body {
   margin: 0;
   padding: 0;
   width: 100%;
-  height: 100%;
   overflow-x: hidden; /* 横スクロールを完全に防止 */
+  overflow-y: auto;
 }
 
 #app {
@@ -207,8 +266,8 @@ html, body {
   align-items: center;
   padding: 0;
   background-color: var(--bg-primary);
-  min-height: 100vh;
   overflow-x: hidden;
+  overflow-y: auto;
 }
 
 /* ==========================================================================
@@ -662,7 +721,6 @@ html, body {
 .app-content {
   width: 100%;
   max-width: 100vw;
-  height: 420px;
   overflow-x: hidden;
 }
 
@@ -722,6 +780,10 @@ html, body {
 
   .logo-sub {
     display: none;
+  }
+
+  .result-subtitle {
+    display: none !important;
   }
 }
 
@@ -806,6 +868,9 @@ html, body {
   overflow: hidden;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
   animation: slideUp 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
 }
 
 .demo-chat-btn {
@@ -873,12 +938,12 @@ html, body {
   .demo-chat-overlay {
     padding: 0;
   }
-  
   .demo-chat-modal {
     width: 100%;
     height: 100%;
     max-height: 100vh;
     border-radius: 0;
+    overflow-y: auto;
   }
 }
 </style>

@@ -1,3 +1,12 @@
+
+<style scoped>
+.action-buttons {
+  display: flex;
+  justify-content: center;
+  margin-bottom: var(--space-xl, 2rem);
+}
+</style>
+
 <!--
   診断結果表示コンポーネント
   職業カード、シェア機能、プレミアム機能を統合
@@ -33,30 +42,16 @@
     <PremiumSection :professions="professions" />
 
     <!-- アクションボタン -->
-    <div class="action-section">
-      
-      <div class="action-grid">
-        <button @click="handleInstantReset" class="action-button secondary-action" type="button">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M3 12a9 9 0 019-9 9.75 9.75 0 016.74 2.74L21 8"/>
-            <path d="M21 3v5h-5"/>
-            <path d="M21 12a9 9 0 01-9 9 9.75 9.75 0 01-6.74-2.74L3 16"/>
-            <path d="M3 21v-5h5"/>
-          </svg>
+      <div class="action-buttons">
+        <HomeButton variant="primary" @click="handleInstantReset">
           もう一度診断する
-        </button>
-        <button @click="$emit('go-home')" class="action-button primary-action">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/>
-          </svg>
-          ホームに戻る
-        </button>
+        </HomeButton>
       </div>
-    </div>
   </div>
 </template>
 
 <script setup lang="ts">
+import HomeButton from '../HomeButton.vue'
 import type { ProfessionScore } from '../../utils/diagnosisLoader'
 import ProfessionCard from './ProfessionCard.vue'
 import ShareSection from './ShareSection.vue'
@@ -110,9 +105,7 @@ function handleInstantReset() {
 .result-header {
   padding: calc(var(--space-xxl) / 2) var(--space-lg);
   text-align: center;
-  background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
-  border-radius: 12px;
-  border: 1px solid var(--border-light);
+  background: transparent;
 }
 
 
@@ -146,20 +139,7 @@ function handleInstantReset() {
   gap: var(--space-md);
 }
 
-.action-button {
-  @include mixins.button-secondary;
-  @include mixins.flex-row(var(--space-sm));
-  justify-content: center;
-  
-  &.primary-action {
-    @include mixins.button-primary;
-  }
 
-  &:hover {
-    transform: translateY(-2px);
-    @include mixins.card-shadow(md);
-  }
-}
 
 // レスポンシブデザイン
 @include mixins.respond-to('tablet') {
@@ -180,12 +160,22 @@ function handleInstantReset() {
     font-size: 2rem;
     line-height: 1.1;
   }
+
+  .result-header {
+    padding-top: 16px;
+    padding-bottom: 16px;
+  }
 }
 
 @media (max-width: 480px) {
+  .tw-result-container {
+    min-height: 100vh;
+    overflow-y: auto;
+  }
   .result-title {
     font-size: 1.75rem;
     line-height: 1.1;
   }
 }
+
 </style>

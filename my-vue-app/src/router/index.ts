@@ -17,7 +17,7 @@ const router = createRouter({
   routes: [
     // 多言語対応ルート
     ...createMultilingualRoutes(),
-    
+
     // 従来のルート（後方互換性のため残す）
     {
       path: '/',

@@ -31,14 +31,7 @@
     >
       <div class="tutorial-card-content">
         <div class="tutorial-header">
-          <h2 class="tutorial-title">
-            <template v-if="categoryInfo">
-              {{ categoryInfo.icon }} {{ categoryInfo.name }}
-            </template>
-            <template v-else>
-              使い方
-            </template>
-          </h2>
+          <h2 class="tutorial-title">使い方</h2>
           <div class="tutorial-progress">質問 {{ questionIndex + 1 }} / {{ totalQuestions }}</div>
         </div>
         
@@ -262,7 +255,7 @@ function completeTutorial() {
   box-sizing: border-box;
   overflow: hidden;
   left: 50%;
-  top: 50%;
+  top: 45%;
   // transform は動的スタイルバインディングで制御
   margin: 0;
   
@@ -380,6 +373,7 @@ function completeTutorial() {
   font-weight: 500;
   margin-bottom: var(--space-lg);
   line-height: 1.4;
+  padding: 0 var(--space-sm);
 }
 
 .tutorial-swipe-demo {
@@ -432,24 +426,29 @@ function completeTutorial() {
   font-weight: 500;
   margin: 0;
   line-height: 1.4;
+  padding: 0 var(--space-sm);
 }
 
 // 小画面最適化
 @media (max-width: 480px) {
+  .tutorial-header {
+    padding-top: 10px;
+    padding-left: 8px;
+    padding-right: 8px;
+  }
   .tutorial-swipe-container {
     min-height: 65vh; // 小画面では少し小さく
   }
   
   .tutorial-swipe-card {
-    width: 80vw !important; // 3:4比率に最適化
+    width: 80vw !important;
     max-width: 80vw !important;
     min-width: 80vw !important;
-    height: calc(80vw * 4 / 3) !important; // 3:4比率維持
-    min-height: calc(80vw * 4 / 3) !important;
-    max-height: calc(80vw * 4 / 3) !important;
-    aspect-ratio: 3/4 !important;
-    left: 50% !important;
-    top: 50% !important;
+    height: 65vh !important;
+    min-height: 65vh !important;
+    max-height: 65vh !important;
+  left: 50% !important;
+  top: 45% !important;
     // transform は動的スタイルバインディングで制御
   }
   
@@ -468,12 +467,12 @@ function completeTutorial() {
     width: 95vw !important;
     max-width: 95vw !important;
     min-width: 95vw !important;
-    height: 45vh !important;
-    min-height: 45vh !important;
-    max-height: 45vh !important;
+    height: 65vh !important;
+    min-height: 65vh !important;
+    max-height: 65vh !important;
     border-radius: 16px;
-    left: 50% !important;
-    top: 50% !important;
+  left: 50% !important;
+  top: 45% !important;
     // transform は動的スタイルバインディングで制御
   }
   

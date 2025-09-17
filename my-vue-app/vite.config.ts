@@ -24,16 +24,13 @@ export default defineConfig({
     },
   },
   server: {
-    fs: {
-      allow: ['..'],
-    },
     proxy: {
       '/api': {
         target: 'http://localhost:8000',
-        // PHP built-in server
         changeOrigin: true,
-      },
-    },
+        rewrite: path => path.replace(/^\/api/, '') // /api/chat-proxy.php → /chat-proxy.php
+      }
+    }
   },
   build: {
     // Core Web Vitals最適化

@@ -256,7 +256,7 @@ function resetForNextCard() {
   width: 95%;
   max-width: 1000px;
   aspect-ratio: 4 / 3;
-  height: auto;
+  height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -419,7 +419,6 @@ function resetForNextCard() {
 @media (max-width: 768px) {
   .swipe-answer-container {
     width: 100%;
-    min-height: 70vh; // 画面高の70%を使用
     padding: var(--space-xs) 0;
     display: flex;
     align-items: center;
@@ -431,9 +430,7 @@ function resetForNextCard() {
     width: 75vw !important; // 3:4比率に適した横幅
     max-width: 75vw !important;
     min-width: 75vw !important;
-    height: 100vw !important; // 3:4比率: width * 4/3
     min-height: 100vw !important;
-    max-height: 100vw !important;
     aspect-ratio: 3/4 !important;
     padding: 0;
     border-radius: 20px;
@@ -441,7 +438,7 @@ function resetForNextCard() {
     margin: 0 auto;
     position: absolute;
     left: 50%;
-    top: 50%;
+    top: 35%; // 50% から 35% に変更してカードを上に移動
     // transform は動的スタイルバインディングで制御
   }
   
@@ -450,7 +447,6 @@ function resetForNextCard() {
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 100%;
   }
   
   .option-header {
@@ -490,12 +486,9 @@ function resetForNextCard() {
     width: 80vw !important; // 3:4比率に最適化
     max-width: 80vw !important;
     min-width: 80vw !important;
-    height: calc(80vw * 4 / 3) !important; // 3:4比率維持
-    min-height: calc(80vw * 4 / 3) !important;
-    max-height: calc(80vw * 4 / 3) !important;
     aspect-ratio: 3/4 !important;
     left: 50% !important;
-    top: 50% !important;
+    top: 45% !important; // 50% から 35% に変更してカードを上に移動
     // transform は動的スタイルバインディングで制御
   }
   
@@ -514,10 +507,7 @@ function resetForNextCard() {
 @media (min-width: 1025px) {
   .swipe-card {
     aspect-ratio: 3 / 4 !important;
-    height: auto !important;
-    min-height: auto !important;
-    max-height: none !important;
-    padding: 0;
+   padding: 0;
     left: 50%;
     top: 50%;
     // transform は動的スタイルバインディングで制御
@@ -537,33 +527,6 @@ function resetForNextCard() {
 @media (min-width: 1400px) {
   .option-text {
     font-size: 2.2rem !important;
-  }
-}
-
-// 非常に小さな画面（Galaxy Fold等）
-@media (max-width: 320px) {
-  .swipe-answer-container {
-    min-height: 60vh;
-  }
-  
-  .swipe-card {
-    width: 95vw !important;
-    max-width: 95vw !important;
-    min-width: 95vw !important;
-    height: 45vh !important;
-    min-height: 45vh !important;
-    max-height: 45vh !important;
-    border-radius: 16px;
-  }
-  
-  .option-text {
-    font-size: clamp(1.1rem, 4.5vw, 1.6rem) !important;
-    line-height: 1.2;
-    padding: clamp(2px, 0.5vw, 8px);
-  }
-  
-  .card-content {
-    padding: clamp(10px, 2.5vw, 16px) clamp(14px, 3vw, 20px);
   }
 }
 

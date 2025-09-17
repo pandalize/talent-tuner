@@ -263,6 +263,7 @@
 @media (max-width: 480px) {
   .app-footer {
     padding: var(--space-md) var(--space-sm) var(--space-md);
+    margin: 0 !important;
   }
   
   .footer-content {
