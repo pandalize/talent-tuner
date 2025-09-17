@@ -137,21 +137,21 @@ const { home, nav, common } = useTranslation()
   position: relative;
   overflow: hidden;
   
-  // 動的な背景パターン
+  // 動的な背景パターン（高さ・幅は固定）
   &::before {
     content: '';
     position: absolute;
-    top: -50%;
-    right: -50%;
-    width: 200%;
-    height: 200%;
+    top: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
     background: radial-gradient(circle at 30% 60%, rgba(59, 130, 246, 0.08) 0%, transparent 50%),
                 radial-gradient(circle at 80% 20%, rgba(16, 185, 129, 0.06) 0%, transparent 50%),
                 radial-gradient(circle at 40% 80%, rgba(245, 158, 11, 0.04) 0%, transparent 50%);
     animation: float 25s ease-in-out infinite;
   }
   
-  // 装飾的な幾何学模様
+  // 装飾的な幾何学模様（高さ・幅は固定）
   &::after {
     content: '';
     position: absolute;
@@ -168,32 +168,32 @@ const { home, nav, common } = useTranslation()
 // 新しいアニメーション
 @keyframes float {
   0%, 100% { 
-    transform: translateX(0) translateY(0) rotate(0deg);
+    transform: none;
     opacity: 0.6;
   }
   25% { 
-    transform: translateX(20px) translateY(-10px) rotate(90deg);
+    transform: none;
     opacity: 0.8;
   }
   50% { 
-    transform: translateX(-10px) translateY(-20px) rotate(180deg);
+    transform: none;
     opacity: 1;
   }
   75% { 
-    transform: translateX(-20px) translateY(10px) rotate(270deg);
+    transform: none;
     opacity: 0.8;
   }
 }
 
 @keyframes drift {
   0%, 100% { 
-    transform: translate(0, 0) scale(1);
+    transform: none;
   }
   33% { 
-    transform: translate(30px, -20px) scale(1.1);
+    transform: none;
   }
   66% { 
-    transform: translate(-20px, 20px) scale(0.9);
+    transform: none;
   }
 }
 
@@ -623,12 +623,11 @@ const { home, nav, common } = useTranslation()
   }
 
   .home-main {
-    min-height: 60vh;
     height: 60vh;
   }
   .hero-section {
-    min-height: 80vh;
-    height: auto;
+    padding-top: 30vh;
+    height: 60vh;
   }
 
   .hero-content {
