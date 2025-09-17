@@ -37,9 +37,9 @@ export class ClaudeApiClient {
   // レート制限設定
   private static readonly RATE_LIMITS = {
     MAX_MESSAGES_PER_SESSION: 20,     // セッションあたり最大メッセージ数
-    MAX_MESSAGES_PER_HOUR: 10,        // 1時間あたり最大メッセージ数
-    MAX_MESSAGES_PER_DAY: 30,         // 1日あたり最大メッセージ数
-    MAX_INPUT_LENGTH: 500,             // 入力文字数制限
+    MAX_MESSAGES_PER_HOUR: 2,        // 1時間あたり最大メッセージ数
+    MAX_MESSAGES_PER_DAY: 5,         // 1日あたり最大メッセージ数
+    MAX_INPUT_LENGTH: 50,             // 入力文字数制限
     MAX_OUTPUT_TOKENS: 800,            // 出力トークン制限（コスト管理）
     COOLDOWN_SECONDS: 10               // メッセージ間のクールダウン時間（秒）
   };

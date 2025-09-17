@@ -5,7 +5,7 @@ import { ref } from 'vue'
 import ResultDisplay from './components/diagnosis/ResultDisplay.vue'
 import AppFooter from './components/AppFooter.vue'
 import LanguageSwitcher from './components/LanguageSwitcher.vue'
-import CareerChatBotDemo from './components/CareerChatBotDemo.vue'
+import CareerChatBot from './components/CareerChatBot.vue'
 
 import { onMounted, onUnmounted } from 'vue'
 
@@ -248,7 +248,7 @@ const closeDemoResult = () => {
     <!-- デモチャットモーダル -->
     <div v-if="isDemoChatOpen" class="demo-chat-overlay" @click="closeDemoChat">
       <div class="demo-chat-modal" @click.stop>
-        <CareerChatBotDemo @close="closeDemoChat" />
+        <CareerChatBot @close="closeDemoChat" />
       </div>
     </div>
     <!-- デモ診断結果モーダルは廃止（ページ遷移に変更） -->

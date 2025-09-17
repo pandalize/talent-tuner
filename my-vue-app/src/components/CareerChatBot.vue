@@ -165,8 +165,9 @@
 </template>
 
 <script setup lang="ts">
+
 import { ref, nextTick, onMounted, computed, onUnmounted } from 'vue';
-import { getClaudeApiClient, type ChatMessage, type CareerAdviceResponse } from '../utils/claudeApiClient';
+import { ClaudeApiClient, getClaudeApiClient, type ChatMessage, type CareerAdviceResponse } from '../utils/claudeApiClient';
 import { professionDataManager } from '../utils/professionDataManager';
 
 // Emits
@@ -174,13 +175,8 @@ const emit = defineEmits<{
   close: [];
 }>();
 
-// レート制限設定（クライアント表示用）
-const RATE_LIMITS = {
-  MAX_MESSAGES_PER_SESSION: 20,
-  MAX_MESSAGES_PER_HOUR: 10,
-  MAX_MESSAGES_PER_DAY: 30,
-  COOLDOWN_SECONDS: 10
-};
+// claudeApiClientのRATE_LIMITSを参照
+const RATE_LIMITS = (ClaudeApiClient as any).RATE_LIMITS;
 
 // リアクティブデータ
 const messages = ref<ChatMessage[]>([]);
