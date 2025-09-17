@@ -1018,7 +1018,7 @@ function formatTime(date: Date): string {
 /* 小さめタブレット用 (481px - 768px) */
 @media (max-width: 768px) and (min-width: 481px) {
   .input-container textarea {
-    font-size: 15px;
+    font-size: 16px;
     min-height: 42px;
   }
   
@@ -1110,7 +1110,7 @@ function formatTime(date: Date): string {
   }
 
   .input-container textarea {
-    font-size: 14px;
+    font-size: 16px;
     width: 100%;
     min-width: 0;
     min-height: 40px;
@@ -1120,7 +1120,7 @@ function formatTime(date: Date): string {
   
   /* モバイル用プレースホルダー調整 - 画面幅に応じて動的に調整 */
   .input-container textarea::placeholder {
-    font-size: calc(10px + 0.5vw); /* 320px: 11.6px, 375px: 11.875px, 414px: 12.07px */
+    font-size: clamp(16px, calc(10px + 0.5vw), 20px); /* 320px: 11.6px, 375px: 11.875px, 414px: 12.07px */
     letter-spacing: -0.02em; /* 文字間を少し詰める */
   }
 
@@ -1131,24 +1131,5 @@ function formatTime(date: Date): string {
   }
 }
 
-/* 極小スマートフォン (320px - 360px) */
-@media (max-width: 360px) {
-  .input-container textarea {
-    font-size: 13px;
-    min-height: 38px;
-    padding: 8px 10px;
-  }
-  
-  .input-container textarea::placeholder {
-    font-size: 10.5px; /* 固定サイズで確実に収める */
-  }
-}
 
-/* 超極小スマートフォン (320px以下) */
-@media (max-width: 320px) {
-  .input-container textarea::placeholder {
-    font-size: 10px; /* さらに小さく */
-    letter-spacing: -0.03em; /* 文字間をさらに詰める */
-  }
-}
 </style>

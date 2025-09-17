@@ -112,8 +112,8 @@ const closeDemoResult = () => {
 
       <!-- ヘッダーコントロール -->
       <div class="header-controls">
-        <LanguageSwitcher />
-        
+        <!-- <LanguageSwitcher /> -->
+
         <!-- ハンバーガーメニューボタン -->
         <button 
           class="mobile-menu-toggle"

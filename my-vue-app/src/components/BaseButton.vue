@@ -121,14 +121,14 @@ function handleClick(event: MouseEvent) {
   &:hover {
     background: linear-gradient(135deg, var(--accent-blue) 0%, var(--primary-blue) 100%);
     transform: translateY(-3px);
-    box-shadow: 0 8px 25px rgba(59, 130, 246, 0.4);
+     /*box-shadow: 0 8px 25px rgba(59, 130, 246, 0.4); */
     &::before {
       left: 100%;
     }
   }
   &:active {
     transform: translateY(0);
-    box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+    /* box-shadow: 0 4px 15px rgba(59, 130, 246, 0); */
   }
 }
 
