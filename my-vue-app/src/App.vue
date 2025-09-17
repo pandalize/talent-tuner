@@ -745,6 +745,7 @@ html, body {
     justify-content: space-between;
     align-items: center;
     padding: var(--space-sm) var(--space-md);
+    height: 10vh; 
     
     &::before {
       height: 2px;

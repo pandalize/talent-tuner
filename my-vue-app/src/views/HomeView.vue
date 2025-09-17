@@ -623,8 +623,8 @@ const { home, nav, common } = useTranslation()
   }
 
   .home-main {
-    min-height: 80vh;
-    height: auto;
+    min-height: 60vh;
+    height: 60vh;
   }
   .hero-section {
     min-height: 80vh;
