@@ -47,26 +47,6 @@
           </router-link>
         </div>
 
-        <div class="trust-indicators">
-          <div class="trust-item">
-            <svg class="trust-icon" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/>
-            </svg>
-            <span>{{ home.trust.users('25,000') }}</span>
-          </div>
-          <div class="trust-item">
-            <svg class="trust-icon" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M9 11H7v2h2v-2zm4 0h-2v2h2v-2zm4 0h-2v2h2v-2zm2-7h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V9h14v11z"/>
-            </svg>
-            <span>{{ home.trust.updated('2025') }}</span>
-          </div>
-          <div class="trust-item">
-            <svg class="trust-icon" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/>
-            </svg>
-            <span>{{ home.trust.privacy() }}</span>
-          </div>
-        </div>
       </div>
     </div>
 
@@ -122,16 +102,17 @@ const { home, nav, common } = useTranslation()
 
 .home-main {
   width: 100%;
-  height: 380px;
-  // min-height: 100vh;
+  min-height: calc(100vh - 80px); // ヘッダー分を引く
   background: var(--bg-primary);
+  display: flex;
+  flex-direction: column;
 }
 
 // ヒーローセクション
 .hero-section {
   @include mixins.flex-center;
-  min-height: 420px;
-  height: 420px;
+  flex: 1;
+  min-height: 500px;
   padding: var(--space-xl) 0;
   background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 50%, #f1f5f9 100%);
   position: relative;
@@ -208,7 +189,7 @@ const { home, nav, common } = useTranslation()
 
 .hero-content {
   @include mixins.container;
-  width: 90%;
+  width: 100%;
   padding: var(--space-xl) var(--space-lg);
   text-align: center;
   position: relative;
@@ -216,6 +197,7 @@ const { home, nav, common } = useTranslation()
 }
 
 .hero-title {
+  overflow-wrap: anywhere;
   font-family: var(--font-heading);
   font-size: var(--fs-h1);
   font-weight: 700;
@@ -373,6 +355,7 @@ const { home, nav, common } = useTranslation()
 .methodology-section {
   padding: var(--space-xxl) 0;
   background: var(--bg-secondary);
+  flex-shrink: 0;
 }
 
 .section-container {
@@ -474,6 +457,16 @@ const { home, nav, common } = useTranslation()
     min-height: auto;
     height: 50px;
     margin-bottom: 0;
+  }
+  .feature-item:hover,
+  .feature-item:active {
+    transform: none !important;
+    box-shadow: none !important;
+    border: none !important;
+  }
+  .feature-item:hover::before,
+  .feature-item:active::before {
+    opacity: 0 !important;
   }
 
   .feature-number {
@@ -623,11 +616,11 @@ const { home, nav, common } = useTranslation()
   }
 
   .home-main {
-    height: 60vh;
+    min-height: calc(100vh - 10vh); // モバイルヘッダー分を引く
   }
   .hero-section {
-    padding-top: 30vh;
-    height: 60vh;
+    min-height: auto;
+    padding: var(--space-lg) 0;
   }
 
   .hero-content {
