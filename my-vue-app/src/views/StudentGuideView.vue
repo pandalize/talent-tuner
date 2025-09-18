@@ -1768,6 +1768,12 @@ onMounted(() => {
   .analysis-framework {
     grid-template-columns: 1fr;
   }
+
+
+  .timeline-content {
+    width: 100%;
+    text-align: left;
+  }
   
   .tools-grid {
     grid-template-columns: 1fr;
@@ -1824,10 +1830,6 @@ onMounted(() => {
   .table-of-contents,
   .guide-section {
     padding: 1.5rem;
-  }
-  
-  .stat-item {
-    width: 50%
   }
 
   .stat-number {

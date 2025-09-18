@@ -1145,6 +1145,7 @@ function showTab(tabId: string) {
   border-radius: 15px;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
   flex: 1;
+  overflow-wrap: break-word;
 }
 
 .timeline-content h4 {
@@ -1357,7 +1358,8 @@ function showTab(tabId: string) {
   }
   
   .guide-title {
-    font-size: 2rem;
+    font-size: clamp(1.5rem, 8vw, 2.5rem);
+
   }
   
   .guide-section {
@@ -1384,6 +1386,10 @@ function showTab(tabId: string) {
     grid-template-columns: 1fr;
   }
   
+  .timeline-content {
+    width: 100%;
+  }
+
   .timeline::before {
     display: none;
   }
@@ -1410,7 +1416,7 @@ function showTab(tabId: string) {
 @media (max-width: 480px) {
   .table-of-contents,
   .guide-section {
-    padding: 1.5rem 1rem;
+    padding: 1.5rem;
   }
   
   .stat-number {
