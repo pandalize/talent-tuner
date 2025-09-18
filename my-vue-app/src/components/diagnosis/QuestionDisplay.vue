@@ -27,7 +27,15 @@
     <div class="question-card tw-card">
       <!-- モバイル版: チュートリアルスワイプカード（枠内最上部） 非表示化 -->
       
-      <template v-if="shouldShowTutorial && effectiveSwipeMode">
+
+      <!-- 1枚目のチュートリアルカードの前に説明カードを表示 -->
+      <template v-if="showExplainSwipeCard && effectiveSwipeMode">
+        <div class="tutorial-card-container">
+          <ExplainSwipeCard @close="showExplainSwipeCard = false" />
+        </div>
+      </template>
+
+      <template v-else-if="shouldShowTutorial && effectiveSwipeMode">
         <div class="tutorial-card-container">
           <TutorialSwipeCard
             :main-question="question.text"
@@ -142,6 +150,7 @@ import { useDiagnosis } from '../../composables/useDiagnosis'
 import type { Question } from '../../utils/diagnosisLoader'
 import SwipeAnswer from './SwipeAnswer.vue'
 import TutorialSwipeCard from './TutorialSwipeCard.vue'
+import ExplainSwipeCard from './ExplainSwipeCard.vue'
 
 // Props
 interface Props {
@@ -194,10 +203,23 @@ const effectiveSwipeMode = computed(() => {
   return isMobile.value
 })
 
+
+// 初回説明カード表示用
+const showExplainSwipeCard = ref(false)
+
 // 初回チュートリアル表示の判定（最初の質問でスワイプモードの場合）
 const shouldShowInitialTutorial = computed(() => {
   return effectiveSwipeMode.value && props.questionIndex === 0 && currentOptionIndex.value === 0 && !props.tutorialCompleted
 })
+
+// 初回のみ説明カードを表示
+if (typeof window !== 'undefined') {
+  const w = window as Window & { __explain_swipe_card_shown?: boolean };
+  if (shouldShowInitialTutorial.value && !w.__explain_swipe_card_shown) {
+    showExplainSwipeCard.value = true
+    w.__explain_swipe_card_shown = true
+  }
+}
 
 // カテゴリーチュートリアル表示の判定（4問ごとのカテゴリー紹介）
 const shouldShowCategoryTutorialDisplay = computed(() => {
