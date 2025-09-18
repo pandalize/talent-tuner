@@ -12,7 +12,7 @@
           {{ isTyping ? 'アドバイス考案中...' : 'オンライン' }}
         </p>
       </div>
-      <button class="close-chat" @click="$emit('close')" aria-label="チャットを閉じる">
+  <button class="close-chat" @click="closeAndGoHome" aria-label="チャットを閉じる">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
           <path d="M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z" />
         </svg>
@@ -174,6 +174,14 @@ import { professionDataManager } from '../utils/professionDataManager';
 const emit = defineEmits<{
   close: [];
 }>();
+
+import { useRouter } from 'vue-router';
+const router = useRouter();
+
+function closeAndGoHome() {
+  emit('close');
+  router.push('/');
+}
 
 // claudeApiClientのRATE_LIMITSを参照
 const RATE_LIMITS = (ClaudeApiClient as any).RATE_LIMITS;
@@ -1018,7 +1026,7 @@ function formatTime(date: Date): string {
 /* 小さめタブレット用 (481px - 768px) */
 @media (max-width: 768px) and (min-width: 481px) {
   .input-container textarea {
-    font-size: 16px;
+    font-size: 15px;
     min-height: 42px;
   }
   
@@ -1110,7 +1118,7 @@ function formatTime(date: Date): string {
   }
 
   .input-container textarea {
-    font-size: 16px;
+    font-size: 14px;
     width: 100%;
     min-width: 0;
     min-height: 40px;
@@ -1120,7 +1128,7 @@ function formatTime(date: Date): string {
   
   /* モバイル用プレースホルダー調整 - 画面幅に応じて動的に調整 */
   .input-container textarea::placeholder {
-    font-size: clamp(16px, calc(10px + 0.5vw), 20px); /* 320px: 11.6px, 375px: 11.875px, 414px: 12.07px */
+    font-size: calc(10px + 0.5vw); /* 320px: 11.6px, 375px: 11.875px, 414px: 12.07px */
     letter-spacing: -0.02em; /* 文字間を少し詰める */
   }
 
@@ -1131,5 +1139,24 @@ function formatTime(date: Date): string {
   }
 }
 
+/* 極小スマートフォン (320px - 360px) */
+@media (max-width: 360px) {
+  .input-container textarea {
+    font-size: 13px;
+    min-height: 38px;
+    padding: 8px 10px;
+  }
+  
+  .input-container textarea::placeholder {
+    font-size: 10.5px; /* 固定サイズで確実に収める */
+  }
+}
 
+/* 超極小スマートフォン (320px以下) */
+@media (max-width: 320px) {
+  .input-container textarea::placeholder {
+    font-size: 10px; /* さらに小さく */
+    letter-spacing: -0.03em; /* 文字間をさらに詰める */
+  }
+}
 </style>
