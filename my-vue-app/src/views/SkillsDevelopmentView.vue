@@ -670,10 +670,6 @@
             <h3>年収・転職情報</h3>
             <p>職業別年収相場と転職市場の最新動向</p>
           </router-link>
-          <router-link to="/career-change" class="related-card">
-            <h3>転職・キャリアチェンジ</h3>
-            <p>異業種転職を成功させるための実践的な方法</p>
-          </router-link>
           <router-link to="/student-guide" class="related-card">
             <h3>学生向けガイド</h3>
             <p>就職活動を成功させる準備と戦略</p>

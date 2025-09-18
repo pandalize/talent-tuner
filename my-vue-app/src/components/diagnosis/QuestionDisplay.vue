@@ -69,12 +69,9 @@
               </div>
               
               <!-- 5段階評価スケール -->
-              <div class="rating-scale tw-rating">
-                <div class="scale-labels tw-labels">
-                  <span class="scale-label-left tw-label-left">全く当てはまらない</span>
-                  <span class="scale-label-right tw-label-right">よく当てはまる</span>
-                </div>
-                <div class="scale-buttons tw-buttons">
+              <div class="rating-scale tw-rating" style="display: flex; align-items: center; width: 100%; gap: 1.2rem;">
+                <span class="scale-label-left tw-label-left">全く当てはまらない</span>
+                <div class="scale-buttons tw-buttons" style="flex: 1; display: flex; justify-content: center; gap: 2%; max-width: 400px;">
                   <button
                     v-for="rating in [1, 2, 3, 4, 5]"
                     :key="`${option.label}-${rating}`"
@@ -91,6 +88,7 @@
                     {{ rating }}
                   </button>
                 </div>
+                <span class="scale-label-right tw-label-right">よく当てはまる</span>
               </div>
             </div>
           </div>
@@ -412,15 +410,18 @@ function handleAnswerCompleted() {
 }
 
 // 評価スケール
+// 横並び一列に
 .rating-scale {
-  @include mixins.flex-column(var(--space-sm));
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 100%;
+  gap: 1.2rem;
 }
 
+// ラベルは個別spanで横並び配置
 .scale-labels {
-  @include mixins.flex-between;
-  font-size: var(--fs-small);
-  color: var(--text-secondary);
-  margin-bottom: var(--space-xs);
+  display: none;
 }
 
 .scale-buttons {

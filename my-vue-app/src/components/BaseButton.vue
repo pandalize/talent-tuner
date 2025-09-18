@@ -87,7 +87,6 @@ function handleClick(event: MouseEvent) {
   background: #f3f4f6;
   color: #222;
   outline: none;
-  -webkit-tap-highlight-color: #ff0000; /* 赤 */
   /* HomeViewの.btnの見た目を反映 */
   &:disabled {
     opacity: 0.5;
@@ -121,15 +120,15 @@ function handleClick(event: MouseEvent) {
   }
   &:hover {
     background: linear-gradient(135deg, var(--accent-blue) 0%, var(--primary-blue) 100%);
-    transform: translateY(3px);
-    box-shadow: 0 8px 25px rgba(59, 130, 246, 0.4); 
+    transform: translateY(-3px);
+     /*box-shadow: 0 8px 25px rgba(59, 130, 246, 0.4); */
     &::before {
       left: 100%;
     }
   }
   &:active {
     transform: translateY(0);
-    box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+    /* box-shadow: 0 4px 15px rgba(59, 130, 246, 0); */
   }
 }
 

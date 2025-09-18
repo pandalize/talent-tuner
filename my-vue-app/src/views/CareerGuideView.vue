@@ -286,54 +286,6 @@
               </div>
             </div>
           </div>
-          
-          <div class="decision-template">
-            <h3>📋 意思決定シート テンプレート</h3>
-            <div class="template-content">
-              <table class="decision-table">
-                <thead>
-                  <tr>
-                    <th>職業名</th>
-                    <th>適性<br>(重み×3)</th>
-                    <th>収入<br>(重み×2)</th>
-                    <th>成長<br>(重み×2)</th>
-                    <th>バランス<br>(重み×1)</th>
-                    <th>やりがい<br>(重み×2)</th>
-                    <th>総合スコア</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>プログラマー</td>
-                    <td>8×3=24</td>
-                    <td>7×2=14</td>
-                    <td>9×2=18</td>
-                    <td>6×1=6</td>
-                    <td>8×2=16</td>
-                    <td><strong>78</strong></td>
-                  </tr>
-                  <tr>
-                    <td>公認会計士</td>
-                    <td>6×3=18</td>
-                    <td>8×2=16</td>
-                    <td>6×2=12</td>
-                    <td>5×1=5</td>
-                    <td>6×2=12</td>
-                    <td><strong>63</strong></td>
-                  </tr>
-                  <tr>
-                    <td>起業家</td>
-                    <td>7×3=21</td>
-                    <td>9×2=18</td>
-                    <td>10×2=20</td>
-                    <td>3×1=3</td>
-                    <td>10×2=20</td>
-                    <td><strong>82</strong></td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
         </div>
       </section>
 
@@ -421,10 +373,6 @@
           <router-link to="/salary-guide" class="related-card">
             <h3>年収・転職情報</h3>
             <p>職業別年収相場と転職市場の最新動向</p>
-          </router-link>
-          <router-link to="/career-change" class="related-card">
-            <h3>転職・キャリアチェンジ</h3>
-            <p>異業種転職を成功させるための実践的な方法</p>
           </router-link>
           <router-link to="/student-guide" class="related-card">
             <h3>学生向けガイド</h3>
@@ -842,46 +790,6 @@ onMounted(() => {
 }
 
 /* 意思決定テーブル */
-.decision-template {
-  background: #f8f9ff;
-  padding: 2rem;
-  border-radius: 15px;
-  margin: 2rem 0;
-}
-
-.decision-template h3 {
-  color: var(--main-color);
-  margin-bottom: 1.5rem;
-}
-
-.decision-table {
-  width: 100%;
-  border-collapse: collapse;
-  background: white;
-  border-radius: 10px;
-  overflow: hidden;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
-}
-
-.decision-table th,
-.decision-table td {
-  padding: 1rem;
-  text-align: center;
-  border-bottom: 1px solid #f0f0f0;
-}
-
-.decision-table th {
-  background: var(--main-color);
-  color: white;
-  font-weight: 600;
-  font-size: 0.9rem;
-}
-
-.decision-table td:first-child {
-  font-weight: 600;
-  text-align: left;
-  background: #f8f9ff;
-}
 
 /* タイムライン */
 .timeline {
