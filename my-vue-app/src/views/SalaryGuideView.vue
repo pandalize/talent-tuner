@@ -43,7 +43,7 @@
           </div>
           
           <div class="trend-analysis">
-            <h3>🔥 年収上昇が著しい分野</h3>
+            <h3>年収上昇が著しい分野</h3>
             <div class="trend-grid">
               <div class="trend-item hot">
                 <h4>IT・テクノロジー</h4>
@@ -104,7 +104,7 @@
           
           <div class="salary-categories">
             <div class="salary-category">
-              <h3>💻 IT・エンジニア系</h3>
+              <h3>IT・エンジニア系</h3>
               <div class="profession-list">
                 <div class="profession-item high-salary">
                   <div class="profession-header">
@@ -245,7 +245,7 @@
             </div>
             
             <div class="salary-category">
-              <h3>📊 データ・分析系</h3>
+              <h3>データ・分析系</h3>
               <div class="profession-list">
                 <div class="profession-item high-salary">
                   <div class="profession-header">
@@ -318,7 +318,7 @@
             </div>
             
             <div class="salary-category">
-              <h3>🎨 デザイン・クリエイティブ系</h3>
+              <h3>デザイン・クリエイティブ系</h3>
               <div class="profession-list">
                 <div class="profession-item medium-salary">
                   <div class="profession-header">
@@ -391,7 +391,7 @@
             </div>
             
             <div class="salary-category">
-              <h3>📈 ビジネス・マーケティング系</h3>
+              <h3>ビジネス・マーケティング系</h3>
               <div class="profession-list">
                 <div class="profession-item high-salary">
                   <div class="profession-header">
@@ -450,19 +450,6 @@
             </div>
           </div>
           
-          <div class="salary-legend">
-            <h3>年収レベルの定義</h3>
-            <div class="legend-items">
-              <div class="legend-item">
-                <span class="legend-color high-salary"></span>
-                <span class="legend-text">高年収：平均600万円以上（市場価値が高く年収アップが期待しやすい）</span>
-              </div>
-              <div class="legend-item">
-                <span class="legend-color medium-salary"></span>
-                <span class="legend-text">中年収：平均400-600万円（安定した需要があり専門性でアップ可能）</span>
-              </div>
-            </div>
-          </div>
         </div>
       </section>
 
@@ -473,7 +460,6 @@
         <div class="content-block">
           <div class="factors-analysis">
             <div class="factor-item">
-              <div class="factor-icon">🎯</div>
               <div class="factor-content">
                 <h3>スキル・専門性（影響度40%）</h3>
                 <p>最も年収に直結する要因。希少性の高い技術スキルや資格、専門知識の深さが収入を左右します。</p>
@@ -490,7 +476,6 @@
             </div>
             
             <div class="factor-item">
-              <div class="factor-icon">🏢</div>
               <div class="factor-content">
                 <h3>業界・企業規模（影響度25%）</h3>
                 <p>所属業界と企業規模により年収レンジが大きく異なります。成長業界や大手企業は高年収の傾向があります。</p>
@@ -528,7 +513,6 @@
             </div>
             
             <div class="factor-item">
-              <div class="factor-icon">📍</div>
               <div class="factor-content">
                 <h3>地域・勤務形態（影響度20%）</h3>
                 <p>勤務地と働き方により年収に地域格差が生じます。リモートワークの普及で格差は縮小傾向にあります。</p>
@@ -566,7 +550,6 @@
             </div>
             
             <div class="factor-item">
-              <div class="factor-icon">⏰</div>
               <div class="factor-content">
                 <h3>経験年数・年齢（影響度15%）</h3>
                 <p>一般的には経験とともに年収も上昇しますが、スキルベースの職種では年齢より能力が重視される傾向があります。</p>
@@ -608,7 +591,7 @@
           </div>
           
           <div class="demand-analysis">
-            <h3>🔥 求人需要が急増している職種</h3>
+            <h3>求人需要が急増している職種</h3>
             <div class="demand-grid">
               <div class="demand-item hot">
                 <h4>生成AI・LLMエンジニア</h4>
@@ -669,7 +652,7 @@
           </div>
           
           <div class="market-trends">
-            <h3>📊 転職市場のトレンド</h3>
+            <h3>転職市場のトレンド</h3>
             <div class="trend-cards">
               <div class="trend-card">
                 <h4>リモートワーク常態化</h4>
@@ -800,7 +783,7 @@
           </div>
           
           <div class="negotiation-alternatives">
-            <h3>💡 年収以外の交渉ポイント</h3>
+            <h3>年収以外の交渉ポイント</h3>
             <p>基本給の増額が難しい場合、他の条件での交渉も検討しましょう。</p>
             <div class="alternatives-grid">
               <div class="alternative-item">
@@ -851,7 +834,7 @@
           
           <div class="strategy-paths">
             <div class="path-item">
-              <h3>🚀 短期集中型（6ヶ月以内）</h3>
+              <h3>短期集中型（6ヶ月以内）</h3>
               <div class="path-content">
                 <p><strong>対象：</strong>現在のスキルレベルが高く、即転職で年収アップを狙える人</p>
                 <div class="path-steps">
@@ -899,7 +882,7 @@
             </div>
             
             <div class="path-item">
-              <h3>📈 スキルアップ型（1-2年）</h3>
+              <h3>スキルアップ型（1-2年）</h3>
               <div class="path-content">
                 <p><strong>対象：</strong>現在のスキルに不足があり、学習・実践を通じて市場価値を高めたい人</p>
                 <div class="path-steps">
@@ -947,7 +930,7 @@
             </div>
             
             <div class="path-item">
-              <h3>🏢 社内昇進型（2-3年）</h3>
+              <h3>社内昇進型（2-3年）</h3>
               <div class="path-content">
                 <p><strong>対象：</strong>現在の職場に満足しており、社内でのキャリアアップを重視する人</p>
                 <div class="path-steps">
@@ -996,7 +979,7 @@
           </div>
           
           <div class="success-metrics">
-            <h3>📊 年収アップ成功の指標</h3>
+            <h3>年収アップ成功の指標</h3>
             <div class="metrics-grid">
               <div class="metric-item">
                 <h4>市場価値指標</h4>
@@ -1221,7 +1204,7 @@ onMounted(() => {
 
 /* ハイライトボックス */
 .highlight-box {
-  background: linear-gradient(135deg, #e3f2fd, #f8f9ff);
+  background: linear-gradient(135deg, #e3f2fd);
   padding: 2rem;
   border-radius: 15px;
   border-left: 4px solid var(--main-color);
@@ -1273,22 +1256,6 @@ onMounted(() => {
   padding: 2rem;
   border-radius: 15px;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
-  border-left: 4px solid #ddd;
-}
-
-.trend-item.hot {
-  background: linear-gradient(135deg, #fff3e0, #fff);
-  border-left-color: #ff5722;
-}
-
-.trend-item.rising {
-  background: linear-gradient(135deg, #f3e5f5, #fff);
-  border-left-color: #e91e63;
-}
-
-.trend-item.moderate {
-  background: linear-gradient(135deg, #e8f5e8, #fff);
-  border-left-color: #4caf50;
 }
 
 .trend-item h4 {
@@ -1355,16 +1322,6 @@ onMounted(() => {
   border: 2px solid #f0f0f0;
 }
 
-.profession-item.high-salary {
-  background: linear-gradient(135deg, #fff3e0, #fff);
-  border-color: #ff9800;
-}
-
-.profession-item.medium-salary {
-  background: linear-gradient(135deg, #f3e5f5, #fff);
-  border-color: #9c27b0;
-}
-
 .profession-header {
   display: flex;
   justify-content: space-between;
@@ -1375,6 +1332,7 @@ onMounted(() => {
 }
 
 .profession-header h4 {
+  font-size: 1.2rem;
   color: var(--main-color);
   margin: 0;
 }
@@ -1451,44 +1409,6 @@ onMounted(() => {
   font-weight: 600;
 }
 
-/* 年収レベル凡例 */
-.salary-legend {
-  background: #f8f9ff;
-  padding: 1.5rem;
-  border-radius: 10px;
-  margin: 2rem 0;
-}
-
-.salary-legend h3 {
-  color: var(--main-color);
-  margin-bottom: 1rem;
-}
-
-.legend-items {
-  display: flex;
-  flex-direction: column;
-  gap: 0.8rem;
-}
-
-.legend-item {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-}
-
-.legend-color {
-  width: 20px;
-  height: 20px;
-  border-radius: 3px;
-}
-
-.legend-color.high-salary {
-  background: #ff9800;
-}
-
-.legend-color.medium-salary {
-  background: #9c27b0;
-}
 
 .legend-text {
   font-size: 0.9rem;
@@ -1501,17 +1421,6 @@ onMounted(() => {
   gap: 2rem;
 }
 
-.factor-item {
-  display: flex;
-  align-items: flex-start;
-  gap: 2rem;
-  padding: 2rem;
-  background: white;
-  border-radius: 15px;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
-  border: 2px solid #f0f0f0;
-}
-
 .factor-icon {
   font-size: 3rem;
   text-align: center;
@@ -1521,6 +1430,7 @@ onMounted(() => {
 .factor-content h3 {
   color: var(--main-color);
   margin-bottom: 1rem;
+  font-size: 1.5rem;
 }
 
 .factor-content p {
@@ -1716,22 +1626,6 @@ onMounted(() => {
   padding: 2rem;
   border-radius: 15px;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
-  border-left: 4px solid #ddd;
-}
-
-.demand-item.hot {
-  background: linear-gradient(135deg, #fff3e0, #fff);
-  border-left-color: #ff5722;
-}
-
-.demand-item.rising {
-  background: linear-gradient(135deg, #f3e5f5, #fff);
-  border-left-color: #e91e63;
-}
-
-.demand-item.moderate {
-  background: linear-gradient(135deg, #e8f5e8, #fff);
-  border-left-color: #4caf50;
 }
 
 .demand-stats {
@@ -1788,8 +1682,14 @@ onMounted(() => {
 
 .trend-cards {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  grid-template-columns: repeat(2, 1fr);
   gap: 2rem;
+}
+
+@media (max-width: 700px) {
+  .trend-cards {
+    grid-template-columns: 1fr;
+  }
 }
 
 .trend-card {
@@ -2025,6 +1925,9 @@ onMounted(() => {
 .negotiation-alternatives h3 {
   color: var(--main-color);
   margin-bottom: 2rem;
+}
+.negotiation-alternatives p {
+  margin-bottom: 1.5rem;
 }
 
 .alternatives-grid {

@@ -4,7 +4,7 @@
       <!-- ヘッダー -->
       <header class="guide-header">
         <h1 class="guide-title">キャリア選択ガイド</h1>
-        <p class="guide-subtitle">自分に最適な職業を見つけるための完全ガイド</p>
+        <p class="guide-subtitle">最適な職業を見つけるための完全ガイド</p>
       </header>
 
       <!-- 目次 -->
@@ -63,7 +63,6 @@
           
           <div class="analysis-grid">
             <div class="analysis-card">
-              <div class="card-icon">🧠</div>
               <h3>スキル・能力</h3>
               <ul>
                 <li>得意な作業・苦手な作業</li>
@@ -78,7 +77,6 @@
             </div>
             
             <div class="analysis-card">
-              <div class="card-icon">❤️</div>
               <h3>興味・関心</h3>
               <ul>
                 <li>どんな話題にワクワクするか</li>
@@ -93,7 +91,6 @@
             </div>
             
             <div class="analysis-card">
-              <div class="card-icon">⚖️</div>
               <h3>価値観・優先事項</h3>
               <ul>
                 <li>年収 vs やりがい vs 安定性</li>
@@ -108,7 +105,6 @@
             </div>
             
             <div class="analysis-card">
-              <div class="card-icon">🌟</div>
               <h3>ライフスタイル</h3>
               <ul>
                 <li>理想的な1日の過ごし方</li>
@@ -132,9 +128,11 @@
         <div class="content-block">
           <div class="criteria-list">
             <div class="criteria-item">
-              <div class="criteria-number">1</div>
-              <div class="criteria-content">
+              <div class="criteria-header">
+                <div class="criteria-number">1</div>
                 <h3>適性マッチ度</h3>
+              </div>
+              <div class="criteria-content">
                 <p>自分のスキルや性格と職業要件の一致度。適性診断ツールを活用して客観的に評価しましょう。</p>
                 <div class="tip">
                   <strong>ポイント：</strong>「できること」と「やりたいこと」の重なりを見つける
@@ -143,9 +141,11 @@
             </div>
             
             <div class="criteria-item">
-              <div class="criteria-number">2</div>
-              <div class="criteria-content">
+              <div class="criteria-header">
+                <div class="criteria-number">2</div>
                 <h3>収入・安定性</h3>
+              </div>
+              <div class="criteria-content">
                 <p>年収レンジ、昇進可能性、業界の将来性を総合的に判断。ライフプランとの整合性も重要です。</p>
                 <div class="tip">
                   <strong>ポイント：</strong>初年度年収だけでなく、5-10年後のキャリアパスも考慮
@@ -154,9 +154,11 @@
             </div>
             
             <div class="criteria-item">
-              <div class="criteria-number">3</div>
-              <div class="criteria-content">
+              <div class="criteria-header">
+                <div class="criteria-number">3</div>
                 <h3>成長・学習機会</h3>
+              </div>
+              <div class="criteria-content">
                 <p>スキルアップの機会、研修制度、業界のトレンド。継続的な成長が見込める環境かどうか。</p>
                 <div class="tip">
                   <strong>ポイント：</strong>AIに代替されにくく、経験と共に価値が高まる職業を選ぶ
@@ -165,9 +167,11 @@
             </div>
             
             <div class="criteria-item">
-              <div class="criteria-number">4</div>
-              <div class="criteria-content">
+              <div class="criteria-header">
+                <div class="criteria-number">4</div>
                 <h3>ワークライフバランス</h3>
+              </div>
+              <div class="criteria-content">
                 <p>労働時間、休暇制度、リモートワーク可能性。プライベートとの両立しやすさ。</p>
                 <div class="tip">
                   <strong>ポイント：</strong>業界平均の労働時間や残業状況を事前に調査
@@ -176,9 +180,11 @@
             </div>
             
             <div class="criteria-item">
-              <div class="criteria-number">5</div>
-              <div class="criteria-content">
+              <div class="criteria-header">
+                <div class="criteria-number">5</div>
                 <h3>社会貢献・やりがい</h3>
+              </div>
+              <div class="criteria-content">
                 <p>仕事の社会的意義、達成感、自己実現の度合い。長期的なモチベーション維持に影響。</p>
                 <div class="tip">
                   <strong>ポイント：</strong>「誰の」「どんな課題を」解決する仕事かを明確にする
@@ -196,7 +202,7 @@
         <div class="content-block">
           <div class="info-methods">
             <div class="method-category">
-              <h3>📚 基礎情報の収集</h3>
+              <h3>基礎情報の収集</h3>
               <ul>
                 <li><strong>職業情報サイト：</strong>厚生労働省「職業情報提供サイト」、転職サイトの職種説明</li>
                 <li><strong>統計データ：</strong>年収ラボ、転職会議、OpenWork等の口コミサイト</li>
@@ -205,7 +211,7 @@
             </div>
             
             <div class="method-category">
-              <h3>👥 リアルな声の収集</h3>
+              <h3>リアルな声の収集</h3>
               <ul>
                 <li><strong>OB・OG訪問：</strong>大学キャリアセンター、LinkedIn、知人の紹介</li>
                 <li><strong>業界イベント：</strong>セミナー、勉強会、展示会への参加</li>
@@ -214,7 +220,7 @@
             </div>
             
             <div class="method-category">
-              <h3>🔍 実体験による確認</h3>
+              <h3>実体験による確認</h3>
               <ul>
                 <li><strong>インターンシップ：</strong>短期・長期インターンでの実務体験</li>
                 <li><strong>副業・プロボノ：</strong>関連する副業やボランティア活動</li>
@@ -224,7 +230,7 @@
           </div>
           
           <div class="warning-box">
-            <h3>⚠️ 情報収集時の注意点</h3>
+            <h3>情報収集時の注意点</h3>
             <ul>
               <li>個人の主観的な意見と客観的データを分けて判断</li>
               <li>ネガティブな情報に偏りすぎない（不満を持つ人ほど発信しがち）</li>
@@ -583,11 +589,6 @@ onMounted(() => {
   border-color: var(--main-color);
 }
 
-.card-icon {
-  font-size: 3rem;
-  text-align: center;
-  margin-bottom: 1rem;
-}
 
 .analysis-card h3 {
   color: var(--main-color);
@@ -642,15 +643,23 @@ onMounted(() => {
   gap: 2rem;
 }
 
+.criteria-header {
+  display: flex;
+}
+
 .criteria-item {
   display: flex;
-  align-items: flex-start;
+  flex-direction: column;
   gap: 2rem;
   padding: 2rem;
   background: white;
   border-radius: 15px;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
   border: 2px solid #f0f0f0;
+}
+
+.criteria-item h3{
+  margin: 1rem 0 1rem 1rem;
 }
 
 .criteria-number {
@@ -973,7 +982,7 @@ onMounted(() => {
   }
   
   .guide-title {
-    font-size: 2rem;
+    font-size: clamp(1.5rem, 8vw, 2.5rem);
   }
   
   .guide-section {
@@ -995,6 +1004,10 @@ onMounted(() => {
   .criteria-item {
     flex-direction: column;
     text-align: center;
+  }
+
+  .criteria-item p {
+    text-align: left;
   }
   
   .info-methods {
@@ -1037,13 +1050,30 @@ onMounted(() => {
 @media (max-width: 480px) {
   .table-of-contents,
   .guide-section {
-    padding: 1.5rem 1rem;
+    padding: 1.5rem;
   }
   
   .stat-number {
     font-size: 2rem;
   }
   
+  .criteria-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    justify-content: center;
+    margin-bottom: 1rem;
+  }
+
+  .criteria-header .criteria-number {
+    margin-bottom: 0;
+  }
+
+  .criteria-header h3 {
+    font-size: 1.1rem;
+    margin: 0;
+  }
+
   .criteria-number {
     width: 50px;
     height: 50px;
@@ -1052,6 +1082,10 @@ onMounted(() => {
   
   .decision-table {
     font-size: 0.7rem;
+  }
+
+  .timeline-content {
+    width: 100%;
   }
 }
 </style>
