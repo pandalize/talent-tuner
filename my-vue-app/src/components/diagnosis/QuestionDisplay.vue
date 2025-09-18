@@ -26,7 +26,7 @@
     <!-- PC版 & モバイル版共通: 質問カード -->
     <div class="question-card tw-card">
       <!-- モバイル版: チュートリアルスワイプカード（枠内最上部） 非表示化 -->
-      <!--
+      
       <template v-if="shouldShowTutorial && effectiveSwipeMode">
         <div class="tutorial-card-container">
           <TutorialSwipeCard
@@ -38,7 +38,7 @@
           />
         </div>
       </template>
-      -->
+      
       
       <!-- モバイル版: スワイプモードのカード（枠内最上部） -->
       <template v-if="shouldShowSwipeOption && effectiveSwipeMode">
@@ -205,15 +205,14 @@ const shouldShowCategoryTutorialDisplay = computed(() => {
 })
 
 // いずれかのチュートリアルを表示するか
-// const shouldShowTutorial = computed(() => {
-//   return shouldShowInitialTutorial.value || shouldShowCategoryTutorialDisplay.value
-// })
-const shouldShowTutorial = computed(() => false);
+const shouldShowTutorial = computed(() => {
+  return shouldShowInitialTutorial.value || shouldShowCategoryTutorialDisplay.value
+})
 
 // チュートリアル完了後の質問表示判定（使用しない）
-// const shouldShowQuestionAfterTutorial = computed(() => {
-//   return effectiveSwipeMode.value && props.questionIndex === 0 && currentOptionIndex.value === 0 && tutorialCompleted.value
-// })
+   const shouldShowQuestionAfterTutorial = computed(() => {
+    return effectiveSwipeMode.value && props.questionIndex === 0 && currentOptionIndex.value === 0 && tutorialCompleted.value
+  })
 
 // スワイプモードでオプション表示すべきか判定
 const shouldShowSwipeOption = computed(() => {
@@ -224,12 +223,12 @@ const shouldShowSwipeOption = computed(() => {
   if (!currentOption.value) return false
   
   // チュートリアル表示中はfalse
-  // if (shouldShowTutorial.value) return false
+   if (shouldShowTutorial.value) return false
   
   // 最初の質問の場合はチュートリアル完了後のみ
-  //if (props.questionIndex === 0) {
-  //  return props.tutorialCompleted
-  //}
+  if (props.questionIndex === 0) {
+    return props.tutorialCompleted
+  }
   
   // 2問目以降は常にスワイプモード
   return true
