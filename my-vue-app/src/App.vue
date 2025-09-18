@@ -26,6 +26,22 @@ const { t } = useI18n()
 const isMobileMenuOpen = ref(false)
 const isDemoChatOpen = ref(false)
 const isDemoResultOpen = ref(false)
+const dropdownOpen = ref(false);
+
+function handleDropdownClickOutside(e: MouseEvent) {
+  if (!dropdownOpen.value) return;
+  const dropdown = document.querySelector('.dropdown');
+  if (dropdown && !dropdown.contains(e.target as Node)) {
+    dropdownOpen.value = false;
+  }
+}
+
+onMounted(() => {
+  document.addEventListener('click', handleDropdownClickOutside);
+})
+onUnmounted(() => {
+  document.removeEventListener('click', handleDropdownClickOutside);
+})
 
 const toggleMobileMenu = () => {
   isMobileMenuOpen.value = !isMobileMenuOpen.value
@@ -70,7 +86,22 @@ const closeDemoResult = () => {
         <RouterLink to="/" class="nav-item">{{ $t('nav.home') }}</RouterLink>
         <RouterLink to="/diagnosis" class="nav-item">{{ $t('nav.diagnosis') }}</RouterLink>
         <RouterLink to="/about" class="nav-item">{{ $t('nav.about') }}</RouterLink>
-        <RouterLink to="/career-guide" class="nav-item">{{ $t('nav.career_guide') }}</RouterLink>
+        <div class="nav-item dropdown">
+          <span
+            class="dropdown-label"
+            tabindex="0"
+            @click.stop="dropdownOpen = !dropdownOpen"
+            @keydown.enter.space="dropdownOpen = !dropdownOpen"
+            aria-haspopup="true"
+            :aria-expanded="dropdownOpen"
+          >{{ $t('nav.career_guide') }}</span>
+          <div v-if="dropdownOpen" class="dropdown-menu" @click.stop>
+            <RouterLink to="/student-guide" class="dropdown-item" @click="dropdownOpen = false">学生向けキャリアガイド</RouterLink>
+            <RouterLink to="/skills-development" class="dropdown-item" @click="dropdownOpen = false">スキル開発ガイド</RouterLink>
+            <RouterLink to="/career-guide" class="dropdown-item" @click="dropdownOpen = false">キャリア選択ガイド</RouterLink>
+            <RouterLink to="/salary-guide" class="dropdown-item" @click="dropdownOpen = false">年収転職ガイド</RouterLink>
+          </div>
+        </div>
         <RouterLink to="/diagnosis-method" class="nav-item">診断について</RouterLink>
         <button 
           class="nav-item demo-chat-desktop-btn" 
@@ -916,5 +947,36 @@ html, body {
     border-radius: 0;
     overflow-y: auto;
   }
+}
+
+/* ドロップダウンメニュー */
+.dropdown {
+  position: relative;
+}
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  min-width: 200px;
+  background: #fff;
+  border: 1px solid var(--border-light);
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+  z-index: 2000;
+  display: flex;
+  flex-direction: column;
+  padding: 0.5rem 0;
+}
+.dropdown-item {
+  padding: 0.75rem 1.5rem;
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-size: 0.95rem;
+  transition: background 0.2s, color 0.2s;
+  white-space: nowrap;
+}
+.dropdown-item:hover {
+  background: var(--accent-blue);
+  color: #fff;
 }
 </style>

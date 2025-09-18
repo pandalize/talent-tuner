@@ -8,11 +8,9 @@
       </div>
       <div class="bot-info">
         <h3>進路相談アシスタント</h3>
-        <p class="bot-status" :class="{ 'typing': isTyping }">
-          {{ isTyping ? 'アドバイス考案中...' : 'オンライン' }}
-        </p>
+
       </div>
-  <button class="close-chat" @click="closeAndGoHome" aria-label="チャットを閉じる">
+      <button class="close-chat" @click="$emit('close')" aria-label="チャットを閉じる">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
           <path d="M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z" />
         </svg>
@@ -23,7 +21,8 @@
       <div class="welcome-message" v-if="messages.length === 0">
         <div class="message bot-message">
           <div class="message-content">
-            <p>こんにちは！進路相談アシスタントです。🌟</p>
+            <p>こんにちは！進路相談アシスタントです！
+            </p>
             <p>進路や転職について、どのようなことでお悩みですか？お気軽にご相談ください。</p>
           </div>
         </div>
@@ -134,7 +133,6 @@
           </svg>
         </button>
       </div>
-      <p class="input-hint">Shift + Enter で改行、Enter で送信</p>
     </div>
 
     <!-- 使用状況表示 -->
@@ -175,15 +173,7 @@ const emit = defineEmits<{
   close: [];
 }>();
 
-import { useRouter } from 'vue-router';
-const router = useRouter();
-
-function closeAndGoHome() {
-  emit('close');
-  router.push('/');
-}
-
-// claudeApiClientのRATE_LIMITSを参照
+// claudeApiClientのRATE_LIMITSを直接参照
 const RATE_LIMITS = (ClaudeApiClient as any).RATE_LIMITS;
 
 // リアクティブデータ
@@ -216,10 +206,10 @@ const shouldShowDiagnosisRecommendation = ref(false);
 
 // クイックスタートオプション
 const quickStartOptions = [
-  { text: '将来何をしたいかわからない', content: '将来何をしたいかわからなくて悩んでいます。どうやって進路を考えればいいでしょうか？' },
-  { text: '転職を考えています', content: '転職を考えているのですが、自分に合う職業がわからず迷っています。' },
-  { text: '今の仕事に不満があります', content: '今の仕事に不満を感じていて、自分に本当に合う職業を見つけたいです。' },
-  { text: '就職活動の相談', content: '就職活動中ですが、どの業界・職種を選べばいいか迷っています。' }
+  { text: '将来やりたいことが見つからない', content: '将来やりたいことが見つからず、進路選択に悩んでいます。どう考えればいいですか？' },
+  { text: '文系・理系どちらを選ぶべきか迷っている', content: '文系・理系どちらを選ぶべきか迷っています。自分に合う選び方を知りたいです。' },
+  { text: '部活と勉強の両立が難しい', content: '部活と勉強の両立が難しく、進路に不安があります。アドバイスがほしいです。' },
+  { text: '志望校・学部の選び方がわからない', content: '志望校や学部の選び方がわかりません。どうやって決めればいいでしょうか？' }
 ];
 
 // ユーザープロフィール（会話から推測）
@@ -524,18 +514,6 @@ function formatTime(date: Date): string {
   font-weight: 600;
 }
 
-.bot-status {
-  margin: 0;
-  font-size: 0.875rem;
-  opacity: 0.8;
-  transition: all var(--transition-normal);
-}
-
-.bot-status.typing {
-  opacity: 1;
-  animation: pulse 1.5s ease-in-out infinite;
-}
-
 .close-chat {
   @include mixins.button-base;
   background: none;
@@ -617,14 +595,18 @@ function formatTime(date: Date): string {
    ウェルカムメッセージとクイックオプション
    ========================================================================== */
 .welcome-message {
-  @include mixins.flex-column(var(--space-md));
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  gap: var(--space-md);
 }
 
 .quick-options {
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
   gap: 2%;
   width: 100%;
+  margin-top: auto;
 }
 
 .quick-option-btn {
@@ -803,13 +785,6 @@ function formatTime(date: Date): string {
   animation: pulse 1s ease-in-out infinite;
 }
 
-.input-hint {
-  margin: 0;
-  font-size: 0.75rem;
-  opacity: 0.6;
-  text-align: center;
-}
-
 /* ==========================================================================
    診断推奨バナー
    ========================================================================== */
@@ -983,13 +958,6 @@ function formatTime(date: Date): string {
   transform: none;
 }
 
-.input-hint {
-  margin: var(--space-xs) 0 0 0;
-  font-size: 0.75rem;
-  color: var(--text-secondary);
-  text-align: center;
-}
-
 /* ==========================================================================
    アニメーション
    ========================================================================== */
@@ -1026,7 +994,7 @@ function formatTime(date: Date): string {
 /* 小さめタブレット用 (481px - 768px) */
 @media (max-width: 768px) and (min-width: 481px) {
   .input-container textarea {
-    font-size: 15px;
+    font-size: 16px;
     min-height: 42px;
   }
   
@@ -1118,7 +1086,7 @@ function formatTime(date: Date): string {
   }
 
   .input-container textarea {
-    font-size: 14px;
+    font-size: 16px;
     width: 100%;
     min-width: 0;
     min-height: 40px;
@@ -1128,7 +1096,7 @@ function formatTime(date: Date): string {
   
   /* モバイル用プレースホルダー調整 - 画面幅に応じて動的に調整 */
   .input-container textarea::placeholder {
-    font-size: calc(10px + 0.5vw); /* 320px: 11.6px, 375px: 11.875px, 414px: 12.07px */
+    font-size: clamp(16px, calc(10px + 0.5vw), 20px); /* 320px: 11.6px, 375px: 11.875px, 414px: 12.07px */
     letter-spacing: -0.02em; /* 文字間を少し詰める */
   }
 
@@ -1139,24 +1107,5 @@ function formatTime(date: Date): string {
   }
 }
 
-/* 極小スマートフォン (320px - 360px) */
-@media (max-width: 360px) {
-  .input-container textarea {
-    font-size: 13px;
-    min-height: 38px;
-    padding: 8px 10px;
-  }
-  
-  .input-container textarea::placeholder {
-    font-size: 10.5px; /* 固定サイズで確実に収める */
-  }
-}
 
-/* 超極小スマートフォン (320px以下) */
-@media (max-width: 320px) {
-  .input-container textarea::placeholder {
-    font-size: 10px; /* さらに小さく */
-    letter-spacing: -0.03em; /* 文字間をさらに詰める */
-  }
-}
 </style>

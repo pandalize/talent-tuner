@@ -3,11 +3,6 @@
     <div class="student-guide-content">
       <!-- ヘッダー -->
       <header class="guide-header">
-        <div class="breadcrumb">
-          <router-link to="/">ホーム</router-link>
-          <span class="separator">></span>
-          <span class="current">学生向けキャリアガイド</span>
-        </div>
         <h1 class="guide-title">学生向けキャリアガイド</h1>
         <p class="guide-subtitle">就職活動を成功させる準備と戦略</p>
       </header>
@@ -718,15 +713,12 @@ onMounted(() => {
 }
 
 .student-guide-content {
-  max-width: 1000px;
-  margin: 0 auto;
-  background: white;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  width: 100%;
 }
 
 /* ヘッダー */
 .guide-header {
-  background: linear-gradient(135deg, var(--main-color), var(--light-blue));
+  background: linear-gradient(135deg, var(--primary-navy) 0%, var(--primary-blue) 70%);
   color: white;
   padding: 3rem 2rem;
   text-align: center;
@@ -767,7 +759,9 @@ onMounted(() => {
 .table-of-contents {
   background: #f8f9ff;
   padding: 2rem;
-  border-left: 4px solid var(--main-color);
+  max-width: 900px;
+  margin: 0 auto;
+  width: 100%;
 }
 
 .table-of-contents h2 {
@@ -799,6 +793,9 @@ onMounted(() => {
 .guide-section {
   padding: 3rem 2rem;
   border-bottom: 1px solid #f0f0f0;
+  max-width: 900px;
+  margin: 0 auto;
+  width: 100%;
 }
 
 .guide-section h2 {
@@ -1595,7 +1592,7 @@ onMounted(() => {
 
 /* CTA セクション */
 .cta-section {
-  background: linear-gradient(135deg, var(--main-color), var(--light-blue));
+  background: linear-gradient(135deg, var(--primary-navy) 0%, var(--primary-blue) 70%);
   color: white;
   padding: 4rem 2rem;
   text-align: center;

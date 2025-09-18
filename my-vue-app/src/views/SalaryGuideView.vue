@@ -3,11 +3,6 @@
     <div class="salary-guide-content">
       <!-- ヘッダー -->
       <header class="guide-header">
-        <div class="breadcrumb">
-          <router-link to="/">ホーム</router-link>
-          <span class="separator">></span>
-          <span class="current">年収・転職情報ガイド</span>
-        </div>
         <h1 class="guide-title">年収・転職情報ガイド</h1>
         <p class="guide-subtitle">職業別年収相場と転職市場の最新動向</p>
       </header>
@@ -1101,15 +1096,13 @@ onMounted(() => {
 }
 
 .salary-guide-content {
-  max-width: 1000px;
+  width: 100%;
   margin: 0 auto;
-  background: white;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
 }
 
 /* ヘッダー */
 .guide-header {
-  background: linear-gradient(135deg, var(--main-color), var(--light-blue));
+  background: linear-gradient(135deg, var(--primary-navy) 0%, var(--primary-blue) 70%);
   color: white;
   padding: 3rem 2rem;
   text-align: center;
@@ -1150,7 +1143,9 @@ onMounted(() => {
 .table-of-contents {
   background: #f8f9ff;
   padding: 2rem;
-  border-left: 4px solid var(--main-color);
+  max-width: 900px;
+  margin: 0 auto;
+  width: 100%;
 }
 
 .table-of-contents h2 {
@@ -1182,6 +1177,9 @@ onMounted(() => {
 .guide-section {
   padding: 3rem 2rem;
   border-bottom: 1px solid #f0f0f0;
+  max-width: 900px;
+  margin: 0 auto;
+  width: 100%;
 }
 
 .guide-section h2 {
@@ -2210,7 +2208,7 @@ onMounted(() => {
 
 /* CTA セクション */
 .cta-section {
-  background: linear-gradient(135deg, var(--main-color), var(--light-blue));
+  background: linear-gradient(135deg, var(--primary-navy) 0%, var(--primary-blue) 70%);
   color: white;
   padding: 4rem 2rem;
   text-align: center;

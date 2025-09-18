@@ -3,76 +3,15 @@
     <!-- ヒーローセクション -->
     <div class="hero-section">
       <div class="hero-content">
-        <!-- hero-badge削除 -->
-        <h1 class="hero-title">科学的な適職診断メソッド</h1>
-        <p class="hero-subtitle">
+        <h1 class="hero-title">診断の特徴</h1>
+        <!--<p class="hero-subtitle">
           心理学とデータサイエンスを融合した<br>
           精密な職業適性分析システム
-        </p>
-        <div class="hero-stats">
-          <div class="stat-item">
-            <div class="stat-number">4</div>
-            <div class="stat-label">診断軸</div>
-          </div>
-          <div class="stat-item">
-            <div class="stat-number">4</div>
-            <div class="stat-label">質問項目</div>
-          </div>
-          <div class="stat-item">
-            <div class="stat-number">8</div>
-            <div class="stat-label">職業分野</div>
-          </div>
-        </div>
+        </p>-->
       </div>
     </div>
     
     <div class="content-container">
-      <!-- システム特徴 -->
-      <section class="features-section">
-        <div class="section-header">
-          <h2 class="section-title">診断の特徴</h2>
-          <p class="section-subtitle">最新の心理学理論に基づく、信頼性の高い職業適性診断</p>
-        </div>
-        
-        <div class="features-grid">
-          <div class="feature-card">
-            <div class="feature-icon">
-              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                <path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
-              </svg>
-            </div>
-            <h3 class="feature-title">包括的な評価基準</h3>
-            <p class="feature-description">
-              個人の能力、興味、価値観、ワークライフバランスを総合的に分析し、最適な職業を提案します。
-            </p>
-          </div>
-          
-          <div class="feature-card">
-            <div class="feature-icon">
-              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-              </svg>
-            </div>
-            <h3 class="feature-title">データに基づく分析
-</h3>
-            <p class="feature-description">
-              統計的手法と心理測定学の理論を応用し、信頼性の高い診断結果を提供します。
-            </p>
-          </div>
-          
-          <div class="feature-card">
-            <div class="feature-icon">
-              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                <path d="M13 10V3L4 14h7v7l9-11h-7z"/>
-              </svg>
-            </div>
-            <h3 class="feature-title">迅速な診断プロセス</h3>
-            <p class="feature-description">
-              厳選された質問により、短時間で精度の高い診断を実現。忙しい方にも最適です。
-            </p>
-          </div>
-        </div>
-      </section>
 
       <!-- 診断カテゴリー -->
       <section class="categories-section">
@@ -84,7 +23,7 @@
         <div class="category-detail">
           <div class="category-header">
             <span class="category-number">01</span>
-            <h3>スキル（Skills）</h3>
+            <h3>スキル</h3>
           </div>
           <div class="category-content">
             <h4>測定内容</h4>
@@ -103,7 +42,7 @@
         <div class="category-detail">
           <div class="category-header">
             <span class="category-number">02</span>
-            <h3>興味（Interest）</h3>
+            <h3>興味</h3>
           </div>
           <div class="category-content">
             <h4>測定内容</h4>
@@ -122,7 +61,7 @@
         <div class="category-detail">
           <div class="category-header">
             <span class="category-number">03</span>
-            <h3>優先事項（Priority）</h3>
+            <h3>優先事項</h3>
           </div>
           <div class="category-content">
             <h4>測定内容</h4>
@@ -140,8 +79,9 @@
 
         <div class="category-detail">
           <div class="category-header">
+
             <span class="category-number">04</span>
-            <h3>ワークライフバランス（Balance）</h3>
+            <h3>ワークライフバランス</h3>
           </div>
           <div class="category-content">
             <h4>測定内容</h4>
@@ -160,29 +100,8 @@
 
       <!-- 診断の信頼性 -->
       <section class="reliability-section">
-        <h2>診断の信頼性と限界</h2>
-        <div class="reliability-content">
-          <div class="reliability-point">
-            <h3>✓ 診断の強み</h3>
-            <ul>
-              <li>多次元的な分析による包括的な適性評価</li>
-              <li>現実的な職業情報に基づく実用的な結果</li>
-              <li>個人の価値観と働き方の希望を重視</li>
-              <li>継続的なデータ分析による精度向上</li>
-            </ul>
-          </div>
-          <div class="reliability-point">
-            <h3>⚠ 診断の限界</h3>
-            <ul>
-              <li>自己申告による回答のため、客観性に制限がある</li>
-              <li>職業体験や実際の業務内容との差異がある可能性</li>
-              <li>市場環境や業界動向の変化は反映されない</li>
-              <li>最終的な職業選択は個人の総合的判断が必要</li>
-            </ul>
-          </div>
-        </div>
+        <h2>診断結果の活用方法</h2>
         <div class="recommendation-note">
-          <h3>📝 診断結果の活用方法</h3>
           <p>この診断は職業選択の<strong>参考情報</strong>として活用し、実際の職業体験、業界研究、キャリアカウンセリングなどと組み合わせることで、より確実なキャリア選択が可能になります。診断結果を出発点として、さらに深い自己分析と情報収集を行うことをお勧めします。</p>
         </div>
       </section>
@@ -192,15 +111,15 @@
         <h2>関連情報</h2>
         <div class="links-grid">
           <router-link to="/diagnosis" class="link-card">
-            <h3>📊 診断を受ける</h3>
+            <h3>診断を受ける</h3>
             <p>実際に適性診断を体験してみましょう</p>
           </router-link>
           <router-link to="/result-guide" class="link-card">
-            <h3>📈 結果の活用ガイド</h3>
+            <h3>結果の活用ガイド</h3>
             <p>診断結果をキャリア選択に活かす方法</p>
           </router-link>
           <router-link to="/career-guide" class="link-card">
-            <h3>🎯 キャリアガイド</h3>
+            <h3>キャリアガイド</h3>
             <p>職業選択の総合的なガイダンス</p>
           </router-link>
         </div>
@@ -208,21 +127,6 @@
     </div>
   </div>
 </template>
-
-<script setup lang="ts">
-// メタタグの設定
-import { onMounted } from 'vue'
-
-onMounted(() => {
-  document.title = '診断方法について｜ため職 - 適性診断の仕組みと信頼性'
-  
-  // メタディスクリプション
-  const metaDescription = document.querySelector('meta[name="description"]')
-  if (metaDescription) {
-    metaDescription.setAttribute('content', 'ため職の適性診断システムの詳細解説。4つのカテゴリー（スキル・興味・優先事項・バランス）による科学的分析方法、スコアリング・アルゴリズム、診断の信頼性と限界について専門的に説明します。')
-  }
-})
-</script>
 
 <style scoped>
 .diagnosis-method-page {
@@ -647,60 +551,23 @@ section {
   margin-bottom: var(--space-xl);
 }
 
-.reliability-point {
-  background: var(--bg-primary);
-  padding: var(--space-xl);
-  border-radius: 16px;
-  box-shadow: var(--shadow-md);
-  border: 1px solid var(--border-light);
-  transition: all var(--transition-normal);
-}
-
-.reliability-point:hover {
-  transform: translateY(-4px);
-  box-shadow: var(--shadow-lg);
-}
-
-.reliability-point h3 {
-  font-family: var(--font-heading);
-  font-size: 1.25rem;
-  margin-bottom: var(--space-md);
-  font-weight: 600;
-  color: var(--primary-navy);
-}
-
-.reliability-point ul {
-  padding-left: var(--space-lg);
-}
-
-.reliability-point li {
-  margin-bottom: var(--space-sm);
-  line-height: 1.7;
-  color: var(--text-secondary);
-}
-
-.reliability-point li::marker {
-  color: var(--accent-blue);
-}
-
 .recommendation-note {
-  background: linear-gradient(135deg, rgba(184, 134, 11, 0.05), rgba(52, 152, 219, 0.05));
+  background: var(--bg-primary);
   border: 1px solid var(--border-light);
+  box-shadow: var(--shadow-md);
   border-radius: 16px;
   padding: var(--space-xl);
   position: relative;
   overflow: hidden;
+  transition: all var(--transition-normal);
+
 }
 
-.recommendation-note::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 4px;
-  background: linear-gradient(90deg, var(--accent-gold), var(--accent-blue));
+.recommendation-note:hover {
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-2px);
 }
+
 
 .recommendation-note h3 {
   font-family: var(--font-heading);
@@ -743,10 +610,17 @@ section {
   border-radius: 2px;
 }
 
+/* web版は3カラム固定、タブレット以下は自動 */
 .links-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  grid-template-columns: repeat(3, 1fr);
   gap: var(--space-lg);
+}
+
+@media (max-width: 1024px) {
+  .links-grid {
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  }
 }
 
 .link-card {
@@ -833,8 +707,8 @@ section {
   }
 
   .category-header {
-    flex-direction: column;
-    align-items: flex-start;
+    flex-direction: row;
+    align-items: center;
     gap: var(--space-md);
   }
 
@@ -864,23 +738,10 @@ section {
   .hero-content {
     width: 95%;
   }
-  
-  .hero-stats {
-    flex-direction: column;
-    gap: var(--space-md);
-  }
-  
-  .stat-item {
-    display: flex;
-    align-items: center;
-    gap: var(--space-md);
-  }
-  
-  .stat-number {
-    font-size: 1.75rem;
-    margin-bottom: 0;
-  }
 
+  .categories-section {
+    padding: 0;
+  }
   .features-grid {
     gap: var(--space-md);
   }
@@ -892,11 +753,17 @@ section {
   .category-detail {
     padding: var(--space-md);
   }
-  
+
+  .category-number {
+    font-size: 0.95rem;
+    min-width: 48px;
+    padding: var(--space-xs) var(--space-sm);
+  }
+
   .category-content h4 {
     padding-left: var(--space-sm);
   }
-  
+
   .category-content h4::before {
     width: 3px;
     height: 16px;
@@ -905,15 +772,19 @@ section {
   .links-grid {
     grid-template-columns: 1fr;
   }
-  
+
+  .reliability-section {
+    padding: 0;
+  }
+
   .link-card {
     padding: var(--space-lg);
   }
-  
+
   .question-options {
     padding: var(--space-md);
   }
-  
+
   .option {
     padding: var(--space-sm) var(--space-md);
     font-size: 0.9375rem;
