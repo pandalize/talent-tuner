@@ -1,4 +1,3 @@
-
 <!--
   質問表示コンポーネント
   5段階評価システムによる質問表示とナビゲーション
@@ -26,7 +25,8 @@
     
     <!-- PC版 & モバイル版共通: 質問カード -->
     <div class="question-card tw-card">
-      <!-- モバイル版: チュートリアルスワイプカード（枠内最上部） -->
+      <!-- モバイル版: チュートリアルスワイプカード（枠内最上部） 非表示化 -->
+      <!--
       <template v-if="shouldShowTutorial && effectiveSwipeMode">
         <div class="tutorial-card-container">
           <TutorialSwipeCard
@@ -38,6 +38,7 @@
           />
         </div>
       </template>
+      -->
       
       <!-- モバイル版: スワイプモードのカード（枠内最上部） -->
       <template v-if="shouldShowSwipeOption && effectiveSwipeMode">
@@ -206,9 +207,10 @@ const shouldShowCategoryTutorialDisplay = computed(() => {
 })
 
 // いずれかのチュートリアルを表示するか
-const shouldShowTutorial = computed(() => {
-  return shouldShowInitialTutorial.value || shouldShowCategoryTutorialDisplay.value
-})
+// const shouldShowTutorial = computed(() => {
+//   return shouldShowInitialTutorial.value || shouldShowCategoryTutorialDisplay.value
+// })
+const shouldShowTutorial = computed(() => false);
 
 // チュートリアル完了後の質問表示判定（使用しない）
 // const shouldShowQuestionAfterTutorial = computed(() => {
@@ -224,12 +226,12 @@ const shouldShowSwipeOption = computed(() => {
   if (!currentOption.value) return false
   
   // チュートリアル表示中はfalse
-  if (shouldShowTutorial.value) return false
+  // if (shouldShowTutorial.value) return false
   
   // 最初の質問の場合はチュートリアル完了後のみ
-  if (props.questionIndex === 0) {
-    return props.tutorialCompleted
-  }
+  //if (props.questionIndex === 0) {
+  //  return props.tutorialCompleted
+  //}
   
   // 2問目以降は常にスワイプモード
   return true
@@ -363,9 +365,6 @@ function handleAnswerCompleted() {
 // 質問カード - 5段階評価形式
 .question-card {
   @include mixins.container(900px);
-  
-  // 通常質問時は上方向に余白を追加してカードを上げる
-  margin-top: 4vh;
   
   // スワイプモードの場合は幅を100%に
   .options-list:has(.swipe-answer-container) & {
@@ -590,7 +589,7 @@ function handleAnswerCompleted() {
     padding: var(--space-xs);
     box-sizing: border-box;
     position: relative;
-    min-height: 70vh; // スワイプカードのための十分な高さを確保
+  min-height: 70vh; // スワイプカードのための十分な高さを確保
   }
   
   .options-list {
@@ -807,10 +806,6 @@ function handleAnswerCompleted() {
   position: relative;
   margin: 0;
   padding: var(--space-xs) 0;
-  /* チュートリアル時はmargin-topを0にして上詰め */
-  .tutorial-card-container & {
-    margin-top: 0 !important;
-  }
 }
 
 // スワイプカードコンテナ（枠内最上部に配置）
@@ -934,12 +929,6 @@ function handleAnswerCompleted() {
 
 // モバイル版ではナビゲーションを非表示（768px未満で非表示）
 @media (max-width: 767px) {
-
-  .question-card {
-    min-height: 85vh;
-  }
-  
-
   .question-navigation {
     display: none !important;
   }
