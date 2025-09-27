@@ -2,7 +2,6 @@
 import { RouterLink, RouterView, useRoute } from 'vue-router' // named export
 import { useI18n } from 'vue-i18n'
 import { ref } from 'vue' 
-import AppFooter from './components/AppFooter.vue'  // default export
 
 const route = useRoute() // 現在のルート情報を取得
 const { t } = useI18n() // 国際化対応のための関数
@@ -111,7 +110,7 @@ const dropdownOpen = ref(false);
         
         <RouterLink 
           to="/diagnosis" 
-          class="mobile-nav-item diagnosis-highlight" 
+          class="mobile-nav-item" 
           @click="closeMobileMenu"
         >
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -144,7 +143,7 @@ const dropdownOpen = ref(false);
         
         <RouterLink 
           to="/chat"
-          class="mobile-nav-item chat-btn"
+          class="mobile-nav-item"
           @click="closeMobileMenu"
         >
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -469,54 +468,12 @@ html, body {
     transition: transform var(--transition-normal);
   }
   
-  &:hover {
-    background: linear-gradient(135deg, rgba(59, 130, 246, 0.08), rgba(16, 185, 129, 0.05));
-    color: var(--primary-navy);
-    
-    &::before {
-      transform: scaleX(1);
-    }
-  }
-  
   &.router-link-active {
     background: linear-gradient(135deg, rgba(59, 130, 246, 0.12), rgba(16, 185, 129, 0.08));
     color: var(--primary-navy);
     font-weight: 600;
-    
-    &::before {
-      transform: scaleX(1);
-      background: var(--accent-gold);
-    }
   }
 
-  &.diagnosis-highlight {
-    background: linear-gradient(135deg, var(--accent-blue), var(--primary-blue));
-    font-weight: 600 !important;
-    color: white !important;
-    border: none !important;
-    width: 100%;
-    text-align: left;
-    
-    &::before {
-      display: none !important;
-    }
-    
-    &:hover {
-      background: linear-gradient(135deg, #2980b9, #1e3a8a) !important;
-      transform: translateY(-2px);
-      box-shadow: 0 6px 16px rgba(243, 156, 18, 0.4);
-    }
-    
-    svg {
-      position: relative;
-      
-      circle {
-        fill: rgba(255, 255, 255, 0.9);
-      }
-    }
-  }
-
-  
   svg {
     flex-shrink: 0;
     opacity: 0.8;

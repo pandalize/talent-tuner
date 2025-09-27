@@ -69,11 +69,6 @@ export const baseRoutes: RouteRecordRaw[] = [
     component: () => import('../views/ResultGuideView.vue')
   },
   {
-    path: 'diagnosis-theory',
-    name: 'diagnosis-theory',
-    component: () => import('../views/DiagnosisTheoryView.vue')
-  },
-  {
     path: 'privacy',
     name: 'privacy',
     component: () => import('../views/PrivacyPolicyView.vue')

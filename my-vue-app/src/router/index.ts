@@ -176,15 +176,6 @@ const router = createRouter({
       }
     },
     {
-      path: '/diagnosis-theory',
-      name: 'diagnosis-theory',
-      component: () => import('../views/DiagnosisTheoryView.vue'),
-      meta: {
-        title: '適性診断の理論と背景 | ため職',
-        description: '適性診断の科学的根拠を詳細解説。ホランド理論、多重知能理論、統計学的手法、診断精度、今後の技術発展まで、職業適性診断の理論的背景を専門的に説明します。'
-      }
-    },
-    {
       path: '/sitemap',
       name: 'sitemap',
       component: () => import('../views/SitemapView.vue'),
