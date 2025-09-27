@@ -142,7 +142,6 @@ import { useDiagnosis } from '../../composables/useDiagnosis'
 import type { Question } from '../../utils/diagnosisLoader'
 import SwipeAnswer from './SwipeAnswer.vue'
 import TutorialSwipeCard from './TutorialSwipeCard.vue'
-import ExplainSwipeCard from './ExplainSwipeCard.vue'
 
 // Props
 interface Props {
