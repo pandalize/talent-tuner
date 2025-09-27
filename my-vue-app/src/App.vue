@@ -86,12 +86,12 @@ const closeDemoResult = () => {
             aria-haspopup="true"
             :aria-expanded="dropdownOpen"
           >{{ $t('nav.career_guide') }}</RouterLink>
-          <div v-if="dropdownOpen" class="dropdown-menu">
+          <!-- <div v-if="dropdownOpen" class="dropdown-menu">
             <RouterLink to="/student-guide" class="dropdown-item">{{ t('guide.student') }}</RouterLink>
             <RouterLink to="/skills-development" class="dropdown-item">{{ t('guide.skills') }}</RouterLink>
             <RouterLink to="/career-guide" class="dropdown-item">{{ t('guide.career') }}</RouterLink>
             <RouterLink to="/salary-guide" class="dropdown-item">{{ t('guide.salary') }}</RouterLink>
-          </div>
+          </div> -->
         </div>
         <RouterLink to="/diagnosis-method" class="nav-item">診断について</RouterLink> <!-- $tはja.json,en.jsonから取得したかったが失敗 -->
         <RouterLink 
@@ -111,7 +111,6 @@ const closeDemoResult = () => {
           class="mobile-menu-toggle"
           @click="toggleMobileMenu"
           :class="{ 'menu-open': isMobileMenuOpen }"
-          :aria-label="isMobileMenuOpen ? t('nav.close_menu') : t('nav.open_menu')"
           :aria-expanded="isMobileMenuOpen"
         >
           <span class="hamburger-line"></span>
@@ -137,7 +136,6 @@ const closeDemoResult = () => {
           <button 
             class="mobile-nav-close"
             @click="closeMobileMenu"
-            :aria-label="t('nav.close_menu')"
           >
               <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#222" stroke-width="1.5">
               <path d="M18 6L6 18M6 6l12 12"/>
