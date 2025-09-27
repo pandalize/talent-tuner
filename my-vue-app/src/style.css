@@ -18,7 +18,7 @@ html, body {
 @layer components {
   .tw-nav-container {
     @apply flex items-center justify-between
-           border border-neutral-200 rounded-xl 
+           border border-gray-200 rounded-xl 
            shadow-lg p-4 z-10;
     background-color: rgba(255, 255, 255, 0.95);
     backdrop-filter: blur(12px);
@@ -139,7 +139,7 @@ html, body {
   }
 
   .tw-profession-card {
-  @apply w-full rounded-xl border border-neutral-200 shadow-md
+  @apply w-full rounded-xl border border-gray-200 shadow-md
            mb-6;
     padding: 1rem 1.5rem;
     background-color: white;
@@ -362,7 +362,7 @@ html, body {
 
   .tw-option {
     @apply bg-gradient-to-r from-white to-gray-50
-           border border-neutral-200 rounded-xl
+           border border-gray-200 rounded-xl
            p-8 transition-all duration-300
            hover:border-blue-300 hover:shadow-md
            hover:from-blue-50 hover:to-white;

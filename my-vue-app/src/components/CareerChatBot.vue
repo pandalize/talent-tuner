@@ -10,11 +10,6 @@
         <h3>進路相談アシスタント</h3>
 
       </div>
-      <button class="close-chat" @click="$emit('close')" aria-label="チャットを閉じる">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-          <path d="M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z" />
-        </svg>
-      </button>
     </div>
 
     <div class="chat-messages" ref="messagesContainer">
@@ -490,7 +485,7 @@ function formatTime(date: Date): string {
    ========================================================================== */
 .chat-header {
   @include mixins.flex-row(var(--space-sm));
-  @include mixins.section-padding(sm);
+  padding: var(--space-sm) var(--space-md);
   background: var(--primary-navy);
   color: white;
 }
@@ -1108,4 +1103,4 @@ function formatTime(date: Date): string {
 }
 
 
-</style>
+</style scoped>

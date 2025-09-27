@@ -1,12 +1,12 @@
 <template>
   <div class="career-chat-view">
-    <CareerChatBotDemo @close="handleChatClose" class="full-width-chat" />
+    <CareerChatBot @close="handleChatClose" class="full-width-chat" />
   </div>
 </template>
 
 <script setup lang="ts">
 import { useRouter } from 'vue-router';
-import CareerChatBotDemo from '../components/CareerChatBotDemo.vue';
+import CareerChatBot from '../components/CareerChatBot.vue';
 
 const router = useRouter();
 
@@ -21,7 +21,6 @@ function handleChatClose() {
    チャットビュー基本レイアウト
    ========================================================================== */
 .career-chat-view {
-  min-height: calc(100vh - 80px);
   background: var(--bg-secondary);
   display: flex;
   align-items: stretch;
@@ -49,7 +48,6 @@ function handleChatClose() {
    ========================================================================== */
 @media (min-width: 769px) {
   .career-chat-view {
-    padding: var(--space-md);
     align-items: center;
     justify-content: center;
   }
