@@ -3,11 +3,6 @@
     <div class="skills-development-content">
       <!-- ヘッダー -->
       <header class="guide-header">
-        <div class="breadcrumb">
-          <router-link to="/">ホーム</router-link>
-          <span class="separator">></span>
-          <span class="current">スキル開発ガイド</span>
-        </div>
         <h1 class="guide-title">スキル開発ガイド</h1>
         <p class="guide-subtitle">高収入職業に必要なスキルを効率的に身につける方法</p>
       </header>
@@ -68,7 +63,7 @@
           <div class="profession-skills-grid">
             <div class="skill-category">
               <div class="category-header">
-                <h3>💻 プログラマー</h3>
+                <h3>プログラマー</h3>
                 <div class="difficulty">習得難易度: ★★★☆☆</div>
               </div>
               <div class="skills-list">
@@ -97,7 +92,7 @@
 
             <div class="skill-category">
               <div class="category-header">
-                <h3>📊 公認会計士</h3>
+                <h3>公認会計士</h3>
                 <div class="difficulty">習得難易度: ★★★★★</div>
               </div>
               <div class="skills-list">
@@ -126,7 +121,7 @@
 
             <div class="skill-category">
               <div class="category-header">
-                <h3>🏗️ 建設業</h3>
+                <h3>建設業</h3>
                 <div class="difficulty">習得難易度: ★★★☆☆</div>
               </div>
               <div class="skills-list">
@@ -155,7 +150,7 @@
 
             <div class="skill-category">
               <div class="category-header">
-                <h3>📈 デイトレーダー</h3>
+                <h3>デイトレーダー</h3>
                 <div class="difficulty">習得難易度: ★★★★☆</div>
               </div>
               <div class="skills-list">
@@ -184,7 +179,7 @@
 
             <div class="skill-category">
               <div class="category-header">
-                <h3>🚀 起業家</h3>
+                <h3>起業家</h3>
                 <div class="difficulty">習得難易度: ★★★★★</div>
               </div>
               <div class="skills-list">
@@ -213,7 +208,7 @@
 
             <div class="skill-category">
               <div class="category-header">
-                <h3>📱 インフルエンサー</h3>
+                <h3>インフルエンサー</h3>
                 <div class="difficulty">習得難易度: ★★☆☆☆</div>
               </div>
               <div class="skills-list">
@@ -250,7 +245,6 @@
         <div class="content-block">
           <div class="method-grid">
             <div class="method-card">
-              <div class="method-icon">🎯</div>
               <h3>目標設定と計画立案</h3>
               <div class="method-steps">
                 <div class="step">
@@ -269,7 +263,6 @@
             </div>
 
             <div class="method-card">
-              <div class="method-icon">📚</div>
               <h3>マルチモーダル学習</h3>
               <div class="method-steps">
                 <div class="step">
@@ -288,7 +281,6 @@
             </div>
 
             <div class="method-card">
-              <div class="method-icon">👥</div>
               <h3>コミュニティ活用</h3>
               <div class="method-steps">
                 <div class="step">
@@ -307,7 +299,6 @@
             </div>
 
             <div class="method-card">
-              <div class="method-icon">🔄</div>
               <h3>反復と応用</h3>
               <div class="method-steps">
                 <div class="step">
@@ -568,7 +559,7 @@
         <div class="content-block">
           <div class="resource-categories">
             <div class="resource-category">
-              <h3>📖 オンライン学習プラットフォーム</h3>
+              <h3>オンライン学習プラットフォーム</h3>
               <div class="resource-list">
                 <div class="resource-item">
                   <div class="resource-name">Udemy</div>
@@ -592,7 +583,7 @@
             </div>
 
             <div class="resource-category">
-              <h3>📚 書籍・参考資料</h3>
+              <h3>書籍・参考資料</h3>
               <div class="resource-list">
                 <div class="resource-item">
                   <div class="resource-name">プログラミング言語別入門書</div>
@@ -616,7 +607,7 @@
             </div>
 
             <div class="resource-category">
-              <h3>👥 コミュニティ・イベント</h3>
+              <h3>コミュニティ・イベント</h3>
               <div class="resource-list">
                 <div class="resource-item">
                   <div class="resource-name">Meetup・connpass</div>
@@ -669,10 +660,6 @@
           <router-link to="/salary-guide" class="related-card">
             <h3>年収・転職情報</h3>
             <p>職業別年収相場と転職市場の最新動向</p>
-          </router-link>
-          <router-link to="/career-change" class="related-card">
-            <h3>転職・キャリアチェンジ</h3>
-            <p>異業種転職を成功させるための実践的な方法</p>
           </router-link>
           <router-link to="/student-guide" class="related-card">
             <h3>学生向けガイド</h3>
@@ -742,15 +729,12 @@ function showTab(tabId: string) {
 }
 
 .skills-development-content {
-  max-width: 1000px;
-  margin: 0 auto;
-  background: white;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  width: 100%;
 }
 
 /* ヘッダー */
 .guide-header {
-  background: linear-gradient(135deg, var(--main-color), var(--light-blue));
+  background: linear-gradient(135deg, var(--primary-navy) 0%, var(--primary-blue) 70%);
   color: white;
   padding: 3rem 2rem;
   text-align: center;
@@ -791,7 +775,9 @@ function showTab(tabId: string) {
 .table-of-contents {
   background: #f8f9ff;
   padding: 2rem;
-  border-left: 4px solid var(--main-color);
+  max-width: 900px;
+  margin: 0 auto;
+  width: 100%;
 }
 
 .table-of-contents h2 {
@@ -823,6 +809,9 @@ function showTab(tabId: string) {
 .guide-section {
   padding: 3rem 2rem;
   border-bottom: 1px solid #f0f0f0;
+  max-width: 900px;
+  margin: 0 auto;
+  width: 100%;
 }
 
 .guide-section h2 {
@@ -919,7 +908,7 @@ function showTab(tabId: string) {
 }
 
 .category-header {
-  background: linear-gradient(135deg, var(--main-color), var(--light-blue));
+  background: linear-gradient(135deg, var(--primary-navy) 0%, var(--primary-blue) 70%);
   color: white;
   padding: 1.5rem;
   text-align: center;
@@ -944,7 +933,6 @@ function showTab(tabId: string) {
   padding: 1rem;
   background: #f8f9ff;
   border-radius: 8px;
-  border-left: 3px solid var(--main-color);
 }
 
 .skill-name {
@@ -986,12 +974,6 @@ function showTab(tabId: string) {
   transform: translateY(-5px);
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
   border-color: var(--main-color);
-}
-
-.method-icon {
-  font-size: 3rem;
-  text-align: center;
-  margin-bottom: 1rem;
 }
 
 .method-card h3 {
@@ -1163,6 +1145,7 @@ function showTab(tabId: string) {
   border-radius: 15px;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
   flex: 1;
+  overflow-wrap: break-word;
 }
 
 .timeline-content h4 {
@@ -1260,7 +1243,7 @@ function showTab(tabId: string) {
 
 /* CTA セクション */
 .cta-section {
-  background: linear-gradient(135deg, var(--main-color), var(--light-blue));
+  background: linear-gradient(135deg, var(--primary-navy) 0%, var(--primary-blue) 70%);
   color: white;
   padding: 4rem 2rem;
   text-align: center;
@@ -1375,7 +1358,8 @@ function showTab(tabId: string) {
   }
   
   .guide-title {
-    font-size: 2rem;
+    font-size: clamp(1.5rem, 8vw, 2.5rem);
+
   }
   
   .guide-section {
@@ -1402,6 +1386,10 @@ function showTab(tabId: string) {
     grid-template-columns: 1fr;
   }
   
+  .timeline-content {
+    width: 100%;
+  }
+
   .timeline::before {
     display: none;
   }
@@ -1428,7 +1416,7 @@ function showTab(tabId: string) {
 @media (max-width: 480px) {
   .table-of-contents,
   .guide-section {
-    padding: 1.5rem 1rem;
+    padding: 1.5rem;
   }
   
   .stat-number {

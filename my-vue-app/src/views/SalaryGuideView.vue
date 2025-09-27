@@ -3,11 +3,6 @@
     <div class="salary-guide-content">
       <!-- ヘッダー -->
       <header class="guide-header">
-        <div class="breadcrumb">
-          <router-link to="/">ホーム</router-link>
-          <span class="separator">></span>
-          <span class="current">年収・転職情報ガイド</span>
-        </div>
         <h1 class="guide-title">年収・転職情報ガイド</h1>
         <p class="guide-subtitle">職業別年収相場と転職市場の最新動向</p>
       </header>
@@ -48,7 +43,7 @@
           </div>
           
           <div class="trend-analysis">
-            <h3>🔥 年収上昇が著しい分野</h3>
+            <h3>年収上昇が著しい分野</h3>
             <div class="trend-grid">
               <div class="trend-item hot">
                 <h4>IT・テクノロジー</h4>
@@ -109,7 +104,7 @@
           
           <div class="salary-categories">
             <div class="salary-category">
-              <h3>💻 IT・エンジニア系</h3>
+              <h3>IT・エンジニア系</h3>
               <div class="profession-list">
                 <div class="profession-item high-salary">
                   <div class="profession-header">
@@ -250,7 +245,7 @@
             </div>
             
             <div class="salary-category">
-              <h3>📊 データ・分析系</h3>
+              <h3>データ・分析系</h3>
               <div class="profession-list">
                 <div class="profession-item high-salary">
                   <div class="profession-header">
@@ -323,7 +318,7 @@
             </div>
             
             <div class="salary-category">
-              <h3>🎨 デザイン・クリエイティブ系</h3>
+              <h3>デザイン・クリエイティブ系</h3>
               <div class="profession-list">
                 <div class="profession-item medium-salary">
                   <div class="profession-header">
@@ -396,7 +391,7 @@
             </div>
             
             <div class="salary-category">
-              <h3>📈 ビジネス・マーケティング系</h3>
+              <h3>ビジネス・マーケティング系</h3>
               <div class="profession-list">
                 <div class="profession-item high-salary">
                   <div class="profession-header">
@@ -455,19 +450,6 @@
             </div>
           </div>
           
-          <div class="salary-legend">
-            <h3>年収レベルの定義</h3>
-            <div class="legend-items">
-              <div class="legend-item">
-                <span class="legend-color high-salary"></span>
-                <span class="legend-text">高年収：平均600万円以上（市場価値が高く年収アップが期待しやすい）</span>
-              </div>
-              <div class="legend-item">
-                <span class="legend-color medium-salary"></span>
-                <span class="legend-text">中年収：平均400-600万円（安定した需要があり専門性でアップ可能）</span>
-              </div>
-            </div>
-          </div>
         </div>
       </section>
 
@@ -478,7 +460,6 @@
         <div class="content-block">
           <div class="factors-analysis">
             <div class="factor-item">
-              <div class="factor-icon">🎯</div>
               <div class="factor-content">
                 <h3>スキル・専門性（影響度40%）</h3>
                 <p>最も年収に直結する要因。希少性の高い技術スキルや資格、専門知識の深さが収入を左右します。</p>
@@ -495,7 +476,6 @@
             </div>
             
             <div class="factor-item">
-              <div class="factor-icon">🏢</div>
               <div class="factor-content">
                 <h3>業界・企業規模（影響度25%）</h3>
                 <p>所属業界と企業規模により年収レンジが大きく異なります。成長業界や大手企業は高年収の傾向があります。</p>
@@ -533,7 +513,6 @@
             </div>
             
             <div class="factor-item">
-              <div class="factor-icon">📍</div>
               <div class="factor-content">
                 <h3>地域・勤務形態（影響度20%）</h3>
                 <p>勤務地と働き方により年収に地域格差が生じます。リモートワークの普及で格差は縮小傾向にあります。</p>
@@ -571,7 +550,6 @@
             </div>
             
             <div class="factor-item">
-              <div class="factor-icon">⏰</div>
               <div class="factor-content">
                 <h3>経験年数・年齢（影響度15%）</h3>
                 <p>一般的には経験とともに年収も上昇しますが、スキルベースの職種では年齢より能力が重視される傾向があります。</p>
@@ -613,7 +591,7 @@
           </div>
           
           <div class="demand-analysis">
-            <h3>🔥 求人需要が急増している職種</h3>
+            <h3>求人需要が急増している職種</h3>
             <div class="demand-grid">
               <div class="demand-item hot">
                 <h4>生成AI・LLMエンジニア</h4>
@@ -674,7 +652,7 @@
           </div>
           
           <div class="market-trends">
-            <h3>📊 転職市場のトレンド</h3>
+            <h3>転職市場のトレンド</h3>
             <div class="trend-cards">
               <div class="trend-card">
                 <h4>リモートワーク常態化</h4>
@@ -710,9 +688,11 @@
             
             <div class="negotiation-steps">
               <div class="step-item">
-                <div class="step-number">STEP 1</div>
-                <div class="step-content">
+                <div class="step-header">
+                  <div class="step-number">STEP 1</div>
                   <h3>市場価値の客観的把握</h3>
+                </div>
+                <div class="step-content">
                   <p>同職種・同経験年数の年収相場を複数のソースから収集し、自分の適正年収レンジを設定します。</p>
                   <div class="step-details">
                     <h4>情報収集の方法：</h4>
@@ -727,9 +707,11 @@
               </div>
               
               <div class="step-item">
-                <div class="step-number">STEP 2</div>
-                <div class="step-content">
+                <div class="step-header">
+                  <div class="step-number">STEP 2</div>
                   <h3>貢献価値の数値化・可視化</h3>
+                </div>
+                <div class="step-content">
                   <p>これまでの実績を具体的な数値で示し、転職先での貢献可能性を明確に伝えられるよう準備します。</p>
                   <div class="value-examples">
                     <h4>貢献価値の表現例：</h4>
@@ -756,25 +738,27 @@
               </div>
               
               <div class="step-item">
-                <div class="step-number">STEP 3</div>
-                <div class="step-content">
+                <div class="step-header">
+                  <div class="step-number">STEP 3</div>
                   <h3>交渉タイミングの最適化</h3>
+                </div>
+                <div class="step-content">
                   <p>年収交渉は適切なタイミングで行うことが成功の鍵。企業側の採用意欲が最も高いタイミングを狙います。</p>
                   <div class="timing-guide">
                     <div class="timing-item best">
                       <h4>最適なタイミング</h4>
                       <ul>
-                        <li>内定通知直後（企業の採用意欲がピーク）</li>
-                        <li>複数内定を獲得した時（選択権を持つ状況）</li>
-                        <li>入社承諾前の最終条件確認時</li>
+                        <li><span style="font-weight: bold; color: green;">✓</span>　内定通知直後（企業の採用意欲がピーク）</li>
+                        <li><span style="font-weight: bold; color: green;">✓</span>　複数内定を獲得した時（選択権を持つ状況）</li>
+                        <li><span style="font-weight: bold; color: green;">✓</span>　入社承諾前の最終条件確認時</li>
                       </ul>
                     </div>
                     <div class="timing-item avoid">
                       <h4>避けるべきタイミング</h4>
                       <ul>
-                        <li>一次面接での早すぎる交渉</li>
-                        <li>他候補者との競争が激しいとき</li>
-                        <li>企業の業績悪化・採用予算削減時</li>
+                        <li><span style="font-weight: bold; color: red;">✗</span>　一次面接での早すぎる交渉</li>
+                        <li><span style="font-weight: bold; color: red;">✗</span>　他候補者との競争が激しいとき</li>
+                        <li><span style="font-weight: bold; color: red;">✗</span>　企業の業績悪化・採用予算削減時</li>
                       </ul>
                     </div>
                   </div>
@@ -782,9 +766,11 @@
               </div>
               
               <div class="step-item">
-                <div class="step-number">STEP 4</div>
-                <div class="step-content">
+                <div class="step-header">
+                  <div class="step-number">STEP 4</div>
                   <h3>効果的な交渉話法の活用</h3>
+                </div>
+                <div class="step-content">
                   <p>感情論ではなく、論理的根拠に基づいた交渉を行い、双方にメリットのある条件を模索します。</p>
                   <div class="negotiation-phrases">
                     <h4>効果的な交渉フレーズ：</h4>
@@ -805,7 +791,7 @@
           </div>
           
           <div class="negotiation-alternatives">
-            <h3>💡 年収以外の交渉ポイント</h3>
+            <h3>年収以外の交渉ポイント</h3>
             <p>基本給の増額が難しい場合、他の条件での交渉も検討しましょう。</p>
             <div class="alternatives-grid">
               <div class="alternative-item">
@@ -856,7 +842,7 @@
           
           <div class="strategy-paths">
             <div class="path-item">
-              <h3>🚀 短期集中型（6ヶ月以内）</h3>
+              <h3>短期集中型（6ヶ月以内）</h3>
               <div class="path-content">
                 <p><strong>対象：</strong>現在のスキルレベルが高く、即転職で年収アップを狙える人</p>
                 <div class="path-steps">
@@ -865,10 +851,10 @@
                     <div class="timeline-content">
                       <h4>市場価値の最大化</h4>
                       <ul>
-                        <li>ポートフォリオ・職務経歴書の充実</li>
-                        <li>複数の転職エージェント登録</li>
-                        <li>LinkedInプロフィールの最適化</li>
-                        <li>業界動向・求人トレンドの調査</li>
+                        <li><span style="font-weight: bold;">✓</span>　ポートフォリオ・職務経歴書の充実</li>
+                        <li><span style="font-weight: bold;">✓</span>　複数の転職エージェント登録</li>
+                        <li><span style="font-weight: bold;">✓</span>　LinkedInプロフィールの最適化</li>
+                        <li><span style="font-weight: bold;">✓</span>　業界動向・求人トレンドの調査</li>
                       </ul>
                     </div>
                   </div>
@@ -877,10 +863,10 @@
                     <div class="timeline-content">
                       <h4>戦略的転職活動</h4>
                       <ul>
-                        <li>年収アップが期待できる企業への集中応募</li>
-                        <li>複数内定の同時進行</li>
-                        <li>面接での価値訴求の練習</li>
-                        <li>年収交渉の準備・実践</li>
+                        <li><span style="font-weight: bold;">✓</span>　年収アップが期待できる企業への集中応募</li>
+                        <li><span style="font-weight: bold;">✓</span>　複数内定の同時進行</li>
+                        <li><span style="font-weight: bold;">✓</span>　面接での価値訴求の練習</li>
+                        <li><span style="font-weight: bold;">✓</span>　年収交渉の準備・実践</li>
                       </ul>
                     </div>
                   </div>
@@ -889,10 +875,10 @@
                     <div class="timeline-content">
                       <h4>条件交渉・入社準備</h4>
                       <ul>
-                        <li>複数オファーでの条件比較</li>
-                        <li>年収・労働条件の最終交渉</li>
-                        <li>円満退職の準備</li>
-                        <li>新職場でのスタートダッシュ準備</li>
+                        <li><span style="font-weight: bold;">✓</span>　複数オファーでの条件比較</li>
+                        <li><span style="font-weight: bold;">✓</span>　年収・労働条件の最終交渉</li>
+                        <li><span style="font-weight: bold;">✓</span>　円満退職の準備</li>
+                        <li><span style="font-weight: bold;">✓</span>　新職場でのスタートダッシュ準備</li>
                       </ul>
                     </div>
                   </div>
@@ -904,7 +890,7 @@
             </div>
             
             <div class="path-item">
-              <h3>📈 スキルアップ型（1-2年）</h3>
+              <h3>スキルアップ型（1-2年）</h3>
               <div class="path-content">
                 <p><strong>対象：</strong>現在のスキルに不足があり、学習・実践を通じて市場価値を高めたい人</p>
                 <div class="path-steps">
@@ -913,10 +899,10 @@
                     <div class="timeline-content">
                       <h4>スキル習得・基礎固め</h4>
                       <ul>
-                        <li>高収入職種に必要なスキルの選定・学習</li>
-                        <li>オンラインコース・プログラミングスクール受講</li>
-                        <li>実践的なプロジェクト制作</li>
-                        <li>基礎的な資格取得</li>
+                        <li><span style="font-weight: bold;">✓</span>　高収入職種に必要なスキルの選定・学習</li>
+                        <li><span style="font-weight: bold;">✓</span>　オンラインコース・プログラミングスクール受講</li>
+                        <li><span style="font-weight: bold;">✓</span>　実践的なプロジェクト制作</li>
+                        <li><span style="font-weight: bold;">✓</span>　基礎的な資格取得</li>
                       </ul>
                     </div>
                   </div>
@@ -925,10 +911,10 @@
                     <div class="timeline-content">
                       <h4>実務経験・ポートフォリオ構築</h4>
                       <ul>
-                        <li>副業・フリーランスでの実務経験積み上げ</li>
-                        <li>GitHub・ポートフォリオサイトの充実</li>
-                        <li>技術記事執筆・発信活動</li>
-                        <li>業界コミュニティへの参加</li>
+                        <li><span style="font-weight: bold;">✓</span>　副業・フリーランスでの実務経験積み上げ</li>
+                        <li><span style="font-weight: bold;">✓</span>　GitHub・ポートフォリオサイトの充実</li>
+                        <li><span style="font-weight: bold;">✓</span>　技術記事執筆・発信活動</li>
+                        <li><span style="font-weight: bold;">✓</span>　業界コミュニティへの参加</li>
                       </ul>
                     </div>
                   </div>
@@ -937,10 +923,10 @@
                     <div class="timeline-content">
                       <h4>転職活動・キャリアアップ</h4>
                       <ul>
-                        <li>上級資格・認定の取得</li>
-                        <li>実績を武器にした戦略的転職</li>
-                        <li>専門性を活かした高年収ポジション応募</li>
-                        <li>継続的なスキルアップ計画策定</li>
+                        <li><span style="font-weight: bold;">✓</span>　上級資格・認定の取得</li>
+                        <li><span style="font-weight: bold;">✓</span>　実績を武器にした戦略的転職</li>
+                        <li><span style="font-weight: bold;">✓</span>　専門性を活かした高年収ポジション応募</li>
+                        <li><span style="font-weight: bold;">✓</span>　継続的なスキルアップ計画策定</li>
                       </ul>
                     </div>
                   </div>
@@ -952,7 +938,7 @@
             </div>
             
             <div class="path-item">
-              <h3>🏢 社内昇進型（2-3年）</h3>
+              <h3>社内昇進型（2-3年）</h3>
               <div class="path-content">
                 <p><strong>対象：</strong>現在の職場に満足しており、社内でのキャリアアップを重視する人</p>
                 <div class="path-steps">
@@ -961,10 +947,10 @@
                     <div class="timeline-content">
                       <h4>社内評価の向上</h4>
                       <ul>
-                        <li>現職での成果最大化・可視化</li>
-                        <li>上司・人事との定期的なキャリア相談</li>
-                        <li>社内研修・外部セミナーの積極的受講</li>
-                        <li>他部署との横断的プロジェクト参加</li>
+                        <li><span style="font-weight: bold;">✓</span>　現職での成果最大化・可視化</li>
+                        <li><span style="font-weight: bold;">✓</span>　上司・人事との定期的なキャリア相談</li>
+                        <li><span style="font-weight: bold;">✓</span>　社内研修・外部セミナーの積極的受講</li>
+                        <li><span style="font-weight: bold;">✓</span>　他部署との横断的プロジェクト参加</li>
                       </ul>
                     </div>
                   </div>
@@ -973,10 +959,10 @@
                     <div class="timeline-content">
                       <h4>リーダーシップ・専門性の発揮</h4>
                       <ul>
-                        <li>チームリーダー・プロジェクトマネージャー経験</li>
-                        <li>業界最新トレンドの社内共有・啓蒙</li>
-                        <li>後輩指導・メンタリング実践</li>
-                        <li>社外活動（講演・執筆）による知名度向上</li>
+                        <li><span style="font-weight: bold;">✓</span>　チームリーダー・プロジェクトマネージャー経験</li>
+                        <li><span style="font-weight: bold;">✓</span>　業界最新トレンドの社内共有・啓蒙</li>
+                        <li><span style="font-weight: bold;">✓</span>　後輩指導・メンタリング実践</li>
+                        <li><span style="font-weight: bold;">✓</span>　社外活動（講演・執筆）による知名度向上</li>
                       </ul>
                     </div>
                   </div>
@@ -985,10 +971,10 @@
                     <div class="timeline-content">
                       <h4>昇進・条件改善交渉</h4>
                       <ul>
-                        <li>管理職・専門職への昇進申請</li>
-                        <li>これまでの成果を基にした待遇改善交渉</li>
-                        <li>他社オファーを交渉材料とした条件向上</li>
-                        <li>長期キャリアパスの明確化</li>
+                        <li><span style="font-weight: bold;">✓</span>　管理職・専門職への昇進申請</li>
+                        <li><span style="font-weight: bold;">✓</span>　これまでの成果を基にした待遇改善交渉</li>
+                        <li><span style="font-weight: bold;">✓</span>　他社オファーを交渉材料とした条件向上</li>
+                        <li><span style="font-weight: bold;">✓</span>　長期キャリアパスの明確化</li>
                       </ul>
                     </div>
                   </div>
@@ -1001,7 +987,7 @@
           </div>
           
           <div class="success-metrics">
-            <h3>📊 年収アップ成功の指標</h3>
+            <h3>年収アップ成功の指標</h3>
             <div class="metrics-grid">
               <div class="metric-item">
                 <h4>市場価値指標</h4>
@@ -1063,10 +1049,6 @@
             <h3>スキル開発ガイド</h3>
             <p>高収入職業に必要なスキルの効率的な身につけ方</p>
           </router-link>
-          <router-link to="/career-change" class="related-card">
-            <h3>転職・キャリアチェンジ</h3>
-            <p>異業種転職を成功させるための実践的な方法</p>
-          </router-link>
           <router-link to="/student-guide" class="related-card">
             <h3>学生向けガイド</h3>
             <p>就職活動を成功させる準備と戦略</p>
@@ -1105,15 +1087,13 @@ onMounted(() => {
 }
 
 .salary-guide-content {
-  max-width: 1000px;
+  width: 100%;
   margin: 0 auto;
-  background: white;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
 }
 
 /* ヘッダー */
 .guide-header {
-  background: linear-gradient(135deg, var(--main-color), var(--light-blue));
+  background: linear-gradient(135deg, var(--primary-navy) 0%, var(--primary-blue) 70%);
   color: white;
   padding: 3rem 2rem;
   text-align: center;
@@ -1154,7 +1134,9 @@ onMounted(() => {
 .table-of-contents {
   background: #f8f9ff;
   padding: 2rem;
-  border-left: 4px solid var(--main-color);
+  max-width: 900px;
+  margin: 0 auto;
+  width: 100%;
 }
 
 .table-of-contents h2 {
@@ -1186,6 +1168,9 @@ onMounted(() => {
 .guide-section {
   padding: 3rem 2rem;
   border-bottom: 1px solid #f0f0f0;
+  max-width: 900px;
+  margin: 0 auto;
+  width: 100%;
 }
 
 .guide-section h2 {
@@ -1227,7 +1212,7 @@ onMounted(() => {
 
 /* ハイライトボックス */
 .highlight-box {
-  background: linear-gradient(135deg, #e3f2fd, #f8f9ff);
+  background: linear-gradient(135deg, #e3f2fd);
   padding: 2rem;
   border-radius: 15px;
   border-left: 4px solid var(--main-color);
@@ -1279,22 +1264,6 @@ onMounted(() => {
   padding: 2rem;
   border-radius: 15px;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
-  border-left: 4px solid #ddd;
-}
-
-.trend-item.hot {
-  background: linear-gradient(135deg, #fff3e0, #fff);
-  border-left-color: #ff5722;
-}
-
-.trend-item.rising {
-  background: linear-gradient(135deg, #f3e5f5, #fff);
-  border-left-color: #e91e63;
-}
-
-.trend-item.moderate {
-  background: linear-gradient(135deg, #e8f5e8, #fff);
-  border-left-color: #4caf50;
 }
 
 .trend-item h4 {
@@ -1361,16 +1330,6 @@ onMounted(() => {
   border: 2px solid #f0f0f0;
 }
 
-.profession-item.high-salary {
-  background: linear-gradient(135deg, #fff3e0, #fff);
-  border-color: #ff9800;
-}
-
-.profession-item.medium-salary {
-  background: linear-gradient(135deg, #f3e5f5, #fff);
-  border-color: #9c27b0;
-}
-
 .profession-header {
   display: flex;
   justify-content: space-between;
@@ -1381,6 +1340,7 @@ onMounted(() => {
 }
 
 .profession-header h4 {
+  font-size: 1.2rem;
   color: var(--main-color);
   margin: 0;
 }
@@ -1457,44 +1417,6 @@ onMounted(() => {
   font-weight: 600;
 }
 
-/* 年収レベル凡例 */
-.salary-legend {
-  background: #f8f9ff;
-  padding: 1.5rem;
-  border-radius: 10px;
-  margin: 2rem 0;
-}
-
-.salary-legend h3 {
-  color: var(--main-color);
-  margin-bottom: 1rem;
-}
-
-.legend-items {
-  display: flex;
-  flex-direction: column;
-  gap: 0.8rem;
-}
-
-.legend-item {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-}
-
-.legend-color {
-  width: 20px;
-  height: 20px;
-  border-radius: 3px;
-}
-
-.legend-color.high-salary {
-  background: #ff9800;
-}
-
-.legend-color.medium-salary {
-  background: #9c27b0;
-}
 
 .legend-text {
   font-size: 0.9rem;
@@ -1507,17 +1429,6 @@ onMounted(() => {
   gap: 2rem;
 }
 
-.factor-item {
-  display: flex;
-  align-items: flex-start;
-  gap: 2rem;
-  padding: 2rem;
-  background: white;
-  border-radius: 15px;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
-  border: 2px solid #f0f0f0;
-}
-
 .factor-icon {
   font-size: 3rem;
   text-align: center;
@@ -1527,6 +1438,7 @@ onMounted(() => {
 .factor-content h3 {
   color: var(--main-color);
   margin-bottom: 1rem;
+  font-size: 1.5rem;
 }
 
 .factor-content p {
@@ -1722,22 +1634,6 @@ onMounted(() => {
   padding: 2rem;
   border-radius: 15px;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
-  border-left: 4px solid #ddd;
-}
-
-.demand-item.hot {
-  background: linear-gradient(135deg, #fff3e0, #fff);
-  border-left-color: #ff5722;
-}
-
-.demand-item.rising {
-  background: linear-gradient(135deg, #f3e5f5, #fff);
-  border-left-color: #e91e63;
-}
-
-.demand-item.moderate {
-  background: linear-gradient(135deg, #e8f5e8, #fff);
-  border-left-color: #4caf50;
 }
 
 .demand-stats {
@@ -1794,8 +1690,14 @@ onMounted(() => {
 
 .trend-cards {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  grid-template-columns: repeat(2, 1fr);
   gap: 2rem;
+}
+
+@media (max-width: 700px) {
+  .trend-cards {
+    grid-template-columns: 1fr;
+  }
 }
 
 .trend-card {
@@ -1836,6 +1738,7 @@ onMounted(() => {
 
 .step-item {
   display: flex;
+  flex-direction: column;
   align-items: flex-start;
   gap: 2rem;
   padding: 2rem;
@@ -1843,6 +1746,15 @@ onMounted(() => {
   border-radius: 15px;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
   border: 2px solid #f0f0f0;
+}
+
+.step-item h3 {
+  margin-left: 1rem;
+}
+
+.step-header {
+  display: flex;
+  align-items: center;
 }
 
 .step-number {
@@ -1966,22 +1878,6 @@ onMounted(() => {
   position: relative;
 }
 
-.timing-item.best li::before {
-  content: '✓';
-  position: absolute;
-  left: 0;
-  color: #4caf50;
-  font-weight: bold;
-}
-
-.timing-item.avoid li::before {
-  content: '✗';
-  position: absolute;
-  left: 0;
-  color: #f44336;
-  font-weight: bold;
-}
-
 /* 交渉フレーズ */
 .negotiation-phrases {
   background: #f8f9ff;
@@ -2031,6 +1927,9 @@ onMounted(() => {
 .negotiation-alternatives h3 {
   color: var(--main-color);
   margin-bottom: 2rem;
+}
+.negotiation-alternatives p {
+  margin-bottom: 1.5rem;
 }
 
 .alternatives-grid {
@@ -2145,14 +2044,6 @@ onMounted(() => {
   position: relative;
 }
 
-.timeline-content li::before {
-  content: '✓';
-  position: absolute;
-  left: 0;
-  color: var(--main-color);
-  font-weight: bold;
-}
-
 .expected-result {
   background: linear-gradient(135deg, #e3f2fd, #fff);
   padding: 1rem;
@@ -2214,7 +2105,7 @@ onMounted(() => {
 
 /* CTA セクション */
 .cta-section {
-  background: linear-gradient(135deg, var(--main-color), var(--light-blue));
+  background: linear-gradient(135deg, var(--primary-navy) 0%, var(--primary-blue) 70%);
   color: white;
   padding: 4rem 2rem;
   text-align: center;
@@ -2329,7 +2220,7 @@ onMounted(() => {
   }
   
   .guide-title {
-    font-size: 2rem;
+    font-size: clamp(1.5rem, 8vw, 2.5rem);
   }
   
   .guide-section {
@@ -2351,10 +2242,18 @@ onMounted(() => {
   .salary-categories {
     gap: 2rem;
   }
+
+  .salary-category {
+    padding: 1.5rem;
+  }
   
   .profession-header {
     flex-direction: column;
     align-items: flex-start;
+  }
+
+  .profession-item {
+    padding: 1.5rem;
   }
   
   .factor-item {
@@ -2380,38 +2279,41 @@ onMounted(() => {
   .related-cards {
     grid-template-columns: 1fr;
   }
+
+  .timeline-content {
+    width: 100%;
+  }
 }
 
 @media (max-width: 480px) {
-  .table-of-contents,
-  .guide-section {
-    padding: 1.5rem 1rem;
+  .step-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    justify-content: center;
+    margin-bottom: 1rem;
   }
-  
-  .stat-number {
-    font-size: 2rem;
+  .step-header .step-number {
+    margin-bottom: 0;
   }
-  
-  .step-number {
-    width: 60px;
-    height: 60px;
-    font-size: 0.9rem;
+  .step-header h3 {
+    font-size: 1.1rem;
+    margin: 0;
   }
-  
-  .example-grid {
+
+  .example-grid,
+  .statistics,
+  .trend-grid,
+  .region-grid,
+  .market-statistics,
+  .demand-grid,
+  .timing-guide,
+  .alternatives-grid,
+  .metrics-grid,
+  .related-cards {
     grid-template-columns: 1fr;
   }
+
   
-  .timing-guide {
-    grid-template-columns: 1fr;
-  }
-  
-  .alternatives-grid {
-    grid-template-columns: 1fr;
-  }
-  
-  .metrics-grid {
-    grid-template-columns: 1fr;
-  }
 }
 </style>

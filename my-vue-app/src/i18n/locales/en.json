@@ -12,16 +12,26 @@
       "chat": "Our AI career counseling assistant is here to listen and guide you through your career and transition concerns."
     }
   },
+  "app": {
+    "tameshoku": "TameShoku"
+  },
   "nav": {
     "home": "Home",  
     "diagnosis": "Start Assessment",
     "chat": "AI Career Counseling",
     "about": "Professions",
     "career_guide": "Career Guide",
+    "diagnosis_method": "About Diagnosis",
     "language": "Language",
     "open_menu": "Open menu",
     "close_menu": "Close menu"
   },
+  "guide": {
+    "student": "Career Guide for Students",
+    "skills": "Skills Development Guide",
+    "career": "Career Selection Guide",
+    "salary": "Salary & Job Change Guide"
+    },
   "common": {
     "loading": "Loading...",
     "error": "An error occurred",

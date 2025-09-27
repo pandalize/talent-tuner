@@ -139,7 +139,7 @@ html, body {
   }
 
   .tw-profession-card {
-    @apply w-full rounded-xl border border-gray-200 shadow-md
+  @apply w-full rounded-xl border border-gray-200 shadow-md
            mb-6;
     padding: 1rem 1.5rem;
     background-color: white;

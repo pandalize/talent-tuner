@@ -616,16 +616,16 @@ const { home, nav, common } = useTranslation()
   }
 
   .home-main {
-    min-height: calc(100vh - 10vh); // モバイルヘッダー分を引く
+    height: 60vh !important;
   }
   .hero-section {
-    min-height: auto;
+    height: 60vh !important;
     padding: var(--space-lg) 0;
   }
 
   .hero-content {
     padding: var(--space-lg) var(--space-sm);
-    min-height: 80vh;
+    height: 60vh !important;
   }
 
   .hero-title {

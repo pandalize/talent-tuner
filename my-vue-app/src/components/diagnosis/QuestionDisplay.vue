@@ -1,4 +1,3 @@
-
 <!--
   質問表示コンポーネント
   5段階評価システムによる質問表示とナビゲーション
@@ -26,8 +25,17 @@
     
     <!-- PC版 & モバイル版共通: 質問カード -->
     <div class="question-card tw-card">
-      <!-- モバイル版: チュートリアルスワイプカード（枠内最上部） -->
-      <template v-if="shouldShowTutorial && effectiveSwipeMode">
+      <!-- モバイル版: チュートリアルスワイプカード（枠内最上部） 非表示化 -->
+      
+
+      <!-- 1枚目のチュートリアルカードの前に説明カードを表示 -->
+      <template v-if="showExplainSwipeCard && effectiveSwipeMode">
+        <div class="tutorial-card-container">
+          <ExplainSwipeCard @close="showExplainSwipeCard = false" />
+        </div>
+      </template>
+
+      <template v-else-if="shouldShowTutorial && effectiveSwipeMode">
         <div class="tutorial-card-container">
           <TutorialSwipeCard
             :main-question="question.text"
@@ -38,6 +46,7 @@
           />
         </div>
       </template>
+      
       
       <!-- モバイル版: スワイプモードのカード（枠内最上部） -->
       <template v-if="shouldShowSwipeOption && effectiveSwipeMode">
@@ -68,12 +77,9 @@
               </div>
               
               <!-- 5段階評価スケール -->
-              <div class="rating-scale tw-rating">
-                <div class="scale-labels tw-labels">
-                  <span class="scale-label-left tw-label-left">全く当てはまらない</span>
-                  <span class="scale-label-right tw-label-right">よく当てはまる</span>
-                </div>
-                <div class="scale-buttons tw-buttons">
+              <div class="rating-scale tw-rating" style="display: flex; align-items: center; width: 100%; gap: 1.2rem;">
+                <span class="scale-label-left tw-label-left">全く当てはまらない</span>
+                <div class="scale-buttons tw-buttons" style="flex: 1; display: flex; justify-content: center; gap: 2%; max-width: 400px;">
                   <button
                     v-for="rating in [1, 2, 3, 4, 5]"
                     :key="`${option.label}-${rating}`"
@@ -90,6 +96,7 @@
                     {{ rating }}
                   </button>
                 </div>
+                <span class="scale-label-right tw-label-right">よく当てはまる</span>
               </div>
             </div>
           </div>
@@ -143,6 +150,7 @@ import { useDiagnosis } from '../../composables/useDiagnosis'
 import type { Question } from '../../utils/diagnosisLoader'
 import SwipeAnswer from './SwipeAnswer.vue'
 import TutorialSwipeCard from './TutorialSwipeCard.vue'
+import ExplainSwipeCard from './ExplainSwipeCard.vue'
 
 // Props
 interface Props {
@@ -195,10 +203,23 @@ const effectiveSwipeMode = computed(() => {
   return isMobile.value
 })
 
+
+// 初回説明カード表示用
+const showExplainSwipeCard = ref(false)
+
 // 初回チュートリアル表示の判定（最初の質問でスワイプモードの場合）
 const shouldShowInitialTutorial = computed(() => {
   return effectiveSwipeMode.value && props.questionIndex === 0 && currentOptionIndex.value === 0 && !props.tutorialCompleted
 })
+
+// 初回のみ説明カードを表示
+if (typeof window !== 'undefined') {
+  const w = window as Window & { __explain_swipe_card_shown?: boolean };
+  if (shouldShowInitialTutorial.value && !w.__explain_swipe_card_shown) {
+    showExplainSwipeCard.value = true
+    w.__explain_swipe_card_shown = true
+  }
+}
 
 // カテゴリーチュートリアル表示の判定（4問ごとのカテゴリー紹介）
 const shouldShowCategoryTutorialDisplay = computed(() => {
@@ -211,9 +232,9 @@ const shouldShowTutorial = computed(() => {
 })
 
 // チュートリアル完了後の質問表示判定（使用しない）
-// const shouldShowQuestionAfterTutorial = computed(() => {
-//   return effectiveSwipeMode.value && props.questionIndex === 0 && currentOptionIndex.value === 0 && tutorialCompleted.value
-// })
+   const shouldShowQuestionAfterTutorial = computed(() => {
+    return effectiveSwipeMode.value && props.questionIndex === 0 && currentOptionIndex.value === 0 && tutorialCompleted.value
+  })
 
 // スワイプモードでオプション表示すべきか判定
 const shouldShowSwipeOption = computed(() => {
@@ -224,7 +245,7 @@ const shouldShowSwipeOption = computed(() => {
   if (!currentOption.value) return false
   
   // チュートリアル表示中はfalse
-  if (shouldShowTutorial.value) return false
+   if (shouldShowTutorial.value) return false
   
   // 最初の質問の場合はチュートリアル完了後のみ
   if (props.questionIndex === 0) {
@@ -364,9 +385,6 @@ function handleAnswerCompleted() {
 .question-card {
   @include mixins.container(900px);
   
-  // 通常質問時は上方向に余白を追加してカードを上げる
-  margin-top: 4vh;
-  
   // スワイプモードの場合は幅を100%に
   .options-list:has(.swipe-answer-container) & {
     max-width: 100%;
@@ -413,15 +431,18 @@ function handleAnswerCompleted() {
 }
 
 // 評価スケール
+// 横並び一列に
 .rating-scale {
-  @include mixins.flex-column(var(--space-sm));
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 100%;
+  gap: 1.2rem;
 }
 
+// ラベルは個別spanで横並び配置
 .scale-labels {
-  @include mixins.flex-between;
-  font-size: var(--fs-small);
-  color: var(--text-secondary);
-  margin-bottom: var(--space-xs);
+  display: none;
 }
 
 .scale-buttons {
@@ -590,7 +611,7 @@ function handleAnswerCompleted() {
     padding: var(--space-xs);
     box-sizing: border-box;
     position: relative;
-    min-height: 70vh; // スワイプカードのための十分な高さを確保
+  min-height: 70vh; // スワイプカードのための十分な高さを確保
   }
   
   .options-list {
@@ -807,10 +828,6 @@ function handleAnswerCompleted() {
   position: relative;
   margin: 0;
   padding: var(--space-xs) 0;
-  /* チュートリアル時はmargin-topを0にして上詰め */
-  .tutorial-card-container & {
-    margin-top: 0 !important;
-  }
 }
 
 // スワイプカードコンテナ（枠内最上部に配置）
@@ -934,12 +951,6 @@ function handleAnswerCompleted() {
 
 // モバイル版ではナビゲーションを非表示（768px未満で非表示）
 @media (max-width: 767px) {
-
-  .question-card {
-    min-height: 85vh;
-  }
-  
-
   .question-navigation {
     display: none !important;
   }

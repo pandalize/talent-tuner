@@ -3,11 +3,6 @@
     <div class="student-guide-content">
       <!-- ヘッダー -->
       <header class="guide-header">
-        <div class="breadcrumb">
-          <router-link to="/">ホーム</router-link>
-          <span class="separator">></span>
-          <span class="current">学生向けキャリアガイド</span>
-        </div>
         <h1 class="guide-title">学生向けキャリアガイド</h1>
         <p class="guide-subtitle">就職活動を成功させる準備と戦略</p>
       </header>
@@ -69,7 +64,6 @@
           
           <div class="analysis-framework">
             <div class="framework-card">
-              <div class="framework-icon">🎓</div>
               <h3>学業・研究経験</h3>
               <div class="framework-questions">
                 <h4>分析ポイント</h4>
@@ -86,7 +80,6 @@
             </div>
             
             <div class="framework-card">
-              <div class="framework-icon">🏃</div>
               <h3>課外活動・サークル</h3>
               <div class="framework-questions">
                 <h4>分析ポイント</h4>
@@ -103,7 +96,6 @@
             </div>
             
             <div class="framework-card">
-              <div class="framework-icon">💼</div>
               <h3>アルバイト・インターン</h3>
               <div class="framework-questions">
                 <h4>分析ポイント</h4>
@@ -120,7 +112,6 @@
             </div>
             
             <div class="framework-card">
-              <div class="framework-icon">🌟</div>
               <h3>価値観・将来ビジョン</h3>
               <div class="framework-questions">
                 <h4>分析ポイント</h4>
@@ -168,110 +159,131 @@
         <div class="content-block">
           <div class="research-process">
             <div class="process-step">
-              <div class="step-number">STEP 1</div>
-              <div class="step-content">
+              <div class="step-header">
+                <div class="step-number">STEP 1</div>
                 <h3>業界全体の把握</h3>
+              </div>
+              <div class="step-content">
                 <div class="step-details">
-                  <h4>調査内容</h4>
-                  <ul>
-                    <li>業界の市場規模と成長性</li>
-                    <li>主要企業とそのシェア</li>
-                    <li>業界のトレンドと将来性</li>
-                    <li>平均年収と労働条件</li>
-                  </ul>
-                  <h4>情報源</h4>
-                  <ul>
-                    <li>業界団体の公式サイト</li>
-                    <li>経済新聞・業界誌</li>
-                    <li>政府統計・調査レポート</li>
-                  </ul>
+                  <div class="step-details-row">
+                    <div class="step-detail-col">
+                      <h4>調査内容</h4>
+                      <ul>
+                        <li>業界の市場規模と成長性</li>
+                        <li>主要企業とそのシェア</li>
+                        <li>業界のトレンドと将来性</li>
+                        <li>平均年収と労働条件</li>
+                      </ul>
+                    </div>
+                    <div class="step-detail-col">
+                      <h4>情報源</h4>
+                      <ul>
+                        <li>業界団体の公式サイト</li>
+                        <li>経済新聞・業界誌</li>
+                        <li>政府統計・調査レポート</li>
+                      </ul>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
             
             <div class="process-step">
-              <div class="step-number">STEP 2</div>
-              <div class="step-content">
+              <div class="step-header">
+                <div class="step-number">STEP 2</div>
                 <h3>企業の詳細分析</h3>
+              </div>
+              <div class="step-content">
                 <div class="step-details">
-                  <h4>調査内容</h4>
-                  <ul>
-                    <li>企業理念・ミッション</li>
-                    <li>事業内容と競合優位性</li>
-                    <li>財務状況と業績推移</li>
-                    <li>社風・企業文化</li>
-                  </ul>
-                  <h4>情報源</h4>
-                  <ul>
-                    <li>会社四季報・有価証券報告書</li>
-                    <li>企業の採用サイト・IR情報</li>
-                    <li>転職口コミサイト</li>
-                  </ul>
+                  <div class="step-details-row">
+                    <div class="step-detail-col">
+                      <h4>調査内容</h4>
+                      <ul>
+                        <li>企業理念・ミッション</li>
+                        <li>事業内容と競合優位性</li>
+                        <li>財務状況と業績推移</li>
+                        <li>社風・企業文化</li>
+                      </ul>
+                    </div>
+                    <div class="step-detail-col">
+                      <h4>情報源</h4>
+                      <ul>
+                        <li>会社四季報・有価証券報告書</li>
+                        <li>企業の採用サイト・IR情報</li>
+                        <li>転職口コミサイト</li>
+                      </ul>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
             
             <div class="process-step">
-              <div class="step-number">STEP 3</div>
+              <div class="step-header">
+                <div class="step-number">STEP 3</div>
+                <h3>キャリアパスの理解</h3>
+              </div>
               <div class="step-content">
-                <h3>職種・キャリアパスの理解</h3>
                 <div class="step-details">
-                  <h4>調査内容</h4>
-                  <ul>
-                    <li>具体的な業務内容</li>
-                    <li>必要なスキル・資格</li>
-                    <li>昇進・昇格の仕組み</li>
-                    <li>転職・キャリアチェンジの実例</li>
-                  </ul>
-                  <h4>情報源</h4>
-                  <ul>
-                    <li>職種別の求人情報</li>
-                    <li>現役者へのOB・OG訪問</li>
-                    <li>LinkedIn等のプロフィール分析</li>
-                  </ul>
+                  <!-- ここは2カラム構造に統一 -->
+                  <div class="step-details-row">
+                    <div class="step-detail-col">
+                      <h4>調査内容</h4>
+                      <ul>
+                        <li>職種の役割・業務内容</li>
+                        <li>必要なスキル・資格</li>
+                        <li>キャリアパスの選択肢</li>
+                        <li>年収レンジと昇給例</li>
+                      </ul>
+                    </div>
+                    <div class="step-detail-col">
+                      <h4>情報源</h4>
+                      <ul>
+                        <li>求人票・職種ガイド</li>
+                        <li>現役社員のインタビュー</li>
+                        <li>転職エージェントのアドバイス</li>
+                      </ul>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-          
-          <div class="industry-categories">
-            <h3>人気業界の特徴と求められる人材</h3>
             <div class="industry-grid">
               <div class="industry-card">
-                <h4>💻 IT・テクノロジー</h4>
+                <h4>IT・テクノロジー</h4>
                 <div class="industry-growth">成長性: ★★★★★</div>
                 <div class="industry-skills">
-                  <strong>求められるスキル:</strong>
+                  <strong>求められるスキル: </strong>
                   <span>プログラミング、論理思考、継続学習意欲</span>
                 </div>
                 <div class="industry-salary">平均年収: 450-800万円</div>
               </div>
               
               <div class="industry-card">
-                <h4>🏦 金融・保険</h4>
+                <h4>金融・保険</h4>
                 <div class="industry-growth">成長性: ★★★☆☆</div>
                 <div class="industry-skills">
-                  <strong>求められるスキル:</strong>
+                  <strong>求められるスキル: </strong>
                   <span>数値分析、リスク管理、コミュニケーション</span>
                 </div>
                 <div class="industry-salary">平均年収: 500-900万円</div>
               </div>
               
               <div class="industry-card">
-                <h4>🏭 製造業</h4>
+                <h4>製造業</h4>
                 <div class="industry-growth">成長性: ★★★☆☆</div>
                 <div class="industry-skills">
-                  <strong>求められるスキル:</strong>
+                  <strong>求められるスキル: </strong>
                   <span>品質管理、改善提案、チームワーク</span>
                 </div>
                 <div class="industry-salary">平均年収: 400-700万円</div>
               </div>
               
               <div class="industry-card">
-                <h4>🛒 小売・サービス</h4>
+                <h4>小売・サービス</h4>
                 <div class="industry-growth">成長性: ★★☆☆☆</div>
                 <div class="industry-skills">
-                  <strong>求められるスキル:</strong>
+                  <strong>求められるスキル: </strong>
                   <span>接客力、企画力、店舗運営</span>
                 </div>
                 <div class="industry-salary">平均年収: 350-600万円</div>
@@ -288,7 +300,7 @@
         <div class="content-block">
           <div class="selection-stages">
             <div class="stage-item">
-              <div class="stage-title">📝 書類選考対策</div>
+              <div class="stage-title">書類選考対策</div>
               <div class="stage-content">
                 <h4>エントリーシート(ES)のポイント</h4>
                 <ul>
@@ -307,7 +319,7 @@
             </div>
             
             <div class="stage-item">
-              <div class="stage-title">💬 面接対策</div>
+              <div class="stage-title">面接対策</div>
               <div class="stage-content">
                 <h4>面接の種類と対策</h4>
                 <div class="interview-types">
@@ -358,7 +370,7 @@
             </div>
             
             <div class="stage-item">
-              <div class="stage-title">🧪 筆記・適性検査対策</div>
+              <div class="stage-title">筆記・適性検査対策</div>
               <div class="stage-content">
                 <h4>主要な検査と対策法</h4>
                 <div class="test-types">
@@ -393,22 +405,18 @@
             <h3>インターンシップ参加のメリット</h3>
             <div class="benefits-grid">
               <div class="benefit-item">
-                <div class="benefit-icon">🔍</div>
                 <h4>業界・職種理解</h4>
                 <p>実際の業務を体験することで、仕事内容や社風を具体的に理解できる</p>
               </div>
               <div class="benefit-item">
-                <div class="benefit-icon">💼</div>
                 <h4>実務スキル習得</h4>
                 <p>ビジネスマナーや実践的なスキルを身につけ、就職後のスタートダッシュが可能</p>
               </div>
               <div class="benefit-item">
-                <div class="benefit-icon">🤝</div>
                 <h4>人脈形成</h4>
                 <p>社員や他の参加学生とのネットワークを構築し、情報収集に活用</p>
               </div>
               <div class="benefit-item">
-                <div class="benefit-icon">✨</div>
                 <h4>選考優遇</h4>
                 <p>優秀な成果を残せば早期選考や特別選考ルートへの招待の可能性</p>
               </div>
@@ -684,10 +692,6 @@
             <h3>年収・転職情報</h3>
             <p>職業別年収相場と転職市場の最新動向</p>
           </router-link>
-          <router-link to="/career-change" class="related-card">
-            <h3>転職・キャリアチェンジ</h3>
-            <p>異業種転職を成功させるための実践的な方法</p>
-          </router-link>
         </div>
       </section>
     </div>
@@ -722,15 +726,12 @@ onMounted(() => {
 }
 
 .student-guide-content {
-  max-width: 1000px;
-  margin: 0 auto;
-  background: white;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  width: 100%;
 }
 
 /* ヘッダー */
 .guide-header {
-  background: linear-gradient(135deg, var(--main-color), var(--light-blue));
+  background: linear-gradient(135deg, var(--primary-navy) 0%, var(--primary-blue) 70%);
   color: white;
   padding: 3rem 2rem;
   text-align: center;
@@ -771,7 +772,9 @@ onMounted(() => {
 .table-of-contents {
   background: #f8f9ff;
   padding: 2rem;
-  border-left: 4px solid var(--main-color);
+  max-width: 900px;
+  margin: 0 auto;
+  width: 100%;
 }
 
 .table-of-contents h2 {
@@ -803,6 +806,9 @@ onMounted(() => {
 .guide-section {
   padding: 3rem 2rem;
   border-bottom: 1px solid #f0f0f0;
+  max-width: 900px;
+  margin: 0 auto;
+  width: 100%;
 }
 
 .guide-section h2 {
@@ -875,6 +881,14 @@ onMounted(() => {
   font-weight: bold;
 }
 
+.step-details-row {
+  display: flex;
+  gap: 2rem;
+}
+.step-detail-col {
+  flex: 1;
+}
+
 /* 分析フレームワーク */
 .analysis-framework {
   display: grid;
@@ -898,11 +912,6 @@ onMounted(() => {
   border-color: var(--main-color);
 }
 
-.framework-icon {
-  font-size: 3rem;
-  text-align: center;
-  margin-bottom: 1rem;
-}
 
 .framework-card h3 {
   color: var(--main-color);
@@ -1010,7 +1019,9 @@ onMounted(() => {
 
 .process-step {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
+  flex-direction: column;
+  text-align: center;
   gap: 2rem;
   margin-bottom: 3rem;
   padding: 2rem;
@@ -1036,7 +1047,30 @@ onMounted(() => {
 
 .step-content h3 {
   color: var(--main-color);
-  margin-bottom: 1rem;
+  margin: 1rem 0;
+}
+
+.step-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.2rem;
+}
+.step-header .step-number {
+  font-size: 1rem;
+  padding: 0.7rem 1.2rem;
+}
+.step-header h3 {
+  font-size: 1.1rem;
+  margin: 0;
+}
+
+.step-details ul li {
+  text-align: left;
+}
+
+.step-details ul {
+  width: 120%;
 }
 
 .step-details h4 {
@@ -1296,8 +1330,14 @@ onMounted(() => {
 
 .benefits-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  grid-template-columns: repeat(2, 1fr);
   gap: 2rem;
+}
+
+@media (max-width: 700px) {
+  .benefits-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 .benefit-item {
@@ -1315,10 +1355,6 @@ onMounted(() => {
   border-color: var(--main-color);
 }
 
-.benefit-icon {
-  font-size: 3rem;
-  margin-bottom: 1rem;
-}
 
 .benefit-item h4 {
   color: var(--main-color);
@@ -1599,7 +1635,7 @@ onMounted(() => {
 
 /* CTA セクション */
 .cta-section {
-  background: linear-gradient(135deg, var(--main-color), var(--light-blue));
+  background: linear-gradient(135deg, var(--primary-navy) 0%, var(--primary-blue) 70%);
   color: white;
   padding: 4rem 2rem;
   text-align: center;
@@ -1714,7 +1750,7 @@ onMounted(() => {
   }
   
   .guide-title {
-    font-size: 2rem;
+    font-size: clamp(1.5rem, 8vw, 2.5rem);
   }
   
   .guide-section {
@@ -1722,7 +1758,7 @@ onMounted(() => {
   }
   
   .guide-section h2 {
-    font-size: 1.5rem;
+    font-size: clamp(1rem, 2rem, 5vw);
   }
   
   .statistics {
@@ -1731,6 +1767,12 @@ onMounted(() => {
   
   .analysis-framework {
     grid-template-columns: 1fr;
+  }
+
+
+  .timeline-content {
+    width: 100%;
+    text-align: left;
   }
   
   .tools-grid {
@@ -1782,23 +1824,24 @@ onMounted(() => {
   .related-cards {
     grid-template-columns: 1fr;
   }
-  
-  .process-step {
-    flex-direction: column;
-    text-align: center;
-  }
 }
 
 @media (max-width: 480px) {
   .table-of-contents,
   .guide-section {
-    padding: 1.5rem 1rem;
+    padding: 1.5rem;
   }
-  
+
   .stat-number {
     font-size: 2rem;
   }
-  
+
+  .step-details-row {
+    flex-direction: column;
+    justify-content: center;
+    gap: 1rem;
+  }
+
   .framework-card {
     margin-bottom: 1rem;
   }

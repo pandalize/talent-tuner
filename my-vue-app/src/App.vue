@@ -1,73 +1,52 @@
-<script setup lang="ts">
-import { RouterLink, RouterView, useRoute } from 'vue-router'
+<script setup lang="ts"> // Vue3でTypeScriptを使い、ロジックを簡潔に書くための宣言
+import { RouterLink, RouterView, useRoute } from 'vue-router' // named export
 import { useI18n } from 'vue-i18n'
-import { ref } from 'vue'
-import ResultDisplay from './components/diagnosis/ResultDisplay.vue'
-import AppFooter from './components/AppFooter.vue'
-import LanguageSwitcher from './components/LanguageSwitcher.vue'
-import CareerChatBot from './components/CareerChatBot.vue'
+import { ref } from 'vue' // 
+// import ResultDisplay from './components/diagnosis/ResultDisplay.vue' // 診断結果のデモ版
+import AppFooter from './components/AppFooter.vue'  // default export
+// import LanguageSwitcher from './components/LanguageSwitcher.vue'  // 言語切替えコンポーネント
+// import CareerChatBot from './components/CareerChatBot.vue'
+// import { onMounted, onUnmounted } from 'vue'
 
-import { onMounted, onUnmounted } from 'vue'
-
-const route = useRoute()
-const isMobile = ref(false)
-function checkMobile() {
-  isMobile.value = window.innerWidth <= 768
-}
-onMounted(() => {
-  checkMobile()
-  window.addEventListener('resize', checkMobile)
-})
-onUnmounted(() => {
-  window.removeEventListener('resize', checkMobile)
-})
-
+const route = useRoute() // 現在のルート情報を取得
 const { t } = useI18n()
+
+
+/*
+// モバイルかどうかの判定（ヘッダーの表示を切り替えるため）
+const isMobile = ref(false) // モバイル判定用のリアクティブ変数
+function checkMobile() { // 480px以下をモバイルと判定する関数
+  isMobile.value = window.innerWidth <= 480 // window.innerWidth <= 480の結果をisMobile.valueに代入
+}
+onMounted(() => { // コンポーネントが表示された直後に中の関数が実行される
+  checkMobile()
+  window.addEventListener('resize', checkMobile) // 画面サイズが変わったかを監視、変わるとcheckMobileを自動で呼び出す
+})
+onUnmounted(() => { // コンポーネントが破棄される直前に中の関数が実行される
+  window.removeEventListener('resize', checkMobile) // 画面サイズが変わったかの監視を解除
+})
+*/
+
+
+// ハンバーガーメニューを開閉
 const isMobileMenuOpen = ref(false)
-const isDemoChatOpen = ref(false)
-const isDemoResultOpen = ref(false)
-
-// デモ診断結果データ
-const demoProfessions = [
-  {
-    name: 'Webデザイナー',
-    score: 86,
-    categories: { skill: 22, interest: 22, priority: 21, balance: 21 },
-  annualIncome: '350万円〜600万円',
-  jobDetails: 'Webサイトやバナー、UI/UXデザインなどを担当し、クライアントや自社サービスのデザイン業務を行います。HTML/CSSやFigma、Photoshopなどのツールを活用します。',
-  comment: 'あなたはクリエイティブな発想力とデザインへの関心が高く、細部までこだわる力があります。Webデザイナーとして多様な案件で活躍できる素質があります。'
-  },
-  {
-    name: 'インフルエンサー',
-    score: 83,
-    categories: { skill: 20, interest: 22, priority: 21, balance: 20 },
-  annualIncome: '100万円〜1,000万円以上',
-  jobDetails: 'SNSやYouTubeなどで情報発信し、フォロワーや企業案件、広告収入などで収益を得ます。企画力や発信力、セルフブランディングが重要です。',
-  comment: 'あなたは新しいことに挑戦する意欲と発信力があり、SNSで自分の世界観を表現するのが得意です。インフルエンサーとして多くの人に影響を与えられるでしょう。'
-  },
-  {
-    name: 'マーケティング',
-    score: 77,
-    categories: { skill: 19, interest: 20, priority: 19, balance: 19 },
-  annualIncome: '400万円〜800万円',
-  jobDetails: '市場調査や広告運用、SNS運用、プロモーション企画などを通じて、商品やサービスの売上拡大を目指します。分析力やコミュニケーション力が求められます。',
-  comment: 'あなたは情報収集や分析が得意で、戦略的に物事を考える力があります。マーケティング分野で企画やプロモーションに携わる適性が高いです。'
-  }
-]
-const demoMaxCategoryScore = 25
-const demoTotalQuestions = 16
-
-const toggleMobileMenu = () => {
+// const isDemoChatOpen = ref(false)
+// const isDemoResultOpen = ref(false)
+const toggleMobileMenu = () => { // isMobileMenuOpenを反転させる関数
   isMobileMenuOpen.value = !isMobileMenuOpen.value
 }
-
-const closeMobileMenu = () => {
+const closeMobileMenu = () => { // isMobileMenuOpenをfalseにする関数
   isMobileMenuOpen.value = false
 }
 
-const showDemoChat = () => {
+
+// ドロップタウンを開閉
+const dropdownOpen = ref(false);
+
+
+/*const showDemoChat = () => { // isDemoChatOpenをtrueにする関数
   isDemoChatOpen.value = true
-  closeMobileMenu()
+  closeMobileMenu() // モバイルメニューが開いている場合は閉じる
 }
 
 const closeDemoChat = () => {
@@ -80,39 +59,52 @@ const showDemoResult = () => {
 }
 const closeDemoResult = () => {
   isDemoResultOpen.value = false
-}
+}*/
 </script>
 
 <template>
-  <div id="app" style="width: 100vw; max-width: 100vw; overflow-x: hidden; box-sizing: border-box;">
+  <div id="app" style="width: 100vw; box-sizing: border-box;">
     <header class="app-header">
-      <!-- ロゴ部分 -->
-      <RouterLink to="/" class="logo" @click="closeMobileMenu">
+      <RouterLink to="/" class="logo">
         <img src="/favicon.ico" alt="ため職" class="logo-icon">
         <div class="logo-text">
-          <span class="logo-main">ため職</span>
-          <span class="logo-sub">Professional Career Assessment</span>
+          <span class="logo-main">ため職</span> <!-- $tはja.json,en.jsonから取得したかったが失敗 -->
+          <!-- <span class="logo-sub">Professional Career Assessment</span> -->
         </div>
       </RouterLink>
 
-      <!-- デスクトップナビゲーション -->
-      <nav class="main-nav desktop-nav">
-        <RouterLink to="/" class="nav-item">{{ $t('nav.home') }}</RouterLink>
+      <nav class="header-nav desktop-nav">
+        <RouterLink to="/" class="nav-item">{{ $t('nav.home') }}</RouterLink>  <!-- $tはja.json,en.jsonから取得 -->
         <RouterLink to="/diagnosis" class="nav-item">{{ $t('nav.diagnosis') }}</RouterLink>
         <RouterLink to="/about" class="nav-item">{{ $t('nav.about') }}</RouterLink>
-        <RouterLink to="/career-guide" class="nav-item">{{ $t('nav.career_guide') }}</RouterLink>
-        <RouterLink to="/diagnosis-method" class="nav-item">診断について</RouterLink>
-        <button 
-          class="nav-item demo-chat-desktop-btn" 
-          @click="showDemoChat"
+        <div class="nav-item dropdown"
+             @mouseenter="dropdownOpen = true"
+             @mouseleave="dropdownOpen = false">
+          <RouterLink
+            to="/career-guide"
+            class="dropdown-label"
+            aria-haspopup="true"
+            :aria-expanded="dropdownOpen"
+          >{{ $t('nav.career_guide') }}</RouterLink>
+          <div v-if="dropdownOpen" class="dropdown-menu">
+            <RouterLink to="/student-guide" class="dropdown-item">{{ t('guide.student') }}</RouterLink>
+            <RouterLink to="/skills-development" class="dropdown-item">{{ t('guide.skills') }}</RouterLink>
+            <RouterLink to="/career-guide" class="dropdown-item">{{ t('guide.career') }}</RouterLink>
+            <RouterLink to="/salary-guide" class="dropdown-item">{{ t('guide.salary') }}</RouterLink>
+          </div>
+        </div>
+        <RouterLink to="/diagnosis-method" class="nav-item">診断について</RouterLink> <!-- $tはja.json,en.jsonから取得したかったが失敗 -->
+        <RouterLink 
+          to="/chat"
+          class="nav-item chat-desktop-btn"
         >
-          AI進路相談
-        </button>
+          {{ t('nav.chat') }}
+        </RouterLink>
       </nav>
 
       <!-- ヘッダーコントロール -->
       <div class="header-controls">
-        <!-- <LanguageSwitcher /> -->
+        <!--　<LanguageSwitcher /> -->  <!-- 言語切替コンポーネント -->
 
         <!-- ハンバーガーメニューボタン -->
         <button 
@@ -128,9 +120,9 @@ const closeDemoResult = () => {
         </button>
       </div>
 
-      <!-- モバイルメニューオーバーレイ -->
+      <!-- モバイルメニューオーバーレイ（ハンバーガーメニューが開いているときに画面全体に表示される半透明の背景レイヤー） -->
       <div 
-        v-if="isMobileMenuOpen" 
+        v-if="isMobileMenuOpen"
         class="mobile-menu-overlay"
         @click="closeMobileMenu"
       ></div>
@@ -142,13 +134,12 @@ const closeDemoResult = () => {
       >
         <!-- 閉じるボタン -->
         <div class="mobile-nav-header">
-          <span class="mobile-nav-title">メニュー</span>
           <button 
             class="mobile-nav-close"
             @click="closeMobileMenu"
             :aria-label="t('nav.close_menu')"
           >
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#222" stroke-width="1.5">
               <path d="M18 6L6 18M6 6l12 12"/>
             </svg>
           </button>
@@ -200,16 +191,15 @@ const closeDemoResult = () => {
           {{ $t('nav.career_guide') }}
         </RouterLink>
         
-        
         <RouterLink 
           to="/chat"
-          class="mobile-nav-item demo-chat-btn"
-            @click="() => { showDemoChat(); closeMobileMenu(); }"
+          class="mobile-nav-item chat-btn"
+          @click="closeMobileMenu"
         >
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/>
           </svg>
-          AI進路相談
+          {{ $t('nav.chat') }}
         </RouterLink>
         
         <RouterLink 
@@ -226,137 +216,75 @@ const closeDemoResult = () => {
         </div>
       </nav>
     </header>
+
     
     <main class="app-content">
-      <RouterView @show-demo-chat="showDemoChat" />
+      <RouterView/>
     </main>
     
-  <AppFooter v-if="!(route.path.startsWith('/diagnosis') && isMobile) && !(isMobile && isDemoChatOpen)" />
-
-    <!-- デモチャットモーダル -->
+    
+    <!--
+    デモチャットモーダル
     <div v-if="isDemoChatOpen" class="demo-chat-overlay" @click="closeDemoChat">
       <div class="demo-chat-modal" @click.stop>
         <CareerChatBot @close="closeDemoChat" />
       </div>
     </div>
-    <!-- デモ診断結果モーダルは廃止（ページ遷移に変更） -->
+    -->
   </div>
 </template>
 
 <style>
-/* ==========================================================================
-   グローバルスタイル & リセット
-   ========================================================================== */
-
 html, body {
   margin: 0;
   padding: 0;
   width: 100%;
-  overflow-x: hidden; /* 横スクロールを完全に防止 */
+  overflow-x: hidden;
   overflow-y: auto;
 }
 
 #app {
   font-family: var(--font-body);
-  width: 100vw;
-  max-width: 100%;
+  width: 100%;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 0;
-  background-color: var(--bg-primary);
   overflow-x: hidden;
   overflow-y: auto;
 }
 
-/* ==========================================================================
-   ヘッダーエリア - 知的でプロフェッショナルなデザイン
-   ========================================================================== */
 .app-header {
-  position: sticky;
-  top: 0;
-  width: 100%;
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(20px);
-  border-bottom: 1px solid rgba(59, 130, 246, 0.1);
+  position: sticky; top: 0;
   z-index: 1000;
+  width: 100%;
+  max-height: 80px;
+  background: rgba(255, 255, 255, 0.95);
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: var(--space-sm) var(--space-lg);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08), 0 1px 3px rgba(0, 0, 0, 0.05);
-  gap: var(--space-md);
   transition: all var(--transition-normal);
-  
-  &::before {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: 1px;
-    background: linear-gradient(90deg, 
-      transparent 0%, 
-      rgba(59, 130, 246, 0.3) 20%, 
-      rgba(16, 185, 129, 0.3) 50%, 
-      rgba(245, 158, 11, 0.3) 80%, 
-      transparent 100%
-    );
-    opacity: 0;
-    animation: headerGlow 4s ease-in-out infinite;
-  }
 }
 
-@keyframes headerGlow {
-  0%, 100% { opacity: 0; }
-  50% { opacity: 1; }
-}
-
-/* ==========================================================================
-   ロゴ
-   ========================================================================== */
 .logo {
   display: flex;
   align-items: center;
-  gap: var(--space-xs);
+  gap: var(--space-sm);
   text-decoration: none;
-  color: var(--primary-navy);
   transition: all var(--transition-normal);
   position: relative;
-  
-  &::before {
-    content: '';
-    position: absolute;
-    top: -2px;
-    left: -4px;
-    right: -4px;
-    bottom: -2px;
-    background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(16, 185, 129, 0.1));
-    border-radius: 8px;
-    opacity: 0;
-    transition: opacity var(--transition-normal);
-    z-index: -1;
-  }
-  
-  &:hover::before {
-    opacity: 1;
-  }
-  
-  &:hover {
-    transform: translateY(-1px);
-  }
+  max-width: 180px;
 }
 
 .logo-icon {
-  width: 24px;
-  height: 24px;
-  flex-shrink: 0;
+  width: 30%;
 }
 
 .logo-text {
   display: flex;
   flex-direction: column;
+  height: 100%
 }
 
 .logo-main {
@@ -367,68 +295,52 @@ html, body {
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  line-height: 1;
   transition: all var(--transition-normal);
 }
 
+/*
 .logo-sub {
   font-family: var(--font-mono);
-  font-size: 0.625rem;
+  font-size: 60%;
   color: var(--text-secondary);
-  letter-spacing: 0.05em;
   text-transform: uppercase;
-  margin-top: 2px;
   opacity: 0.8;
   transition: opacity var(--transition-normal);
 }
+*/
 
-.logo:hover .logo-sub {
-  opacity: 1;
-}
-
-/* ==========================================================================
-   メインナビゲーション
-   ========================================================================== */
-.main-nav {
+.header-nav {
+  width: 80%;
   display: flex;
-  gap: var(--space-sm);
   align-items: center;
+  gap: 3%;
   flex-wrap: wrap;
-  background: rgba(248, 250, 252, 0.8);
   padding: var(--space-xs);
   border-radius: 12px;
-  border: 1px solid rgba(59, 130, 246, 0.1);
 }
 
 .nav-item {
+  width: 13.8%;
   color: var(--text-secondary);
+  text-align: center;
   text-decoration: none;
-  padding: var(--space-xs) var(--space-md);
   border-radius: 8px;
   transition: all var(--transition-normal);
   font-weight: 500;
-  font-size: 0.9375rem;
+  font-size: 1.3vw;
+  padding: var(--space-xs) 0;
   position: relative;
   overflow: hidden;
   
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.1), transparent);
-    transition: left 0.5s ease;
-  }
   
   &::after {
+    /* 下線アニメーション */
     content: '';
     position: absolute;
     bottom: 0;
     left: 50%;
     transform: translateX(-50%) scaleX(0);
-    width: 80%;
+    width: 100%;
     height: 2px;
     background: linear-gradient(135deg, var(--accent-blue), var(--accent-gold));
     border-radius: 1px;
@@ -439,13 +351,7 @@ html, body {
 
 .nav-item:hover {
   color: var(--primary-navy);
-  background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(16, 185, 129, 0.08));
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15);
-  
-  &::before {
-    left: 100%;
-  }
+  background: transparent;
   
   &::after {
     transform: translateX(-50%) scaleX(1);
@@ -454,9 +360,7 @@ html, body {
 
 .nav-item.router-link-active {
   color: var(--primary-navy);
-  background: linear-gradient(135deg, rgba(59, 130, 246, 0.15), rgba(16, 185, 129, 0.1));
   font-weight: 600;
-  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.2);
   
   &::after {
     transform: translateX(-50%) scaleX(1);
@@ -465,16 +369,12 @@ html, body {
   }
 }
 
-/* ==========================================================================
-   ヘッダーコントロール（言語切り替え・ハンバーガーメニュー等）
-   ========================================================================== */
 .header-controls {
   display: flex;
   align-items: center;
   gap: var(--space-sm);
 }
 
-/* ハンバーガーメニューボタン */
 .mobile-menu-toggle {
   display: none;
   flex-direction: column;
@@ -488,26 +388,17 @@ html, body {
   gap: 4px;
   padding: 0;
   transition: all var(--transition-normal);
-  border-radius: 8px;
-  
-  &:hover {
-    background: rgba(59, 130, 246, 0.1);
-  }
-  
-  &:active {
-    transform: scale(0.95);
-  }
 }
 
 .hamburger-line {
   width: 20px;
   height: 2px;
   background: var(--primary-navy);
-  border-radius: 1px;
   transition: all var(--transition-normal);
   transform-origin: center;
 }
 
+/* 3本線（.hamburger-line）を×（バツ）に変形 */
 .mobile-menu-toggle.menu-open .hamburger-line {
   &:nth-child(1) {
     transform: rotate(45deg) translateY(6px);
@@ -523,42 +414,23 @@ html, body {
   }
 }
 
-/* モバイルメニューオーバーレイ */
+/* ハンバーガーメニューが開いているときに画面全体に表示される半透明の黒い背景レイヤー */
 .mobile-menu-overlay {
   position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  top: 0; left: 0; right: 0; bottom: 0;
   width: 100vw;
   height: 100vh;
   background: rgba(0, 0, 0, 0.5);
-  z-index: 998;
   backdrop-filter: blur(4px);
-  animation: fadeIn 0.3s ease;
+  z-index: 998; /* 値が大きいほど前面に表示される */
 }
 
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-/* モバイルナビゲーション */
 .mobile-nav {
-  position: fixed;
-  top: 0;
-  right: -100%;
-  bottom: 0;
-  left: auto;
-  width: 65vw; /* 画面幅の65% */
-  min-width: 280px; /* 最小幅を保証 */
-  max-width: 420px; /* 最大幅を制限 */
-  height: 100vh; /* ビューポート高さ100% */
-  height: 100dvh; /* 動的ビューポート高さ（モバイル対応） */
-  background: linear-gradient(135deg, var(--bg-primary) 0%, rgba(248, 250, 252, 0.98) 100%);
-  backdrop-filter: blur(20px);
-  border-left: 1px solid var(--border-light);
-  box-shadow: -4px 0 20px rgba(0, 0, 0, 0.15);
+  position: fixed; /* スクロールしても常に同じ場所に表示される */
+  top: 0; right: -100%; bottom: 0; left: auto; /* 画面外に配置 */
+  width: 280px;
+  height: 100vh;
+  background: var(--bg-primary);
   z-index: 999;
   transition: right var(--transition-normal);
   overflow-y: auto;
@@ -572,40 +444,31 @@ html, body {
   }
 }
 
-/* モバイルメニューヘッダー */
 .mobile-nav-header {
+  height: 10vh;
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end; /* 右寄せ */
   align-items: center;
-  padding: var(--space-lg) var(--space-xl);
-  border-bottom: 1px solid var(--border-light);
-  background: rgba(255, 255, 255, 0.5);
-  backdrop-filter: blur(10px);
+  padding: var(--space-sm) var(--space-md);
+  border-bottom: #e2e2e2 2px solid;
   position: sticky;
   top: 0;
   z-index: 10;
-  flex-shrink: 0; /* ヘッダーが縮まないように */
-}
-
-.mobile-nav-title {
-  font-size: 1.125rem;
-  font-weight: 600;
-  color: var(--primary-navy);
-  font-family: var(--font-heading);
+  flex-shrink: 0;
 }
 
 .mobile-nav-close {
-  width: 40px;
-  height: 40px;
+  width: 32px;
+  height: 32px;
   display: flex;
   align-items: center;
   justify-content: center;
   background: transparent;
-  border: 2px solid var(--border-light);
-  border-radius: 50%;
+  border: none;
   cursor: pointer;
   transition: all var(--transition-normal);
   color: var(--text-secondary);
+  padding: 0;
   
   &:hover {
     background: var(--bg-secondary);
@@ -619,12 +482,11 @@ html, body {
   }
   
   svg {
-    width: 20px;
-    height: 20px;
+    width: 32px;
+    height: 32px;
   }
 }
 
-/* モバイルナビコンテンツ */
 .mobile-nav-content {
   flex: 1;
   overflow-y: auto;
@@ -715,30 +577,46 @@ html, body {
   }
 }
 
-/* ==========================================================================
-   メインコンテンツエリア
-   ========================================================================== */
 .app-content {
   width: 100%;
   max-width: 100vw;
   overflow-x: hidden;
 }
 
-.breadcrumb-container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 var(--space-lg);
+/* ドロップダウンメニュー */
+.dropdown {
+  position: relative;
+}
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  min-width: 200px;
+  background: #fff;
+  border: 1px solid var(--border-light);
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+  z-index: 2000;
+  display: flex;
+  flex-direction: column;
+  padding: 0.5rem 0;
+}
+.dropdown-label {
+  padding: 0;
+}
+.dropdown-item {
+  padding: 0.75rem 1.5rem;
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-size: 0.95rem;
+  transition: background 0.2s, color 0.2s;
+  white-space: nowrap;
+}
+.dropdown-item:hover {
+  background: var(--accent-blue);
+  color: #fff;
 }
 
-@media (max-width: 768px) {
-  .breadcrumb-container {
-    padding: 0 var(--space-md);
-  }
-}
-
-/* ==========================================================================
-   レスポンシブデザイン
-   ========================================================================== */
 @media (max-width: 768px) {
   .app-header {
     flex-direction: row;
@@ -753,12 +631,10 @@ html, body {
     }
   }
 
-  /* デスクトップナビを非表示 */
   .desktop-nav {
     display: none;
   }
 
-  /* モバイルメニューボタンを表示 */
   .mobile-menu-toggle {
     display: flex;
   }
@@ -786,6 +662,19 @@ html, body {
   .result-subtitle {
     display: none !important;
   }
+
+  /*
+  .demo-chat-overlay {
+    padding: 0;
+  }
+  .demo-chat-modal {
+    width: 100%;
+    height: 100%;
+    max-height: 100vh;
+    border-radius: 0;
+    overflow-y: auto;
+  }
+  */
 }
 
 @media (max-width: 480px) {
@@ -798,7 +687,7 @@ html, body {
   }
   
   .mobile-nav {
-    width: 70vw; /* 小さい画面では70% */
+    width: 70vw;
     right: -100vw;
     
     &.mobile-nav-open {
@@ -813,138 +702,4 @@ html, body {
   }
 }
 
-/* タッチデバイス最適化 */
-@media (hover: none) and (pointer: coarse) {
-  .nav-item:hover {
-    background-color: transparent;
-  }
-
-  .nav-item:active {
-    background-color: var(--bg-secondary);
-  }
-  
-  .mobile-nav-item:hover {
-    background: transparent;
-    transform: none;
-  }
-  
-  .mobile-nav-item:active {
-    background: linear-gradient(135deg, rgba(59, 130, 246, 0.15), rgba(16, 185, 129, 0.08));
-    transform: scale(0.98);
-  }
-  
-  .mobile-menu-toggle:hover {
-    background: transparent;
-  }
-  
-  .mobile-menu-toggle:active {
-    background: rgba(59, 130, 246, 0.15);
-  }
-}
-
-/* ==========================================================================
-   デモチャットモーダル
-   ========================================================================== */
-.demo-chat-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.6);
-  backdrop-filter: blur(8px);
-  z-index: 2000;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: var(--space-md);
-  animation: fadeIn 0.3s ease;
-}
-
-.demo-chat-modal {
-  width: 100%;
-  max-width: 800px;
-  max-height: 90vh;
-  border-radius: 16px;
-  overflow: hidden;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-  animation: slideUp 0.3s ease;
-  display: flex;
-  flex-direction: column;
-  overflow-y: auto;
-}
-
-.demo-chat-btn {
-  background: linear-gradient(135deg, var(--accent-gold), #f39c12) !important;
-  color: white !important;
-  font-weight: 600 !important;
-  border: none !important;
-  width: 100%;
-  text-align: left;
-  
-  &::before {
-    display: none !important;
-  }
-  
-  &:hover {
-    background: linear-gradient(135deg, #e67e22, #d35400) !important;
-    transform: translateY(-2px);
-    box-shadow: 0 6px 16px rgba(243, 156, 18, 0.4);
-  }
-  
-  svg {
-    position: relative;
-    
-    circle {
-      fill: rgba(255, 255, 255, 0.9);
-    }
-  }
-}
-
-.demo-chat-desktop-btn {
-  background: linear-gradient(135deg, var(--accent-gold), #f39c12) !important;
-  color: white !important;
-  font-weight: 600 !important;
-  border: none !important;
-  cursor: pointer;
-  
-  &::before {
-    display: none !important;
-  }
-  
-  &::after {
-    display: none !important;
-  }
-  
-  &:hover {
-    background: linear-gradient(135deg, #e67e22, #d35400) !important;
-    color: white !important;
-    transform: translateY(-2px);
-    box-shadow: 0 6px 16px rgba(243, 156, 18, 0.4);
-  }
-}
-
-@keyframes slideUp {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@media (max-width: 768px) {
-  .demo-chat-overlay {
-    padding: 0;
-  }
-  .demo-chat-modal {
-    width: 100%;
-    height: 100%;
-    max-height: 100vh;
-    border-radius: 0;
-    overflow-y: auto;
-  }
-}
 </style>
