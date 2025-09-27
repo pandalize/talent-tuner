@@ -1,37 +1,14 @@
 <script setup lang="ts"> // Vue3でTypeScriptを使い、ロジックを簡潔に書くための宣言
 import { RouterLink, RouterView, useRoute } from 'vue-router' // named export
 import { useI18n } from 'vue-i18n'
-import { ref } from 'vue' // 
-// import ResultDisplay from './components/diagnosis/ResultDisplay.vue' // 診断結果のデモ版
+import { ref } from 'vue' 
 import AppFooter from './components/AppFooter.vue'  // default export
-// import LanguageSwitcher from './components/LanguageSwitcher.vue'  // 言語切替えコンポーネント
-// import CareerChatBot from './components/CareerChatBot.vue'
-// import { onMounted, onUnmounted } from 'vue'
 
 const route = useRoute() // 現在のルート情報を取得
-const { t } = useI18n()
-
-
-/*
-// モバイルかどうかの判定（ヘッダーの表示を切り替えるため）
-const isMobile = ref(false) // モバイル判定用のリアクティブ変数
-function checkMobile() { // 480px以下をモバイルと判定する関数
-  isMobile.value = window.innerWidth <= 480 // window.innerWidth <= 480の結果をisMobile.valueに代入
-}
-onMounted(() => { // コンポーネントが表示された直後に中の関数が実行される
-  checkMobile()
-  window.addEventListener('resize', checkMobile) // 画面サイズが変わったかを監視、変わるとcheckMobileを自動で呼び出す
-})
-onUnmounted(() => { // コンポーネントが破棄される直前に中の関数が実行される
-  window.removeEventListener('resize', checkMobile) // 画面サイズが変わったかの監視を解除
-})
-*/
-
+const { t } = useI18n() // 国際化対応のための関数
 
 // ハンバーガーメニューを開閉
-const isMobileMenuOpen = ref(false)
-// const isDemoChatOpen = ref(false)
-// const isDemoResultOpen = ref(false)
+const isMobileMenuOpen = ref(false); // モバイルメニューの開閉状態を管理するリアクティブ変数
 const toggleMobileMenu = () => { // isMobileMenuOpenを反転させる関数
   isMobileMenuOpen.value = !isMobileMenuOpen.value
 }
@@ -39,27 +16,9 @@ const closeMobileMenu = () => { // isMobileMenuOpenをfalseにする関数
   isMobileMenuOpen.value = false
 }
 
-
 // ドロップタウンを開閉
 const dropdownOpen = ref(false);
 
-
-/*const showDemoChat = () => { // isDemoChatOpenをtrueにする関数
-  isDemoChatOpen.value = true
-  closeMobileMenu() // モバイルメニューが開いている場合は閉じる
-}
-
-const closeDemoChat = () => {
-  isDemoChatOpen.value = false
-}
-
-const showDemoResult = () => {
-  isDemoResultOpen.value = true
-  closeMobileMenu()
-}
-const closeDemoResult = () => {
-  isDemoResultOpen.value = false
-}*/
 </script>
 
 <template>
@@ -86,12 +45,6 @@ const closeDemoResult = () => {
             aria-haspopup="true"
             :aria-expanded="dropdownOpen"
           >{{ $t('nav.career_guide') }}</RouterLink>
-          <!-- <div v-if="dropdownOpen" class="dropdown-menu">
-            <RouterLink to="/student-guide" class="dropdown-item">{{ t('guide.student') }}</RouterLink>
-            <RouterLink to="/skills-development" class="dropdown-item">{{ t('guide.skills') }}</RouterLink>
-            <RouterLink to="/career-guide" class="dropdown-item">{{ t('guide.career') }}</RouterLink>
-            <RouterLink to="/salary-guide" class="dropdown-item">{{ t('guide.salary') }}</RouterLink>
-          </div> -->
         </div>
         <RouterLink to="/diagnosis-method" class="nav-item">診断について</RouterLink> <!-- $tはja.json,en.jsonから取得したかったが失敗 -->
         <RouterLink 

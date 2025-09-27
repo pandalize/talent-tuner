@@ -26,16 +26,8 @@
     <!-- PC版 & モバイル版共通: 質問カード -->
     <div class="question-card tw-card">
       <!-- モバイル版: チュートリアルスワイプカード（枠内最上部） 非表示化 -->
-      
-
-      <!-- 1枚目のチュートリアルカードの前に説明カードを表示 -->
-      <template v-if="showExplainSwipeCard && effectiveSwipeMode">
-        <div class="tutorial-card-container">
-          <ExplainSwipeCard @close="showExplainSwipeCard = false" />
-        </div>
-      </template>
-
-      <template v-else-if="shouldShowTutorial && effectiveSwipeMode">
+      <template v-if="shouldShowTutorial && effectiveSwipeMode">
+      <!-- <template> -->
         <div class="tutorial-card-container">
           <TutorialSwipeCard
             :main-question="question.text"
