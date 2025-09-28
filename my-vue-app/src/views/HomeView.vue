@@ -39,9 +39,9 @@
           <router-link to="/diagnosis" class="btn btn-primary">
             {{ home.cta.startDiagnosis() }}
           </router-link>
-          <button class="btn btn-chat" @click="$emit('show-demo-chat')">
+          <router-link to="/chat" class="btn btn-chat">
             {{ home.cta.aiCounseling() }}
-          </button>
+          </router-link>
           <router-link to="/about" class="btn btn-secondary">
             {{ home.cta.viewProfessions() }}
           </router-link>

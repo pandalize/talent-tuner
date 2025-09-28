@@ -1,10 +1,9 @@
-<script setup lang="ts"> // Vue3でTypeScriptを使い、ロジックを簡潔に書くための宣言
-import { RouterLink, RouterView, useRoute } from 'vue-router' // named export
+<script setup lang="ts">
+import { RouterLink, RouterView } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { ref } from 'vue' 
 
-const route = useRoute() // 現在のルート情報を取得
-const { t } = useI18n() // 国際化対応のための関数
+const { t } = useI18n()
 
 // ハンバーガーメニューを開閉
 const isMobileMenuOpen = ref(false); // モバイルメニューの開閉状態を管理するリアクティブ変数
@@ -14,10 +13,6 @@ const toggleMobileMenu = () => { // isMobileMenuOpenを反転させる関数
 const closeMobileMenu = () => { // isMobileMenuOpenをfalseにする関数
   isMobileMenuOpen.value = false
 }
-
-// ドロップタウンを開閉
-const dropdownOpen = ref(false);
-
 </script>
 
 <template>
@@ -31,27 +26,13 @@ const dropdownOpen = ref(false);
         </div>
       </RouterLink>
 
-      <nav class="header-nav desktop-nav">
+      <nav class="header-nav">
         <RouterLink to="/" class="nav-item">{{ $t('nav.home') }}</RouterLink>  <!-- $tはja.json,en.jsonから取得 -->
         <RouterLink to="/diagnosis" class="nav-item">{{ $t('nav.diagnosis') }}</RouterLink>
         <RouterLink to="/about" class="nav-item">{{ $t('nav.about') }}</RouterLink>
-        <div class="nav-item dropdown"
-             @mouseenter="dropdownOpen = true"
-             @mouseleave="dropdownOpen = false">
-          <RouterLink
-            to="/career-guide"
-            class="dropdown-label"
-            aria-haspopup="true"
-            :aria-expanded="dropdownOpen"
-          >{{ $t('nav.career_guide') }}</RouterLink>
-        </div>
-        <RouterLink to="/diagnosis-method" class="nav-item">診断について</RouterLink> <!-- $tはja.json,en.jsonから取得したかったが失敗 -->
-        <RouterLink 
-          to="/chat"
-          class="nav-item chat-desktop-btn"
-        >
-          {{ t('nav.chat') }}
-        </RouterLink>
+        <RouterLink to="/career-guide" class="nav-item">{{ $t('nav.career_guide') }}</RouterLink>
+        <RouterLink to="/diagnosis-method" class="nav-item">{{ $t('nav.diagnosis_method') }}</RouterLink>
+        <RouterLink to="/chat" class="nav-item">{{ $t('nav.chat') }}</RouterLink>
       </nav>
 
       <!-- ヘッダーコントロール -->
@@ -539,7 +520,7 @@ html, body {
     }
   }
 
-  .desktop-nav {
+  .header-nav {
     display: none;
   }
 
