@@ -1,0 +1,11 @@
+{
+  "buildCommand": "cd my-vue-app && npm run build",
+  "outputDirectory": "my-vue-app/dist",
+  "installCommand": "npm install && cd my-vue-app && npm install",
+  "rewrites": [
+    {
+      "source": "/((?!api/).*)",
+      "destination": "/index.html"
+    }
+  ]
+}

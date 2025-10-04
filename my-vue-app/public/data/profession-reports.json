@@ -1,0 +1,26 @@
+{
+  "プログラマー": {
+    "price": 300,
+    "reportId": "programmer-report"
+  },
+  "公認会計士": {
+    "price": 300,
+    "reportId": "accountant-report"
+  },
+  "インフルエンサー": {
+    "price": 300,
+    "reportId": "influencer-report"
+  },
+  "起業家": {
+    "price": 300,
+    "reportId": "entrepreneur-report"
+  },
+  "建設業": {
+    "price": 300,
+    "reportId": "construction-report"
+  },
+  "デイトレーダー": {
+    "price": 300,
+    "reportId": "trader-report"
+  }
+}

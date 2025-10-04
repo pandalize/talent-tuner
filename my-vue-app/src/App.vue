@@ -33,6 +33,7 @@ const closeMobileMenu = () => { // isMobileMenuOpenをfalseにする関数
         <RouterLink to="/career-guide" class="nav-item">{{ $t('nav.career_guide') }}</RouterLink>
         <RouterLink to="/diagnosis-method" class="nav-item">{{ $t('nav.diagnosis_method') }}</RouterLink>
         <RouterLink to="/chat" class="nav-item">{{ $t('nav.chat') }}</RouterLink>
+        <RouterLink to="/payment" class="nav-item">決済</RouterLink>
       </nav>
 
       <!-- ヘッダーコントロール -->

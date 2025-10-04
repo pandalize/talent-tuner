@@ -24,13 +24,14 @@ export default defineConfig({
     },
   },
   server: {
-    proxy: {
-      '/api': {
-        target: 'http://localhost:8000',
-        changeOrigin: true,
-        rewrite: path => path.replace(/^\/api/, '') // /api/chat-proxy.php → /chat-proxy.php
-      }
-    }
+    // プロキシ設定を一時的に無効化（Stripe API テスト用）
+    // proxy: {
+    //   '/api': {
+    //     target: 'http://localhost:8000',
+    //     changeOrigin: true,
+    //     rewrite: path => path.replace(/^\/api/, '') // /api/chat-proxy.php → /chat-proxy.php
+    //   }
+    // }
   },
   build: {
     // Core Web Vitals最適化

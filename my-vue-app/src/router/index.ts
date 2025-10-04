@@ -176,6 +176,11 @@ const router = createRouter({
       }
     },
     {
+      path: '/payment',
+      name: 'payment',
+      component: () => import('../views/PaymentView.vue')
+    },
+    {
       path: '/sitemap',
       name: 'sitemap',
       component: () => import('../views/SitemapView.vue'),

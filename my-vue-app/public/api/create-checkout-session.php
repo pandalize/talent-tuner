@@ -63,8 +63,8 @@ try {
             'quantity' => 1,
         ]],
         'mode' => 'payment',
-        'success_url' => 'https://pandalize.com/payment-success?session_id={CHECKOUT_SESSION_ID}',
-        'cancel_url' => 'https://pandalize.com/diagnosis',
+        'success_url' => 'http://localhost:5173/payment-success?session_id={CHECKOUT_SESSION_ID}',
+        'cancel_url' => 'http://localhost:5173/diagnosis',
         'metadata' => [
             'result_data' => json_encode($resultData)
         ]

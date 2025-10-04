@@ -76,7 +76,7 @@ const bodyClasses = computed(() => [
   }
 
   .tw-card-border {
-  @apply border border-gray-200;
+  @apply border;
   }
 
   .tw-card-hover {
@@ -84,11 +84,11 @@ const bodyClasses = computed(() => [
   }
 
   .tw-card-header {
-  @apply px-6 py-4 border-b border-gray-200;
+  @apply px-6 py-4 border-b;
   }
 
   .tw-card-footer {
-  @apply px-6 py-4 border-t border-gray-200 bg-gray-50;
+  @apply px-6 py-4 border-t bg-gray-50;
   }
 
   /* Shadow variations */
