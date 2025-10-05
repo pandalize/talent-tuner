@@ -1,8 +1,6 @@
 <template>
   <div>
     <h2>ご購入ありがとうございました！</h2>
-    <p>職業名: {{ professionName }}</p>
-    <p>購入者名: {{ customerName }}</p>
     <button @click="downloadPdf" :disabled="!sessionId">PDFダウンロード</button>
   </div>
 </template>

@@ -1,5 +1,4 @@
 import Stripe from 'stripe'
-import type { PurchaseData } from '../my-vue-app/src/types/PurchaseData'
 
 export default async function handler(req: any, res: any) {
   res.setHeader('Access-Control-Allow-Origin', 'http://localhost:5173')
@@ -20,15 +19,10 @@ export default async function handler(req: any, res: any) {
       priceId,
       price,
       currency,
-      customerName,
-      customerEmail,
-      telephone,
-      country,
       timestamp
-    } = req.body as PurchaseData
+    } = req.body
 
     const session = await stripe.checkout.sessions.create({
-      customer_email: customerEmail,
       line_items: [
         {
           price: priceId,
@@ -41,9 +35,6 @@ export default async function handler(req: any, res: any) {
         reportId,
         price: price?.toString(),
         currency,
-        customerName,
-        telephone,
-        country,
         timestamp,
         serviceName: 'talent-tuner-diagnosis-report'
       },

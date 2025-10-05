@@ -4,6 +4,7 @@ import { createMultilingualRoutes, getMetaForRoute } from './multilingual'
 import { changeLanguage, type SupportedLocale } from '../i18n'
 // SEOユーティリティをインポート
 // import { setupStructuredData } from '../utils/seoUtils'
+import SuccessView from '@/views/SuccessView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -201,6 +202,11 @@ const router = createRouter({
     {
       path: '/:pathMatch(.*)*',
       redirect: '/404',
+    },
+    {
+      path: '/success',
+      name: 'Success',
+      component: SuccessView
     },
   ],
 })

@@ -14,17 +14,7 @@
             <div class="profession-name">{{ profession.name }}</div>
             <div class="profession-price">¥{{ getProfessionPrice(profession.name) }}</div>
           </div>
-          <!-- 購入済みの場合 -->
-          <div v-if="isProfessionPurchased(profession.name)" class="purchased-button">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
-              <polyline points="22,4 12,14.01 9,11.01"/>
-            </svg>
-            購入済み
-          </div>
-          
-          <!-- 未購入の場合 -->
-          <button v-else @click="purchasePdfReport(index)" class="premium-button" :disabled="isProcessing[index]">
+          <button @click="purchasePdfReport(index)" class="premium-button" :disabled="isProcessing[index]">
             <svg v-if="!isProcessing[index]" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <circle cx="9" cy="21" r="1"/>
               <circle cx="20" cy="21" r="1"/>
@@ -42,7 +32,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import type { ProfessionScore } from '../../utils/diagnosisLoader'
 import type { PurchaseData } from '../../types/PurchaseData'
@@ -60,7 +50,6 @@ const router = useRouter() // ルーターの使用
 // 状態管理
 const isProcessing = ref<Record<number, boolean>>({}) // 各職業の購入処理中状態
 const professionReports = ref<ProfessionReports | null>(null) // 職業レポート設定
-const purchasedReports = ref<any[]>([]) // 購入履歴
 
 // 職業レポート設定を読み込む関数
 async function loadProfessionReports() {
@@ -82,60 +71,12 @@ function getProfessionPrice(professionName: string): number {
   return reportConfig?.price || 300
 }
 
-// 購入履歴を読み込む関数
-function loadPurchasedReports() {
-  const storedReports = sessionStorage.getItem('purchasedReports')
-  if (storedReports) {
-    try {
-      purchasedReports.value = JSON.parse(storedReports)
-      console.log('購入履歴を読み込みました:', purchasedReports.value.map(r => r.professionName))
-    } catch (error) {
-      console.error('購入履歴の読み込みエラー:', error)
-      purchasedReports.value = []
-    }
-  } else {
-    purchasedReports.value = []
-    console.log('購入履歴なし')
-  }
-}
-
-// 指定された職業が購入済みかチェックする関数
-function isProfessionPurchased(professionName: string): boolean {
-  return purchasedReports.value.some(report => report.professionName === professionName)
-}
-
-// ページがアクティブになったときに購入履歴を更新
-const handleVisibilityChange = () => {
-  if (!document.hidden) {
-    // 決済から戻ってきた可能性があるかチェック
-    const hasNewPurchaseData = sessionStorage.getItem('purchaseData')
-    const hasPaymentCompleted = sessionStorage.getItem('paymentCompleted')
-    
-    if (hasPaymentCompleted || !hasNewPurchaseData) {
-      console.log('決済完了の可能性があるため購入履歴を再読み込み')
-      loadPurchasedReports()
-    }
-  }
-}
-
 // 決済完了データをチェック
 onMounted(async () => {
   // 職業レポート設定を読み込み
   await loadProfessionReports()
-  
-  // 購入履歴を読み込み
-  loadPurchasedReports()
-  
-  // ページの可視性変更を監視
-  document.addEventListener('visibilitychange', handleVisibilityChange)
-  
-  // 古い決済完了データをクリア（不要になったため）
-  sessionStorage.removeItem('paymentCompleted')
 })
 
-onUnmounted(() => {
-  document.removeEventListener('visibilitychange', handleVisibilityChange)
-})
 
 // 決済画面への遷移
 async function purchasePdfReport(professionIndex: number = 0) {
@@ -156,10 +97,6 @@ async function purchasePdfReport(professionIndex: number = 0) {
       price: reportConfig?.price || 300,
       currency: 'JPY',
       reportId: reportConfig?.reportId || 'default-report',
-      customerName: '',
-      customerEmail: '',
-      telephone: '',
-      country: '',
       timestamp: new Date().toISOString(),
     }
     
