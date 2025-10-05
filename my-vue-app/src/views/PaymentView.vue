@@ -3,6 +3,7 @@ import { loadStripe } from '@stripe/stripe-js'
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import type { Stripe, StripeElements, StripeCardElement } from '@stripe/stripe-js'
+import type { PurchaseData } from '../types/PurchaseData'
 
 const router = useRouter()
 const stripe = ref<Stripe | null>(null)
@@ -13,16 +14,14 @@ const stripePublicKey = ref(import.meta.env.VITE_STRIPE_PUBLIC_KEY)
 const postalCode = ref('')
 
 // 購入データの受け取り
-interface PurchaseData {
-  professionName: string
-  price: number
-  currency: string
-  reportId: string
-  timestamp: string
-}
-
 const purchaseData = ref<PurchaseData | null>(null)
 const error = ref<string>('')
+
+// 購入者情報
+const customerName = ref('')
+const customerEmail = ref('')
+const telephone = ref('')
+const country = ref('')
 
 onMounted(async () => {
   try {
@@ -89,16 +88,27 @@ const handlePayment = async () => {
     const response = await fetch('http://localhost:3000/api/create-payment-intent', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ 
-        amount: purchaseData.value?.price,
-        currency: purchaseData.value?.currency,
+      body: JSON.stringify({
+        priceId: purchaseData.value?.priceId,
         professionName: purchaseData.value?.professionName,
-        reportId: purchaseData.value?.reportId
+        reportId: purchaseData.value?.reportId,
+        price: purchaseData.value?.price,
+        currency: purchaseData.value?.currency,
+        customerName: customerName.value,
+        customerEmail: customerEmail.value,
+        telephone: telephone.value,
+        country: country.value,
+        timestamp: new Date().toISOString(),
       })
     })
 
     const data = await response.json()
 
+    if (response.ok && data.url) {
+      window.location.href = data.url
+      return
+    }
+    
     if (response.ok && data.paymentIntent && data.paymentIntent.client_secret) {
       const result = await stripe.value.confirmCardPayment(data.paymentIntent.client_secret, {
         payment_method: {
@@ -190,6 +200,15 @@ const formatPostalCode = (event: Event) => {
     }
   }
 }
+
+// サンプルデータ自動入力
+const fillSampleData = () => {
+  customerName.value = '山田 太郎'
+  customerEmail.value = 'sample@example.com'
+  telephone.value = '08012345678'
+  country.value = '日本'
+  postalCode.value = '123-4567'
+}
 </script>
 
 <template>
@@ -236,12 +255,33 @@ const formatPostalCode = (event: Event) => {
       </div>
     </div>
     
+      <div class="customer-info-form">
+        <h3>購入者情報の入力</h3>
+        <div class="form-group">
+          <label for="customerName">氏名</label>
+          <input id="customerName" v-model="customerName" type="text" placeholder="氏名" />
+        </div>
+        <div class="form-group">
+          <label for="customerEmail">メールアドレス</label>
+          <input id="customerEmail" v-model="customerEmail" type="email" placeholder="メールアドレス" />
+        </div>
+        <div class="form-group">
+          <label for="telephone">電話番号</label>
+          <input id="telephone" v-model="telephone" type="tel" placeholder="電話番号" />
+        </div>
+        <div class="form-group">
+          <label for="country">国</label>
+          <input id="country" v-model="country" type="text" placeholder="国" />
+        </div>
+      </div>
+    
       <button 
         @click="handlePayment" 
         :disabled="isLoading || !stripe || postalCode.replace('-', '').length !== 7"
       >
         {{ isLoading ? '処理中...' : `決済する（¥${purchaseData?.price}）` }}
       </button>
+      <button @click="fillSampleData" type="button" style="margin-left:1rem;">サンプルデータ自動入力</button>
     </div>
   </div>
 </template>
@@ -355,6 +395,34 @@ button:disabled {
 }
 
 .postal-code-input {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+}
+
+.customer-info-form {
+  margin: 2rem 0;
+  text-align: left;
+}
+
+.customer-info-form h3 {
+  color: #2d3748;
+  margin-bottom: 1rem;
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: bold;
+}
+
+.form-group input {
   width: 100%;
   padding: 0.75rem;
   border: 1px solid #ccc;

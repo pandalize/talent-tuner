@@ -7,7 +7,6 @@
           <p class="premium-subtitle">より深い自己理解とキャリア設計のために</p>
         </div>
       </div>
-      
       <div class="purchase-buttons">
         <div v-for="(profession, index) in professions.slice(0, 3)" :key="profession.name" class="profession-card">
           <div class="profession-info">
@@ -36,6 +35,8 @@
           </button>
         </div>
       </div>
+
+      <!-- 購入者情報入力欄は削除 -->
     </div>
   </div>
 </template>
@@ -44,20 +45,22 @@
 import { ref, onMounted, onUnmounted } from 'vue'
 import { useRouter } from 'vue-router'
 import type { ProfessionScore } from '../../utils/diagnosisLoader'
+import type { PurchaseData } from '../../types/PurchaseData'
+import type { ProfessionReportConfig, ProfessionReports } from '../../types/ProfessionReport'
 
 // Props
 interface Props {
-  professions: ProfessionScore[]
+  professions: ProfessionScore[] // 職業スコアの配列
 }
 
-const props = defineProps<Props>()
+const props = defineProps<Props>() // Propsの定義
 
-const router = useRouter()
+const router = useRouter() // ルーターの使用
 
 // 状態管理
-const isProcessing = ref<Record<number, boolean>>({})
-const professionReports = ref<any>(null)
-const purchasedReports = ref<any[]>([])
+const isProcessing = ref<Record<number, boolean>>({}) // 各職業の購入処理中状態
+const professionReports = ref<ProfessionReports | null>(null) // 職業レポート設定
+const purchasedReports = ref<any[]>([]) // 購入履歴
 
 // 職業レポート設定を読み込む関数
 async function loadProfessionReports() {
@@ -137,7 +140,6 @@ onUnmounted(() => {
 // 決済画面への遷移
 async function purchasePdfReport(professionIndex: number = 0) {
   if (isProcessing.value[professionIndex]) return
-  
   try {
     isProcessing.value[professionIndex] = true
     
@@ -147,14 +149,17 @@ async function purchasePdfReport(professionIndex: number = 0) {
     
     // 職業レポート設定から価格とレポートIDを取得
     const reportConfig = professionReports.value?.[professionName]
-    const price = reportConfig?.price || 300
-    const reportId = reportConfig?.reportId || 'default-report'
     
-    const purchaseData = {
+    const purchaseData: PurchaseData = {
       professionName: professionName,
-      price: price,
+      priceId: reportConfig?.priceId || 'default-price-id',
+      price: reportConfig?.price || 300,
       currency: 'JPY',
-      reportId: reportId,
+      reportId: reportConfig?.reportId || 'default-report',
+      customerName: '',
+      customerEmail: '',
+      telephone: '',
+      country: '',
       timestamp: new Date().toISOString(),
     }
     
@@ -195,16 +200,6 @@ async function purchasePdfReport(professionIndex: number = 0) {
     border-radius: 50%;
     transform: translate(50%, -50%);
   }
-}
-
-.premium-header {
-  @include mixins.flex-row(var(--space-lg));
-  margin-bottom: var(--space-lg);
-  align-items: flex-start;
-}
-
-.premium-content {
-  flex: 1;
 }
 
 .premium-title {

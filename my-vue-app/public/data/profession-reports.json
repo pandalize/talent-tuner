@@ -1,26 +1,32 @@
 {
   "プログラマー": {
-    "price": 300,
+    "price": 400,
+    "priceId": "price_1PXXXXXXX",
     "reportId": "programmer-report"
   },
   "公認会計士": {
     "price": 300,
+    "priceId": "price_1PYYYYYYY",
     "reportId": "accountant-report"
   },
   "インフルエンサー": {
     "price": 300,
+    "priceId": "price_1PZZZZZZZ",
     "reportId": "influencer-report"
   },
   "起業家": {
-    "price": 300,
+    "price": 500,
+    "priceId": "price_1SEm7gRzSw29Rc5R8DjQEUMM",
     "reportId": "entrepreneur-report"
   },
   "建設業": {
-    "price": 300,
+    "price": 200,
+    "priceId": "price_1PBBBBBBB",
     "reportId": "construction-report"
   },
   "デイトレーダー": {
     "price": 300,
+    "priceId": "price_1PCCCCCCC",
     "reportId": "trader-report"
   }
 }
