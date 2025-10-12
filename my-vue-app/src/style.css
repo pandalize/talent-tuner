@@ -18,7 +18,7 @@ html, body {
 @layer components {
   .tw-nav-container {
     @apply flex items-center justify-between
-           border rounded
+           border rounded-lg
            shadow-lg p-4 z-10;
     background-color: rgba(255, 255, 255, 0.95);
     backdrop-filter: blur(12px);
@@ -491,7 +491,7 @@ html, body {
     .tw-label-left,
     .tw-label-right {
       @apply text-xs p-1 bg-blue-50 
-             border border-blue-100 rounded
+             border border-blue-100 rounded-md
              max-w-20 text-center break-words;
     }
   }
