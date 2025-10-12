@@ -6,7 +6,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     }
 
     try {
-        const apiKey = process.env.VITE_CLAUDE_API_KEY; // 環境変数からAPIキーを取得
+        const apiKey = process.env.CLAUDE_API_KEY; // 環境変数からAPIキーを取得
         const claudeResponse = await fetch('https://api.anthropic.com/v1/messages', { // ClaudeのAPIエンドポイントにリクエストを送り、結果を取ってくる
             method: 'POST', // TTPメソッドはPOST
             headers: {
