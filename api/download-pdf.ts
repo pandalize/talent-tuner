@@ -1,5 +1,7 @@
 import Stripe from 'stripe'
 import type { NextApiRequest, NextApiResponse } from 'next'
+import fs from 'fs'
+import path from 'path'
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
@@ -17,10 +19,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     // 職業名をmetadataから取得
     const professionName = session.metadata?.professionName || 'report'
 
-    // ダミーPDFデータ（本番はPDF生成処理に置き換え）
-    const pdfBuffer = Buffer.from(`%PDF-1.4\n%Dummy PDF for ${professionName}\n`, 'utf-8')
+    // PDFファイルパス
+    const pdfPath = path.join(process.cwd(), 'public/pdfs', `${professionName}-report.pdf`)
+    if (!fs.existsSync(pdfPath)) {
+      return res.status(404).json({ error: 'PDFファイルが存在しません' })
+    }
+    const pdfBuffer = fs.readFileSync(pdfPath)
     res.setHeader('Content-Type', 'application/pdf')
-    res.setHeader('Content-Disposition', `attachment; filename="${professionName}-report.pdf"`)
+    res.setHeader('Content-Disposition', `attachment; filename=\"${professionName}-report.pdf\"`)
     res.send(pdfBuffer)
   } catch (error: any) {
     console.error('PDFダウンロードAPIエラー:', error.message)
