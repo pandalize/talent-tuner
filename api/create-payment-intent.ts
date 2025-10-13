@@ -15,12 +15,19 @@ export default async function handler(req: any, res: any) {
     const stripe = new Stripe(secretKey)
     const {
       professionName,
-      reportId,
       priceId,
       price,
       currency,
       timestamp
     } = req.body
+
+    console.log('metadata:', {
+      professionName,
+      priceId,
+      price: price?.toString(),
+      currency,
+      timestamp,
+    })
 
     const session = await stripe.checkout.sessions.create({
       line_items: [
@@ -31,12 +38,11 @@ export default async function handler(req: any, res: any) {
       ],
       mode: 'payment',
       metadata: {
-        professionName,
-        reportId,
-        price: price?.toString(),
-        currency,
-        timestamp,
-        serviceName: 'talent-tuner-diagnosis-report'
+        professionName: professionName,
+        priceId: priceId,
+        price: price.toString(),
+        currency: currency,
+        timestamp: timestamp,
       },
       success_url: 'http://localhost:5173/success?session_id={CHECKOUT_SESSION_ID}',
       cancel_url: 'http://localhost:5173/cancel',

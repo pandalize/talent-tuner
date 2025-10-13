@@ -18,7 +18,7 @@ onMounted(async () => {
       const parsedData = JSON.parse(storedData)
       
       // 必要なデータがすべて含まれているかチェック
-      if (parsedData.professionName && parsedData.price && parsedData.currency && parsedData.reportId) {
+      if (parsedData.professionName && parsedData.price && parsedData.currency) {
         purchaseData.value = parsedData
         console.log('購入データを読み込みました:', parsedData.professionName, '¥' + parsedData.price)
       } else {
@@ -37,15 +37,20 @@ onMounted(async () => {
 const handlePayment = async () => {
   isLoading.value = true
   try {
-    console.log('決済処理開始:', purchaseData.value?.professionName, purchaseData.value?.reportId)
-    
+    console.log('決済処理開始:', purchaseData.value?.professionName)
+    console.log('送信データ:', {
+      priceId: purchaseData.value?.priceId,
+      professionName: purchaseData.value?.professionName,
+      price: purchaseData.value?.price,
+      currency: purchaseData.value?.currency,
+      timestamp: new Date().toISOString(),
+    })
     const response = await fetch('http://localhost:3000/api/create-payment-intent', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         priceId: purchaseData.value?.priceId,
         professionName: purchaseData.value?.professionName,
-        reportId: purchaseData.value?.reportId,
         price: purchaseData.value?.price,
         currency: purchaseData.value?.currency,
         timestamp: new Date().toISOString(),
@@ -86,17 +91,14 @@ const handlePayment = async () => {
       <h2>購入内容</h2>
       <div class="product-details">
         <h3>{{ purchaseData.professionName }} 詳細診断レポート</h3>
-        <p class="price">¥{{ purchaseData.price }} ({{ purchaseData.currency }})</p>
+        <p class="price">{{ purchaseData.price }} ({{ purchaseData.currency }})</p>
       </div>
     </div>
     
     <!-- 決済ボタン（エラーがない場合のみ表示） -->
     <div v-if="!error">
-      <button 
-        @click="handlePayment" 
-        :disabled="isLoading"
-      >
-        {{ isLoading ? '処理中...' : `決済する（¥${purchaseData?.price}）` }}
+      <button @click="handlePayment" :disabled="isLoading">
+        {{ isLoading ? '処理中...' : `決済する（${purchaseData?.price}）` }}
       </button>
     </div>
   </div>

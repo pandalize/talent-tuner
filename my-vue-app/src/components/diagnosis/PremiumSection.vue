@@ -92,11 +92,10 @@ async function purchasePdfReport(professionIndex: number = 0) {
     const reportConfig = professionReports.value?.[professionName]
     
     const purchaseData: PurchaseData = {
-      professionName: professionName,
+      professionName: professionName, // 日本語名のみ
       priceId: reportConfig?.priceId || 'default-price-id',
       price: reportConfig?.price || 300,
       currency: 'JPY',
-      reportId: reportConfig?.reportId || 'default-report',
       timestamp: new Date().toISOString(),
     }
     
