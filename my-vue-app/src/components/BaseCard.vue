@@ -70,67 +70,74 @@ const bodyClasses = computed(() => [
 </script>
 
 <style scoped>
-@layer components {
-  .tw-base-card {
-    @apply bg-white transition-all duration-300;
-  }
+.tw-base-card {
+  background-color: white;
+  transition: all 0.3s;
+}
 
-  .tw-card-border {
-  @apply border;
-  }
+.tw-card-border {
+  border: 1px solid #e5e7eb;
+}
 
-  .tw-card-hover {
-    @apply hover:shadow-lg hover:-translate-y-1 cursor-pointer;
-  }
+.tw-card-hover {
+  cursor: pointer;
+}
 
-  .tw-card-header {
-  @apply px-6 py-4 border-b;
-  }
+.tw-card-hover:hover {
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  transform: translateY(-0.25rem);
+}
 
-  .tw-card-footer {
-  @apply px-6 py-4 border-t bg-gray-50;
-  }
+.tw-card-header {
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid #e5e7eb;
+}
 
-  /* Shadow variations */
-  .tw-shadow-none {
-    @apply shadow-none;
-  }
+.tw-card-footer {
+  padding: 1rem 1.5rem;
+  border-top: 1px solid #e5e7eb;
+  background-color: #f9fafb;
+}
 
-  .tw-shadow-sm {
-    @apply shadow-sm;
-  }
+/* Shadow variations */
+.tw-shadow-none {
+  box-shadow: none;
+}
 
-  .tw-shadow-md {
-    @apply shadow-md;
-  }
+.tw-shadow-sm {
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+}
 
-  .tw-shadow-lg {
-    @apply shadow-lg;
-  }
+.tw-shadow-md {
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
 
-  .tw-shadow-xl {
-    @apply shadow-xl;
-  }
+.tw-shadow-lg {
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
 
-  /* Padding variations */
-  .tw-padding-none {
-    @apply p-0;
-  }
+.tw-shadow-xl {
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
 
-  .tw-padding-sm {
-    @apply p-4;
-  }
+/* Padding variations */
+.tw-padding-none {
+  padding: 0;
+}
 
-  .tw-padding-md {
-    @apply p-6;
-  }
+.tw-padding-sm {
+  padding: 1rem;
+}
 
-  .tw-padding-lg {
-    @apply p-8;
-  }
+.tw-padding-md {
+  padding: 1.5rem;
+}
 
-  .tw-padding-xl {
-    @apply p-10;
-  }
+.tw-padding-lg {
+  padding: 2rem;
+}
+
+.tw-padding-xl {
+  padding: 2.5rem;
 }
 </style>

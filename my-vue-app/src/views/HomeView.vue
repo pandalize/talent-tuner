@@ -34,69 +34,50 @@
           </div>
         </div>
 
-        <div class="action-buttons">
-          <router-link to="/diagnosis" class="btn btn-primary">
+        <div class="aligned-button">
+          <BaseButton
+            variant="blue"
+            size="md"
+            @click="$router.push('/diagnosis')"
+          >
             {{ $t('home.cta.start_diagnosis') }}
-          </router-link>
-          <router-link to="/chat" class="btn btn-chat">
+          </BaseButton>
+          <BaseButton
+            variant="gold"
+            size="md"
+            @click="$router.push('/chat')"
+          >
             {{ $t('home.cta.ai_counseling') }}
-          </router-link>
-          <router-link to="/about" class="btn btn-secondary">
+          </BaseButton>
+          <BaseButton
+            variant="white"
+            size="md"
+            @click="$router.push('/about')"
+          >
             {{ $t('home.cta.view_professions') }}
-          </router-link>
+          </BaseButton>
         </div>
 
       </div>
     </div>
-
-    <section class="methodology-section">
-      <div class="section-container">
-        <h2 class="section-title">診断の特徴</h2>
-        <div class="methodology-grid">
-          <div class="methodology-card">
-            <div class="card-icon">
-              <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                <path d="M9 17H7a2 2 0 01-2-2V7a2 2 0 012-2h2m10 10h2a2 2 0 002-2V7a2 2 0 00-2-2h-2m-5-3v18m-4-8h8"/>
-              </svg>
-            </div>
-            <h3>包括的な評価基準</h3>
-            <p>個人の能力、興味、価値観、ワークライフバランスを総合的に分析し、最適な職業を提案します。</p>
-          </div>
-          <div class="methodology-card">
-            <div class="card-icon">
-              <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                <path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
-              </svg>
-            </div>
-            <h3>データに基づく分析</h3>
-            <p>統計的手法と心理測定学の理論を応用し、信頼性の高い診断結果を提供します。</p>
-          </div>
-          <div class="methodology-card">
-            <div class="card-icon">
-              <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                <path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
-              </svg>
-            </div>
-            <h3>迅速な診断プロセス</h3>
-            <p>厳選された質問により、短時間で精度の高い診断を実現。忙しい方にも最適です。</p>
-          </div>
-        </div>
-      </div>
-    </section>
   </main>
 </template>
 
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n'
+import BaseButton from '@/components/BaseButton.vue'
 
 const { t } = useI18n()
 </script>
 
 <style lang="scss" scoped>
 @use '@/assets/scss/mixins.scss' as mixins;
-// =====================================================
-// Home Page - SCSS版
-// =====================================================
+
+.aligned-button {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
 
 .home-main {
   width: 100%;
@@ -348,76 +329,6 @@ const { t } = useI18n()
 }
 
 /* ==========================================================================
-   方法論セクション
-   ========================================================================== */
-.methodology-section {
-  padding: var(--space-xxl) 0;
-  background: var(--bg-secondary);
-  flex-shrink: 0;
-}
-
-.section-container {
-  max-width: 1200px;
-  width: 90%;
-  margin: 0 auto;
-}
-
-.section-title {
-  font-family: var(--font-heading);
-  font-size: var(--fs-h2);
-  color: var(--primary-navy);
-  text-align: center;
-  margin-bottom: var(--space-xl);
-  font-weight: 600;
-}
-
-.methodology-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: var(--space-lg);
-}
-
-.methodology-card {
-  background: var(--bg-primary);
-  padding: var(--space-lg);
-  border-radius: 8px;
-  text-align: center;
-  transition: all var(--transition-normal);
-  border: 1px solid var(--border-light);
-}
-
-.methodology-card:hover {
-  transform: translateY(-4px);
-  box-shadow: var(--shadow-lg);
-}
-
-.card-icon {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 80px;
-  height: 80px;
-  background: var(--bg-secondary);
-  border-radius: 50%;
-  margin-bottom: var(--space-md);
-  color: var(--primary-navy);
-}
-
-.methodology-card h3 {
-  font-family: var(--font-heading);
-  font-size: 1.25rem;
-  color: var(--primary-navy);
-  margin-bottom: var(--space-sm);
-  font-weight: 600;
-}
-
-.methodology-card p {
-  font-size: var(--fs-body);
-  color: var(--text-secondary);
-  line-height: 1.6;
-}
-
-/* ==========================================================================
    レスポンシブデザイン - モバイル最適化
    ========================================================================== */
 @media (max-width: 768px) {
@@ -481,21 +392,6 @@ const { t } = useI18n()
   .feature-desc {
     font-size: 1rem;
     line-height: 1.3;
-  }
-
-  .action-buttons {
-    display: flex;
-    flex-direction: row;
-    gap: var(--space-sm);
-    align-items: center;
-    justify-content: center;
-    margin-bottom: var(--space-xl);
-    flex-wrap: wrap;
-  }
-
-  // アクションボタンの間隔を確実に空ける
-  .action-buttons > *:not(:last-child) {
-    margin-right: var(--space-md, 1rem);
   }
 
   .btn {

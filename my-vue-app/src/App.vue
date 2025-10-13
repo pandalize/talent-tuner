@@ -9,14 +9,14 @@
       </RouterLink>
 
       <nav class="header-nav">
-        <RouterLink to="/" class="nav-item">{{ $t('nav.home') }}</RouterLink>
-        <RouterLink to="/diagnosis" class="nav-item">{{ $t('nav.diagnosis') }}</RouterLink>
-        <RouterLink to="/about" class="nav-item">{{ $t('nav.about') }}</RouterLink>
-        <RouterLink to="/career-guide" class="nav-item">{{ $t('nav.career_guide') }}</RouterLink>
-        <RouterLink to="/diagnosis-method" class="nav-item">{{ $t('nav.diagnosis_method') }}</RouterLink>
-        <RouterLink to="/chat" class="nav-item">{{ $t('nav.chat') }}</RouterLink>
-        <RouterLink to="/payment" class="nav-item">{{ $t('nav.payment') }}</RouterLink>
-        <RouterLink to="/newchat" class="nav-item">{{ $t('nav.newchat') }}</RouterLink>
+          <RouterLink to="/" class="nav-item">{{ $t('nav.home') }}</RouterLink>
+          <RouterLink to="/diagnosis" class="nav-item">{{ $t('nav.diagnosis') }}</RouterLink>
+          <!-- <RouterLink to="/career-guide" class="nav-item">{{ $t('nav.career_guide') }}</RouterLink> -->
+          <!-- <RouterLink to="/diagnosis-method" class="nav-item">{{ $t('nav.diagnosis_method') }}</RouterLink> -->
+          <!-- <RouterLink to="/chat" class="nav-item">{{ $t('nav.chat') }}</RouterLink> -->
+          <!-- <RouterLink to="/payment" class="nav-item">{{ $t('nav.payment') }}</RouterLink> -->
+          <RouterLink to="/newchat" class="nav-item">{{ $t('nav.newchat') }}</RouterLink>
+          <RouterLink to="/about" class="nav-item">{{ $t('nav.about') }}</RouterLink>
       </nav>
 
       <!-- ヘッダーコントロール -->
@@ -246,9 +246,10 @@ html, body {
   width: 80%;
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 3%;
-  flex-wrap: wrap;
-  padding: var(--space-xs);
+  flex-wrap: wrap; 
+  padding: var(--space-xs); 
   border-radius: 12px;
 }
 

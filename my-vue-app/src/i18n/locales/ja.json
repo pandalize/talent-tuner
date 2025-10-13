@@ -34,7 +34,7 @@
       "salary": "年収転職ガイド"
     },
     "payment": "決済",
-    "newchat": "New AI進路相談"
+    "newchat": "AI進路相談"
   },
   "common": {
     "loading": "読み込み中...",
@@ -49,7 +49,7 @@
   },
   "home": {
     "hero": {
-      "subtitle": "プロフェッショナルのための",
+      "subtitle": "高校生全員のための",
       "title": "適職診断システム",
       "description": "心理学的アプローチと統計的分析に基づいた、科学的な職業適性診断をご提供します。"
     },
