@@ -13,7 +13,9 @@
     }
   },
   "app": {
-    "tameshoku": "ため職"
+    "tameshoku": "ため職",
+    "title": "職業適性診断システム",
+    "description": "あなたに最適な職業を科学的に診断"
   },
   "nav": {
     "home": "ホーム",
@@ -24,14 +26,16 @@
     "diagnosis_method": "診断について",
     "language": "言語",
     "open_menu": "メニューを開く",
-    "close_menu": "メニューを閉じる"
-    },
+    "close_menu": "メニューを閉じる",
     "guide": {
       "student": "学生向けキャリアガイド",
       "skills": "スキル開発ガイド",
       "career": "キャリア選択ガイド",
       "salary": "年収転職ガイド"
     },
+    "payment": "決済",
+    "newchat": "New AI進路相談"
+  },
   "common": {
     "loading": "読み込み中...",
     "error": "エラーが発生しました",

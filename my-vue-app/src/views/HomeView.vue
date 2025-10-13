@@ -1,49 +1,48 @@
-
 <template>
   <main class="home-main">
     <div class="hero-section">
       <div class="hero-content">
         <h1 class="hero-title">
-          <span class="hero-subtitle">{{ home.hero.subtitle() }}</span>
-          {{ home.hero.title() }}
+          <span class="hero-subtitle">{{ $t('home.hero.subtitle') }}</span>
+          {{ $t('home.hero.title') }}
         </h1>
         <p class="hero-description">
-          {{ home.hero.description() }}
+          {{ $t('home.hero.description') }}
         </p>
 
         <div class="feature-grid">
           <div class="feature-item">
             <div class="feature-number">01</div>
             <div class="feature-content">
-              <h3 class="feature-title">{{ home.features.analysis.title() }}</h3>
-              <p class="feature-desc">{{ home.features.analysis.description() }}</p>
+              <h3 class="feature-title">{{ $t('home.features.analysis.title') }}</h3>
+              <p class="feature-desc">{{ $t('home.features.analysis.description') }}</p>
             </div>
           </div>
           <div class="feature-item">
             <div class="feature-number">02</div>
             <div class="feature-content">
-              <h3 class="feature-title">{{ home.features.evidence.title() }}</h3>
-              <p class="feature-desc">{{ home.features.evidence.description() }}</p>
+              <h3 class="feature-title">{{ $t('home.features.evidence.title') }}</h3>
+              <p class="feature-desc">{{ $t('home.features.evidence.description') }}</p>
             </div>
           </div>
           <div class="feature-item">
             <div class="feature-number">03</div>
             <div class="feature-content">
-              <h3 class="feature-title">{{ home.features.instant.title() }}</h3>
-              <p class="feature-desc">{{ home.features.instant.description() }}</p>
+              <h3 class="feature-title">{{ $t('home.features.instant.title') }}</h3>
+              <p class="feature-desc">{{ $t('home.features.instant.description') }}</p>
             </div>
           </div>
         </div>
 
         <div class="action-buttons">
           <router-link to="/diagnosis" class="btn btn-primary">
-            {{ home.cta.startDiagnosis() }}
+            {{ $t('home.cta.start_diagnosis') }}
           </router-link>
           <router-link to="/chat" class="btn btn-chat">
-            {{ home.cta.aiCounseling() }}
+            {{ $t('home.cta.ai_counseling') }}
           </router-link>
           <router-link to="/about" class="btn btn-secondary">
-            {{ home.cta.viewProfessions() }}
+            {{ $t('home.cta.view_professions') }}
           </router-link>
         </div>
 
@@ -88,10 +87,9 @@
 </template>
 
 <script setup lang="ts">
-import { useTranslation } from '../composables/useTranslation'
+import { useI18n } from 'vue-i18n'
 
-// 翻訳ヘルパーを使用（型安全で短縮されたアクセス）
-const { home, nav, common } = useTranslation()
+const { t } = useI18n()
 </script>
 
 <style lang="scss" scoped>
