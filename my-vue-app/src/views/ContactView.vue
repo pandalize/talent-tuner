@@ -51,7 +51,7 @@
 </template>
 
 <script setup lang="ts">
-// お問い合わせページ（メールアドレス直接表示）
+
 </script>
 
 <style scoped>

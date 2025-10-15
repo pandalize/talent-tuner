@@ -107,18 +107,23 @@
       </section>
 
       <!-- アクションセクション -->
-      <section class="action-section">
-        <div class="action-cards">
-          <router-link to="/diagnosis" class="action-card">
-            <h3>適性診断を受ける</h3>
-            <p>あなたにこの職業がどれくらい向いているか診断してみましょう</p>
-          </router-link>
-          <router-link to="/about" class="action-card">
-            <h3>他の職業も見る</h3>
-            <p>8つの高収入職業から最適な選択肢を見つけましょう</p>
-          </router-link>
-        </div>
-      </section>
+
+      <div class="action-section">
+        <BaseButton
+          variant="blue"
+          size="md"
+          @click="$router.push('/diagnosis')"
+          >
+          適性診断を受ける
+        </BaseButton>
+        <BaseButton
+          variant="gold"
+          size="md"
+          @click="$router.push('/about')"
+        >
+          他の職業も見る
+        </BaseButton>
+      </div>
     </div>
   </div>
 </template>
@@ -127,6 +132,7 @@
 import { ref, onMounted, computed, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { loadProfessionDatabase, type ProfessionDatabase, type ProfessionData } from '../utils/diagnosisLoader';
+import BaseButton from '@/components/BaseButton.vue';
 
 const route = useRoute();
 const router = useRouter();
@@ -465,9 +471,11 @@ section h3 {
   box-shadow: 0 5px 15px rgba(95, 144, 178, 0.3);
 }
 
-/* アクションセクション */
 .action-section {
-  background: #f8f9ff;
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  padding: 2rem;
 }
 
 .action-cards {

@@ -1,7 +1,3 @@
-<!--
-  診断機能のメインコンテナ
-  QuestionNavigatorから分離された軽量版
--->
 <template>
   <div
     class="diagnosis-container"

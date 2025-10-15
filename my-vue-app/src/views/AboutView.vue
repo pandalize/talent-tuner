@@ -37,18 +37,23 @@
             </li>
           </ul>
         </div>
-        
+
         <div class="profession-actions">
-          <router-link 
-            :to="`/profession/${selectedProfessionId}`" 
-            class="detail-button"
+          <BaseButton
+            variant="blue"
+            size="md"
             v-if="selectedProfessionId"
-          >
+            @click="$router.push(`/profession/${selectedProfessionId}`)"
+            >
             詳細情報を見る
-          </router-link>
-          <router-link to="/diagnosis" class="diagnosis-button">
+          </BaseButton>
+          <BaseButton
+            variant="gold"
+            size="md"
+            @click="$router.push('/diagnosis')"
+          >
             適性診断を受ける
-          </router-link>
+          </BaseButton>
         </div>
       </div>
     </div>
@@ -59,6 +64,7 @@
 import { ref, onMounted, computed } from 'vue';
 import { professionDataManager } from '../utils/professionDataManager';
 import type { ProfessionData } from '../utils/diagnosisLoader';
+import BaseButton from '@/components/BaseButton.vue';
 
 const professions = ref<ProfessionData[]>([]);
 const selectedProfessionName = ref('');
@@ -108,9 +114,6 @@ onMounted(loadProfessionData);
 </script>
 
 <style scoped>
-/* ==========================================================================
-   基本レイアウト
-   ========================================================================== */
 .about {
   width: 100%;
   padding: 0;
@@ -143,9 +146,6 @@ onMounted(loadProfessionData);
   line-height: 1.6;
 }
 
-/* ==========================================================================
-   職業セレクター
-   ========================================================================== */
 .profession-selector {
   display: flex;
   flex-wrap: wrap;
@@ -184,9 +184,6 @@ onMounted(loadProfessionData);
   transform: translateY(-2px);
 }
 
-/* ==========================================================================
-   状態別コンテナ (ローディング, エラー)
-   ========================================================================== */
 .loading-container, .error-container {
   text-align: center;
   padding: 3rem 1rem;
@@ -216,9 +213,6 @@ onMounted(loadProfessionData);
   font-size: 0.9rem;
 }
 
-/* ==========================================================================
-   職業詳細説明
-   ========================================================================== */
 .profession-description {
   margin-top: 2rem;
   padding: 1.5rem;
@@ -283,9 +277,6 @@ onMounted(loadProfessionData);
   padding-left: 0.5rem;
 }
 
-/* ==========================================================================
-   職業アクション
-   ========================================================================== */
 .profession-actions {
   display: flex;
   gap: 1rem;
@@ -333,10 +324,6 @@ onMounted(loadProfessionData);
   box-shadow: 0 5px 15px rgba(230, 188, 153, 0.3);
 }
 
-/* ==========================================================================
-   メディアクエリ (レスポンシブ対応)
-   ========================================================================== */
-/* スマートフォン向け */
 @media (max-width: 456px) {
   .about {
     padding: 1rem;
@@ -383,25 +370,13 @@ onMounted(loadProfessionData);
   }
 }
 
-/* タブレット向け */
-@media (min-width: 769px) and (max-width: 1024px) {
+@media (min-width: 769px) {
   .about {
     padding: 1rem;
   }
 
   .about-content {
     max-width: 90%;
-  }
-}
-
-/* 大画面向け */
-@media (min-width: 1025px) {
-  .about {
-    padding: 1rem;
-  }
-
-  .about-content {
-    max-width: 1200px;
   }
 }
 </style>

@@ -1,15 +1,12 @@
 <template>
   <div class="sitemap-page">
     <div class="container">
-      <!-- ヒーローセクション -->
       <header class="sitemap-hero">
         <h1>サイトマップ</h1>
         <p>ため職の全ページをカテゴリー別に整理してご紹介します。目的のページを素早く見つけることができます。</p>
       </header>
 
-      <!-- メインコンテンツ -->
       <div class="sitemap-content">
-        <!-- 主要機能 -->
         <section class="sitemap-section">
           <h2>🎯 主要機能</h2>
           <ul class="sitemap-list">
@@ -40,7 +37,6 @@
           </ul>
         </section>
 
-        <!-- 職業詳細ページ -->
         <section class="sitemap-section">
           <h2>💼 職業詳細ページ</h2>
           <p>各職業の詳細情報、必要スキル、キャリアパス、年収データを網羅</p>
@@ -105,7 +101,6 @@
           </div>
         </section>
 
-        <!-- キャリアガイド -->
         <section class="sitemap-section">
           <h2>📚 キャリアガイド</h2>
           <ul class="sitemap-list">
@@ -142,7 +137,6 @@
           </ul>
         </section>
 
-        <!-- 診断について -->
         <section class="sitemap-section">
           <h2>🔬 診断システムについて</h2>
           <ul class="sitemap-list">
@@ -167,7 +161,6 @@
           </ul>
         </section>
 
-        <!-- サイト情報 -->
         <section class="sitemap-section">
           <h2>ℹ️ サイト情報</h2>
           <ul class="sitemap-list">
@@ -199,7 +192,6 @@
         </section>
       </div>
 
-      <!-- フッター -->
       <footer class="sitemap-footer">
         <div class="sitemap-stats">
           <p><strong>総ページ数:</strong> 25ページ</p>
@@ -217,7 +209,6 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 
-// 現在の日付を取得
 const currentDate = computed(() => {
   return new Date().toLocaleDateString('ja-JP', {
     year: 'numeric',

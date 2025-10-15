@@ -32,7 +32,7 @@
 </template>
 
 <script setup lang="ts">
-// 404エラーページ
+
 </script>
 
 <style scoped>

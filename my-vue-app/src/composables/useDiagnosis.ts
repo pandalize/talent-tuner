@@ -1,8 +1,3 @@
-/**
- * 診断機能の状態管理Composable
- * QuestionNavigatorから分離したロジックを統合管理
- */
-
 import { ref, computed, nextTick } from 'vue'
 import {
   loadDiagnosticConfig,

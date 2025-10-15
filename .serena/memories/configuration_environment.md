@@ -25,10 +25,6 @@ FTP_USER=your-username
 FTP_PASSWORD=your-password
 ```
 
-### テンプレートファイル
-- `.env.example`: 環境変数テンプレート（公開可能）
-- `.env.deploy.example`: デプロイ設定テンプレート
-
 ## Vite設定（vite.config.ts）
 
 ### 基本設定

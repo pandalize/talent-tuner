@@ -230,7 +230,6 @@ section {
   margin-bottom: var(--space-xxl);
 }
 
-/* 特徴セクション */
 .section-header {
   text-align: center;
   margin-bottom: var(--space-xl);
@@ -245,7 +244,6 @@ section {
   position: relative;
 }
 
-/* 診断についてページだけmargin-top追加 */
 .diagnosis-method-page .section-title {
   margin-top: 3.5rem;
 }
@@ -280,7 +278,6 @@ section {
   margin: 0 auto;
 }
 
-/* features-gridの親のmax-width制限を解除 */
 .features-section {
   width: 100vw;
   max-width: 100vw;
@@ -610,7 +607,6 @@ section {
   border-radius: 2px;
 }
 
-/* web版は3カラム固定、タブレット以下は自動 */
 .links-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);

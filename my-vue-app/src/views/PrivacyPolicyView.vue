@@ -68,7 +68,7 @@
 </template>
 
 <script setup lang="ts">
-// プライバシーポリシーページ
+
 </script>
 
 <style scoped>

@@ -8,10 +8,10 @@
   </div>
 </template>
 
+
 <script setup lang="ts">
 import ResultDisplay from '../components/diagnosis/ResultDisplay.vue'
 
-// App.vueのデモデータと同じ内容
 const demoProfessions = [
   {
     name: 'Webデザイナー',

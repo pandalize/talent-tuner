@@ -6,7 +6,6 @@
     </div>
     
     <div class="content-container">
-      <!-- 結果の読み方 -->
       <section class="reading-section">
         <h2>診断結果の読み方</h2>
         <div class="reading-guide">
