@@ -3,9 +3,15 @@
     <input v-model="userInput" placeholder="メッセージを入力" />
     <button @click="addUserMessage">送信</button>
     <!-- <button @click="callAPI">APIを呼び出す</button> -->
-    <div v-if="result !== null">
-      <p>APIレスポンス：{{ result }}</p>
+    <div class="chat-history">
+      <div v-for="(msg, idx) in messages" :key="idx" :class="msg.role"> <!-- messages 配列の要素を1つずつ msg という変数で取り出し、idx をインデックスとして使う、msg.roleをクラス名としてdivに付与 -->
+        <div>{{ msg.role === 'user' ? 'あなた' : 'AI' }}:</div> <!-- メッセージの送り主がユーザーならtrueであなたと表示、falseならAIと表示 -->
+        {{ msg.content }}
+      </div>
     </div>
+    <!-- <div v-if="result !== null">
+      <p>APIレスポンス：{{ result }}</p>
+    </div> -->
   </div>
 </template>
 
@@ -49,11 +55,18 @@ function addAIResponse(aiText: string) { // 理解してない
 
 async function callAPI() { // この関数の中に処理が完了するのを待たなければいけない作業があるかも
     try {
+        const apiMessages = messages.value.map(m => ({ // messages.value配列の各要素(m)に対して新しいオブジェクトを作成、各要素を受け取ってroleとcontentだけを返す
+            role: m.role,
+            content: m.content
+        }));
         const res = await fetch('/api/chat', { // fetch：サーバーレス関数のエンドポイントにリクエストを送り、結果を取ってくる、fetchが完了するまで次の処理を待つ
-            method: 'POST' // HTTPメソッドはPOST
+            method: 'POST', // HTTPメソッドはPOST
+            headers: { 'Content-Type': 'application/json' }, // JSON形式のデータを送ることを指定
+            body: JSON.stringify({ messages: apiMessages }) // messagesプロパティで内容をセットでJSON形式の文字列に変換してリクエストボディにセット
         });
         const data = await res.json(); // レスポンスをJSONとして取得、これも完了まで待つ
-        if (data && data.data && data.data.content && data.data.content[0] && data.data.content[0].text) { // 一つずつ確認しないと、elseに行かずにエラーになる
+        console.log('APIレスポンス:', data);
+        if (data && data.data && data.data.content && data.data.content[0] && data.data.content[0].text) { // 一つずつ確認しないと、elseに行かずにエラーになる、constのdataのdataプロパティのcontent配列の0番目のtextが存在するか
             addAIResponse(data.data.content[0].text); // AIのレスポンスをメッセージリストに追加
             result.value = data.data.content[0].text; // レスポンスをJSONとして取得、これも完了まで待つ、リアクティブ変数は常に.valueを使って値を更新する
         } else {
