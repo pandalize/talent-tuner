@@ -200,7 +200,7 @@
   margin: var(--space-xl) 0;
 }
 
-.feature-item {
+.home-card {
   @include mixins.card-base;
   @include mixins.card-padding(md);
   @include mixins.card-shadow(sm);

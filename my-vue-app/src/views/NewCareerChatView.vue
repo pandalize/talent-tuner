@@ -53,7 +53,7 @@ async function callAPI() { // この関数の中に処理が完了するのを�
             method: 'POST' // HTTPメソッドはPOST
         });
         const data = await res.json(); // レスポンスをJSONとして取得、これも完了まで待つ
-        if (data && data.data && data.data.content && data.data.content[0] && data.data.content[0].text) { //理解し直す
+        if (data && data.data && data.data.content && data.data.content[0] && data.data.content[0].text) { // 一つずつ確認しないと、elseに行かずにエラーになる
             addAIResponse(data.data.content[0].text); // AIのレスポンスをメッセージリストに追加
             result.value = data.data.content[0].text; // レスポンスをJSONとして取得、これも完了まで待つ、リアクティブ変数は常に.valueを使って値を更新する
         } else {
