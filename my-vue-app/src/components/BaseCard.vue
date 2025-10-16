@@ -1,14 +1,27 @@
 <template>
-  <div :class="cardClasses">
-    <div v-if="$slots.header" class="tw-card-header">
+  <!-- ホームの説明 -->
+  <div v-if="variant === 'home'">
+    <div class="home-card">
+      <div v-if="$slots.number" class="home-number">
+        <slot name="number" />
+      </div>
+      <div v-if="$slots.header" class="home-header">
+        <slot name="header" />
+      </div>
+      <div class="home-body">
+        <slot />
+      </div>
+    </div>
+  </div>
+  <!-- 結果の順位と説明 -->
+  <div v-else-if="variant === 'result'">
+    <div v-if="$slots.header" class="result-header">
       <slot name="header" />
     </div>
-    
-    <div class="tw-card-body" :class="bodyClasses">
+    <div class="result-body">
       <slot />
     </div>
-    
-    <div v-if="$slots.footer" class="tw-card-footer">
+    <div v-if="$slots.footer" class="result-footer">
       <slot name="footer" />
     </div>
   </div>
@@ -18,126 +31,135 @@
 import { computed } from 'vue'
 
 interface Props {
-  shadow?: 'none' | 'sm' | 'md' | 'lg' | 'xl'
-  padding?: 'none' | 'sm' | 'md' | 'lg' | 'xl'
-  rounded?: 'none' | 'sm' | 'md' | 'lg' | 'xl'
-  border?: boolean
-  hover?: boolean
+  variant?: 'home' | 'result'
 }
 
-const props = withDefaults(defineProps<Props>(), {
-  shadow: 'md',
-  padding: 'md',
-  rounded: 'lg',
-  border: true,
-  hover: false,
-})
-
-const cardClasses = computed(() => [
-  'tw-base-card',
-  {
-    // Shadow
-    'tw-shadow-none': props.shadow === 'none',
-    'tw-shadow-sm': props.shadow === 'sm',
-    'tw-shadow-md': props.shadow === 'md',
-    'tw-shadow-lg': props.shadow === 'lg',
-    'tw-shadow-xl': props.shadow === 'xl',
-    
-    // Rounded
-    'tw-rounded-none': props.rounded === 'none',
-    'tw-rounded-sm': props.rounded === 'sm',
-    'tw-rounded-md': props.rounded === 'md',
-    'tw-rounded-lg': props.rounded === 'lg',
-    'tw-rounded-xl': props.rounded === 'xl',
-    
-    // Border
-    'tw-card-border': props.border,
-    
-    // Hover
-    'tw-card-hover': props.hover,
-  }
-])
-
-const bodyClasses = computed(() => [
-  {
-    'tw-padding-none': props.padding === 'none',
-    'tw-padding-sm': props.padding === 'sm',
-    'tw-padding-md': props.padding === 'md',
-    'tw-padding-lg': props.padding === 'lg',
-    'tw-padding-xl': props.padding === 'xl',
-  }
-])
+const props = defineProps<Props>()
 </script>
 
-<style scoped>
-.tw-base-card {
-  background-color: white;
-  transition: all 0.3s;
+<style lang="scss" scoped>
+@use '@/assets/scss/mixins.scss' as mixins;
+
+.home-card {
+  @include mixins.card-base;
+  @include mixins.card-padding(lg);
+  @include mixins.card-shadow(sm);
+  position: relative;
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  transition: all var(--transition-normal);
+  border: 1px solid rgba(59, 130, 246, 0.1);
+  
+  // グラデーションボーダー効果
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    padding: 2px;
+    background: linear-gradient(135deg, var(--accent-blue), var(--accent-gold), var(--primary-blue));
+    border-radius: inherit;
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask-composite: exclude;
+    opacity: 0;
+    transition: opacity var(--transition-normal);
+  }
+
+  &:hover {
+    @include mixins.card-shadow(lg);
+    transform: translateY(-8px) scale(1.02);
+    border-color: transparent;
+    
+    &::before {
+      opacity: 1;
+    }
+  }
 }
 
-.tw-card-border {
-  border: 1px solid #e5e7eb;
+.home-number {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 3rem;
+  height: 3rem;
+  font-family: var(--font-mono);
+  font-size: var(--fs-lg);
+  font-weight: 700;
+  color: white;
+  background: linear-gradient(135deg, var(--accent-blue) 0%, var(--primary-blue) 100%);
+  border-radius: var(--radius-round);
+  margin-bottom: var(--space-md);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+  position: relative;
+  
+  &::after {
+    content: '';
+    position: absolute;
+    inset: -2px;
+    background: linear-gradient(135deg, var(--accent-blue), var(--accent-gold));
+    border-radius: inherit;
+    z-index: -1;
+    opacity: 0;
+    transition: opacity var(--transition-fast);
+  }
+  
+  .home-card:hover & {
+    transform: scale(1.1) rotate(5deg);
+    
+    &::after {
+      opacity: 0.3;
+    }
+  }
 }
 
-.tw-card-hover {
-  cursor: pointer;
+.home-header {
+  font-family: var(--font-heading);
+  font-size: 1.25rem;
+  color: var(--primary-navy);
+  margin-bottom: var(--space-xs);
+  font-weight: 600;
 }
 
-.tw-card-hover:hover {
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-  transform: translateY(-0.25rem);
+.home-body {
+  font-size: var(--fs-small);
+  color: var(--text-secondary);
+  line-height: 1.6;
 }
 
-.tw-card-header {
-  padding: 1rem 1.5rem;
-  border-bottom: 1px solid #e5e7eb;
-}
+@media (max-width: 768px) {
+  .home-card {
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    padding: var(--space-sm);
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-md);
+  }
 
-.tw-card-footer {
-  padding: 1rem 1.5rem;
-  border-top: 1px solid #e5e7eb;
-  background-color: #f9fafb;
-}
+  .home-card:hover,
+  .home-card:active {
+    transform: none !important;
+    box-shadow: none !important;
+    border: none !important;
+  }
+  .home-card:hover::before,
+  .home-card:active::before {
+    opacity: 0 !important;
+  }
 
-/* Shadow variations */
-.tw-shadow-none {
-  box-shadow: none;
-}
+  .home-number {
+    display: none;
+  }
 
-.tw-shadow-sm {
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-}
+  .home-header {
+    margin-bottom: var(--space-xs);
+    font-size: 1.125rem;
+  }
 
-.tw-shadow-md {
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-}
-
-.tw-shadow-lg {
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-}
-
-.tw-shadow-xl {
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-}
-
-/* Padding variations */
-.tw-padding-none {
-  padding: 0;
-}
-
-.tw-padding-sm {
-  padding: 1rem;
-}
-
-.tw-padding-md {
-  padding: 1.5rem;
-}
-
-.tw-padding-lg {
-  padding: 2rem;
-}
-
-.tw-padding-xl {
-  padding: 2.5rem;
+  .home-body {
+    display: none;
+  }
 }
 </style>

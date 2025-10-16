@@ -8,35 +8,12 @@ const meta = {
     layout: 'padded',
   },
   tags: ['autodocs'],
-  argTypes: {
-    shadow: {
-      control: { type: 'select' },
-      options: ['none', 'sm', 'md', 'lg', 'xl'],
-    },
-    padding: {
-      control: { type: 'select' },
-      options: ['none', 'sm', 'md', 'lg', 'xl'],
-    },
-    rounded: {
-      control: { type: 'select' },
-      options: ['none', 'sm', 'md', 'lg', 'xl'],
-    },
-    border: { control: 'boolean' },
-    hover: { control: 'boolean' },
-  },
 } satisfies Meta<typeof BaseCard>
 
 export default meta
 type Story = StoryObj<typeof meta>
 
 export const Default: Story = {
-  args: {
-    shadow: 'md',
-    padding: 'md',
-    rounded: 'lg',
-    border: true,
-    hover: false,
-  },
   render: (args) => ({
     components: { BaseCard },
     setup() {
