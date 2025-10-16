@@ -1,33 +1,16 @@
 <template>
-  <div
-    class="diagnosis-container"
-    style="width: 100vw; max-width: 100vw; overflow-x: hidden; box-sizing: border-box; padding-left: 4px; padding-right: 4px;"
-  >
+  <div class="diagnosis-container">
     <!-- ローディング状態 -->
     <div v-if="loading" class="loading-section">
-      <div class="loading-spinner"></div>
       <h3>診断システムを初期化中</h3>
       <p>最適な質問をご用意しています...</p>
     </div>
 
     <!-- エラー状態 -->
     <div v-else-if="error" class="error-section">
-      <div class="error-icon">
-        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <circle cx="12" cy="12" r="10"/>
-          <line x1="12" y1="8" x2="12" y2="12"/>
-          <line x1="12" y1="16" x2="12.01" y2="16"/>
-        </svg>
-      </div>
       <h3>データの読み込みに失敗しました</h3>
       <p>{{ error }}</p>
       <button @click="loadConfig" class="btn reload-button">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M3 12a9 9 0 019-9 9.75 9.75 0 016.74 2.74L21 8"/>
-          <path d="M21 3v5h-5"/>
-          <path d="M21 12a9 9 0 01-9 9 9.75 9.75 0 01-6.74-2.74L3 16"/>
-          <path d="M3 21v-5h5"/>
-        </svg>
         再読み込み
       </button>
     </div>
@@ -178,7 +161,6 @@ onMounted(() => {
 <style lang="scss" scoped>
 @use '@/assets/scss/mixins.scss' as mixins;
 
-// 基本レイアウト
 .diagnosis-container {
   @include mixins.flex-center;
   @include mixins.container(900px);
@@ -187,13 +169,15 @@ onMounted(() => {
   min-height: calc(100vh - 80px);
   flex-direction: column;
   padding: var(--space-md);
+  padding-left: 4px;
   padding-bottom: var(--space-lg);
+  padding-right: 4px;
   margin-bottom: var(--space-lg);
   position: relative;
   min-height: 400px;
   overflow-x: hidden;
-
-  border: none !important;
+  border: none;
+  box-sizing: border-box;  
 
   // 子要素の直接配置用設定
   > * {
@@ -204,8 +188,6 @@ onMounted(() => {
   }
 }
 
-
-// ローディング & エラーセクション
 .loading-section {
   @include mixins.section-padding;
   text-align: center;
@@ -222,21 +204,6 @@ onMounted(() => {
   p {
     color: var(--text-secondary);
     font-size: var(--fs-body);
-  }
-}
-
-.loading-spinner {
-  width: 40px;
-  height: 40px;
-  border: 3px solid var(--bg-tertiary);
-  border-top: 3px solid var(--accent-blue);
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
-  margin: 0 auto var(--space-md);
-
-  @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
   }
 }
 
@@ -258,24 +225,13 @@ onMounted(() => {
   }
 }
 
-.error-icon {
-  margin-bottom: var(--space-md);
-  color: #dc3545;
-}
-
 .reload-button {
   @include mixins.button-primary;
 }
 
-
-
-// レスポンシブデザイン
 @include mixins.respond-to('tablet') {
   .diagnosis-container {
     padding: var(--space-md) var(--space-sm);
-  }
-
-  .diagnosis-container {
     @include mixins.card-padding(lg);
   }
 }
@@ -288,12 +244,6 @@ onMounted(() => {
     max-width: 100vw;
     overflow-x: hidden;
     box-sizing: border-box;
-    
-  }
-  
-  .diagnosis-container {
-    width: 100%;
-    max-width: 100%;
     padding: var(--space-md);
     padding-bottom: var(--space-lg);
     margin-bottom: var(--space-lg);

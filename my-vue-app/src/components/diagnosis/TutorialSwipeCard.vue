@@ -72,7 +72,6 @@
 <script setup lang="ts">
 import { ref, watch, onMounted } from 'vue'
 
-// Props
 interface Props {
   mainQuestion: string
   questionIndex: number
@@ -84,14 +83,13 @@ interface Props {
   } | null
 }
 
-const props = defineProps<Props>()
-
-// Emits
 interface Emits {
   'tutorial-completed': []
 }
 
 const emit = defineEmits<Emits>()
+
+const props = defineProps<Props>()  // 参照されていないように見えるが必要
 
 // リアクティブデータ
 const tutorialCardRef = ref<HTMLElement>()
@@ -232,7 +230,6 @@ function completeTutorial() {
   box-sizing: border-box;
 }
 
-// チュートリアルスワイプカード
 .tutorial-swipe-card {
   position: absolute;
   background: white;
@@ -256,11 +253,8 @@ function completeTutorial() {
   overflow: hidden;
   left: 50%;
   top: 45%;
-  // transform は動的スタイルバインディングで制御
   margin: 0;
-  
-  // 初期状態（非表示）
-  opacity: 0;
+    opacity: 0;
   // transform は動的スタイルバインディングで制御
   transition: opacity 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94), 
               transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94),
@@ -314,14 +308,11 @@ function completeTutorial() {
     border: 2px solid #40c057;
     box-shadow: 0 12px 48px rgba(81, 207, 102, 0.6);
     opacity: 0.9;
-    
-    .tutorial-card-content {
-      color: white;
-    }
   }
 }
 
 .tutorial-card-content {
+  color: white;
   position: relative;
   z-index: 2;
   width: 100%;
@@ -429,50 +420,49 @@ function completeTutorial() {
   padding: 0 var(--space-sm);
 }
 
-// 小画面最適化
 @media (max-width: 480px) {
+  .tutorial-swipe-container {
+    min-height: 65vh;
+  }
+
+  .tutorial-swipe-card {
+    width: 80vw;
+    max-width: 80vw;
+    min-width: 80vw;
+    height: 65vh;
+    min-height: 65vh;
+    max-height: 65vh;
+    left: 50% !important;
+    top: 45% !important;
+    // transform は動的スタイルバインディングで制御
+  }
+
+  .tutorial-card-content {
+    padding: clamp(8px, 2vw, 16px) clamp(4px, 1.5vw, 12px);
+  }
+
   .tutorial-header {
     padding-top: 10px;
     padding-left: 8px;
     padding-right: 8px;
   }
-  .tutorial-swipe-container {
-    min-height: 65vh; // 小画面では少し小さく
-  }
-  
-  .tutorial-swipe-card {
-    width: 80vw !important;
-    max-width: 80vw !important;
-    min-width: 80vw !important;
-    height: 65vh !important;
-    min-height: 65vh !important;
-    max-height: 65vh !important;
-  left: 50% !important;
-  top: 45% !important;
-    // transform は動的スタイルバインディングで制御
-  }
-  
-  .tutorial-card-content {
-    padding: clamp(8px, 2vw, 16px) clamp(4px, 1.5vw, 12px);
-  }
 }
 
-// 極小画面最適化（Galaxy Fold等）
 @media (max-width: 320px) {
   .tutorial-swipe-container {
     min-height: 60vh;
   }
   
   .tutorial-swipe-card {
-    width: 95vw !important;
-    max-width: 95vw !important;
-    min-width: 95vw !important;
-    height: 65vh !important;
-    min-height: 65vh !important;
-    max-height: 65vh !important;
+    width: 95vw;
+    max-width: 95vw;
+    min-width: 95vw;
+    height: 65vh;
+    min-height: 65vh;
+    max-height: 65vh;
     border-radius: 16px;
-  left: 50% !important;
-  top: 45% !important;
+    left: 50%;
+    top: 45%;
     // transform は動的スタイルバインディングで制御
   }
   

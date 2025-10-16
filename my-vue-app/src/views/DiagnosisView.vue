@@ -1,7 +1,7 @@
 <template>
-  <div class="diagnosis-view">
+  <main class="diagnosis-main">
     <DiagnosisContainer />
-  </div>
+  </main>
 </template>
 
 <script setup lang="ts">
@@ -9,12 +9,12 @@ import DiagnosisContainer from '../components/diagnosis/DiagnosisContainer.vue'
 </script>
 
 <style scoped>
-.diagnosis-view {
+.diagnosis-main {
   width: 100%;
 }
 
 @media (max-width: 768px) {
-  .diagnosis-view {
+  .diagnosis-main {
     min-height: 100vh;
     height: 100vh;
     display: flex;

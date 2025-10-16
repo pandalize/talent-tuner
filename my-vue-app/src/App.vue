@@ -1,5 +1,5 @@
 <template>
-  <div id="app" style="width: 100vw; box-sizing: border-box;">
+  <div id="app">
     <header class="app-header">
       <RouterLink to="/" class="logo">
         <img src="/favicon.ico" alt="Pandalize" class="logo-icon">
@@ -67,7 +67,7 @@
           class="mobile-nav-item" 
           @click="closeMobileMenu"
         >
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <svg class='nav-icon' viewBox="0 0 24 24">
             <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/>
           </svg>
           {{ $t('nav.home') }}
@@ -78,7 +78,7 @@
           class="mobile-nav-item" 
           @click="closeMobileMenu"
         >
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <svg class='nav-icon' viewBox="0 0 24 24">
             <path d="M9 11H7v2h2v-2zm4 0h-2v2h2v-2zm4 0h-2v2h2v-2zm2-7h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V9h14v11z"/>
           </svg>
           {{ $t('nav.diagnosis') }}
@@ -89,7 +89,7 @@
           class="mobile-nav-item" 
           @click="closeMobileMenu"
         >
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <svg class='nav-icon' viewBox="0 0 24 24">
             <path d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
           </svg>
           {{ $t('nav.about') }}
@@ -100,7 +100,7 @@
           class="mobile-nav-item" 
           @click="closeMobileMenu"
         >
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <svg class='nav-icon' viewBox="0 0 24 24">
             <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
           </svg>
           {{ $t('nav.career_guide') }}
@@ -111,7 +111,7 @@
           class="mobile-nav-item"
           @click="closeMobileMenu"
         >
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <svg class='nav-icon' viewBox="0 0 24 24">
             <path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/>
           </svg>
           {{ $t('nav.chat') }}
@@ -122,7 +122,7 @@
           class="mobile-nav-item" 
           @click="closeMobileMenu"
         >
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <svg class='nav-icon' viewBox="0 0 24 24">
             <circle cx="12" cy="12" r="3"/>
             <path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z"/>
           </svg>
@@ -136,16 +136,6 @@
     <main class="app-content">
       <RouterView/>
     </main>
-    
-    
-    <!--
-    デモチャットモーダル
-    <div v-if="isDemoChatOpen" class="demo-chat-overlay" @click="closeDemoChat">
-      <div class="demo-chat-modal" @click.stop>
-        <CareerChatBot @close="closeDemoChat" />
-      </div>
-    </div>
-    -->
   </div>
 
   <footer class="app-footer">
@@ -272,17 +262,6 @@ html, body {
   background-clip: text;
   transition: all var(--transition-normal);
 }
-
-/*
-.logo-sub {
-  font-family: var(--font-mono);
-  font-size: 60%;
-  color: var(--text-secondary);
-  text-transform: uppercase;
-  opacity: 0.8;
-  transition: opacity var(--transition-normal);
-}
-*/
 
 .header-nav {
   width: 80%;
@@ -500,7 +479,12 @@ html, body {
     font-weight: 600;
   }
 
-  svg {
+  .nav-icon {
+    width: 20px;
+    height: 20px;
+    stroke: currentColor;
+    fill: none;
+    stroke-width: 2;
     flex-shrink: 0;
     opacity: 0.8;
     transition: opacity var(--transition-normal);
@@ -515,40 +499,6 @@ html, body {
   width: 100%;
   max-width: 100vw;
   overflow-x: hidden;
-}
-
-/* ドロップダウンメニュー */
-.dropdown {
-  position: relative;
-}
-.dropdown-menu {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  min-width: 200px;
-  background: #fff;
-  border: 1px solid var(--border-light);
-  border-radius: 8px;
-  box-shadow: 0 4px 16px rgba(0,0,0,0.08);
-  z-index: 2000;
-  display: flex;
-  flex-direction: column;
-  padding: 0.5rem 0;
-}
-.dropdown-label {
-  padding: 0;
-}
-.dropdown-item {
-  padding: 0.75rem 1.5rem;
-  color: var(--text-secondary);
-  text-decoration: none;
-  font-size: 0.95rem;
-  transition: background 0.2s, color 0.2s;
-  white-space: nowrap;
-}
-.dropdown-item:hover {
-  background: var(--accent-blue);
-  color: #fff;
 }
 
 .app-footer {
@@ -573,18 +523,18 @@ html, body {
   font-weight: 700;
 }
 
-.footer-section h4 {
-  color: var(--background-white, #fff);
-  font-size: clamp(14px, 2.5vw, 18px);
-  margin-bottom: var(--space-sm);
-  font-weight: 600;
-}
-
 .footer-section p {
   color: #ccc;
   font-size: clamp(12px, 2vw, 14px);
   line-height: 1.6;
   margin: 0;
+}
+
+.footer-section h4 {
+  color: var(--background-white, #fff);
+  font-size: clamp(14px, 2.5vw, 18px);
+  margin-bottom: var(--space-sm);
+  font-weight: 600;
 }
 
 .footer-section ul {
@@ -671,27 +621,6 @@ html, body {
   .logo-main {
     font-size: 1.5rem;
   }
-
-  .logo-sub {
-    display: none;
-  }
-
-  .result-subtitle {
-    display: none !important;
-  }
-
-  /*
-  .demo-chat-overlay {
-    padding: 0;
-  }
-  .demo-chat-modal {
-    width: 100%;
-    height: 100%;
-    max-height: 100vh;
-    border-radius: 0;
-    overflow-y: auto;
-  }
-  */
 
   .app-footer {
   padding: var(--space-xl) var(--space-md) var(--space-lg);
@@ -847,7 +776,7 @@ html, body {
 
     .app-footer {
     padding: var(--space-md) var(--space-sm) var(--space-md);
-    margin: 0 !important;
+    margin: 0;
     height: 30vh;
   }
   
@@ -890,19 +819,4 @@ html, body {
     }
   }
 }
-
-/* タッチデバイス最適化 */
-@media (hover: none) and (pointer: coarse) {
-  .footer-section a:hover {
-    background: transparent;
-    transform: none;
-  }
-  
-  .footer-section a:active {
-    background: rgba(52, 152, 219, 0.3);
-    transform: scale(0.95);
-    transition: all 0.1s ease;
-  }
-}
-
 </style>

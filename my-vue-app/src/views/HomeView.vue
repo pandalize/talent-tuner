@@ -57,7 +57,6 @@
             {{ $t('home.cta.view_professions') }}
           </BaseButton>
         </div>
-
       </div>
     </div>
   </main>
@@ -73,12 +72,6 @@ const { t } = useI18n()
 <style lang="scss" scoped>
 @use '@/assets/scss/mixins.scss' as mixins;
 
-.aligned-button {
-  display: flex;
-  justify-content: center;
-  gap: 20px;
-}
-
 .home-main {
   width: 100%;
   min-height: calc(100vh - 80px); // ヘッダー分を引く
@@ -87,7 +80,6 @@ const { t } = useI18n()
   flex-direction: column;
 }
 
-// ヒーローセクション
 .hero-section {
   @include mixins.flex-center;
   flex: 1;
@@ -214,7 +206,6 @@ const { t } = useI18n()
   line-height: 1.8;
 }
 
-// 特徴グリッド - 共通コンポーネントを使用
 .feature-grid {
   @include mixins.grid-auto-fit(250px);
   margin-bottom: var(--space-xl);
@@ -305,32 +296,12 @@ const { t } = useI18n()
   line-height: 1.6;
 }
 
-
-/* ==========================================================================
-   信頼性指標
-   ========================================================================== */
-.trust-indicators {
+.aligned-button {
   display: flex;
-  gap: var(--space-lg);
   justify-content: center;
-  flex-wrap: wrap;
+  gap: 20px;
 }
 
-.trust-item {
-  display: flex;
-  align-items: center;
-  gap: var(--space-xs);
-  font-size: var(--fs-small);
-  color: var(--text-secondary);
-}
-
-.trust-icon {
-  color: var(--accent-gold);
-}
-
-/* ==========================================================================
-   レスポンシブデザイン - モバイル最適化
-   ========================================================================== */
 @media (max-width: 768px) {
   .hero-content {
     padding: var(--space-lg) var(--space-md);
@@ -393,122 +364,9 @@ const { t } = useI18n()
     font-size: 1rem;
     line-height: 1.3;
   }
-
-  .btn {
-    width: 130px;
-    justify-content: center;
-    padding: var(--space-md) var(--space-sm);
-    font-size: 0.9rem;
-    font-weight: 600;
-    border-radius: 50px;
-    border: 2px solid transparent;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    transition: all 0.3s ease;
-    text-decoration: none;
-    
-    &.btn-primary {
-      order: 1;
-      background: linear-gradient(135deg, var(--accent-blue) 0%, var(--primary-blue) 100%);
-      border: 2px solid var(--accent-blue);
-      box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
-      color: white;
-      min-height: 48px;
-
-      &:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 8px 25px rgba(59, 130, 246, 0.5);
-      }
-
-      &:active {
-        transform: translateY(0);
-        box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
-      }
-    }
-
-    &.btn-chat {
-      order: 2;
-      background: linear-gradient(135deg, #fbbf24 0%, var(--accent-gold) 100%);
-      border: 2px solid var(--accent-gold);
-      color: var(--primary-navy);
-      min-height: 48px;
-
-      &:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 6px 18px rgba(245, 158, 11, 0.4);
-      }
-
-      &:active {
-        transform: translateY(0);
-        box-shadow: 0 3px 10px rgba(245, 158, 11, 0.3);
-      }
-    }
-    
-    &.btn-secondary {
-      display: none;
-    }
-  }
-
-  .btn-icon {
-    width: 24px;
-    height: 24px;
-  }
-
-  .trust-indicators {
-    display: none;
-  }
-
-  .methodology-section {
-    display: none;
-  }
-
-  .section-container {
-    width: 95%;
-    padding: 0 var(--space-md);
-  }
-
-  .section-title {
-    font-size: 1.75rem;
-    margin-bottom: var(--space-lg);
-  }
-
-  .methodology-grid {
-    grid-template-columns: 1fr;
-    gap: var(--space-md);
-  }
-
-  .methodology-card {
-    padding: var(--space-xl);
-    border-radius: 16px;
-    background: linear-gradient(135deg, var(--bg-primary) 0%, rgba(248, 250, 252, 0.95) 100%);
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
-  }
-
-  .card-icon {
-    width: 64px;
-    height: 64px;
-    margin-bottom: var(--space-lg);
-    background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(16, 185, 129, 0.08));
-  }
-
-  .methodology-card h3 {
-    font-size: 1.25rem;
-    margin-bottom: var(--space-md);
-  }
-
-  .methodology-card p {
-    font-size: 1rem;
-    line-height: 1.7;
-  }
 }
 
 @media (max-width: 480px) {
-  .action-buttons {
-    gap: 20px !important;
-  }
-  .action-buttons > *:not(:last-child) {
-    margin-right: unset !important;
-  }
-
   .home-main {
     height: 60vh !important;
   }
@@ -536,6 +394,10 @@ const { t } = useI18n()
     gap: var(--space-md);
   }
 
+  .feature-number {
+    display: none;
+  }
+
   .feature-content {
     display: flex;
     flex-direction: column;
@@ -543,13 +405,6 @@ const { t } = useI18n()
 
   .feature-title {
     margin-bottom: var(--space-xs);
-  }
-
-  .feature-number {
-    display: none;
-  }
-
-  .feature-title {
     font-size: 1.125rem;
   }
 
@@ -557,55 +412,9 @@ const { t } = useI18n()
     display: none;
   }
 
-
-  .trust-indicators {
+  .aligned-button {
     flex-direction: column;
-    align-items: center;
-    gap: var(--space-sm);
-  }
-
-  .trust-item {
-    font-size: 0.8125rem;
-  }
-
-  .methodology-card {
-    padding: var(--space-lg);
-  }
-
-  .card-icon {
-    width: 56px;
-    height: 56px;
-  }
-}
-
-/* タッチデバイス最適化 */
-@media (hover: none) and (pointer: coarse) {
-  .btn:hover {
-    transform: none;
-    box-shadow: initial;
-  }
-
-  .btn:active {
-    transform: scale(0.98);
-    transition: transform 0.1s ease;
-  }
-
-  .feature-item:hover {
-    transform: none;
-  }
-
-  .feature-item:active {
-    transform: scale(0.98);
-    transition: transform 0.1s ease;
-  }
-
-  .methodology-card:hover {
-    transform: none;
-  }
-
-  .methodology-card:active {
-    transform: scale(0.98);
-    transition: transform 0.1s ease;
+    gap: var(--space-md);
   }
 }
 </style>

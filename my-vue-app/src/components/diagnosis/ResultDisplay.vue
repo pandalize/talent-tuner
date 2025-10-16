@@ -1,19 +1,5 @@
-
-<style scoped>
-.action-buttons {
-  display: flex;
-  justify-content: center;
-  margin-bottom: var(--space-xl, 2rem);
-}
-</style>
-
-<!--
-  診断結果表示コンポーネント
-  職業カード、シェア機能、プレミアム機能を統合
--->
 <template>
-  <div class="tw-result-container">
-    <!-- 結果ヘッダー -->
+  <div class="result-container">
     <div class="result-header">
       <h1 class="result-title">あなたの適職診断結果</h1>
       <p class="result-subtitle">
@@ -21,11 +7,7 @@
       </p>
     </div>
 
-    <!-- 職業カードリスト -->
-    <div 
-      class="results-grid" 
-      style="width: 100%; max-width: 100vw; overflow-x: hidden; box-sizing: border-box; padding: 0; margin: 0;"
-    >
+    <div class="results-grid">
       <ProfessionCard
         v-for="(profession, index) in professions"
         :key="profession.name"
@@ -35,27 +17,28 @@
       />
     </div>
 
-    <!-- シェア機能 -->
     <ShareSection :professions="professions" />
 
-    <!-- プレミアム機能（詳細レポート購入） -->
     <PremiumSection :professions="professions" />
 
-    <!-- アクションボタン -->
       <div class="action-buttons">
-        <HomeButton variant="primary" @click="handleInstantReset">
-          もう一度診断する
-        </HomeButton>
+        <BaseButton
+            variant="blue"
+            size="md"
+            @click=handleInstantReset
+          >
+            もう一度診断する
+          </BaseButton>
       </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import HomeButton from '../HomeButton.vue'
 import type { ProfessionScore } from '../../utils/diagnosisLoader'
 import ProfessionCard from './ProfessionCard.vue'
 import ShareSection from './ShareSection.vue'
 import PremiumSection from './PremiumSection.vue'
+import BaseButton from '@/components/BaseButton.vue';
 
 // Props
 interface Props {
@@ -96,18 +79,11 @@ function handleInstantReset() {
 <style lang="scss" scoped>
 @use '@/assets/scss/mixins.scss' as mixins;
 
-.result-display {
-  @include mixins.container(1000px);
-  @include mixins.flex-column(var(--space-xxl));
-}
-
-// 結果ヘッダー
 .result-header {
   padding: calc(var(--space-xxl) / 2) var(--space-lg);
   text-align: center;
   background: transparent;
 }
-
 
 .result-title {
   font-family: var(--font-heading);
@@ -124,22 +100,20 @@ function handleInstantReset() {
   margin: 0;
 }
 
-// 結果カードグリッド
 .results-grid {
   @include mixins.flex-column(var(--space-xxl));
+  width: 100%;
+  overflow-x: hidden;
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
 }
 
-// アクション機能
-.action-section {
-  margin-top: var(--space-xl);
+.action-buttons {
+  display: flex;
+  justify-content: center;
+  margin-bottom: var(--space-xl, 2rem);
 }
-
-.action-grid {
-  @include mixins.grid-auto-fit(200px);
-  gap: var(--space-md);
-}
-
-
 
 // レスポンシブデザイン
 @include mixins.respond-to('tablet') {
@@ -148,28 +122,21 @@ function handleInstantReset() {
   }
 }
 
-@include mixins.respond-to('mobile') {
-  .action-grid {
-    @include mixins.grid-columns(1);
-  }
-}
-
 // モバイル版のタイトルサイズ調整
 @media (max-width: 768px) {
-  .result-title {
-    font-size: 2rem;
-    line-height: 1.1;
-  }
-
   .result-header {
     padding-top: 16px;
     padding-bottom: 16px;
   }
+
+  .result-title {
+    font-size: 2rem;
+    line-height: 1.1;
+  }
 }
 
 @media (max-width: 480px) {
-  .tw-result-container {
-    min-height: 100vh;
+  .result-container {
     overflow-y: auto;
   }
   .result-title {
@@ -177,5 +144,4 @@ function handleInstantReset() {
     line-height: 1.1;
   }
 }
-
 </style>

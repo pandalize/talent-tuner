@@ -17,7 +17,6 @@ components/diagnosis/
 ├── ResultDisplay.vue           # 結果表示
 ├── ShareSection.vue            # シェア機能
 ├── PremiumSection.vue          # プレミアム機能
-└── ProgressIndicator.vue       # 進捗表示
 ```
 
 ### 1.2 状態管理の整理
