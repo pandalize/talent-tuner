@@ -43,13 +43,13 @@ function addUserMessage() { // 送信ボタンが押されたときに呼ばれ�
     callAPI(); // APIを呼び出す関数を実行
 }
 
-function addAIResponse(aiText: string) { // 理解してない
-    const aiMessage: Message = {
+function addaiResponse(aiText: string) { // addUserMessageと同様
+    const aiResponse: Message = {
         role: 'assistant',
-        content: aiText, 
+        content: aiText,
         timestamp: new Date()
     };
-    messages.value.push(aiMessage);
+    messages.value.push(aiResponse);
     console.log(messages.value);    
 }
 
@@ -67,11 +67,11 @@ async function callAPI() { // この関数の中に処理が完了するのを�
         const data = await res.json(); // レスポンスをJSONとして取得、これも完了まで待つ
         console.log('APIレスポンス:', data);
         if (data && data.data && data.data.content && data.data.content[0] && data.data.content[0].text) { // 一つずつ確認しないと、elseに行かずにエラーになる、constのdataのdataプロパティのcontent配列の0番目のtextが存在するか
-            addAIResponse(data.data.content[0].text); // AIのレスポンスをメッセージリストに追加
+            addaiResponse(data.data.content[0].text); // AIのレスポンスをメッセージリストに追加
             result.value = data.data.content[0].text; // レスポンスをJSONとして取得、これも完了まで待つ、リアクティブ変数は常に.valueを使って値を更新する
         } else {
             const fallback = String(data);
-            addAIResponse(fallback);
+            addaiResponse(fallback);
             result.value = fallback;
         } 
     } catch (error) {
