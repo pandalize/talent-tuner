@@ -10,23 +10,12 @@ import DiagnosisContainer from '../components/diagnosis/DiagnosisContainer.vue'
 
 <style scoped>
 .diagnosis-main {
-  width: 100%;
-}
-
-@media (max-width: 768px) {
-  .diagnosis-main {
-    min-height: 100vh;
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    z-index: 100;
-    background: var(--bg-primary, #ffffff);
-    padding-top: 80px;
-    box-sizing: border-box;
-  }
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100vw;
+  height: 80vh;
+  padding: 0;
+  margin: 0;
 }
 </style>
