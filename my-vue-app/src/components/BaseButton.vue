@@ -17,7 +17,7 @@
 import { computed } from 'vue'
 
 interface Props {
-  variant?: 'primary' | 'secondary' | 'gold' | 'danger'
+  variant?: 'primary' | 'secondary' | 'blue' | 'gold' | 'danger' | 'success' | 'warning' | 'info'
   size?: 'sm' | 'md' | 'lg'
   disabled?: boolean
   loading?: boolean
@@ -39,22 +39,13 @@ interface Emits {
 const emit = defineEmits<Emits>()
 
 const buttonClasses = computed(() => [
-  'tw-base-btn',
+  'base-btn',
+  `btn-${props.variant}`,
+  `btn-${props.size}`,
   {
-    // Variants
-    'tw-btn-primary': props.variant === 'primary',
-    'tw-btn-secondary': props.variant === 'secondary',
-    'tw-btn-gold': props.variant === 'gold',
-    'tw-btn-danger': props.variant === 'danger',
-    
-    // Sizes
-    'tw-btn-sm': props.size === 'sm',
-    'tw-btn-md': props.size === 'md',
-    'tw-btn-lg': props.size === 'lg',
-    
-    // States
-    'tw-btn-loading': props.loading,
-    'tw-btn-block': props.block,
+    'btn-loading': props.loading,
+    'btn-block': props.block,
+    'btn-disabled': props.disabled,
   }
 ])
 
@@ -66,115 +57,186 @@ function handleClick(event: MouseEvent) {
 </script>
 
 <style scoped>
-/* Base button style */
-.tw-base-btn {
+/* 基本ボタンスタイル */
+.base-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: var(--space-xs, 0.5rem);
+  gap: 0.5rem;
   font-weight: 600;
-  font-family: Noto Sans JP, Helvetica Neue, Helvetica, Arial, sans-serif;
+  font-family: 'Noto Sans JP', Helvetica, Arial, sans-serif;
   transition: all 0.3s ease;
-  border-radius: 6px;
+  border-radius: 50px;
   border: 2px solid transparent;
   cursor: pointer;
   text-decoration: none;
-  min-width: 130px;
-  min-height: 48px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-  padding: var(--space-md, 0.75rem) var(--space-lg, 1.5rem);
-  font-size: 0.9rem;
-  background: #f3f4f6;
-  color: #222;
   outline: none;
-  /* HomeViewの.btnの見た目を反映 */
-  &:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-  }
-}
-
-/* Variants */
-.tw-btn-primary {
-  background: linear-gradient(135deg, var(--primary-navy) 0%, var(--accent-blue) 100%);
-  color: #fff;
-  border: 2px solid transparent;
-  background-clip: padding-box;
   position: relative;
   overflow: hidden;
-  min-width: 130px;
-  min-height: 48px;
-  box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
-  font-size: 0.9rem;
-  font-weight: 600;
-  /* HomeViewの.btn-primaryの見た目を反映 */
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-    transition: left 0.6s;
-  }
-  &:hover {
-    background: linear-gradient(135deg, var(--accent-blue) 0%, var(--primary-blue) 100%);
-    transform: translateY(-3px);
-     /*box-shadow: 0 8px 25px rgba(59, 130, 246, 0.4); */
-    &::before {
-      left: 100%;
-    }
-  }
-  &:active {
-    transform: translateY(0);
-    /* box-shadow: 0 4px 15px rgba(59, 130, 246, 0); */
-  }
-}
-
-.tw-btn-gold {
-  background: linear-gradient(135deg, #fbbf24 0%, var(--accent-gold) 100%);
-  border: 2px solid var(--accent-gold);
-  color: var(--primary-navy);
-  &:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 18px rgba(245, 158, 11, 0.4);
-  }
-  &:active {
-    transform: translateY(0);
-    box-shadow: 0 3px 10px rgba(245, 158, 11, 0.3);
-  }
-}
-
-.tw-btn-secondary {
-  background: #f3f4f6;
-  color: var(--primary-navy);
-  border: 2px solid var(--primary-navy);
-  &:hover {
-    background: var(--primary-navy);
-    color: #fff;
-  }
-}
-
-/* Sizes */
-.tw-btn-sm {
-  padding: 0.5rem 1rem;
-  font-size: 0.9rem;
-}
-.tw-btn-md {
+  
+  /* デフォルトサイズ */
   padding: 0.75rem 1.5rem;
   font-size: 1rem;
-}
-.tw-btn-lg {
-  padding: 1rem 2rem;
-  font-size: 1.15rem;
+  min-width: 160px;
+  min-height: 48px;
+  
+  /* ホバーエフェクト */
+  &:hover:not(.btn-disabled) {
+    transform: translateY(-2px);
+  }
+  
+  &:active:not(.btn-disabled) {
+    transform: translateY(0);
+  }
 }
 
-/* States */
-.tw-btn-loading {
-  cursor: wait;
+/* カラーバリエーション - 色だけ変更 */
+.btn-primary {
+  background: linear-gradient(135deg, #3b82f6, #2563eb);
+  color: white;
+  box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+  
+  &:hover:not(.btn-disabled) {
+    box-shadow: 0 8px 25px rgba(59, 130, 246, 0.5);
+  }
 }
-.tw-btn-block {
+
+.btn-secondary {
+  background: #f3f4f6;
+  color: #1a2332;
+  border: 2px solid #d1d5db;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  
+  &:hover:not(.btn-disabled) {
+    background: #e5e7eb;
+    border-color: #9ca3af;
+  }
+}
+
+.btn-blue {
+  background: rgb(55, 129, 213);
+  color: #ffffff;
+  /* border-color: #3b82f6; */
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
+  
+  &:hover:not(.btn-disabled) {
+    background: #3fe26d;
+    color: white;
+  }
+}
+
+.btn-gold {
+  background: linear-gradient(135deg, #fbbf24, #f59e0b);
+  color: #1a2332;
+  box-shadow: 0 6px 20px rgba(245, 158, 11, 0.4);
+  
+  &:hover:not(.btn-disabled) {
+    box-shadow: 0 8px 25px rgba(245, 158, 11, 0.5);
+  }
+}
+
+.btn-white {
+  background: #ffffff;
+  color: #1a2332;
+  border: 2px solid #ffffff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  
+  &:hover:not(.btn-disabled) {
+    background: #f3f4f6;
+    border-color: #d1d5db;
+  }
+}
+
+.btn-danger {
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+  color: white;
+  box-shadow: 0 6px 20px rgba(239, 68, 68, 0.4);
+  
+  &:hover:not(.btn-disabled) {
+    box-shadow: 0 8px 25px rgba(239, 68, 68, 0.5);
+  }
+}
+
+.btn-success {
+  background: linear-gradient(135deg, #10b981, #059669);
+  color: white;
+  box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+  
+  &:hover:not(.btn-disabled) {
+    box-shadow: 0 8px 25px rgba(16, 185, 129, 0.5);
+  }
+}
+
+.btn-warning {
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+  color: white;
+  box-shadow: 0 6px 20px rgba(245, 158, 11, 0.4);
+  
+  &:hover:not(.btn-disabled) {
+    box-shadow: 0 8px 25px rgba(245, 158, 11, 0.5);
+  }
+}
+
+.btn-info {
+  background: linear-gradient(135deg, #06b6d4, #0891b2);
+  color: white;
+  box-shadow: 0 6px 20px rgba(6, 182, 212, 0.4);
+  
+  &:hover:not(.btn-disabled) {
+    box-shadow: 0 8px 25px rgba(6, 182, 212, 0.5);
+  }
+}
+
+/* サイズバリエーション */
+.btn-sm {
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  min-width: 120px;
+  min-height: 40px;
+}
+
+.btn-md {
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  min-width: 160px;
+  min-height: 48px;
+}
+
+.btn-lg {
+  padding: 1rem 2rem;
+  font-size: 1.125rem;
+  min-width: 180px;
+  min-height: 56px;
+}
+
+/* 状態 */
+.btn-loading {
+  cursor: wait;
+  opacity: 0.7;
+}
+
+.btn-block {
   width: 100%;
+}
+
+.btn-disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+/* レスポンシブ */
+@media (max-width: 768px) {
+  .base-btn {
+    min-width: 140px;
+  }
+  
+  .btn-sm {
+    min-width: 100px;
+  }
+  
+  .btn-lg {
+    min-width: 160px;
+  }
 }
 </style>

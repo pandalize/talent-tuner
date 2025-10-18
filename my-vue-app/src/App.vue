@@ -1,45 +1,23 @@
-<script setup lang="ts">
-import { RouterLink, RouterView } from 'vue-router'
-import { useI18n } from 'vue-i18n'
-import { ref } from 'vue' 
-
-const { t } = useI18n()
-
-// ハンバーガーメニューを開閉
-const isMobileMenuOpen = ref(false); // モバイルメニューの開閉状態を管理するリアクティブ変数
-const toggleMobileMenu = () => { // isMobileMenuOpenを反転させる関数
-  isMobileMenuOpen.value = !isMobileMenuOpen.value
-}
-const closeMobileMenu = () => { // isMobileMenuOpenをfalseにする関数
-  isMobileMenuOpen.value = false
-}
-</script>
-
 <template>
   <div id="app" style="width: 100vw; box-sizing: border-box;">
     <header class="app-header">
       <RouterLink to="/" class="logo">
-        <img src="/favicon.ico" alt="ため職" class="logo-icon">
+        <img src="/favicon.ico" alt="Pandalize" class="logo-icon">
         <div class="logo-text">
-          <span class="logo-main">ため職</span> <!-- $tはja.json,en.jsonから取得したかったが失敗 -->
-          <!-- <span class="logo-sub">Professional Career Assessment</span> -->
+          <span class="logo-main">{{ $t('app.tameshoku') }}</span>
         </div>
       </RouterLink>
 
       <nav class="header-nav">
-        <RouterLink to="/" class="nav-item">{{ $t('nav.home') }}</RouterLink>  <!-- $tはja.json,en.jsonから取得 -->
-        <RouterLink to="/diagnosis" class="nav-item">{{ $t('nav.diagnosis') }}</RouterLink>
-        <RouterLink to="/about" class="nav-item">{{ $t('nav.about') }}</RouterLink>
-        <RouterLink to="/career-guide" class="nav-item">{{ $t('nav.career_guide') }}</RouterLink>
-        <RouterLink to="/diagnosis-method" class="nav-item">{{ $t('nav.diagnosis_method') }}</RouterLink>
-        <RouterLink to="/chat" class="nav-item">{{ $t('nav.chat') }}</RouterLink>
-        <RouterLink to="/payment" class="nav-item">決済</RouterLink>
-        <RouterLink to="/newchat" class="nav-item">New AI進路相談</RouterLink>
+          <RouterLink to="/" class="nav-item">{{ $t('nav.home') }}</RouterLink>
+          <RouterLink to="/diagnosis" class="nav-item">{{ $t('nav.diagnosis') }}</RouterLink>
+          <RouterLink to="/newchat" class="nav-item">{{ $t('nav.newchat') }}</RouterLink>
+          <RouterLink to="/about" class="nav-item">{{ $t('nav.about') }}</RouterLink>
       </nav>
 
       <!-- ヘッダーコントロール -->
       <div class="header-controls">
-        <!--　<LanguageSwitcher /> -->  <!-- 言語切替コンポーネント -->
+        <LanguageSwitcher />
 
         <!-- ハンバーガーメニューボタン -->
         <button 
@@ -167,6 +145,24 @@ const closeMobileMenu = () => { // isMobileMenuOpenをfalseにする関数
   </div>
 </template>
 
+<script setup lang="ts">
+import { RouterLink, RouterView } from 'vue-router'
+import { useI18n } from 'vue-i18n'
+import { ref } from 'vue' 
+import LanguageSwitcher from './components/LanguageSwitcher.vue';
+
+const { t } = useI18n()
+
+// ハンバーガーメニューを開閉
+const isMobileMenuOpen = ref(false); // モバイルメニューの開閉状態を管理するリアクティブ変数
+const toggleMobileMenu = () => { // isMobileMenuOpenを反転させる関数
+  isMobileMenuOpen.value = !isMobileMenuOpen.value
+}
+const closeMobileMenu = () => { // isMobileMenuOpenをfalseにする関数
+  isMobileMenuOpen.value = false
+}
+</script>
+
 <style>
 html, body {
   margin: 0;
@@ -246,9 +242,10 @@ html, body {
   width: 80%;
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 3%;
-  flex-wrap: wrap;
-  padding: var(--space-xs);
+  flex-wrap: wrap; 
+  padding: var(--space-xs); 
   border-radius: 12px;
 }
 
