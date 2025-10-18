@@ -15,6 +15,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     try {
         const apiKey = process.env.CLAUDE_API_KEY; // 環境変数からAPIキーを取得
+        const { messages } = req.body; // フロントから受け取ったbodyの中でmessagesだけをmessagesに保存、今はbodyにmessagesしかないが、将来他のデータが増えたときに備えて分割代入で取得
         const claudeResponse = await fetch('https://api.anthropic.com/v1/messages', { // ClaudeのAPIエンドポイントにリクエストを送り、結果を取ってくる
             method: 'POST', // TTPメソッドはPOST
             headers: {
@@ -24,19 +25,14 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
             },
             body: JSON.stringify({ // オブジェクトや配列をJSON形式の文字列に変換してリクエストボディにセット
                 model: 'claude-3-5-haiku-latest', // 使用するモデルを指定
-                messages: [
-                    {
-                        role: 'user',
-                        content: 'こんにちは！'
-                    }
-                ],
+                messages,
                 max_tokens: 256,
             })
         });
 
         const data = await claudeResponse.json(); // ClaudeのAPIからのレスポンスをJavaScriptのオブジェクトに変換
         res.status(200).json({ data }); // ClaudeのAPIからのレスポンスをJSONにして返す
-    } catch (error) {}
+    } catch (error) {
         res.status(500).json({ エラー: '外部APIの呼び出しに失敗しました' }); // エラーメッセージをJSONレスポンスで返す
     }
 }
