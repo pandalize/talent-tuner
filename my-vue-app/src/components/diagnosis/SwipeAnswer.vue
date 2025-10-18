@@ -1,46 +1,31 @@
-<!--
-  スワイプ式2値回答コンポーネント
-  左スワイプ：全く当てはまらない（1）
-  右スワイプ：よく当てはまる（5）
--->
 <template>
-  <div class="swipe-answer-container">
-    <!-- 質問カード -->
-    <div 
-      class="swipe-card"
-      :class="{ 
-        'swiping': isSwiping,
-        'swipe-left': swipeDirection === 'left',
-        'swipe-right': swipeDirection === 'right',
-        'answered': hasAnswered,
-        'selected-no': isAnimatingNo,
-        'selected-yes': isAnimatingYes,
-        'visible': isVisible
-      }"
-      ref="swipeCardRef"
-      @touchstart="handleTouchStart"
-      @touchmove="handleTouchMove"
-      @touchend="handleTouchEnd"
-      @mousedown="handleMouseDown"
-      @mousemove="handleMouseMove"
-      @mouseup="handleMouseUp"
-      @mouseleave="handleMouseUp"
-      :style="{
-        transform: isVisible ? `translate(calc(-50% + ${translateX}px), -50%) rotate(${rotation}deg)` : 'translate(-50%, -50%) scale(0.8) translateY(30px)',
-        transition: isSwiping ? 'none' : (isAnimatingNo || isAnimatingYes) ? 'all 0.8s cubic-bezier(0.43, 0.13, 0.23, 0.96)' : isVisible ? 'all 0.3s ease' : 'opacity 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94), transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94)'
-      }"
-    >
-      <div class="card-content">
-        <div v-if="currentIndex !== undefined && totalCount !== undefined" class="progress-header">
-          <div class="progress-text">{{ currentIndex + 1 }} / {{ totalCount }}</div>
-        </div>
-        
-        <div class="option-header">
-          <div class="option-text">{{ option.text }}</div>
-        </div>
-      </div>
-      
+  <div 
+    class="swipe-card"
+    :class="{ 
+      'swiping': isSwiping,
+      'swipe-left': swipeDirection === 'left',
+      'swipe-right': swipeDirection === 'right',
+      'visible': isVisible
+    }"
+    ref="swipeCardRef"
+    @touchstart="handleTouchStart"
+    @touchmove="handleTouchMove"
+    @touchend="handleTouchEnd"
+    @mousedown="handleMouseDown"
+    @mousemove="handleMouseMove"
+    @mouseup="handleMouseUp"
+    @mouseleave="handleMouseUp"
+    :style="{
+      transform: isVisible ? `translate(calc(-50% + ${translateX}px), -50%) rotate(${rotation}deg)` : 'translate(-50%, -50%) scale(0.8) translateY(30px)',
+      transition: isSwiping ? 'none' : (isAnimatingNo || isAnimatingYes) ? 'all 0.8s cubic-bezier(0.43, 0.13, 0.23, 0.96)' : isVisible ? 'all 0.3s ease' : 'opacity 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94), transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94)'
+    }"
+  >
+    <div class="progress-header">
+      <div class="progress-text">質問 {{ currentIndex + 1 }} / {{ totalCount }}</div>
     </div>
+    
+    <div class="option-text">{{ option.text }}</div>
+      
   </div>
 </template>
 
@@ -55,8 +40,8 @@ interface Props {
     text: string
   }
   currentRating: number | null
-  currentIndex?: number
-  totalCount?: number
+  currentIndex: number
+  totalCount: number
 }
 
 const props = defineProps<Props>()
@@ -228,122 +213,46 @@ function resetForNextCard() {
 </script>
 
 <style lang="scss" scoped>
-.swipe-answer-container {
-  position: relative;
-  width: 100%;
-  min-height: 400px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
-  padding: var(--space-sm) 0;
-  margin: 0 auto;
-  box-sizing: border-box;
-}
-
-// スワイプカード
 .swipe-card {
+  width: 50%;
+  max-width: 400px;
+  aspect-ratio: 3/4;
   position: relative;
   background: white;
   border-radius: 20px;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
-  padding: 0;
-  cursor: grab;
-  user-select: none;
-  touch-action: pan-y;
-  will-change: transform, opacity;
-  width: 95%;
-  max-width: 1000px;
-  aspect-ratio: 4 / 3;
-  height: 100%;
+  padding: var(--space-sm);
+  cursor: grab; // マウスを掴める手の形にする
+  touch-action: pan-y; // スクロールを制御
+  will-change: transform, opacity; // transform/opacityのアニメーションをすることを事前に伝える
   display: flex;
   align-items: center;
   justify-content: center;
   box-sizing: border-box;
-  overflow: hidden;
   margin: var(--space-md) auto 0;
-  left: 0;
-  right: 0;
-  
-  // 初期状態（非表示）
+  left: 25%;
+  top: 50%;
+
   opacity: 0;
-  // transform は動的スタイルバインディングで制御
-  transition: opacity 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94), 
-              transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94),
-              background 0.3s ease;
+  transition: opacity 0.8s ease, 
+              transform 0.8s ease,
+              background 0.1s ease;
   
-  // aspect-ratio未対応ブラウザ向けフォールバック
-  @supports not (aspect-ratio: 4 / 3) {
-    height: 71.25vw; // 95vw × 0.75 = 3:4の比率
-    max-height: 750px;
-  }
-  
-  // 表示状態（ディゾルブイン）
   &.visible {
     opacity: 1;
-    // transform は動的スタイルバインディングで制御
   }
-  
+
   &.swiping {
-    cursor: grabbing;
+    cursor: grabbing; // 掴んでいる手の形にする
     
-    // スワイプ中の背景色変化
     &.swipe-left {
-      background: linear-gradient(135deg, rgba(255, 107, 107, 0.7), rgba(255, 135, 135, 0.7)) !important;
-      transition: background 0.1s ease;
-      
-      .option-text {
-        color: white;
-        text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
-      }
+      background: rgba(255, 107, 107, 0.7);
     }
     
     &.swipe-right {
-      background: linear-gradient(135deg, rgba(81, 207, 102, 0.7), rgba(105, 219, 124, 0.7)) !important;
-      transition: background 0.1s ease;
-      
-      .option-text {
-        color: white;
-        text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
-      }
+      background: rgba(81, 207, 102, 0.7);
     }
   }
-  
-  // 選択時の色変更アニメーション
-  &.selected-no {
-    background: linear-gradient(135deg, #ff6b6b, #ff8787) !important;
-    border: 2px solid #ff5252;
-    box-shadow: 0 12px 48px rgba(255, 107, 107, 0.6);
-    opacity: 0.9;
-    
-    .option-text {
-      color: white;
-    }
-  }
-  
-  &.selected-yes {
-    background: linear-gradient(135deg, #51cf66, #69db7c) !important;
-    border: 2px solid #40c057;
-    box-shadow: 0 12px 48px rgba(81, 207, 102, 0.6);
-    opacity: 0.9;
-    
-    .option-text {
-      color: white;
-    }
-  }
-}
-
-.card-content {
-  position: relative;
-  z-index: 2;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: visible;
-  padding: var(--space-xl) var(--space-lg);
-  box-sizing: border-box;
 }
 
 .progress-header {
@@ -355,178 +264,33 @@ function resetForNextCard() {
 
 .progress-text {
   font-size: clamp(0.7rem, 2vw, 0.9rem);
-  color: var(--text-secondary, #666);
-  background: rgba(255, 255, 255, 0.9);
+  color: var(--text-secondary);
+  background: var(--bg-tertiary);
   padding: var(--space-xs, 4px) var(--space-sm, 8px);
   border-radius: 20px;
   font-weight: 500;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
-.option-header {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0;
-  width: 100%;
-  height: 100%;
-  overflow: visible;
-}
-
 .option-text {
-  // デスクトップ基準のフォントサイズ
   font-size: clamp(1.5rem, 2vw, 2rem);
-  line-height: clamp(1.4, 1.5, 1.6);
+  line-height: 1.4;
   color: var(--text-primary);
   text-align: center;
   font-weight: 500;
   letter-spacing: 0.02em;
-  word-break: break-word;
   white-space: normal;
-  max-height: 100%;
   overflow: visible;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   overflow-wrap: break-word;
-  transition: font-size 0.3s ease;
+  padding: 0 var(--space-sm);
 }
 
-// タブレット最適化
-@media (min-width: 769px) and (max-width: 1024px) {
-  .swipe-card {
-    aspect-ratio: 3 / 4 !important;
-    height: auto !important;
-    min-height: auto !important;
-    max-height: none !important;
-    padding: 0;
-    left: 50%;
-    top: 50%;
-    // transform は動的スタイルバインディングで制御
-  }
-  
-  .card-content {
-    padding: var(--space-xxl) var(--space-xl);
-  }
-  
-  .option-text {
-    font-size: 1.6rem;
-  }
-}
-
-// モバイル最適化 - 縦長カードで大きな画面占有率
-@media (max-width: 768px) {
-  .swipe-answer-container {
-    width: 100%;
-    padding: var(--space-xs) 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-  }
-  
-  .swipe-card {
-    width: 75vw !important; // 3:4比率に適した横幅
-    max-width: 75vw !important;
-    min-width: 75vw !important;
-    min-height: 100vw !important;
-    aspect-ratio: 3/4 !important;
-    padding: 0;
-    border-radius: 20px;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
-    margin: 0 auto;
-    position: absolute;
-    left: 50%;
-    top: 35%; // 50% から 35% に変更してカードを上に移動
-    // transform は動的スタイルバインディングで制御
-  }
-  
-  .card-content {
-    padding: clamp(16px, 4vw, 28px) clamp(20px, 5vw, 32px);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  
-  .option-header {
-    padding: 0;
-    max-width: 100%;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  
-  .option-text {
-    // 動的フォントサイズ: 最小1.4rem、推奨5.5vw、最大2.2rem（大きく調整）
-    font-size: clamp(1.4rem, 5.5vw, 2.2rem) !important;
-    line-height: clamp(1.3, 1.4, 1.5);
-    word-break: break-word;
-    overflow-wrap: break-word;
-    text-align: center;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    height: 100%;
-    padding: clamp(4px, 1vw, 12px);
-    box-sizing: border-box;
-  }
-}
-
-// 小画面モバイル最適化（iPhone SE等）
 @media (max-width: 480px) {
-  .swipe-answer-container {
-    min-height: 65vh; // 小画面では少し小さく
-  }
-  
   .swipe-card {
-    width: 80vw !important; // 3:4比率に最適化
-    max-width: 80vw !important;
-    min-width: 80vw !important;
-    aspect-ratio: 3/4 !important;
-    left: 50% !important;
-    top: 45% !important; // 50% から 35% に変更してカードを上に移動
-    // transform は動的スタイルバインディングで制御
-  }
-  
-  .option-text {
-    // より小さい画面用の動的フォントサイズ: 最小1.2rem、推奨5vw、最大1.8rem（大きく調整）
-    font-size: clamp(1.2rem, 5vw, 1.8rem) !important;
-    line-height: clamp(1.25, 1.35, 1.45);
-  }
-  
-  .card-content {
-    padding: clamp(12px, 3vw, 20px) clamp(16px, 4.5vw, 24px);
+    width: 80vw;
+    height: 65vh;
+    left: 45%;
+    top: 45%;
   }
 }
-
-// 大画面最適化
-@media (min-width: 1025px) {
-  .swipe-card {
-    aspect-ratio: 3 / 4 !important;
-   padding: 0;
-    left: 50%;
-    top: 50%;
-    // transform は動的スタイルバインディングで制御
-  }
-  
-  .card-content {
-    padding: var(--space-xxxl) var(--space-xxl);
-  }
-  
-  .option-text {
-    font-size: clamp(1.8rem, 2.5vw, 2.2rem);
-    line-height: 1.5;
-  }
-}
-
-// 非常に大きな画面での上限設定
-@media (min-width: 1400px) {
-  .option-text {
-    font-size: 2.2rem !important;
-  }
-}
-
 </style>

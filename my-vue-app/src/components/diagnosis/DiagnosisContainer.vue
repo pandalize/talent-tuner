@@ -2,8 +2,7 @@
   <div class="diagnosis-container">
     <!-- ローディング状態 -->
     <div v-if="loading" class="loading-section">
-      <h3>診断システムを初期化中</h3>
-      <p>最適な質問をご用意しています...</p>
+      <p>読み込み中</p>
     </div>
 
     <!-- エラー状態 -->
@@ -162,44 +161,23 @@ onMounted(() => {
 @use '@/assets/scss/mixins.scss' as mixins;
 
 .diagnosis-container {
-  @include mixins.flex-center;
-  @include mixins.container(900px);
-  @include mixins.card-padding(lg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: 100%;
-  min-height: calc(100vh - 80px);
+  height: 100%;
+  padding: 0;
+  margin: 0;
   flex-direction: column;
-  padding: var(--space-md);
-  padding-left: 4px;
-  padding-bottom: var(--space-lg);
-  padding-right: 4px;
-  margin-bottom: var(--space-lg);
   position: relative;
-  min-height: 400px;
   overflow-x: hidden;
   border: none;
   box-sizing: border-box;  
-
-  // 子要素の直接配置用設定
-  > * {
-    width: 100%;
-    max-width: calc(100vw - 16px);
-    margin: 0 auto;
-    box-sizing: border-box;
-  }
 }
 
 .loading-section {
   @include mixins.section-padding;
   text-align: center;
-  color: var(--text-primary);
-
-  h3 {
-    font-family: var(--font-heading);
-    font-size: var(--fs-h3);
-    color: var(--primary-navy);
-    margin-bottom: var(--space-sm);
-    font-weight: 600;
-  }
 
   p {
     color: var(--text-secondary);
@@ -229,32 +207,14 @@ onMounted(() => {
   @include mixins.button-primary;
 }
 
-@include mixins.respond-to('tablet') {
-  .diagnosis-container {
-    padding: var(--space-md) var(--space-sm);
-    @include mixins.card-padding(lg);
-  }
-}
-
-@include mixins.respond-to('mobile') {
+@media (max-width: 480px) {
   .diagnosis-container {
     padding: var(--space-sm);
-    min-height: 100vh;
     width: 100%;
-    max-width: 100vw;
+    height: 100%;
     overflow-x: hidden;
     box-sizing: border-box;
-    padding: var(--space-md);
-    padding-bottom: var(--space-lg);
-    margin-bottom: var(--space-lg);
     box-sizing: border-box;
-    min-height: 600px;
-
-    > * {
-      width: 100%;
-      max-width: 100%;
-      margin: 0;
-    }
   }
 }
 </style>
