@@ -31,7 +31,7 @@ export const Primary: Story = {
     variant: 'primary',
     size: 'md',
   },
-  render: (args) => ({
+  render: (args: any) => ({  
     components: { BaseButton },
     setup() {
       return { args }
@@ -45,7 +45,7 @@ export const Secondary: Story = {
     variant: 'secondary',
     size: 'md',
   },
-  render: (args) => ({
+  render: (args: any) => ({
     components: { BaseButton },
     setup() {
       return { args }
@@ -59,7 +59,7 @@ export const Gold: Story = {
     variant: 'gold',
     size: 'md',
   },
-  render: (args) => ({
+  render: (args: any) => ({
     components: { BaseButton },
     setup() {
       return { args }

@@ -11,10 +11,6 @@
       <nav class="header-nav">
           <RouterLink to="/" class="nav-item">{{ $t('nav.home') }}</RouterLink>
           <RouterLink to="/diagnosis" class="nav-item">{{ $t('nav.diagnosis') }}</RouterLink>
-          <!-- <RouterLink to="/career-guide" class="nav-item">{{ $t('nav.career_guide') }}</RouterLink> -->
-          <!-- <RouterLink to="/diagnosis-method" class="nav-item">{{ $t('nav.diagnosis_method') }}</RouterLink> -->
-          <!-- <RouterLink to="/chat" class="nav-item">{{ $t('nav.chat') }}</RouterLink> -->
-          <!-- <RouterLink to="/payment" class="nav-item">{{ $t('nav.payment') }}</RouterLink> -->
           <RouterLink to="/newchat" class="nav-item">{{ $t('nav.newchat') }}</RouterLink>
           <RouterLink to="/about" class="nav-item">{{ $t('nav.about') }}</RouterLink>
       </nav>
