@@ -22,7 +22,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
                 'Content-Type': 'application/json',
                 'anthropic-version': '2023-06-01', // 使用するAPIバージョンを指定
             },
-            body: JSON.stringify({
+            body: JSON.stringify({ // オブジェクトや配列をJSON形式の文字列に変換してリクエストボディにセット
                 model: 'claude-3-5-haiku-latest', // 使用するモデルを指定
                 messages: [
                     {
@@ -36,7 +36,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
         const data = await claudeResponse.json(); // ClaudeのAPIからのレスポンスをJavaScriptのオブジェクトに変換
         res.status(200).json({ data }); // ClaudeのAPIからのレスポンスをJSONにして返す
-    } catch (error) {
+    } catch (error) {}
         res.status(500).json({ エラー: '外部APIの呼び出しに失敗しました' }); // エラーメッセージをJSONレスポンスで返す
     }
 }

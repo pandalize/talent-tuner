@@ -1,7 +1,7 @@
 <template>
-  <div class="diagnosis-view">
+  <main class="diagnosis-main">
     <DiagnosisContainer />
-  </div>
+  </main>
 </template>
 
 <script setup lang="ts">
@@ -9,13 +9,12 @@ import DiagnosisContainer from '../components/diagnosis/DiagnosisContainer.vue'
 </script>
 
 <style scoped>
-.diagnosis-view {
+.diagnosis-main {
   width: 100%;
 }
 
-/* モバイルでフッターを隠すために画面全体を使用 */
 @media (max-width: 768px) {
-  .diagnosis-view {
+  .diagnosis-main {
     min-height: 100vh;
     height: 100vh;
     display: flex;
@@ -26,7 +25,7 @@ import DiagnosisContainer from '../components/diagnosis/DiagnosisContainer.vue'
     right: 0;
     z-index: 100;
     background: var(--bg-primary, #ffffff);
-    padding-top: 80px; /* ヘッダー分のスペースを確保 */
+    padding-top: 80px;
     box-sizing: border-box;
   }
 }

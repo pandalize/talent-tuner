@@ -1,5 +1,5 @@
 <template>
-  <div id="app" style="width: 100vw; box-sizing: border-box;">
+  <div id="app">
     <header class="app-header">
       <RouterLink to="/" class="logo">
         <img src="/favicon.ico" alt="Pandalize" class="logo-icon">
@@ -63,7 +63,7 @@
           class="mobile-nav-item" 
           @click="closeMobileMenu"
         >
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <svg class='nav-icon' viewBox="0 0 24 24">
             <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/>
           </svg>
           {{ $t('nav.home') }}
@@ -74,7 +74,7 @@
           class="mobile-nav-item" 
           @click="closeMobileMenu"
         >
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <svg class='nav-icon' viewBox="0 0 24 24">
             <path d="M9 11H7v2h2v-2zm4 0h-2v2h2v-2zm4 0h-2v2h2v-2zm2-7h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V9h14v11z"/>
           </svg>
           {{ $t('nav.diagnosis') }}
@@ -85,7 +85,7 @@
           class="mobile-nav-item" 
           @click="closeMobileMenu"
         >
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <svg class='nav-icon' viewBox="0 0 24 24">
             <path d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
           </svg>
           {{ $t('nav.about') }}
@@ -96,7 +96,7 @@
           class="mobile-nav-item" 
           @click="closeMobileMenu"
         >
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <svg class='nav-icon' viewBox="0 0 24 24">
             <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
           </svg>
           {{ $t('nav.career_guide') }}
@@ -107,7 +107,7 @@
           class="mobile-nav-item"
           @click="closeMobileMenu"
         >
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <svg class='nav-icon' viewBox="0 0 24 24">
             <path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/>
           </svg>
           {{ $t('nav.chat') }}
@@ -118,7 +118,7 @@
           class="mobile-nav-item" 
           @click="closeMobileMenu"
         >
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <svg class='nav-icon' viewBox="0 0 24 24">
             <circle cx="12" cy="12" r="3"/>
             <path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z"/>
           </svg>
@@ -128,21 +128,52 @@
       </nav>
     </header>
 
-    
+  
     <main class="app-content">
       <RouterView/>
     </main>
-    
-    
-    <!--
-    デモチャットモーダル
-    <div v-if="isDemoChatOpen" class="demo-chat-overlay" @click="closeDemoChat">
-      <div class="demo-chat-modal" @click.stop>
-        <CareerChatBot @close="closeDemoChat" />
+  </div>
+
+  <footer class="app-footer">
+    <div class="footer-content">
+      <div class="footer-section">
+        <h3>ため職</h3>
+        <p>日本一ためになる正直なおすすめ職業診断</p>
+      </div>
+      
+      <div class="footer-section">
+        <h4>サービス</h4>
+        <ul>
+          <li><router-link to="/diagnosis">診断ページ</router-link></li>
+          <li><router-link to="/chat">AI進路相談</router-link></li>
+          <li><router-link to="/about">職業一覧</router-link></li>
+          <li><router-link to="/career-guide">キャリアガイド</router-link></li>
+          <li><router-link to="/diagnosis-method">診断方法</router-link></li>
+        </ul>
+      </div>
+      
+      <div class="footer-section">
+        <h4>サポート</h4>
+        <ul>
+          <li><router-link to="/contact">お問い合わせ</router-link></li>
+          <li><router-link to="/company">運営者情報</router-link></li>
+          <li><router-link to="/sitemap">サイトマップ</router-link></li>
+        </ul>
+      </div>
+      
+      <div class="footer-section">
+        <h4>法的情報</h4>
+        <ul>
+          <li><router-link to="/privacy">プライバシーポリシー</router-link></li>
+          <li><router-link to="/terms">利用規約</router-link></li>
+        </ul>
       </div>
     </div>
-    -->
-  </div>
+    
+    <div class="footer-bottom">
+      <p>&copy; 2025 Pandalize. All rights reserved.</p>
+    </div>
+  </footer>
 </template>
 
 <script setup lang="ts">
@@ -163,7 +194,8 @@ const closeMobileMenu = () => { // isMobileMenuOpenをfalseにする関数
 }
 </script>
 
-<style>
+<style lang="scss" scoped>
+@use '@/assets/scss/mixins.scss' as mixins;
 html, body {
   margin: 0;
   padding: 0;
@@ -226,17 +258,6 @@ html, body {
   background-clip: text;
   transition: all var(--transition-normal);
 }
-
-/*
-.logo-sub {
-  font-family: var(--font-mono);
-  font-size: 60%;
-  color: var(--text-secondary);
-  text-transform: uppercase;
-  opacity: 0.8;
-  transition: opacity var(--transition-normal);
-}
-*/
 
 .header-nav {
   width: 80%;
@@ -454,7 +475,12 @@ html, body {
     font-weight: 600;
   }
 
-  svg {
+  .nav-icon {
+    width: 20px;
+    height: 20px;
+    stroke: currentColor;
+    fill: none;
+    stroke-width: 2;
     flex-shrink: 0;
     opacity: 0.8;
     transition: opacity var(--transition-normal);
@@ -471,38 +497,87 @@ html, body {
   overflow-x: hidden;
 }
 
-/* ドロップダウンメニュー */
-.dropdown {
-  position: relative;
+.app-footer {
+  background-color: var(--text-dark, #333);
+  color: var(--background-white, #fff);
+  margin-top: auto;
+  padding: var(--space-lg) 0;
+  width: 100%;
 }
-.dropdown-menu {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  min-width: 200px;
-  background: #fff;
-  border: 1px solid var(--border-light);
-  border-radius: 8px;
-  box-shadow: 0 4px 16px rgba(0,0,0,0.08);
-  z-index: 2000;
-  display: flex;
-  flex-direction: column;
-  padding: 0.5rem 0;
+
+.footer-content {
+  @include mixins.container(1200px);
+  @include mixins.grid-auto-fit(200px);
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: var(--space-md);
 }
-.dropdown-label {
-  padding: 0;
+
+.footer-section h3 {
+  color: var(--background-white, #fff);
+  font-size: clamp(18px, 3vw, 24px);
+  margin-bottom: var(--space-sm);
+  font-weight: 700;
 }
-.dropdown-item {
-  padding: 0.75rem 1.5rem;
-  color: var(--text-secondary);
+
+.footer-section p {
+  color: #ccc;
+  font-size: clamp(12px, 2vw, 14px);
+  line-height: 1.6;
+  margin: 0;
+}
+
+.footer-section h4 {
+  color: var(--background-white, #fff);
+  font-size: clamp(14px, 2.5vw, 18px);
+  margin-bottom: var(--space-sm);
+  font-weight: 600;
+}
+
+.footer-section ul {
+  @include mixins.list-reset;
+}
+
+.footer-section li {
+  margin-bottom: var(--space-xs);
+}
+
+.footer-section a {
+  color: #ccc;
   text-decoration: none;
-  font-size: 0.95rem;
-  transition: background 0.2s, color 0.2s;
-  white-space: nowrap;
+  font-size: clamp(12px, 2vw, 14px);
+  transition: color 0.3s ease;
 }
-.dropdown-item:hover {
-  background: var(--accent-blue);
-  color: #fff;
+
+.footer-section a:hover {
+  color: var(--background-white, #fff);
+  text-decoration: underline;
+}
+
+.footer-bottom {
+  max-width: 1200px;
+  margin: var(--space-md) auto 0;
+  padding-top: var(--space-md);
+  border-top: 1px solid #555;
+  text-align: center;
+}
+
+.footer-bottom p {
+  color: #999;
+  font-size: clamp(10px, 1.8vw, 12px);
+  margin: 0;
+}
+
+@media (max-width: 1024px) {
+  .footer-content {
+    @include mixins.grid-columns(2);
+    gap: var(--space-md);
+  }
+  
+  .footer-section:first-child {
+    grid-column: 1 / -1;
+    text-align: center;
+    margin-bottom: var(--space-sm);
+  }
 }
 
 @media (max-width: 768px) {
@@ -543,26 +618,132 @@ html, body {
     font-size: 1.5rem;
   }
 
-  .logo-sub {
+  .app-footer {
+  padding: var(--space-xl) var(--space-md) var(--space-lg);
+  background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+  box-shadow: inset 0 4px 20px rgba(0, 0, 0, 0.1);
+  }
+  
+  .footer-content {
+    @include mixins.grid-columns(2);
+    text-align: center;
+    max-width: 400px;
+    margin: 0 auto;
+  }
+
+  .footer-section:nth-child(1),
+  .footer-section:nth-child(2) {
     display: none;
   }
-
-  .result-subtitle {
-    display: none !important;
+  
+  .footer-section {
+    padding: var(--space-md);
+    backdrop-filter: blur(10px);
+    
+    &:first-child {
+      grid-column: auto;
+      margin-bottom: 0;
+      background: linear-gradient(135deg, rgba(52, 152, 219, 0.1), rgba(16, 185, 129, 0.08));
+      border: 1px solid rgba(52, 152, 219, 0.2);
+      
+      h3 {
+        font-size: 1.5rem;
+        background: linear-gradient(135deg, var(--accent-blue), var(--accent-gold));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin-bottom: var(--space-sm);
+      }
+      
+      p {
+        color: #e8f4fd;
+        font-size: 0.9375rem;
+        line-height: 1.6;
+        opacity: 0.9;
+      }
+    }
+    
+    h4 {
+      font-size: 1.125rem;
+      color: #e8f4fd;
+      position: relative;
+      
+      &::after {
+        content: '';
+        position: absolute;
+        bottom: -4px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 40px;
+        height: 2px;
+        background: linear-gradient(90deg, var(--accent-blue), var(--accent-gold));
+        border-radius: 1px;
+      }
+    }
+    
+    ul {
+      display: flex;
+      flex-direction: column;
+    }
+    
+    li {
+      margin-bottom: 0;
+    }
+    
+    a {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: var(--space-xs) var(--space-sm);
+      color: #bdc3c7;
+      font-size: 0.875rem;
+      border-radius: 8px;
+      transition: all var(--transition-normal);
+      position: relative;
+      overflow: hidden;
+      
+      &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+        transition: left 0.6s ease;
+      }
+      
+      &:hover {
+        color: #ffffff;
+        background: rgba(52, 152, 219, 0.2);
+        transform: translateY(-2px);
+        text-decoration: none;
+        
+        &::before {
+          left: 100%;
+        }
+      }
+      
+      &:active {
+        transform: translateY(0) scale(0.98);
+      }
+    }
+    
+    margin-bottom: 0;
   }
-
-  /*
-  .demo-chat-overlay {
-    padding: 0;
+  
+  .footer-bottom {
+    margin-top: var(--space-xl);
+    padding-top: var(--space-lg);
+    border-top: 1px solid rgba(255, 255, 255, 0.15);
+    
+    p {
+      color: #95a5a6;
+      font-size: 0.75rem;
+      opacity: 0.8;
+      padding: var(--space-xs);
+    }
   }
-  .demo-chat-modal {
-    width: 100%;
-    height: 100%;
-    max-height: 100vh;
-    border-radius: 0;
-    overflow-y: auto;
-  }
-  */
 }
 
 @media (max-width: 480px) {
@@ -588,6 +769,50 @@ html, body {
     font-size: 1.0625rem;
     
   }
-}
 
+    .app-footer {
+    padding: var(--space-md) var(--space-sm) var(--space-md);
+    margin: 0;
+    height: 30vh;
+  }
+  
+  .footer-content {
+    padding: 0;
+    max-width: 100%;
+    gap: 0;
+  }
+  
+  .footer-section {
+    padding: var(--space-sm);
+    
+    &:first-child {
+      h3 {
+        font-size: 1.25rem;
+      }
+      
+      p {
+        font-size: 0.875rem;
+      }
+    }
+    
+    h4 {
+      font-size: 1rem;
+      margin-bottom: var(--space-sm);
+    }
+    
+    a {
+      font-size: 0.8125rem;
+      padding: 0;
+    }
+  }
+  
+  .footer-bottom {
+    margin-top: 0;
+    padding-top: 0;
+    
+    p {
+      font-size: 0.6875rem;
+    }
+  }
+}
 </style>

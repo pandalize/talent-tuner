@@ -31,7 +31,6 @@
       }"
     >
       <div class="card-content">
-        <!-- 進捗表示 -->
         <div v-if="currentIndex !== undefined && totalCount !== undefined" class="progress-header">
           <div class="progress-text">{{ currentIndex + 1 }} / {{ totalCount }}</div>
         </div>

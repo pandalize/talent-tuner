@@ -74,7 +74,7 @@
 </template>
 
 <script setup lang="ts">
-// 利用規約ページ
+
 </script>
 
 <style scoped>

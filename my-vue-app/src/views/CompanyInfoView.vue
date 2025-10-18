@@ -78,7 +78,7 @@
 </template>
 
 <script setup lang="ts">
-// 運営者情報ページ
+
 </script>
 
 <style scoped>

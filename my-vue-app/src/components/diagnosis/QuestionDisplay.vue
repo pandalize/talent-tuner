@@ -4,27 +4,26 @@
   スワイプ式2値回答モードをサポート
 -->
 <template>
-  <div class="question-display tw-question-layout">
+  <div class="question-display">
     <!-- 質問ヘッダー -->
-    <div class="question-header tw-header">
+    <div class="question-header">
       <!-- PC版のみヘッダー表示 -->
       <template v-if="!effectiveSwipeMode">
-        <div class="question-meta tw-meta">
-          <span class="question-number tw-number">
+        <div class="question-meta">
+          <span class="question-number">
             質問 {{ questionIndex + 1 }} / {{ totalQuestions }}
           </span>
-          <span class="category-badge tw-category">{{ getQuestionCategoryName(question) }}</span>
+          <span class="category-badge">{{ getQuestionCategoryName(question) }}</span>
         </div>
-        <h2 class="question-title tw-title">{{ question.text }}</h2>
-        <p class="question-subtitle tw-subtitle">
+        <h2 class="question-title">{{ question.text }}</h2>
+        <p class="question-subtitle">
           各項目について、あなたにどの程度当てはまるかを5段階で評価してください
         </p>
       </template>
-      
     </div>
     
     <!-- PC版 & モバイル版共通: 質問カード -->
-    <div class="question-card tw-card">
+    <div class="question-card">
       <!-- モバイル版: チュートリアルスワイプカード（枠内最上部） 非表示化 -->
       <template v-if="shouldShowTutorial && effectiveSwipeMode">
       <!-- <template> -->
@@ -38,7 +37,6 @@
           />
         </div>
       </template>
-      
       
       <!-- モバイル版: スワイプモードのカード（枠内最上部） -->
       <template v-if="shouldShowSwipeOption && effectiveSwipeMode">
@@ -56,31 +54,31 @@
         </div>
       </template>
       
-      <div v-if="!effectiveSwipeMode" class="options-list tw-options">
+      <div v-if="!effectiveSwipeMode" class="options-list">
         <!-- PC版: 5段階評価モード -->
           <div
             v-for="option in question.options"
             :key="option.label"
-            class="option-item tw-option"
+            class="option-item"
           >
             <div class="option-content">
-              <div class="option-header tw-option-header">
-                <div class="option-text tw-text">{{ option.text }}</div>
+              <div class="option-header">
+                <div class="option-text">{{ option.text }}</div>
               </div>
               
               <!-- 5段階評価スケール -->
-              <div class="rating-scale tw-rating" style="display: flex; align-items: center; width: 100%; gap: 1.2rem;">
-                <span class="scale-label-left tw-label-left">全く当てはまらない</span>
-                <div class="scale-buttons tw-buttons" style="flex: 1; display: flex; justify-content: center; gap: 2%; max-width: 400px;">
+              <div class="rating-scale" style="display: flex; align-items: center; width: 100%; gap: 1.2rem;">
+                <span class="scale-label-left">全く当てはまらない</span>
+                <div class="scale-buttons" style="flex: 1; display: flex; justify-content: center; gap: 2%; max-width: 400px;">
                   <button
                     v-for="rating in [1, 2, 3, 4, 5]"
                     :key="`${option.label}-${rating}`"
                     @click.stop="handleSelectRating(question.id, option.label, rating)"
                     :class="{ 
-                      'selected tw-selected': getLocalOptionRating(question.id, option.label) === rating,
+                      'selected': getLocalOptionRating(question.id, option.label) === rating,
                       [`rating-${rating} tw-rating-${rating}`]: true
                     }"
-                    class="rating-button tw-rating-btn"
+                    class="rating-button"
                     :title="getRatingLabel(rating)"
                     style="pointer-events: auto; position: relative; z-index: 10;"
                     type="button"
@@ -88,7 +86,7 @@
                     {{ rating }}
                   </button>
                 </div>
-                <span class="scale-label-right tw-label-right">よく当てはまる</span>
+                <span class="scale-label-right">よく当てはまる</span>
               </div>
             </div>
           </div>
@@ -143,7 +141,6 @@ import type { Question } from '../../utils/diagnosisLoader'
 import SwipeAnswer from './SwipeAnswer.vue'
 import TutorialSwipeCard from './TutorialSwipeCard.vue'
 
-// Props
 interface Props {
   question: Question
   questionIndex: number
@@ -160,7 +157,6 @@ interface Props {
 
 const props = defineProps<Props>()
 
-// Emits
 interface Emits {
   'select-rating': [questionId: string, optionLabel: string, rating: number]
   'next-question': []
@@ -173,23 +169,18 @@ interface Emits {
 
 const emit = defineEmits<Emits>()
 
-// Composable
 const {
   getQuestionCategoryName,
   getRatingLabel,
-  isCurrentQuestionCompleted
 } = useDiagnosis()
 
-// ブレークポイント設定
 const breakpoints = useBreakpoints({
   mobile: 768,
 })
 const isMobile = breakpoints.smaller('mobile')
 
-// リアクティブデータ
 const currentOptionIndex = ref(0)
 
-// 実際に使用するモード（自動切り替えのみ）
 const effectiveSwipeMode = computed(() => {
   return isMobile.value
 })
@@ -221,11 +212,6 @@ const shouldShowCategoryTutorialDisplay = computed(() => {
 const shouldShowTutorial = computed(() => {
   return shouldShowInitialTutorial.value || shouldShowCategoryTutorialDisplay.value
 })
-
-// チュートリアル完了後の質問表示判定（使用しない）
-   const shouldShowQuestionAfterTutorial = computed(() => {
-    return effectiveSwipeMode.value && props.questionIndex === 0 && currentOptionIndex.value === 0 && tutorialCompleted.value
-  })
 
 // スワイプモードでオプション表示すべきか判定
 const shouldShowSwipeOption = computed(() => {
@@ -262,7 +248,6 @@ const isCurrentQuestionAnswered = computed(() => {
     return rating !== null && rating >= 1 && rating <= 5
   })
 })
-
 
 
 // ローカル関数
@@ -327,7 +312,6 @@ function handleAnswerCompleted() {
   position: relative;
 }
 
-// 質問ヘッダー部分
 .question-header {
   text-align: center;
 }
@@ -422,18 +406,12 @@ function handleAnswerCompleted() {
 }
 
 // 評価スケール
-// 横並び一列に
 .rating-scale {
   display: flex;
   flex-direction: row;
   align-items: center;
   width: 100%;
   gap: 1.2rem;
-}
-
-// ラベルは個別spanで横並び配置
-.scale-labels {
-  display: none;
 }
 
 .scale-buttons {
@@ -476,10 +454,7 @@ function handleAnswerCompleted() {
     transform: scale(1.15);
     @include mixins.card-shadow(md);
   }
-}
 
-// 評価値別の色分け
-.rating-button {
   &.rating-1.selected {
     background: #e74c3c;
     border-color: #e74c3c;
@@ -507,29 +482,23 @@ function handleAnswerCompleted() {
 }
 
 // レスポンシブデザイン
-// デスクトップ（1024px以上）は元のレイアウト維持
 @include mixins.respond-to('desktop') {
   .question-display {
     margin-bottom: 240px;
     padding-bottom: 0;
   }
   
+  .option-item {
+    margin-bottom: var(--space-md);
+  }
+
   .option-header {
     @include mixins.flex-row(var(--space-md));
     align-items: flex-start;
     text-align: left;
-    
-    .option-label {
-      margin-right: var(--space-md);
-    }
-  }
-  
-  .option-item {
-    margin-bottom: var(--space-md);
   }
 }
 
-// タブレット（768px-1023px）
 @media (min-width: 768px) and (max-width: 1023px) {
   .question-title {
     font-size: 1.5rem;
@@ -546,11 +515,6 @@ function handleAnswerCompleted() {
   .option-header {
     @include mixins.flex-column(var(--space-sm));
     text-align: center;
-    
-    .option-label {
-      margin-right: 0;
-      align-self: center;
-    }
   }
   
   .scale-buttons {
@@ -570,11 +534,6 @@ function handleAnswerCompleted() {
     overflow-x: hidden;
   }
 
-  .question-meta {
-    @include mixins.flex-column(var(--space-xs));
-    margin-bottom: var(--space-md);
-  }
-
   .question-header {
     text-align: center;
     padding: var(--space-md) var(--space-sm);
@@ -582,6 +541,11 @@ function handleAnswerCompleted() {
     box-sizing: border-box;
   }
   
+  .question-meta {
+    @include mixins.flex-column(var(--space-xs));
+    margin-bottom: var(--space-md);
+  }
+
   .question-title {
     font-size: 1.25rem;
     line-height: 1.3;
@@ -663,33 +627,18 @@ function handleAnswerCompleted() {
       box-shadow: 0 4px 12px rgba(52, 152, 219, 0.3);
     }
   }
-  
-  .option-label {
-    width: 28px;
-    height: 28px;
-    font-size: 0.75rem;
-    font-weight: 700;
-    flex-shrink: 0;
-  }
-  
-  .scale-labels {
-    font-size: 0.75rem;
-    font-weight: 500;
-    margin-bottom: var(--space-sm);
-    padding: 0;
-    
-    .scale-label-left,
-    .scale-label-right {
-      padding: 2px 4px;
-      background: rgba(59, 130, 246, 0.05);
-      border-radius: 4px;
-      border: 1px solid rgba(59, 130, 246, 0.1);
-      font-size: 0.625rem;
-      text-align: center;
-      max-width: 40%;
-      word-wrap: break-word;
-      line-height: 1.2;
-    }
+
+  .scale-label-left,
+  .scale-label-right {
+    padding: 2px 4px;
+    background: rgba(59, 130, 246, 0.05);
+    border-radius: 4px;
+    border: 1px solid rgba(59, 130, 246, 0.1);
+    font-size: 0.625rem;
+    text-align: center;
+    max-width: 40%;
+    word-wrap: break-word;
+    line-height: 1.2;
   }
 }
 
@@ -946,6 +895,4 @@ function handleAnswerCompleted() {
     display: none !important;
   }
 }
-
-// 中間画面のスタイルを削除（不要になったため）
 </style>

@@ -11,27 +11,21 @@
         </p>
 
         <div class="feature-grid">
-          <div class="feature-item">
-            <div class="feature-number">01</div>
-            <div class="feature-content">
-              <h3 class="feature-title">{{ $t('home.features.analysis.title') }}</h3>
-              <p class="feature-desc">{{ $t('home.features.analysis.description') }}</p>
-            </div>
-          </div>
-          <div class="feature-item">
-            <div class="feature-number">02</div>
-            <div class="feature-content">
-              <h3 class="feature-title">{{ $t('home.features.evidence.title') }}</h3>
-              <p class="feature-desc">{{ $t('home.features.evidence.description') }}</p>
-            </div>
-          </div>
-          <div class="feature-item">
-            <div class="feature-number">03</div>
-            <div class="feature-content">
-              <h3 class="feature-title">{{ $t('home.features.instant.title') }}</h3>
-              <p class="feature-desc">{{ $t('home.features.instant.description') }}</p>
-            </div>
-          </div>
+          <BaseCard variant="home">
+            <template #number>01</template>
+            <template #header>{{ $t('home.features.analysis.title') }}</template>
+            {{ $t('home.features.analysis.description') }}
+          </BaseCard>
+          <BaseCard variant="home">
+            <template #number>02</template>
+            <template #header>{{ $t('home.features.evidence.title') }}</template>
+            {{ $t('home.features.evidence.description') }}
+          </BaseCard>
+          <BaseCard variant="home">
+            <template #number>03</template>
+            <template #header>{{ $t('home.features.instant.title') }}</template>
+            {{ $t('home.features.instant.description') }}
+          </BaseCard>
         </div>
 
         <div class="aligned-button">
@@ -50,14 +44,13 @@
             {{ $t('home.cta.ai_counseling') }}
           </BaseButton>
           <BaseButton
-            variant="white"
+            variant="secondary"
             size="md"
             @click="$router.push('/about')"
           >
             {{ $t('home.cta.view_professions') }}
           </BaseButton>
         </div>
-
       </div>
     </div>
   </main>
@@ -66,18 +59,13 @@
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n'
 import BaseButton from '@/components/BaseButton.vue'
+import BaseCard from '@/components/BaseCard.vue'
 
 const { t } = useI18n()
 </script>
 
 <style lang="scss" scoped>
 @use '@/assets/scss/mixins.scss' as mixins;
-
-.aligned-button {
-  display: flex;
-  justify-content: center;
-  gap: 20px;
-}
 
 .home-main {
   width: 100%;
@@ -87,7 +75,6 @@ const { t } = useI18n()
   flex-direction: column;
 }
 
-// ヒーローセクション
 .hero-section {
   @include mixins.flex-center;
   flex: 1;
@@ -214,123 +201,17 @@ const { t } = useI18n()
   line-height: 1.8;
 }
 
-// 特徴グリッド - 共通コンポーネントを使用
 .feature-grid {
   @include mixins.grid-auto-fit(250px);
   margin-bottom: var(--space-xl);
 }
 
-.feature-item {
-  @include mixins.card-base;
-  @include mixins.card-padding(lg);
-  @include mixins.card-shadow(sm);
-  position: relative;
-  border-radius: var(--radius-xl);
-  overflow: hidden;
-  transition: all var(--transition-normal);
-  border: 1px solid rgba(59, 130, 246, 0.1);
-  
-  // グラデーションボーダー効果
-  &::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    padding: 2px;
-    background: linear-gradient(135deg, var(--accent-blue), var(--accent-gold), var(--primary-blue));
-    border-radius: inherit;
-    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-    mask-composite: exclude;
-    opacity: 0;
-    transition: opacity var(--transition-normal);
-  }
-
-  &:hover {
-    @include mixins.card-shadow(lg);
-    transform: translateY(-8px) scale(1.02);
-    border-color: transparent;
-    
-    &::before {
-      opacity: 1;
-    }
-  }
-}
-
-.feature-number {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 3rem;
-  height: 3rem;
-  font-family: var(--font-mono);
-  font-size: var(--fs-lg);
-  font-weight: 700;
-  color: white;
-  background: linear-gradient(135deg, var(--accent-blue) 0%, var(--primary-blue) 100%);
-  border-radius: var(--radius-round);
-  margin-bottom: var(--space-md);
-  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
-  position: relative;
-  
-  &::after {
-    content: '';
-    position: absolute;
-    inset: -2px;
-    background: linear-gradient(135deg, var(--accent-blue), var(--accent-gold));
-    border-radius: inherit;
-    z-index: -1;
-    opacity: 0;
-    transition: opacity var(--transition-fast);
-  }
-  
-  .feature-item:hover & {
-    transform: scale(1.1) rotate(5deg);
-    
-    &::after {
-      opacity: 0.3;
-    }
-  }
-}
-
-.feature-title {
-  font-family: var(--font-heading);
-  font-size: 1.25rem;
-  color: var(--primary-navy);
-  margin-bottom: var(--space-xs);
-  font-weight: 600;
-}
-
-.feature-desc {
-  font-size: var(--fs-small);
-  color: var(--text-secondary);
-  line-height: 1.6;
-}
-
-
-/* ==========================================================================
-   信頼性指標
-   ========================================================================== */
-.trust-indicators {
+.aligned-button {
   display: flex;
-  gap: var(--space-lg);
   justify-content: center;
-  flex-wrap: wrap;
+  gap: 20px;
 }
 
-.trust-item {
-  display: flex;
-  align-items: center;
-  gap: var(--space-xs);
-  font-size: var(--fs-small);
-  color: var(--text-secondary);
-}
-
-.trust-icon {
-  color: var(--accent-gold);
-}
-
-/* ==========================================================================
-   レスポンシブデザイン - モバイル最適化
-   ========================================================================== */
 @media (max-width: 768px) {
   .hero-content {
     padding: var(--space-lg) var(--space-md);
@@ -357,158 +238,9 @@ const { t } = useI18n()
     margin-top: var(--space-xs);
     margin-bottom: var(--space-sm);
   }
-
-  .feature-item {
-    padding: 0;
-    background: transparent;
-    border: none;
-    box-shadow: none;
-    min-height: auto;
-    height: 50px;
-    margin-bottom: 0;
-  }
-  .feature-item:hover,
-  .feature-item:active {
-    transform: none !important;
-    box-shadow: none !important;
-    border: none !important;
-  }
-  .feature-item:hover::before,
-  .feature-item:active::before {
-    opacity: 0 !important;
-  }
-
-  .feature-number {
-    width: 48px;
-    height: 48px;
-    font-size: 1.25rem;
-  }
-
-  .feature-title {
-    font-size: 1.375rem;
-    margin-bottom: var(--space-sm);
-  }
-
-  .feature-desc {
-    font-size: 1rem;
-    line-height: 1.3;
-  }
-
-  .btn {
-    width: 130px;
-    justify-content: center;
-    padding: var(--space-md) var(--space-sm);
-    font-size: 0.9rem;
-    font-weight: 600;
-    border-radius: 50px;
-    border: 2px solid transparent;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    transition: all 0.3s ease;
-    text-decoration: none;
-    
-    &.btn-primary {
-      order: 1;
-      background: linear-gradient(135deg, var(--accent-blue) 0%, var(--primary-blue) 100%);
-      border: 2px solid var(--accent-blue);
-      box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
-      color: white;
-      min-height: 48px;
-
-      &:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 8px 25px rgba(59, 130, 246, 0.5);
-      }
-
-      &:active {
-        transform: translateY(0);
-        box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
-      }
-    }
-
-    &.btn-chat {
-      order: 2;
-      background: linear-gradient(135deg, #fbbf24 0%, var(--accent-gold) 100%);
-      border: 2px solid var(--accent-gold);
-      color: var(--primary-navy);
-      min-height: 48px;
-
-      &:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 6px 18px rgba(245, 158, 11, 0.4);
-      }
-
-      &:active {
-        transform: translateY(0);
-        box-shadow: 0 3px 10px rgba(245, 158, 11, 0.3);
-      }
-    }
-    
-    &.btn-secondary {
-      display: none;
-    }
-  }
-
-  .btn-icon {
-    width: 24px;
-    height: 24px;
-  }
-
-  .trust-indicators {
-    display: none;
-  }
-
-  .methodology-section {
-    display: none;
-  }
-
-  .section-container {
-    width: 95%;
-    padding: 0 var(--space-md);
-  }
-
-  .section-title {
-    font-size: 1.75rem;
-    margin-bottom: var(--space-lg);
-  }
-
-  .methodology-grid {
-    grid-template-columns: 1fr;
-    gap: var(--space-md);
-  }
-
-  .methodology-card {
-    padding: var(--space-xl);
-    border-radius: 16px;
-    background: linear-gradient(135deg, var(--bg-primary) 0%, rgba(248, 250, 252, 0.95) 100%);
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
-  }
-
-  .card-icon {
-    width: 64px;
-    height: 64px;
-    margin-bottom: var(--space-lg);
-    background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(16, 185, 129, 0.08));
-  }
-
-  .methodology-card h3 {
-    font-size: 1.25rem;
-    margin-bottom: var(--space-md);
-  }
-
-  .methodology-card p {
-    font-size: 1rem;
-    line-height: 1.7;
-  }
 }
 
 @media (max-width: 480px) {
-  .action-buttons {
-    gap: 20px !important;
-  }
-  .action-buttons > *:not(:last-child) {
-    margin-right: unset !important;
-  }
-
   .home-main {
     height: 60vh !important;
   }
@@ -527,85 +259,9 @@ const { t } = useI18n()
     line-height: 1.1;
   }
 
-  .feature-item {
-    padding: var(--space-sm);
-    text-align: center;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  .aligned-button {
+    flex-direction: column;
     gap: var(--space-md);
-  }
-
-  .feature-content {
-    display: flex;
-    flex-direction: column;
-  }
-
-  .feature-title {
-    margin-bottom: var(--space-xs);
-  }
-
-  .feature-number {
-    display: none;
-  }
-
-  .feature-title {
-    font-size: 1.125rem;
-  }
-
-  .feature-desc {
-    display: none;
-  }
-
-
-  .trust-indicators {
-    flex-direction: column;
-    align-items: center;
-    gap: var(--space-sm);
-  }
-
-  .trust-item {
-    font-size: 0.8125rem;
-  }
-
-  .methodology-card {
-    padding: var(--space-lg);
-  }
-
-  .card-icon {
-    width: 56px;
-    height: 56px;
-  }
-}
-
-/* タッチデバイス最適化 */
-@media (hover: none) and (pointer: coarse) {
-  .btn:hover {
-    transform: none;
-    box-shadow: initial;
-  }
-
-  .btn:active {
-    transform: scale(0.98);
-    transition: transform 0.1s ease;
-  }
-
-  .feature-item:hover {
-    transform: none;
-  }
-
-  .feature-item:active {
-    transform: scale(0.98);
-    transition: transform 0.1s ease;
-  }
-
-  .methodology-card:hover {
-    transform: none;
-  }
-
-  .methodology-card:active {
-    transform: scale(0.98);
-    transition: transform 0.1s ease;
   }
 }
 </style>

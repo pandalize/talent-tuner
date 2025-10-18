@@ -26,7 +26,6 @@
         </div>
       </div>
 
-      <!-- 購入者情報入力欄は削除 -->
     </div>
   </div>
 </template>
@@ -36,7 +35,7 @@ import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import type { ProfessionScore } from '../../utils/diagnosisLoader'
 import type { PurchaseData } from '../../types/PurchaseData'
-import type { ProfessionReportConfig, ProfessionReports } from '../../types/ProfessionReport'
+import type { ProfessionReports } from '../../types/ProfessionReport'
 
 // Props
 interface Props {
