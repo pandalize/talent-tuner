@@ -19,18 +19,18 @@ jobs:
         with:
           node-version: '20'
           cache: 'npm'
-          cache-dependency-path: 'my-vue-app/package-lock.json'
+          cache-dependency-path: 'frontend/package-lock.json'
           
       - name: 📥 Install dependencies
-        working-directory: ./my-vue-app
+        working-directory: ./frontend
         run: npm ci
           
       - name: 🔍 Run translation validation
-        working-directory: ./my-vue-app
+        working-directory: ./frontend
         run: npm run validate:translations
           
       - name: 📦 Build project
-        working-directory: ./my-vue-app
+        working-directory: ./frontend
         run: npm run build
           
       - name: 🔍 Check FTP credentials
@@ -45,7 +45,7 @@ jobs:
           echo "✅ FTP credentials are configured"
           
       - name: 🚀 Deploy to FTP (Custom Script)
-        working-directory: ./my-vue-app
+        working-directory: ./frontend
         env:
           FTP_HOST: ${{ secrets.FTP_HOST }}
           FTP_USER: ${{ secrets.FTP_USER }}
