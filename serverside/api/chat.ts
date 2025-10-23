@@ -8,11 +8,28 @@ type Message = {
 type Messages = Message[];
 
 export default async function handler(req: VercelRequest, res: VercelResponse) { // サーバーレスAPIのエントリーポイント（export defaultされた関数：他のファイルからインポートできる関数）となる非同期関数を定義
-    if (req.method !== 'POST') {
-        res.status(405).json({ エラー: 'メソッドが許可されていません' }); // メソッドがPOSTでない場合に405エラーを返すとJSONレスポンスを返す
+    const allowedOrigin = (process.env.ALLOWED_ORIGINS || ''); // 環境変数から許可されたオリジンを取得
+    // プリフライト対応、リクエストが許可されるかを確かめる、もうちょっと勉強が必要
+    res.setHeader('Access-Control-Allow-Origin', allowedOrigin); // リクエストを送信できるオリジンを指定
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization'); // リクエストで許可されるヘッダーを指定
+
+    if (req.method === 'OPTIONS') {
+        res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS'); // 許可されるHTTPメソッドを指定
+        res.status(204).end(); // HTTPレスポンスの送信を完了し、接続を閉じる
         return;
     }
 
+    // POST以外を拒否
+    if (req.method !== 'POST') {
+        res.status(405).json({ エラー: 'POSTのみ許可' });
+        return;
+    }
+
+    console.log('[API] Incoming request:', req.method, req.url);
+    console.log('[API] Body:', req.body);
+
+    // レスポンスを返す
+    res.json({ success: true });
     try {
         const apiKey = process.env.CLAUDE_API_KEY; // 環境変数からAPIキーを取得
         const { messages } = req.body; // フロントから受け取ったbodyの中でmessagesだけをmessagesに保存、今はbodyにmessagesしかないが、将来他のデータが増えたときに備えて分割代入で取得

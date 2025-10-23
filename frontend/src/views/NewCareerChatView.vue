@@ -59,11 +59,15 @@ async function callAPI() { // この関数の中に処理が完了するのを�
             role: m.role,
             content: m.content
         }));
-        const res = await fetch('/api/chat', { // fetch：サーバーレス関数のエンドポイントにリクエストを送り、結果を取ってくる、fetchが完了するまで次の処理を待つ
+        const base = import.meta.env.VITE_API_BASE ?? ''; // 存在しないまま使うと空文字になる仕様は良いのか？
+        const apiBase = base.replace(/\/$/, ''); // 末尾スラッシュを削除
+        const url = apiBase ? `${apiBase}/chat` : '/api/chat';
+        const res = await fetch(url, { // fetch：サーバーレス関数のエンドポイントにリクエストを送り、結果を取ってくる、fetchが完了するまで次の処理を待つ
             method: 'POST', // HTTPメソッドはPOST
             headers: { 'Content-Type': 'application/json' }, // JSON形式のデータを送ることを指定
             body: JSON.stringify({ messages: apiMessages }) // messagesプロパティで内容をセットでJSON形式の文字列に変換してリクエストボディにセット
         });
+        
         const data = await res.json(); // レスポンスをJSONとして取得、これも完了まで待つ
         console.log('APIレスポンス:', data);
         if (data && data.data && data.data.content && data.data.content[0] && data.data.content[0].text) { // 一つずつ確認しないと、elseに行かずにエラーになる、constのdataのdataプロパティのcontent配列の0番目のtextが存在するか

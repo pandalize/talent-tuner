@@ -38,4 +38,5 @@ coverage
 
 *storybook.log
 storybook-static
-.vercel
+
+/serverside/.vercel
