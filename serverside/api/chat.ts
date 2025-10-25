@@ -22,7 +22,6 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         return;
     }
 
-    // POST以外を拒否
     if (req.method !== 'POST') {
         res.status(405).json({ エラー: 'POSTのみ許可' });
         return;
