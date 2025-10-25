@@ -16,9 +16,6 @@ coverage
 
 .env
 .env.deploy
-.env.production
-.env.development
-.env.staging
 
 /cypress/videos/
 /cypress/screenshots/

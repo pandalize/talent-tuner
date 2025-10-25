@@ -39,7 +39,6 @@ function addUserMessage() { // 送信ボタンが押されたときに呼ばれ�
     };
     messages.value.push(userMessage); // 既存のメッセージリストに新しいメッセージを追加
     userInput.value = ''; // 入力欄を空にする
-    console.log(messages.value); // メッセージリストをコンソールに表示（デバッグ用）
     callAPI(); // APIを呼び出す関数を実行
 }
 
@@ -50,7 +49,6 @@ function addaiResponse(aiText: string) { // addUserMessageと同様
         timestamp: new Date()
     };
     messages.value.push(aiResponse);
-    console.log(messages.value);    
 }
 
 async function callAPI() { // この関数の中に処理が完了するのを待たなければいけない作業があるかも
@@ -68,16 +66,10 @@ async function callAPI() { // この関数の中に処理が完了するのを�
             body: JSON.stringify({ messages: apiMessages }) // messagesプロパティで内容をセットでJSON形式の文字列に変換してリクエストボディにセット
         });
         
-        const data = await res.json(); // レスポンスをJSONとして取得、これも完了まで待つ
-        console.log('APIレスポンス:', data);
-        if (data && data.data && data.data.content && data.data.content[0] && data.data.content[0].text) { // 一つずつ確認しないと、elseに行かずにエラーになる、constのdataのdataプロパティのcontent配列の0番目のtextが存在するか
-            addaiResponse(data.data.content[0].text); // AIのレスポンスをメッセージリストに追加
-            result.value = data.data.content[0].text; // レスポンスをJSONとして取得、これも完了まで待つ、リアクティブ変数は常に.valueを使って値を更新する
-        } else {
-            const fallback = String(data);
-            addaiResponse(fallback);
-            result.value = fallback;
-        } 
+        const aiText = await res.json(); // レスポンスをJSONとして取得、これも完了まで待つ
+        addaiResponse(aiText); // AIのレスポンスをメッセージリストに追加
+        result.value = aiText; // レスポンスをJSONとして取得、これも完了まで待つ、リアクティブ変数は常に.valueを使って値を更新する
+        console.log(messages.value)
     } catch (error) {
         result.value = 'APIの呼び出しに失敗しました'; // リアクティブ変数は常に.valueを使って値を更新する  
     }
