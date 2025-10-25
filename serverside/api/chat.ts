@@ -9,6 +9,11 @@ type Messages = Message[];
 
 export default async function handler(req: VercelRequest, res: VercelResponse) { // サーバーレスAPIのエントリーポイント（export defaultされた関数：他のファイルからインポートできる関数）となる非同期関数を定義
     const allowedOrigin = (process.env.ALLOWED_ORIGINS || ''); // 環境変数から許可されたオリジンを取得
+
+    // --- 追加: どのAPI/エンドポイントが要求されたかログ出力 ---
+    console.log(`[incoming] ${req.method} ${req.url} origin=${req.headers.origin ?? 'unknown'}`);
+    // --- ここまで追加 ---
+
     // プリフライト対応、リクエストが許可されるかを確かめる、もうちょっと勉強が必要
     res.setHeader('Access-Control-Allow-Origin', allowedOrigin); // リクエストを送信できるオリジンを指定
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization'); // リクエストで許可されるヘッダーを指定
@@ -30,7 +35,14 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     try {
         const apiKey = process.env.CLAUDE_API_KEY; // 環境変数からAPIキーを取得
         const { messages } = req.body; // フロントから受け取ったbodyの中でmessagesだけをmessagesに保存、今はbodyにmessagesしかないが、将来他のデータが増えたときに備えて分割代入で取得
-        const claudeResponse = await fetch('https://api.anthropic.com/v1/messages', { // ClaudeのAPIエンドポイントにリクエストを送り、結果を取ってくる
+
+        // --- 追加: 外部APIの情報を変数化してログ出力 ---
+        const externalApi = 'https://api.anthropic.com/v1/messages';
+        const model = 'claude-3-5-haiku-latest';
+        console.log(`[outgoing] POST ${externalApi} model=${model} messages=${Array.isArray(messages) ? messages.length : 0}`);
+        // --- ここまで追加 ---
+
+        const claudeResponse = await fetch(externalApi, { // ClaudeのAPIエンドポイントにリクエストを送り、結果を取ってくる
             method: 'POST', // HTTPメソッドはPOST
             headers: {
                 'x-api-key': apiKey ?? '',
@@ -38,11 +50,15 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
                 'anthropic-version': '2023-06-01', // 使用するAPIバージョンを指定
             },
             body: JSON.stringify({ // オブジェクトや配列をJSON形式の文字列に変換してリクエストボディにセット
-                model: 'claude-3-5-haiku-latest', // 使用するモデルを指定
+                model, // ここを model 変数に変更
                 messages,
                 max_tokens: 256,
             })
         });
+
+        // --- 追加: 外部APIのHTTPステータスをログ出力 ---
+        console.log(`[outgoing] response status: ${claudeResponse.status}`);
+        // --- ここまで追加 ---
 
         const data = await claudeResponse.json(); // ClaudeのAPIからのレスポンスをJavaScriptのオブジェクトに変換
         const aiText = data?.content?.[0]?.text || ''; // レスポンスからテキストを抽出

@@ -42,7 +42,7 @@ const router = createRouter({
     {
       path: '/chat',
       name: 'career-chat',
-      component: () => import('../views/CareerChatView.vue'),
+      component: () => import('../views/NewCareerChatView.vue'),
       meta: {
         title: 'AI進路相談 | ため職',
         description: 'AI進路相談アシスタントが、あなたの進路・転職の悩みを親身に聞きます。'
