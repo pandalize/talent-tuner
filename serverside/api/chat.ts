@@ -10,7 +10,6 @@ type Messages = Message[];
 export default async function handler(req: VercelRequest, res: VercelResponse) { // サーバーレスAPIのエントリーポイント（export defaultされた関数：他のファイルからインポートできる関数）となる非同期関数を定義
     const allowedOrigin = (process.env.ALLOWED_ORIGINS || ''); // 環境変数から許可されたオリジンを取得
 
-    // --- 追加: どのAPI/エンドポイントが要求されたかログ出力 ---
     console.log(`[incoming] ${req.method} ${req.url} origin=${req.headers.origin ?? 'unknown'}`);
 
     // プリフライト対応、リクエストが許可されるかを確かめる、もうちょっと勉強が必要
