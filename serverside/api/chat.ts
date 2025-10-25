@@ -12,7 +12,6 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     // --- 追加: どのAPI/エンドポイントが要求されたかログ出力 ---
     console.log(`[incoming] ${req.method} ${req.url} origin=${req.headers.origin ?? 'unknown'}`);
-    // --- ここまで追加 ---
 
     // プリフライト対応、リクエストが許可されるかを確かめる、もうちょっと勉強が必要
     res.setHeader('Access-Control-Allow-Origin', allowedOrigin); // リクエストを送信できるオリジンを指定
