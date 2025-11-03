@@ -9,7 +9,17 @@
   },
   "devDependencies": {
     "@types/node": "^20.0.0",
-    "@vercel/node": "^3.0.0",
+    "@vercel/node": "^5.5.3",
     "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "next": "^16.0.1",
+    "stripe": "^19.2.0"
+  },
+  "overrides": {
+    "node-fetch": "2.6.7",
+    "esbuild": "^0.25.12",
+    "path-to-regexp": "^8.3.0",
+    "undici": "^7.16.0"
   }
 }

@@ -3,17 +3,18 @@ import type { VercelRequest, VercelResponse } from '@vercel/node'; // Vercelの�
 type Message = {
   role: 'user' | 'assistant';
   content: string;
-  timestamp: Date;
+  timestamp?: string;
 };
 type Messages = Message[];
 
 export default async function handler(req: VercelRequest, res: VercelResponse) { // サーバーレスAPIのエントリーポイント（export defaultされた関数：他のファイルからインポートできる関数）となる非同期関数を定義
-    const allowedOrigin = process.env.ALLOWED_ORIGINS; // 環境変数から許可されたオリジンを取得
+    const allowedOrigin = (process.env.ALLOWED_ORIGINS ?? ''); // 環境変数から許可されたオリジンを取得（undefined を空文字に正規化）
 
     console.log(`[incoming] ${req.method} ${req.url} origin=${req.headers.origin ?? 'unknown'}`);
 
     // プリフライト対応、リクエストが許可されるかを確かめる、もうちょっと勉強が必要
-    res.setHeader('Access-Control-Allow-Origin', allowedOrigin); // リクエストを送信できるオリジンを指定
+    // 空文字をそのままセットしない（型エラーと不適切なヘッダ設定を防ぐ）
+    if (allowedOrigin) res.setHeader('Access-Control-Allow-Origin', allowedOrigin); // リクエストを送信できるオリジンを指定
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization'); // リクエストで許可されるヘッダーを指定
 
     if (req.method === 'OPTIONS') {
@@ -57,7 +58,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         console.log(`[outgoing] response status: ${claudeResponse.status}`);
         // --- ここまで追加 ---
 
-        const data = await claudeResponse.json(); // ClaudeのAPIからのレスポンスをJavaScriptのオブジェクトに変換
+        // 型チェックでエラーにならないよう any にしてから抽出
+        const data: any = await claudeResponse.json(); // ClaudeのAPIからのレスポンスをJavaScriptのオブジェクトに変換
         const aiText = data?.content?.[0]?.text || ''; // レスポンスからテキストを抽出
         console.log('[assistant] ', data);
         res.status(200).json( aiText ); // ClaudeのAPIからのレスポンスをJSONにして返す

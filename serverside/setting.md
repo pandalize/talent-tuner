@@ -44,3 +44,8 @@ Vercelとの対話
 
 
 https://localhost:5173からのみアクセス可能
+
+```
+https://localhost:5173からのみアクセス可能
+frontendフォルダに.envを追加、VITE_API_BASEを設定
+serversideフォルダに.envを追加、ALLOWED_ORIGINS, CLAUDE_API_KEYを設定
