@@ -39,7 +39,7 @@ export default defineConfig({
       output: {
         manualChunks: {
           vendor: ['vue', 'vue-router'],
-          utils: ['./src/utils/diagnosisLoader.ts', './src/utils/seoUtils.ts'],
+          utils: ['./src/utils/diagnosisLoader.ts', './src/utils/seoKeywords.ts'],
         },
       },
     },
