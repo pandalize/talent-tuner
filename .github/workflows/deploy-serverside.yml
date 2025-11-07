@@ -4,8 +4,6 @@ on:
   push:
     branches:
       - prod
-    paths:
-      - 'serverside/**'
   workflow_dispatch:  # ← 手動実行を有効化
 
 jobs:

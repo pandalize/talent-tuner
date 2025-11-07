@@ -2,106 +2,45 @@ name: 🚀 Auto Deploy to pandalize.com
 
 on:
   push:
-    branches: [ main ]
-  workflow_dispatch: # 手動実行も可能
+    branches: [ main ]    # main に push されたときだけ実行
+  workflow_dispatch:      # 手動実行を残す
 
 jobs:
   deploy:
     name: Deploy to pandalize.com
-    runs-on: ubuntu-latest    # ...existing code...
-    name: Deploy Serverside to Vercel
-    
-    on:
-      push:
-        branches:
-          - prod
-        paths:
-          - 'serverside/**'
-      workflow_dispatch:  # ← 手動実行を有効化
-    
-    jobs:
-      deploy:
-        runs-on: ubuntu-latest
-        steps:
-          - uses: actions/checkout@v4
-    
-          - name: Setup Node.js
-            uses: actions/setup-node@v4
-            with:
-              node-version: '20'
-    
-          - name: Validate Vercel secrets
-            run: |
-              if [ -z "${{ secrets.VERCEL_TOKEN }}" ]; then
-                echo "❌ VERCEL_TOKEN is not set. Add it to repository Secrets."
-                exit 1
-              fi
-              if [ -z "${{ secrets.VERCEL_ORG_ID }}" ] || [ -z "${{ secrets.VERCEL_PROJECT_ID }}" ]; then
-                echo "⚠️ VERCEL_ORG_ID or VERCEL_PROJECT_ID not set — deployment may still work but verify your config."
-              fi
-    
-          - name: Install serverside deps
-            working-directory: ./serverside
-            run: npm ci
-    
-          - name: Build serverside (local check)
-            working-directory: ./serverside
-            run: npm run build
-    
-          - name: Verify Vercel token (debug)
-            env:
-              VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
-            run: |
-              # whoami で token が有効か確認（失敗ならここで止める）
-              npx vercel whoami --token "$VERCEL_TOKEN" || (echo "VERCEL_TOKEN invalid" && exit 1)
-    
-          - name: Deploy to Vercel (pull / build / deploy)
-            env:
-              VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
-              VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
-              VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
-            working-directory: ./serverside
-            run: |
-              # pull project env (optional), build, and deploy
-              npx vercel pull --yes --environment=production --token="$VERCEL_TOKEN"
-              npx vercel build --prod --token="$VERCEL_TOKEN"
-              npx vercel deploy --prebuilt --prod --token="$VERCEL_TOKEN"
-    # ...existing code...
-    
+    runs-on: ubuntu-latest
+
     steps:
       - name: 📥 Checkout code
         uses: actions/checkout@v4
-        
+
       - name: 📦 Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
           cache: 'npm'
           cache-dependency-path: 'frontend/package-lock.json'
-          
+
       - name: 📥 Install dependencies
         working-directory: ./frontend
         run: npm ci
-          
+
       - name: 🔍 Run translation validation
         working-directory: ./frontend
         run: npm run validate:translations
-          
+
       - name: 📦 Build project
         working-directory: ./frontend
         run: npm run build
-          
+
       - name: 🔍 Check FTP credentials
         run: |
           if [ -z "${{ secrets.FTP_HOST }}" ]; then
             echo "❌ FTP_HOST secret is not set"
-            echo "Please configure GitHub Secrets:"
-            echo "  FTP_HOST, FTP_USER, FTP_PASSWORD"
-            echo "See DEPLOYMENT_SETUP.md for details"
             exit 1
           fi
           echo "✅ FTP credentials are configured"
-          
+
       - name: 🚀 Deploy to FTP (Custom Script)
         working-directory: ./frontend
         env:
@@ -109,7 +48,7 @@ jobs:
           FTP_USER: ${{ secrets.FTP_USER }}
           FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
         run: node deploy-ftp.js
-          
+
       - name: 📧 Send success notification
         if: success()
         uses: dawidd6/action-send-mail@v3
@@ -119,27 +58,10 @@ jobs:
           username: ${{ secrets.MAIL_USERNAME }}
           password: ${{ secrets.MAIL_PASSWORD }}
           subject: "✅ pandalize.com デプロイ成功"
-          to: ${{ secrets.NOTIFICATION_EMAIL }},${{ secrets.NOTIFICATION_EMAIL_2 }},${{ secrets.NOTIFICATION_EMAIL_3 }},${{ secrets.NOTIFICATION_EMAIL_4 }}
+          to: ${{ secrets.NOTIFICATION_EMAIL }}
           from: GitHub Actions <${{ secrets.MAIL_USERNAME }}>
-          body: |
-            🎉 pandalize.com への自動デプロイが成功しました！
-            
-            📊 デプロイ詳細:
-            • リポジトリ: ${{ github.repository }}
-            • ブランチ: ${{ github.ref_name }}
-            • コミット: ${{ github.sha }}
-            • 実行者: ${{ github.actor }}
-            • 実行時刻: ${{ github.event.head_commit.timestamp }}
-            
-            🔗 サイト URL: https://pandalize.com/
-            📝 GitHub Actions: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
-            
-            最新の変更内容:
-            ${{ github.event.head_commit.message }}
-            
-            --
-            GitHub Actions 自動通知システム
-            
+          body: "デプロイ成功"
+
       - name: 📧 Send failure notification
         if: failure()
         uses: dawidd6/action-send-mail@v3
@@ -149,22 +71,6 @@ jobs:
           username: ${{ secrets.MAIL_USERNAME }}
           password: ${{ secrets.MAIL_PASSWORD }}
           subject: "❌ pandalize.com デプロイ失敗"
-          to: ${{ secrets.NOTIFICATION_EMAIL }},${{ secrets.NOTIFICATION_EMAIL_2 }},${{ secrets.NOTIFICATION_EMAIL_3 }},${{ secrets.NOTIFICATION_EMAIL_4 }}
+          to: ${{ secrets.NOTIFICATION_EMAIL }}
           from: GitHub Actions <${{ secrets.MAIL_USERNAME }}>
-          body: |
-            ⚠️ pandalize.com への自動デプロイが失敗しました。
-            
-            📊 失敗詳細:
-            • リポジトリ: ${{ github.repository }}
-            • ブランチ: ${{ github.ref_name }}
-            • コミット: ${{ github.sha }}
-            • 実行者: ${{ github.actor }}
-            • 実行時刻: ${{ github.event.head_commit.timestamp }}
-            
-            📝 ログを確認: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
-            
-            対象のコミット:
-            ${{ github.event.head_commit.message }}
-            
-            --
-            GitHub Actions 自動通知システム
+          body: "デプロイ失敗"
