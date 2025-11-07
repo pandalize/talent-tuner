@@ -8,7 +8,65 @@ on:
 jobs:
   deploy:
     name: Deploy to pandalize.com
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latest    # ...existing code...
+    name: Deploy Serverside to Vercel
+    
+    on:
+      push:
+        branches:
+          - prod
+        paths:
+          - 'serverside/**'
+      workflow_dispatch:  # ← 手動実行を有効化
+    
+    jobs:
+      deploy:
+        runs-on: ubuntu-latest
+        steps:
+          - uses: actions/checkout@v4
+    
+          - name: Setup Node.js
+            uses: actions/setup-node@v4
+            with:
+              node-version: '20'
+    
+          - name: Validate Vercel secrets
+            run: |
+              if [ -z "${{ secrets.VERCEL_TOKEN }}" ]; then
+                echo "❌ VERCEL_TOKEN is not set. Add it to repository Secrets."
+                exit 1
+              fi
+              if [ -z "${{ secrets.VERCEL_ORG_ID }}" ] || [ -z "${{ secrets.VERCEL_PROJECT_ID }}" ]; then
+                echo "⚠️ VERCEL_ORG_ID or VERCEL_PROJECT_ID not set — deployment may still work but verify your config."
+              fi
+    
+          - name: Install serverside deps
+            working-directory: ./serverside
+            run: npm ci
+    
+          - name: Build serverside (local check)
+            working-directory: ./serverside
+            run: npm run build
+    
+          - name: Verify Vercel token (debug)
+            env:
+              VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+            run: |
+              # whoami で token が有効か確認（失敗ならここで止める）
+              npx vercel whoami --token "$VERCEL_TOKEN" || (echo "VERCEL_TOKEN invalid" && exit 1)
+    
+          - name: Deploy to Vercel (pull / build / deploy)
+            env:
+              VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+              VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+              VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+            working-directory: ./serverside
+            run: |
+              # pull project env (optional), build, and deploy
+              npx vercel pull --yes --environment=production --token="$VERCEL_TOKEN"
+              npx vercel build --prod --token="$VERCEL_TOKEN"
+              npx vercel deploy --prebuilt --prod --token="$VERCEL_TOKEN"
+    # ...existing code...
     
     steps:
       - name: 📥 Checkout code
