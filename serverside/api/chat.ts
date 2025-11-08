@@ -8,12 +8,8 @@ type Message = {
 type Messages = Message[];
 
 export default async function handler(req: VercelRequest, res: VercelResponse) { // サーバーレスAPIのエントリーポイント（export defaultされた関数：他のファイルからインポートできる関数）となる非同期関数を定義
-    const allowedEnv = (process.env.ALLOWED_ORIGINS ?? '').trim(); // 例: "http://localhost:5173,https://pandalize-talent-tuner.vercel.app" または "*"
-    const allowedList = allowedEnv ? allowedEnv.split(',').map(s => s.trim()).filter(Boolean) : [];
-    const origin = String(req.headers.origin || '');
-    const isWildcard = allowedList.includes('*');
-    const isAllowed = isWildcard || allowedList.includes(origin);
-    const allowOrigin = isAllowed ? (isWildcard ? '*' : origin) : '';
+    const allowed = (process.env.ALLOWED_ORIGINS ?? ''); // 環境変数から許可されたオリジンを取得（undefined を空文字に正規化）
+    const allowOrigin = (allowed === '*') ? '*' : (req.headers.origin === allowed ? req.headers.origin : ''); // オリジンが許可されているかをチェック
 
     console.log(`[incoming] ${req.method} ${req.url} origin=${req.headers.origin ?? 'unknown'}`);
 
