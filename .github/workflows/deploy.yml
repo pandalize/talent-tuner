@@ -25,7 +25,7 @@ jobs:
         working-directory: ./frontend
         run: npm ci
 
-      - name: 🔍 Run translation validation
+      - name: 🔍 Run translation validation # frontend/scripts/validate-translations.js がリポジトリに存在しないため、エラーが出る可能性あり
         working-directory: ./frontend
         run: npm run validate:translations
 

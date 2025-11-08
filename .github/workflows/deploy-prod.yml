@@ -18,6 +18,18 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
+
+      - name: Show changed files (debug)
+        run: |
+          echo "GITHUB_SHA: $GITHUB_SHA"
+          echo "GITHUB_EVENT_BEFORE: ${{ github.event.before }}"
+          git --no-pager rev-parse --verify origin/prod || true
+          # list changed files between before and after (works for push)
+          git --no-pager diff --name-only ${{ github.event.before }} ${{ github.sha }} || true
+          # fallback: list files in last commit
+          echo "Files in last commit:"
+          git --no-pager show --name-only --pretty="" ${{ github.sha }} || true
+
       - id: filter
         uses: dorny/paths-filter@v2
         with:
@@ -26,6 +38,11 @@ jobs:
               - 'serverside/**'
             frontend:
               - 'frontend/**'
+
+      - name: Dump paths-filter outputs (debug)
+        run: |
+          echo "serverside=${{ steps.filter.outputs.serverside }}"
+          echo "frontend=${{ steps.filter.outputs.frontend }}
 
   deploy-serverside:
     needs: path_filter
@@ -99,9 +116,9 @@ jobs:
         working-directory: ./frontend
         run: npm ci
 
-      - name: Run translation validation
-        working-directory: ./frontend
-        run: npm run validate:translations
+      # - name: Run translation validation
+      #   working-directory: ./frontend
+      #   run: npm run validate:translations
 
       - name: Build frontend
         working-directory: ./frontend
