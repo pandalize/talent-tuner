@@ -8,14 +8,16 @@ type Message = {
 type Messages = Message[];
 
 export default async function handler(req: VercelRequest, res: VercelResponse) { // サーバーレスAPIのエントリーポイント（export defaultされた関数：他のファイルからインポートできる関数）となる非同期関数を定義
-    const allowedOrigin = (process.env.ALLOWED_ORIGINS ?? ''); // 環境変数から許可されたオリジンを取得（undefined を空文字に正規化）
+    const allowed = (process.env.ALLOWED_ORIGINS ?? ''); // 環境変数から許可されたオリジンを取得（undefined を空文字に正規化）
+    const allowOrigin = (allowed === '*') ? '*' : (req.headers.origin === allowed ? req.headers.origin : ''); // オリジンが許可されているかをチェック
 
     console.log(`[incoming] ${req.method} ${req.url} origin=${req.headers.origin ?? 'unknown'}`);
 
     // プリフライト対応、リクエストが許可されるかを確かめる、もうちょっと勉強が必要
     // 空文字をそのままセットしない（型エラーと不適切なヘッダ設定を防ぐ）
-    if (allowedOrigin) res.setHeader('Access-Control-Allow-Origin', allowedOrigin); // リクエストを送信できるオリジンを指定
+    if (allowOrigin) res.setHeader('Access-Control-Allow-Origin', allowOrigin); // リクエストを送信できるオリジンを指定
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization'); // リクエストで許可されるヘッダーを指定
+    res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS'); // 許可されるHTTPメソッドを指定
 
     if (req.method === 'OPTIONS') {
         res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS'); // 許可されるHTTPメソッドを指定
