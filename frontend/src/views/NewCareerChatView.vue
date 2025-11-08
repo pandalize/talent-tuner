@@ -58,7 +58,7 @@ async function callAPI() { // この関数の中に処理が完了するのを�
             content: m.content
         }));
         const apiBase = import.meta.env.VITE_API_BASE ?? ''; // 存在しないまま使うと空文字になる仕様は良いのか？
-        const url = `${apiBase}/chat`; // サーバーレス関数のエンドポイントURLを作成
+        const url = `${apiBase}/api/chat`; // サーバーレス関数のエンドポイントURLを作成
         const res = await fetch(url, { // fetch：サーバーレス関数のエンドポイントにリクエストを送り、結果を取ってくる、fetchが完了するまで次の処理を待つ
             method: 'POST', // HTTPメソッドはPOST
             headers: { 'Content-Type': 'application/json' }, // JSON形式のデータを送ることを指定
