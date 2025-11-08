@@ -15,7 +15,8 @@ jobs:
       serverside: ${{ steps.filter.outputs.serverside }}
       frontend: ${{ steps.filter.outputs.frontend }}
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout full history
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
@@ -41,8 +42,8 @@ jobs:
 
       - name: Dump paths-filter outputs (debug)
         run: |
-          echo "serverside=${{ steps.filter.outputs.serverside }}"
-          echo "frontend=${{ steps.filter.outputs.frontend }}
+          echo serverside=${{ steps.filter.outputs.serverside }}
+          echo frontend=${{ steps.filter.outputs.frontend }}
 
   deploy-serverside:
     needs: path_filter
