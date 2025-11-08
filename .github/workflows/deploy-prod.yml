@@ -4,6 +4,8 @@ on:
   push:
     branches:
       - prod
+    paths-ignore:
+      - '.github/workflows/**'   # ← ワークフロー自身の変更では起動させない
   workflow_dispatch:
 
 jobs:
