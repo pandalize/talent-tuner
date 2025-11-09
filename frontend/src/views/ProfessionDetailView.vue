@@ -16,13 +16,6 @@
     <div v-else-if="professionData" class="profession-content">
       <!-- ヘッダーセクション -->
       <header class="profession-header">
-        <div class="breadcrumb">
-          <router-link to="/">ホーム</router-link>
-          <span class="separator">></span>
-          <router-link to="/about">職業一覧</router-link>
-          <span class="separator">></span>
-          <span class="current">{{ professionName }}</span>
-        </div>
         <h1 class="profession-title">{{ professionName }}</h1>
         <div class="profession-overview">
           <div class="annual-income">
@@ -266,32 +259,6 @@ onMounted(loadProfessionData);
   border-radius: 15px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
   overflow: hidden;
-}
-
-/* パンくずナビ */
-.breadcrumb {
-  padding: 1rem 2rem;
-  background: #f8f9fa;
-  font-size: 0.9rem;
-  border-bottom: 1px solid #e9ecef;
-}
-
-.breadcrumb a {
-  color: var(--main-color);
-  text-decoration: none;
-}
-
-.breadcrumb a:hover {
-  text-decoration: underline;
-}
-
-.separator {
-  margin: 0 0.5rem;
-  color: #6c757d;
-}
-
-.current {
-  color: #6c757d;
 }
 
 /* ヘッダー */

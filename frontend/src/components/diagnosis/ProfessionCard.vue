@@ -4,6 +4,7 @@
 -->
 <template>
   <div 
+    v-if="profession"
     class="tw-profession-card" 
     :class="`rank-${rank}`"
     style="width: 100%; max-width: 100vw; overflow-x: hidden; box-sizing: border-box; margin-left: 0; margin-right: 0; padding: 1rem 1.5rem;"
@@ -151,9 +152,9 @@
       </div>
     </div>
     
-    <!-- 詳細リンクボタン -->
+    <!-- 詳細リンクボタン（変更: link を使う） -->
     <router-link 
-      :to="`/profession/${profession.id || profession.name.toLowerCase().replace(/\s+/g, '-')}`" 
+      :to="link" 
       class="tw-detail-link"
     >
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -167,6 +168,7 @@
 <script setup lang="ts">
 import type { ProfessionScore } from '../../utils/diagnosisLoader'
 import { useDiagnosis } from '../../composables/useDiagnosis'
+import { professionDataManager } from '@/utils/professionDataManager'
 
 // Props
 interface Props {
@@ -175,7 +177,20 @@ interface Props {
   maxCategoryScore: number
 }
 
-defineProps<Props>()
+const props = defineProps<Props>()
+
+// safe access
+const profession = props.profession
+const rank = props.rank
+const maxCategoryScore = props.maxCategoryScore
+
+// professionDataManager の同期メソッドを使って参照（初期化はアプリ起動側で行う想定）
+const remote = professionDataManager.getProfessionByName(profession?.name ?? '')
+const idOrSlug = (remote && remote.id)
+  ? String(remote.id)
+  : (profession?.id ? String(profession.id) : String((profession?.name ?? '').toLowerCase().replace(/\s+/g, '-').replace(/[^\w\-]/g, '')))
+
+const link = `/profession/${encodeURIComponent(idOrSlug)}`
 
 // Composable
 const { getCategoryName } = useDiagnosis()
