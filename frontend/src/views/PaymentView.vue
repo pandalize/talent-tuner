@@ -1,3 +1,32 @@
+<template>
+  <div class="payment-page">
+    <h1>決済ページ</h1>
+    
+    <!-- エラー表示 -->
+    <div v-if="error" class="error-message">
+      <h2>エラー</h2>
+      <p>{{ error }}</p>
+      <router-link to="/" class="back-link">診断ページに戻る</router-link>
+    </div>
+    
+    <!-- 購入内容の表示 -->
+    <div v-else-if="purchaseData" class="purchase-info">
+      <h2>購入内容</h2>
+      <div class="product-details">
+        <h3>{{ purchaseData.professionName }} 詳細診断レポート</h3>
+        <p class="price">{{ purchaseData.price }} ({{ purchaseData.currency }})</p>
+      </div>
+    </div>
+    
+    <!-- 決済ボタン（エラーがない場合のみ表示） -->
+    <div v-if="!error">
+      <button @click="handlePayment" :disabled="isLoading">
+        {{ isLoading ? '処理中...' : `決済する（${purchaseData?.price}）` }}
+      </button>
+    </div>
+  </div>
+</template>
+
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
@@ -7,7 +36,13 @@ const router = useRouter()
 const isLoading = ref(false)
 
 // 購入データの受け取り
-const purchaseData = ref<PurchaseData | null>(null)
+const purchaseData = ref<PurchaseData>({
+  professionName: '',
+  priceId: '',
+  price: 0,
+  currency: 'JPY',
+  timestamp: ''
+})
 const error = ref<string>('')
 
 onMounted(async () => {
@@ -38,6 +73,9 @@ const handlePayment = async () => {
   isLoading.value = true
   try {
     console.log('決済処理開始:', purchaseData.value?.professionName)
+    const apiBase = import.meta.env.VITE_API_BASE ?? ''
+    const url = `${apiBase}/api/create-payment-intent` // NewCareerChatView と同じパターン
+    console.log('fetch url:', url)
     console.log('送信データ:', {
       priceId: purchaseData.value?.priceId,
       professionName: purchaseData.value?.professionName,
@@ -45,7 +83,8 @@ const handlePayment = async () => {
       currency: purchaseData.value?.currency,
       timestamp: new Date().toISOString(),
     })
-    const response = await fetch('http://localhost:3000/api/create-payment-intent', {
+ 
+    const res = await fetch(url, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -57,9 +96,8 @@ const handlePayment = async () => {
       })
     })
 
-    const data = await response.json()
-
-    if (response.ok && data.url) {
+    const data = await res.json()
+    if (res.ok && data.url) {
       window.location.href = data.url
       return
     } else {
@@ -74,35 +112,6 @@ const handlePayment = async () => {
   }
 }
 </script>
-
-<template>
-  <div class="payment-page">
-    <h1>決済ページ</h1>
-    
-    <!-- エラー表示 -->
-    <div v-if="error" class="error-message">
-      <h2>エラー</h2>
-      <p>{{ error }}</p>
-      <router-link to="/" class="back-link">診断ページに戻る</router-link>
-    </div>
-    
-    <!-- 購入内容の表示 -->
-    <div v-else-if="purchaseData" class="purchase-info">
-      <h2>購入内容</h2>
-      <div class="product-details">
-        <h3>{{ purchaseData.professionName }} 詳細診断レポート</h3>
-        <p class="price">{{ purchaseData.price }} ({{ purchaseData.currency }})</p>
-      </div>
-    </div>
-    
-    <!-- 決済ボタン（エラーがない場合のみ表示） -->
-    <div v-if="!error">
-      <button @click="handlePayment" :disabled="isLoading">
-        {{ isLoading ? '処理中...' : `決済する（${purchaseData?.price}）` }}
-      </button>
-    </div>
-  </div>
-</template>
 
 <style scoped>
 .payment-page {

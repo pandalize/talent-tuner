@@ -1,59 +1,98 @@
 import Stripe from 'stripe'
+import type { IncomingMessage, ServerResponse } from 'http'
 
-export default async function handler(req: any, res: any) {
-  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:5173')
-  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS')
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type')
+// 軽量な Req/Res 型（Next/Vercel に依存しない）
+type Req = IncomingMessage & {
+  body?: any;
+  query?: any;
+  headers?: IncomingMessage['headers'];
+  method?: string;
+  url?: string;
+};
+type Res = ServerResponse & {
+  status: (code: number) => Res;
+  json: (body: any) => void;
+  setHeader: ServerResponse['setHeader'];
+  end: ServerResponse['end'];
+};
 
-  if (req.method === 'OPTIONS') return res.status(200).end()
-  if (req.method !== 'POST') return res.status(405).json({ error: 'POSTメソッドのみ対応' })
+export default async function handler(req: Req, res: Res) { // サーバーレスAPIのエントリーポイント
+    const allowed = (process.env.ALLOWED_ORIGINS ?? ''); // 環境変数から許可されたオリジンを取得
+    const originHeader = (req.headers && (req.headers as any).origin) || '';
+    const allowOrigin = (allowed === '*') ? '*' : (originHeader === allowed ? originHeader : '');
 
-  try {
-    const secretKey = process.env.STRIPE_SECRET_KEY
-    if (!secretKey) return res.status(500).json({ error: 'Stripe秘密キーが設定されていません' })
+    console.log(`[incoming] ${req.method} ${req.url} origin=${originHeader ?? 'unknown'}`);
 
-    const stripe = new Stripe(secretKey)
-    const {
-      professionName,
-      priceId,
-      price,
-      currency,
-      timestamp
-    } = req.body
+    // 常に CORS ヘッダをセット（プリフライトレスポンスも含める）
+    const finalAllowOrigin = allowOrigin || (allowed === '*' ? '*' : '');
+    if (finalAllowOrigin) {
+      res.setHeader('Access-Control-Allow-Origin', finalAllowOrigin);
+    }
+    // ブラウザのプリフライトで必要になりやすいヘッダ
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+    res.setHeader('Access-Control-Allow-Credentials', 'true');
+    res.setHeader('Vary', 'Origin');
 
-    console.log('metadata:', {
-      professionName,
-      priceId,
-      price: price?.toString(),
-      currency,
-      timestamp,
-    })
+    // OPTIONS (プリフライト) には 204 で応答
+    if (req.method === 'OPTIONS') {
+        res.status(204).end();
+        return;
+    }
 
-    const session = await stripe.checkout.sessions.create({
-      line_items: [
-        {
-          price: priceId,
-          quantity: 1,
+    if (req.method !== 'POST') {
+        res.status(405).json({ エラー: 'POSTのみ許可' });
+        return;
+    }
+
+    console.log('[body]', req.body);
+
+    try {
+      const secretKey = process.env.STRIPE_SECRET_KEY
+      if (!secretKey) return res.status(500).json({ error: 'Stripe秘密キーが設定されていません' })
+
+      const stripe = new Stripe(secretKey)
+      const {
+        professionName,
+        priceId,
+        price,
+        currency,
+        timestamp
+      } = req.body
+
+      console.log('metadata:', {
+        professionName,
+        priceId,
+        price,
+        currency,
+        timestamp,
+      })
+
+      const session = await stripe.checkout.sessions.create({
+        line_items: [
+          {
+            price: priceId,
+            quantity: 1,
+          },
+        ],
+        mode: 'payment',
+        metadata: {
+          professionName: professionName,
+          priceId: priceId,
+          price: price.toString(),
+          currency: currency,
+          timestamp: timestamp,
         },
-      ],
-      mode: 'payment',
-      metadata: {
-        professionName: professionName,
-        priceId: priceId,
-        price: price.toString(),
-        currency: currency,
-        timestamp: timestamp,
-      },
-      success_url: 'http://localhost:5173/success?session_id={CHECKOUT_SESSION_ID}',
-      cancel_url: 'http://localhost:5173/cancel',
-    })
+        success_url: 'http://localhost:5173/success?session_id={CHECKOUT_SESSION_ID}',
+        cancel_url: 'http://localhost:5173/cancel',
+      })
 
-    res.status(200).json({
-      sessionId: session.id,
-      url: session.url
-    })
-  } catch (error: any) {
-    console.error('Checkout Session作成エラー:', error.message)
-    res.status(500).json({ error: 'Checkout Session作成に失敗しました' })
-  }
+      res.status(200).json({
+        sessionId: session.id,
+        url: session.url
+      })
+    } catch (error: any) {
+      console.error('Checkout Session作成エラー:', error.message)
+      res.status(500).json({ error: 'Checkout Session作成に失敗しました' })
+    }
 }
