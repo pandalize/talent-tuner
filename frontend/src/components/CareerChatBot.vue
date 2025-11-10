@@ -85,7 +85,7 @@
           <p>科学的な適性診断で、あなたにぴったりの職業を発見しませんか？</p>
           <div class="recommendation-actions">
             <router-link to="/diagnosis" class="diagnosis-btn">
-              適性診断を受ける
+              診断を受ける
             </router-link>
             <button @click="dismissDiagnosisRecommendation" class="dismiss-btn">
               後で

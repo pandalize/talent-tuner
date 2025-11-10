@@ -152,16 +152,15 @@
       </div>
     </div>
     
-    <!-- 詳細リンクボタン（変更: link を使う） -->
-    <router-link 
-      :to="link" 
-      class="tw-detail-link"
-    >
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <path d="M9 18l6-6-6-6"/>
-      </svg>
-      この職業の詳細を見る
-    </router-link>
+    <div class="action-buttons">
+      <BaseButton
+          variant="blue"
+          size="md"
+          @click="$router.push(link)"
+        >
+          この職業の詳細を見る
+        </BaseButton>
+    </div>
   </div>
 </template>
 
@@ -169,6 +168,8 @@
 import type { ProfessionScore } from '../../utils/diagnosisLoader'
 import { useDiagnosis } from '../../composables/useDiagnosis'
 import { professionDataManager } from '@/utils/professionDataManager'
+import BaseButton from '@/components/BaseButton.vue'
+
 
 // Props
 interface Props {

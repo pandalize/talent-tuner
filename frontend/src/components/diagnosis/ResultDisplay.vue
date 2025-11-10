@@ -80,6 +80,7 @@ function handleInstantReset() {
 .result-container {
   display: flex;
   flex-direction: column;
+  align-items: center;
   width: 100%;
   position: relative;
   box-sizing: border-box;
@@ -118,6 +119,10 @@ function handleInstantReset() {
   display: flex;
   justify-content: center;
   margin-bottom: var(--space-xl, 2rem);
+}
+
+.premium-section {
+  width: 80%;
 }
 
 // モバイル版のタイトルサイズ調整

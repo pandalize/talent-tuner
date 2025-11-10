@@ -14,15 +14,22 @@
             <div class="profession-name">{{ profession.name }}</div>
             <div class="profession-price">¥{{ getProfessionPrice(profession.name) }}</div>
           </div>
-          <button @click="purchasePdfReport(index)" class="premium-button" :disabled="isProcessing[index]">
-            <svg v-if="!isProcessing[index]" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <circle cx="9" cy="21" r="1"/>
-              <circle cx="20" cy="21" r="1"/>
-              <path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"/>
-            </svg>
-            <div v-if="isProcessing[index]" class="loading-spinner"></div>
-            {{ isProcessing[index] ? '処理中...' : 'レポートを購入' }}
-          </button>
+          <div class="action-buttons">
+            <BaseButton
+              variant="blue"
+              size="md"
+              :disabled="isProcessing[index]"
+              @click="() => purchasePdfReport(index)"
+            >
+              <template v-if="isProcessing[index]">
+                <div class="loading-spinner"></div>
+                処理中...
+              </template>
+              <template v-else>
+                レポートを購入
+              </template>
+            </BaseButton>
+          </div>
         </div>
       </div>
 
@@ -33,6 +40,7 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
+import BaseButton from '@/components/BaseButton.vue'
 import type { ProfessionScore } from '../../utils/diagnosisLoader'
 import type { PurchaseData } from '../../types/PurchaseData'
 import type { ProfessionReports } from '../../types/ProfessionReport'
@@ -65,6 +73,7 @@ async function loadProfessionReports() {
 }
 
 // 指定された職業の価格を取得する関数
+// profession-reports.json に基づく
 function getProfessionPrice(professionName: string): number {
   const reportConfig = professionReports.value?.[professionName]
   return reportConfig?.price || 300
@@ -122,7 +131,7 @@ async function purchasePdfReport(professionIndex: number = 0) {
   border-radius: 12px;
   @include mixins.card-padding(xl);
   position: relative;
-  overflow: hidden;
+  margin-bottom: var(--space-xl);
 
   &::before {
     content: '';
@@ -170,47 +179,6 @@ async function purchasePdfReport(professionIndex: number = 0) {
   opacity: 0.8;
 }
 
-.premium-button {
-  @include mixins.button-base;
-  width: 100%;
-  @include mixins.flex-center;
-  gap: var(--space-sm);
-  background: white;
-  color: var(--primary-navy);
-  font-size: 1.125rem;
-  font-weight: 600;
-  padding: var(--space-md) var(--space-lg);
-  border: none;
-  position: relative;
-  overflow: hidden;
-
-  &:hover:not(:disabled) {
-    background: var(--bg-secondary);
-    transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
-  }
-  
-  &:disabled {
-    opacity: 0.7;
-    cursor: not-allowed;
-  }
-  
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
-    transition: left 0.6s;
-  }
-  
-  &:hover:not(:disabled)::before {
-    left: 100%;
-  }
-}
-
 .loading-spinner {
   width: 20px;
   height: 20px;
@@ -243,6 +211,8 @@ async function purchasePdfReport(professionIndex: number = 0) {
 .purchase-buttons {
   @include mixins.grid-columns(1);
   gap: var(--space-md);
+  display: flex;
+  justify-content: center;
 }
 
 .profession-card {
@@ -251,6 +221,8 @@ async function purchasePdfReport(professionIndex: number = 0) {
   border-radius: 8px;
   padding: var(--space-md);
   @include mixins.flex-column(var(--space-sm));
+  align-items: center;
+  width: 30%;
 }
 
 .profession-info {

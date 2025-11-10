@@ -170,6 +170,7 @@ onMounted(() => {
   position: relative;
   border: none;
   box-sizing: border-box;
+  min-height: 150vh;
 }
 
 .loading-section {

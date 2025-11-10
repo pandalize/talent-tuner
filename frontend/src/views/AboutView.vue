@@ -51,7 +51,7 @@
           size="md"
           @click="$router.push('/diagnosis')"
         >
-          適性診断を受ける
+          診断を受ける
         </BaseButton>
       </div>
     </div>
