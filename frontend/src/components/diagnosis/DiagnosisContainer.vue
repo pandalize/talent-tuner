@@ -162,17 +162,14 @@ onMounted(() => {
 
 .diagnosis-container {
   display: flex;
-  align-items: center;
   justify-content: center;
   width: 100%;
-  height: 100%;
   padding: 0;
-  margin: 0;
   flex-direction: column;
-  position: relative;
   overflow-x: hidden;
+  position: relative;
   border: none;
-  box-sizing: border-box;  
+  box-sizing: border-box;
 }
 
 .loading-section {
@@ -211,9 +208,7 @@ onMounted(() => {
   .diagnosis-container {
     padding: var(--space-sm);
     width: 100%;
-    height: 100%;
     overflow-x: hidden;
-    box-sizing: border-box;
     box-sizing: border-box;
   }
 }

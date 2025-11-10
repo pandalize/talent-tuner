@@ -77,7 +77,13 @@ function handleInstantReset() {
 </script>
 
 <style lang="scss" scoped>
-@use '@/assets/scss/mixins.scss' as mixins;
+.result-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  position: relative;
+  box-sizing: border-box;
+}
 
 .result-header {
   padding: calc(var(--space-xxl) / 2) var(--space-lg);
@@ -101,39 +107,17 @@ function handleInstantReset() {
 }
 
 .results-grid {
-  @include mixins.flex-column(var(--space-xxl));
+  display: grid;
   width: 100%;
-  overflow-x: hidden;
-  box-sizing: border-box;
-  padding: 0;
+  padding: 2rem;
+  gap: 2rem;
   margin: 0;
-  padding-bottom: 2rem;
 }
 
 .action-buttons {
   display: flex;
   justify-content: center;
   margin-bottom: var(--space-xl, 2rem);
-}
-
-/* 追加: 画面内に収めて縦スクロールを許可 */
-.result-container {
-  max-height: calc(100vh - 120px); /* ヘッダ等の高さに合わせて調整 */
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
-  box-sizing: border-box;
-}
-
-/* グリッドの下部に余白を確保（スクロールで最後のカードが切れないように） */
-.results-grid {
-  padding-bottom: 2rem;
-}
-
-// レスポンシブデザイン
-@include mixins.respond-to('tablet') {
-  .result-header {
-    @include mixins.card-padding(lg);
-  }
 }
 
 // モバイル版のタイトルサイズ調整
@@ -150,10 +134,6 @@ function handleInstantReset() {
 }
 
 @media (max-width: 480px) {
-  .result-container {
-    max-height: none;
-    overflow-y: auto;
-  }
   .result-title {
     font-size: 1.75rem;
     line-height: 1.1;
