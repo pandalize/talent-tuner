@@ -32,7 +32,7 @@
 </template>
 
 <script setup lang="ts">
-
+import BaseButton from '@/components/BaseButton.vue';
 </script>
 
 <style scoped>
@@ -95,23 +95,6 @@
   align-items: center;
 }
 
-.btn {
-  display: inline-block;
-  padding: 1rem 2rem;
-  border: none;
-  border-radius: 50px;
-  cursor: pointer;
-  font-family: 'Hiragino Sans', sans-serif;
-  font-weight: 600;
-  text-align: center;
-  letter-spacing: 0.05em;
-  transition: all 0.3s ease;
-  text-decoration: none;
-  font-size: clamp(14px, 2.5vw, 18px);
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
-  min-width: 200px;
-}
-
 .help-section {
   padding-top: 2rem;
   border-top: 1px solid #e0e0e0;
@@ -137,10 +120,6 @@
     flex-direction: row;
     justify-content: center;
     gap: 1.5rem;
-  }
-  
-  .btn {
-    min-width: 160px;
   }
 }
 
