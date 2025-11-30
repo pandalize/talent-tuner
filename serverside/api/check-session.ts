@@ -1,6 +1,11 @@
 import Stripe from 'stripe'
 
 export default async function handler(req: any, res: any) {
+  // CORS ヘッダ（開発用：Vite の origin を許可）
+  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:5173')
+  res.setHeader('Access-Control-Allow-Methods', 'GET,POST,OPTIONS')
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization')
+  if (req.method === 'OPTIONS') return res.status(204).end()
   try {
     const secretKey = process.env.STRIPE_SECRET_KEY
     if (!secretKey) return res.status(500).json({ error: 'Stripe秘密キーが設定されていません' })

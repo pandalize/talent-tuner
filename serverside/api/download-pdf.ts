@@ -4,6 +4,11 @@ import fs from 'fs'
 import path from 'path'
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+  // CORS ヘッダ（開発用：Vite の origin を許可）
+  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:5173')
+  res.setHeader('Access-Control-Allow-Methods', 'GET,POST,OPTIONS')
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization')
+  if (req.method === 'OPTIONS') return res.status(204).end()
   try {
     const secretKey = process.env.STRIPE_SECRET_KEY
     if (!secretKey) return res.status(500).json({ error: 'Stripe秘密キーが設定されていません' })
@@ -25,8 +30,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       return res.status(404).json({ error: 'PDFファイルが存在しません' })
     }
     const pdfBuffer = fs.readFileSync(pdfPath)
+
+    // 例：UTF-8 名を安全に渡す
+    const origName = `${professionName}-report.pdf`
+    const safeAscii = /^[\x20-\x7E]+$/.test(origName) ? origName : 'report.pdf'
+    const encoded = encodeURIComponent(origName)
     res.setHeader('Content-Type', 'application/pdf')
-    res.setHeader('Content-Disposition', `attachment; filename=\"${professionName}-report.pdf\"`)
+    res.setHeader('Content-Disposition', `attachment; filename="${safeAscii}"; filename*=UTF-8''${encoded}`)
     res.send(pdfBuffer)
   } catch (error: any) {
     console.error('PDFダウンロードAPIエラー:', error.message)

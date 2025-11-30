@@ -10,7 +10,7 @@
     "strict": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
-    "types": ["node", "@vercel/node"],
+    "types": ["node"],
     "outDir": "./dist"
   },
   "include": ["api/**/*"],

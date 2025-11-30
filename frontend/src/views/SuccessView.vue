@@ -16,10 +16,12 @@ const sessionId = route.query.session_id as string
 const professionName = ref('')
 const customerName = ref('')
 
+const apiBase = import.meta.env.VITE_API_BASE ?? '';
+
 onMounted(async () => {
   if (!sessionId) return
   try {
-    const res = await fetch(`/api/check-session?session_id=${sessionId}`)
+    const res = await fetch(`${apiBase}/api/check-session?session_id=${encodeURIComponent(sessionId)}`)
     const data = await res.json()
     professionName.value = data.professionName
     customerName.value = data.customerName
@@ -30,13 +32,14 @@ onMounted(async () => {
 
 function downloadPdf() {
   if (!sessionId) return
-  fetch(`/api/download-pdf?session_id=${sessionId}`)
+  fetch(`${apiBase}/api/download-pdf?session_id=${encodeURIComponent(sessionId)}`)
     .then(res => res.blob())
     .then(blob => {
       const url = URL.createObjectURL(blob)
       const a = document.createElement('a')
       a.href = url
-      a.download = 'report.pdf'
+      const name = professionName.value ? `${professionName.value}-report.pdf` : 'report.pdf'
+      a.download = name
       a.click()
       URL.revokeObjectURL(url)
     })

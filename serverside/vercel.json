@@ -13,8 +13,19 @@
       "methods": ["POST", "OPTIONS"]
     },
     {
-      "src": "/api/health",
-      "dest": "/api/health.ts"
+      "src": "/api/create-payment-intent",
+      "dest": "/api/create-payment-intent.ts",
+      "methods": ["POST", "OPTIONS"]
+    },
+    {
+      "src": "/api/check-session",
+      "dest": "/api/check-session.ts",
+      "methods": ["GET", "OPTIONS"]
+    },
+    {
+      "src": "/api/download-pdf",
+      "dest": "/api/download-pdf.ts",
+      "methods": ["GET", "OPTIONS"]
     }
   ],
   "env": {
