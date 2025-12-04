@@ -1,34 +1,27 @@
 <template>
   <div class="question-display">
-    <!-- チュートリアル -->
-    <div v-if="shouldShowTutorial" class="tutorial-card-container">
-      <TutorialSwipeCard
-        :main-question="question.text"
-        :question-index="questionIndex"
-        :total-questions="totalQuestions"
-        :category-info="shouldShowCategoryTutorialDisplay ? currentCategoryInfo : null"
-        @tutorial-completed="handleTutorialCompleted"
-      />
-    </div>
-    
-    <!-- 質問 -->
-    <div v-if="shouldShowSwipeOption" class="swipe-card-container">
-      <SwipeAnswer
-        :key="currentOption.label"
-        :question-id="question.id"
-        :option="currentOption"
-        :current-rating="getLocalOptionRating(question.id, currentOption.label)"
-        :current-index="currentOptionIndex"
-        :total-count="question.options.length"
-        @select-rating="handleSelectRating"
-        @answer-completed="handleAnswerCompleted"
-      />
-    </div>
+    <TutorialSwipeCard
+      :main-question="question.text"
+      :question-index="questionIndex"
+      :total-questions="totalQuestions"
+      :category-info="shouldShowCategoryTutorialDisplay ? currentCategoryInfo : null"
+      @tutorial-completed="handleTutorialCompleted"
+    />
+  
+    <SwipeAnswer
+      :key="currentOption.label"
+      :question-id="question.id"
+      :option="currentOption"
+      :current-rating="getLocalOptionRating(question.id, currentOption.label)"
+      :current-index="currentOptionIndex"
+      :total-count="question.options.length"
+      @select-rating="handleSelectRating"
+      @answer-completed="handleAnswerCompleted"
+    />
   </div>
 </template>
-
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, toRef } from 'vue'
 import { useDiagnosis } from '../../composables/useDiagnosis'
 import type { Question } from '../../utils/diagnosisLoader'
 import SwipeAnswer from './SwipeAnswer.vue'
@@ -171,12 +164,6 @@ function handleAnswerCompleted() {
   gap: var(--space-xl);
   width: 100%;
   height: 100%;
-}
-
-.tutorial-card-container .swipe-card-container {
-  width: 100%;
-  height: 100%;
-  display: flex;
   justify-content: center;
   align-items: flex-start;
   position: relative;

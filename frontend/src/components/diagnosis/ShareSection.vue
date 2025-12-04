@@ -1,41 +1,36 @@
-<!--
-  診断結果シェア機能コンポーネント
-  LINE, X(Twitter), Instagram での共有機能
--->
 <template>
   <div class="share-section">
     <div class="section-header">
-      <h3 class="section-title">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M4 12v8a2 2 0 002 2h12a2 2 0 002-2v-8"/>
-          <polyline points="16,6 12,2 8,6"/>
-          <line x1="12" y1="2" x2="12" y2="15"/>
-        </svg>
-        診断結果をシェア
-      </h3>
-      <p class="section-subtitle">友人や家族と結果を共有して、キャリアについて話し合ってみましょう</p>
+      <h3>診断結果をシェア</h3>
+      <p>友人や家族と結果を共有して、キャリアについて話し合ってみましょう</p>
     </div>
     <div class="share-grid">
-      <div class="action-buttons">
-        <BaseButton variant="secondary" size="md" class="line-card" @click="shareToLine">
-          <img src="/image/LINE.png" alt="LINE" class="platform-icon">
-          <span class="share-description">友達やグループに結果を送信</span>
-        </BaseButton>
-      </div>
+      <BaseButton
+        variant="secondary"
+        size="md"
+        class="action-buttons"
+        @click="shareToLine">
+        <img src="/image/LINE.png" alt="LINE">
+        <span>友達やグループに結果を送信</span>
+      </BaseButton>
 
-      <div class="action-buttons">
-        <BaseButton variant="secondary" size="md" class="x-card" @click="shareToX">
-          <img src="/image/X.png" alt="X (Twitter)" class="platform-icon">
-          <span class="share-description">フォロワーと診断結果を共有</span>
-        </BaseButton>
-      </div>
+      <BaseButton
+        variant="secondary"
+        size="md"
+        class="action-buttons"
+        @click="shareToX">
+        <img src="/image/X.png" alt="X (Twitter)">
+        <span>フォロワーと診断結果を共有</span>
+      </BaseButton>
 
-      <div class="action-buttons">
-        <BaseButton variant="secondary" size="md" class="instagram-card" @click="shareToInstagram">
-          <img src="/image/Instagram.png" alt="Instagram" class="platform-icon">
-          <span class="share-description">ストーリーズで結果を投稿</span>
-        </BaseButton>
-      </div>
+      <BaseButton
+        variant="secondary"
+        size="md"
+        class="action-buttons"
+        @click="shareToInstagram">
+        <img src="/image/Instagram.png" alt="Instagram">
+        <span>ストーリーズで結果を投稿</span>
+      </BaseButton>
     </div>
   </div>
 </template>
@@ -199,7 +194,7 @@ async function fallbackInstagramShare(text: string) {
   margin-bottom: var(--space-xl);
 }
 
-.section-title {
+h3 {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -211,7 +206,7 @@ async function fallbackInstagramShare(text: string) {
   font-weight: 600;
 }
 
-.section-subtitle {
+p {
   color: var(--text-secondary);
   font-size: var(--fs-body);
   margin: 0;
@@ -229,14 +224,14 @@ async function fallbackInstagramShare(text: string) {
   justify-content: center;
 }
 
-.platform-icon {
+img {
   width: 32px;
   height: 32px;
   object-fit: contain;
   flex-shrink: 0;
 }
 
-.share-description {
+span {
   font-size: var(--fs-small);
   color: var(--text-secondary);
   text-align: center;
@@ -269,12 +264,12 @@ async function fallbackInstagramShare(text: string) {
     text-align: center;
   }
 
-  .section-title {
+  h3 {
     font-size: var(--fs-h3);
     margin-bottom: var(--space-xs);
   }
 
-  .section-subtitle {
+  p {
     font-size: var(--fs-small);
     line-height: 1.4;
   }
@@ -295,12 +290,12 @@ async function fallbackInstagramShare(text: string) {
     margin-bottom: var(--space-sm);
   }
 
-  .section-title {
+  h3 {
     font-size: 1rem;
     margin-bottom: 4px;
   }
 
-  .section-subtitle {
+  p {
     display: none;
   }
 

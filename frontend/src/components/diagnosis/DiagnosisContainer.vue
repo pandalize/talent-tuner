@@ -142,7 +142,6 @@ function handleCategoryTutorialCompleted() {
 
 function handleResetDiagnosis() {
   resetDiagnosis()
-  // 診断リセット時はチュートリアル状態もリセット
   tutorialCompleted.value = false
   categoryTutorialShown.value.clear()
 }
@@ -176,29 +175,25 @@ onMounted(() => {
 .loading-section {
   @include mixins.section-padding;
   text-align: center;
-
-  p {
-    color: var(--text-secondary);
-    font-size: var(--fs-body);
-  }
 }
+
+p {
+  color: var(--text-secondary);
+  font-size: var(--fs-body);
+}
+
 
 .error-section {
   @include mixins.section-padding;
   text-align: center;
   color: #dc3545;
+}
 
-  h3 {
-    font-family: var(--font-heading);
-    font-size: var(--fs-h3);
-    margin-bottom: var(--space-sm);
-    font-weight: 600;
-  }
-
-  p {
-    color: var(--text-secondary);
-    margin-bottom: var(--space-lg);
-  }
+h3 {
+  font-family: var(--font-heading);
+  font-size: var(--fs-h3);
+  margin-bottom: var(--space-sm);
+  font-weight: 600;
 }
 
 .reload-button {
