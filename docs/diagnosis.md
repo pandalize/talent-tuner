@@ -21,7 +21,7 @@ DiagnosisView
 - QuestionDisplay：チュートリアルか質問の表示制御
 - SwipeAnswer：質問を表示
 - TutorialSwipeCard：チュートリアルを表示
-- QuestionNavigation：必要？
+- QuestionNavigation：必要か要検討
 - ResultDisplay：診断結果を表示
 - PremiumSection：レポート購入セクション
 - ProfessionCard：診断結果の職業カード表示
@@ -58,20 +58,6 @@ ResultDisplay
 │  ├─ ShareSection
 │  ├─ PremiumSection
 │  └─ BaseButton.base-button
-
-PremiumSection
-├─ div.premium-card
-│  ├─ div.premium-header
-│  │  ├─ h3
-│  │  └─ p.premium-text
-│  └─ div.purchase-buttons
-│     └─ div.profession-card (v-for)
-│        ├─ p.profession-rank
-│        ├─ p.profession-name
-│        ├─ p.profession-price
-│        └─ BaseButton
-│           ├─ div.loading-spinner (v-if)
-│           └─ div (v-else) — テキスト "レポートを購入"
 
 PremiumSection
 ├─ div.premium-card

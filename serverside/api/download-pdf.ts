@@ -3,14 +3,6 @@ import type { IncomingMessage, ServerResponse } from 'http'
 import fs from 'fs'
 import path from 'path'
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  // CORS ヘッダ（開発用：Vite の origin を許可）
-  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:5173')
-  res.setHeader('Access-Control-Allow-Methods', 'GET,POST,OPTIONS')
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization')
-  if (req.method === 'OPTIONS') return res.status(204).end()
-// Next.js の `NextApiRequest` / `NextApiResponse` に依存しないよう、
-// Node の `http` 型をベースにした軽量な Req/Res を定義します。
 type Req = IncomingMessage & {
   query?: any;
   body?: any;
@@ -25,6 +17,18 @@ type Res = ServerResponse & {
 };
 
 export default async function handler(req: Req, res: Res) {
+  if (req.method === 'OPTIONS') {
+    res.status(204).send('');
+    return;
+  }
+
+  // CORS ヘッダ（開発用：Vite の origin を許可）
+  const allowedOrigin = process.env.CORS_ALLOW_ORIGIN || 'http://localhost:5173'
+  res.setHeader('Access-Control-Allow-Origin', allowedOrigin)
+  res.setHeader('Access-Control-Allow-Methods', 'GET,POST,OPTIONS')
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization')
+  if (req.method === 'OPTIONS') return res.status(204).end()
+
   try {
     const secretKey = process.env.STRIPE_SECRET_KEY
     if (!secretKey) return res.status(500).json({ error: 'Stripe秘密キーが設定されていません' })

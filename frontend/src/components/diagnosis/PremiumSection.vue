@@ -157,8 +157,7 @@ h3 {
   gap: var(--space-md);
   display: flex;
   justify-content: center;
-  flex-wrap: wrap; /* アイテムを折り返す */
-  gap: var(--space-md);
+  flex-wrap: wrap;
 }
 
 .profession-card {
@@ -168,8 +167,7 @@ h3 {
   padding: var(--space-md);
   @include mixins.flex-column(var(--space-sm));
   align-items: center;
-  flex: 0 1 calc(33% - 2rem); /* 安定した3カラム表示 */
-  width: calc(33% - 2rem);
+  flex: 0 1 calc(33% - 2rem);
 }
 
 .profession-rank {

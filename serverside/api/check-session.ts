@@ -2,7 +2,8 @@ import Stripe from 'stripe'
 
 export default async function handler(req: any, res: any) {
   // CORS ヘッダ（開発用：Vite の origin を許可）
-  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:5173')
+  const allowedOrigin = process.env.CORS_ALLOW_ORIGIN || 'http://localhost:5173'
+  res.setHeader('Access-Control-Allow-Origin', allowedOrigin)
   res.setHeader('Access-Control-Allow-Methods', 'GET,POST,OPTIONS')
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization')
   if (req.method === 'OPTIONS') return res.status(204).end()

@@ -213,7 +213,6 @@ p {
 }
 
 .share-grid {
-  @include mixins.grid-auto-fit(250px);
   gap: var(--space-md);
   display: flex;
 }

@@ -40,7 +40,7 @@
         class="tw-category-item"
       >
         <div class="tw-category-header">
-          <p class="tw-category-name">{{ getCategoryName(category) }}</p>
+          <p class="tw-category-name">{{ getCategoryName(String(category)) }}</p>
           <p class="tw-category-score">{{ score.toFixed(1) }}pt</p>
         </div>
         <div class="tw-category-bar" >
@@ -99,6 +99,7 @@
 </template>
 
 <script setup lang="ts">
+import { toRef } from 'vue'
 import type { ProfessionScore } from '../../utils/diagnosisLoader'
 import { useDiagnosis } from '../../composables/useDiagnosis'
 import { professionDataManager } from '@/utils/professionDataManager'
@@ -114,20 +115,25 @@ interface Props {
 
 const props = defineProps<Props>()
 
-// safe access
-const profession = props.profession
-const rank = props.rank
-const maxCategoryScore = props.maxCategoryScore
-
-// professionDataManager の同期メソッドを使って参照（初期化はアプリ起動側で行う想定）
-const remote = professionDataManager.getProfessionByName(profession?.name ?? '')
-const idOrSlug = (remote && remote.id)
-  ? String(remote.id)
-  : (profession?.id ? String(profession.id) : String((profession?.name ?? '').toLowerCase().replace(/\s+/g, '-').replace(/[^\w\-]/g, '')))
-
+const profession = toRef(props, 'profession')
+const rank = toRef(props, 'rank')
+const maxCategoryScore = toRef(props, 'maxCategoryScore')
+const remote = professionDataManager.getProfessionByName(profession.value?.name ?? '')
+function generateIdOrSlug(remote: any, profession: ProfessionScore | undefined): string {
+  if (remote && remote.id) {
+    return String(remote.id)
+  } else if (profession?.id) {
+    return String(profession.id)
+  } else {
+    return String((profession?.name ?? '')
+      .toLowerCase()
+      .replace(/\s+/g, '-')
+      .replace(/[^\w\-]/g, ''))
+  }
+}
+const idOrSlug = generateIdOrSlug(remote, profession.value)
 const link = `/profession/${encodeURIComponent(idOrSlug)}`
 
-// Composable
 const { getCategoryName } = useDiagnosis()
 </script>
 
