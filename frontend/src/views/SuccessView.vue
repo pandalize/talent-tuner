@@ -16,7 +16,7 @@ const sessionId = route.query.session_id as string
 const professionName = ref('')
 const customerName = ref('')
 
-const apiBase = import.meta.env.VITE_API_BASE || 'http://localhost:3000';
+const apiBase = import.meta.env.VITE_API_BASE || 'http://localhost:3000'
 
 onMounted(async () => {
   if (!sessionId) return

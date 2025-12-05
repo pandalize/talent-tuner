@@ -1,6 +1,5 @@
 <template>
   <div 
-    v-if="profession"
     class="tw-profession-card" 
     :class="`rank-${rank}`"
   >
@@ -40,7 +39,7 @@
         class="tw-category-item"
       >
         <div class="tw-category-header">
-          <p class="tw-category-name">{{ getCategoryName(String(category)) }}</p>
+          <p class="tw-category-name">{{ getCategoryName(category) }}</p>
           <p class="tw-category-score">{{ score.toFixed(1) }}pt</p>
         </div>
         <div class="tw-category-bar" >
@@ -118,10 +117,10 @@ const props = defineProps<Props>()
 const profession = toRef(props, 'profession')
 const rank = toRef(props, 'rank')
 const maxCategoryScore = toRef(props, 'maxCategoryScore')
-const remote = professionDataManager.getProfessionByName(profession.value?.name ?? '')
-function generateIdOrSlug(remote: any, profession: ProfessionScore | undefined): string {
-  if (remote && remote.id) {
-    return String(remote.id)
+const remoteProfession = professionDataManager.getProfessionByName(profession.value?.name ?? '')
+function generateIdOrSlug(remoteProfession: any, profession: ProfessionScore | undefined): string {
+  if (remoteProfession && remoteProfession.id) {
+    return String(remoteProfession.id)
   } else if (profession?.id) {
     return String(profession.id)
   } else {
@@ -131,7 +130,7 @@ function generateIdOrSlug(remote: any, profession: ProfessionScore | undefined):
       .replace(/[^\w\-]/g, ''))
   }
 }
-const idOrSlug = generateIdOrSlug(remote, profession.value)
+const idOrSlug = generateIdOrSlug(remoteProfession, profession.value)
 const link = `/profession/${encodeURIComponent(idOrSlug)}`
 
 const { getCategoryName } = useDiagnosis()

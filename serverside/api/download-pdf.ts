@@ -27,7 +27,6 @@ export default async function handler(req: Req, res: Res) {
   res.setHeader('Access-Control-Allow-Origin', allowedOrigin)
   res.setHeader('Access-Control-Allow-Methods', 'GET,POST,OPTIONS')
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization')
-  if (req.method === 'OPTIONS') return res.status(204).end()
 
   try {
     const secretKey = process.env.STRIPE_SECRET_KEY
@@ -53,7 +52,7 @@ export default async function handler(req: Req, res: Res) {
 
     // 例：UTF-8 名を安全に渡す
     const origName = `${professionName}-report.pdf`
-    const safeAscii = /^[\x20-\x7E]+$/.test(origName) ? origName : 'report.pdf'
+    const safeAscii = origName.replace(/[^a-zA-Z0-9-_\.]/g, '-')
     const encoded = encodeURIComponent(origName)
     res.setHeader('Content-Type', 'application/pdf')
     res.setHeader('Content-Disposition', `attachment; filename="${safeAscii}"; filename*=UTF-8''${encoded}`)

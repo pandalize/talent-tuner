@@ -10,7 +10,7 @@
     />
   
     <SwipeAnswer
-      v-else-if="shouldShowSwipeOption && currentOption"
+      v-else-if="shouldShowSwipeOption"
       :key="currentOption.label"
       :question-id="question.id"
       :option="currentOption"

@@ -30,7 +30,7 @@
     {
       "src": "/api/health",
       "dest": "/api/health.ts",
-      "methods": ["GET", "OPTIONS"]
+      "methods": ["GET"]
     }
   ],
   "env": {

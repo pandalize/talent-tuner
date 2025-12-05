@@ -28,7 +28,7 @@ export default async function handler(req: Req, res: Res) {
   }
 
   if (req.method !== 'POST') {
-      res.status(405).json({ エラー: 'POSTのみ許可' });
+      res.status(405).json({ error: 'POSTのみ許可' });
       return;
   }
 

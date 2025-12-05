@@ -221,7 +221,8 @@ html, body {
   width: 100%;
   min-height: 56px;
   max-height: 80px;
-  height: auto;  background: rgba(255, 255, 255, 0.95);
+  height: auto;
+  background: rgba(255, 255, 255, 0.95);
   display: flex;
   align-items: center;
   justify-content: space-between;

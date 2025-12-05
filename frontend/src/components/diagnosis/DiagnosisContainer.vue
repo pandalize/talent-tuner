@@ -203,9 +203,6 @@ h3 {
 @media (max-width: 480px) {
   .diagnosis-container {
     padding: var(--space-sm);
-    width: 100%;
-    overflow-x: hidden;
-    box-sizing: border-box;
   }
 }
 </style>
