@@ -1,17 +1,17 @@
 {
   "プログラマー": {
-    "price": 400,
-    "priceId": "price_1PXXXXXXX",
+    "price": 500,
+    "priceId": "price_1Sax18RzSw29Rc5RGfT7kMYc",
     "reportId": "programmer-report"
   },
   "公認会計士": {
-    "price": 300,
-    "priceId": "price_1PYYYYYYY",
+    "price": 500,
+    "priceId": "price_1Sax2MRzSw29Rc5RMyrh8Nwu",
     "reportId": "accountant-report"
   },
   "インフルエンサー": {
-    "price": 300,
-    "priceId": "price_1PZZZZZZZ",
+    "price": 500,
+    "priceId": "price_1Sax2cRzSw29Rc5R2zndNsNL",
     "reportId": "influencer-report"
   },
   "起業家": {
@@ -20,13 +20,23 @@
     "reportId": "entrepreneur-report"
   },
   "建設業": {
-    "price": 200,
-    "priceId": "price_1PBBBBBBB",
+    "price": 500,
+    "priceId": "price_1Sax2rRzSw29Rc5RpDB9C8QP",
     "reportId": "construction-report"
   },
   "デイトレーダー": {
-    "price": 300,
-    "priceId": "price_1PCCCCCCC",
+    "price": 500,
+    "priceId": "price_1Sax32RzSw29Rc5RIqEYfWyD",
     "reportId": "trader-report"
-  }
+  },
+  "ワーホリ": {
+    "price": 500,
+    "priceId": "price_1Sax6JRzSw29Rc5RxZYYUhxM",
+    "reportId": "working-report"
+  },
+  "難関大進学": {
+    "price": 500,
+    "priceId": "price_1Sax6XRzSw29Rc5R4IyNbzXa",
+    "reportId": "university-report"
+  } 
 }
