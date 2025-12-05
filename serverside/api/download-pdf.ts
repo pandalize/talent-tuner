@@ -1,5 +1,5 @@
 import Stripe from 'stripe'
-import type { NextApiRequest, NextApiResponse } from 'next'
+import type { IncomingMessage, ServerResponse } from 'http'
 import fs from 'fs'
 import path from 'path'
 
@@ -9,6 +9,22 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   res.setHeader('Access-Control-Allow-Methods', 'GET,POST,OPTIONS')
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization')
   if (req.method === 'OPTIONS') return res.status(204).end()
+// Next.js の `NextApiRequest` / `NextApiResponse` に依存しないよう、
+// Node の `http` 型をベースにした軽量な Req/Res を定義します。
+type Req = IncomingMessage & {
+  query?: any;
+  body?: any;
+  headers?: IncomingMessage['headers'];
+  method?: string;
+  url?: string;
+};
+type Res = ServerResponse & {
+  status: (code: number) => Res;
+  json: (body: any) => void;
+  send: (body: any) => void;
+};
+
+export default async function handler(req: Req, res: Res) {
   try {
     const secretKey = process.env.STRIPE_SECRET_KEY
     if (!secretKey) return res.status(500).json({ error: 'Stripe秘密キーが設定されていません' })

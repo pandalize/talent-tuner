@@ -1,4 +1,4 @@
-import type { VercelRequest, VercelResponse } from '@vercel/node'; // Vercelのサーバーレス関数で使うリクエスト・レスポンス型をインポート
+import type { IncomingMessage, ServerResponse } from 'http';
 
 type Message = {
   role: 'user' | 'assistant';
@@ -6,8 +6,22 @@ type Message = {
   timestamp?: string;
 };
 type Messages = Message[];
+// Vercel の `VercelRequest` / `VercelResponse` を直接参照しないよう、
+// Node の `http` 型をベースにした軽量な型を定義します。
+type Req = IncomingMessage & {
+    body?: any;
+    headers?: IncomingMessage['headers'];
+    method?: string;
+    url?: string;
+};
+// 実行環境が Vercel のレスポンス拡張（.status/.json 等）を提供することがあるため、
+// ServerResponse をベースに必要なメソッドをオプショナルで追加しておきます。
+type Res = ServerResponse & {
+    status: (code: number) => Res;
+    json: (body: any) => void;
+};
 
-export default async function handler(req: VercelRequest, res: VercelResponse) { // サーバーレスAPIのエントリーポイント（export defaultされた関数：他のファイルからインポートできる関数）となる非同期関数を定義
+export default async function handler(req: Req, res: Res) { // サーバーレスAPIのエントリーポイント（export defaultされた関数）となる非同期関数を定義
     const allowed = (process.env.ALLOWED_ORIGINS ?? ''); // 環境変数から許可されたオリジンを取得（undefined を空文字に正規化）
     const allowOrigin = (allowed === '*') ? '*' : (req.headers.origin === allowed ? req.headers.origin : ''); // オリジンが許可されているかをチェック
 
