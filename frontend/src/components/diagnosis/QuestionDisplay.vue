@@ -1,6 +1,7 @@
 <template>
   <div class="question-display">
     <TutorialSwipeCard
+      v-if="shouldShowTutorial"
       :main-question="question.text"
       :question-index="questionIndex"
       :total-questions="totalQuestions"
@@ -9,6 +10,7 @@
     />
   
     <SwipeAnswer
+      v-else-if="shouldShowSwipeOption && currentOption"
       :key="currentOption.label"
       :question-id="question.id"
       :option="currentOption"
@@ -20,6 +22,7 @@
     />
   </div>
 </template>
+
 <script setup lang="ts">
 import { ref, computed, toRef } from 'vue'
 import { useDiagnosis } from '../../composables/useDiagnosis'
