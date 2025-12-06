@@ -219,9 +219,7 @@ html, body {
   position: fixed; top: 0;
   z-index: 1000;
   width: 100%;
-  min-height: 56px;
-  max-height: 80px;
-  height: auto;
+  height: 10vh;
   background: rgba(255, 255, 255, 0.95);
   display: flex;
   align-items: center;

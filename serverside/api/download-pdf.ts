@@ -17,16 +17,17 @@ type Res = ServerResponse & {
 };
 
 export default async function handler(req: Req, res: Res) {
-  if (req.method === 'OPTIONS') {
-    res.status(204).send('');
-    return;
-  }
 
   // CORS ヘッダ（開発用：Vite の origin を許可）
   const allowedOrigin = process.env.CORS_ALLOW_ORIGIN || 'http://localhost:5173'
   res.setHeader('Access-Control-Allow-Origin', allowedOrigin)
   res.setHeader('Access-Control-Allow-Methods', 'GET,POST,OPTIONS')
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization')
+
+  if (req.method === 'OPTIONS') {
+    res.status(204).send('');
+    return;
+  }
 
   try {
     const secretKey = process.env.STRIPE_SECRET_KEY
@@ -41,6 +42,9 @@ export default async function handler(req: Req, res: Res) {
     const sessionId = Array.isArray(sessionIdRaw) ? sessionIdRaw[0] : String(sessionIdRaw)
     if (!sessionId || sessionId.trim() === '') {
       return res.status(400).json({ error: 'session_id が空です' })
+    }
+    if (!/^cs_/.test(sessionId)) {
+      return res.status(400).json({ error: '無効な session_id 形式です' })
     }
 
     const stripe = new Stripe(secretKey)

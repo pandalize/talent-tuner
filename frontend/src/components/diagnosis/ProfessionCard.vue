@@ -118,19 +118,20 @@ const profession = toRef(props, 'profession')
 const rank = toRef(props, 'rank')
 const maxCategoryScore = toRef(props, 'maxCategoryScore')
 const remoteProfession = professionDataManager.getProfessionByName(profession.value?.name ?? '')
-function generateIdOrSlug(remoteProfession: any, profession: ProfessionScore | undefined): string {
+function getProfessionLinkId(remoteProfession: any, profession: ProfessionScore | undefined): string {
   if (remoteProfession && remoteProfession.id) {
     return String(remoteProfession.id)
   } else if (profession?.id) {
     return String(profession.id)
   } else {
-    return String((profession?.name ?? '')
+    const fallback = String((profession?.name ?? '')
       .toLowerCase()
       .replace(/\s+/g, '-')
       .replace(/[^\w\-]/g, ''))
+    return fallback || 'unknown-profession'
   }
 }
-const idOrSlug = generateIdOrSlug(remoteProfession, profession.value)
+const idOrSlug = getProfessionLinkId(remoteProfession, profession.value)
 const link = `/profession/${encodeURIComponent(idOrSlug)}`
 
 const { getCategoryName } = useDiagnosis()

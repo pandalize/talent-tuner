@@ -28,7 +28,7 @@ export default async function handler(req: Req, res: Res) {
   }
 
   if (req.method !== 'POST') {
-      res.status(405).json({ error: 'POSTのみ許可' });
+      res.status(405).json({ error: 'POSTメソッドのみ許可' });
       return;
   }
 
@@ -48,6 +48,13 @@ export default async function handler(req: Req, res: Res) {
       currency,
       timestamp
     } = req.body
+
+    if (!professionName || !priceId || !price || !currency) {
+      return res.status(400).json({ error: '必須パラメータが不足しています' })
+    }
+    if (typeof price !== 'number' || price <= 0) {
+      return res.status(400).json({ error: '価格が無効です' })
+    }
 
     console.log('metadata:', {
       professionName,
