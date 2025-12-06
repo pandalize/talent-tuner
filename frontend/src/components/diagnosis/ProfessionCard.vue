@@ -227,7 +227,6 @@ h4 {
 }
 
 .tw-category-item {
-  margin: var(--space-md) 0;
   width: 95%;
   max-width: 95%;
   min-width: 0;

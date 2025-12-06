@@ -32,9 +32,19 @@ export default async function handler(req: Req, res: Res) {
     const secretKey = process.env.STRIPE_SECRET_KEY
     if (!secretKey) return res.status(500).json({ error: 'Stripe秘密キーが設定されていません' })
 
-    const { session_id } = req.query
+    const sessionIdRaw = req.query?.session_id
+
+    // session_id の基本バリデーション
+    if (!sessionIdRaw) {
+      return res.status(400).json({ error: 'session_id が必要です' })
+    }
+    const sessionId = Array.isArray(sessionIdRaw) ? sessionIdRaw[0] : String(sessionIdRaw)
+    if (!sessionId || sessionId.trim() === '') {
+      return res.status(400).json({ error: 'session_id が空です' })
+    }
+
     const stripe = new Stripe(secretKey)
-    const session = await stripe.checkout.sessions.retrieve(session_id as string)
+    const session = await stripe.checkout.sessions.retrieve(sessionId)
 
     if (session.payment_status !== 'paid') {
       return res.status(403).json({ error: '未決済です' })

@@ -27,11 +27,7 @@
       "dest": "/api/download-pdf.ts",
       "methods": ["GET", "OPTIONS"]
     },
-    {
-      "src": "/api/health",
-      "dest": "/api/health.ts",
-      "methods": ["GET"]
-    }
+    { "src": "/api/health", "dest": "/api/health.ts", "methods": ["GET"] }
   ],
   "env": {
     "NODE_ENV": "production"

@@ -22,6 +22,9 @@ onMounted(async () => {
   if (!sessionId) return
   try {
     const res = await fetch(`${apiBase}/api/check-session?session_id=${encodeURIComponent(sessionId)}`)
+    if (!res.ok) {
+      throw new Error(`HTTP error! status: ${res.status}`);
+    }
     const data = await res.json()
     professionName.value = data.professionName
     customerName.value = data.customerName
@@ -33,7 +36,15 @@ onMounted(async () => {
 function downloadPdf() {
   if (!sessionId) return
   fetch(`${apiBase}/api/download-pdf?session_id=${encodeURIComponent(sessionId)}`)
-    .then(res => res.blob())
+    .then(res => {
+      if (!res.ok) {
+        if (res.status === 403) throw new Error('NOT_PAID')
+        if (res.status === 404) throw new Error('NOT_FOUND')
+        // 500 などその他のサーバーエラー
+        throw new Error('SERVER_ERROR')
+      }
+      return res.blob()
+    })
     .then(blob => {
       const url = URL.createObjectURL(blob)
       const a = document.createElement('a')
@@ -43,8 +54,18 @@ function downloadPdf() {
       a.click()
       URL.revokeObjectURL(url)
     })
-    .catch(() => {
-      alert('PDFのダウンロードに失敗しました')
+    .catch((err) => {
+      // ステータス別のユーザ向けメッセージ
+      if (err?.message === 'NOT_PAID') {
+        alert('お支払いが確認できません。決済を完了してください。')
+      } else if (err?.message === 'NOT_FOUND') {
+        alert('ダウンロードするPDFが見つかりませんでした。')
+      } else if (err?.message === 'SERVER_ERROR') {
+        alert('サーバーエラーが発生しました。しばらくしてから再度お試しください。')
+      } else {
+        // ネットワークエラーやそれ以外
+        alert('PDFのダウンロードに失敗しました。ネットワークを確認してください。')
+      }
     })
 }
 </script>
