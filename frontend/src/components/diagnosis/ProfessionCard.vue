@@ -117,8 +117,12 @@ const props = defineProps<Props>()
 const profession = toRef(props, 'profession')
 const rank = toRef(props, 'rank')
 const maxCategoryScore = toRef(props, 'maxCategoryScore')
-const remoteProfession = professionDataManager.getProfessionByName(profession.value?.name ?? '')
-function getProfessionLinkId(remoteProfession: any, profession: ProfessionScore | undefined): string {
+const remoteProfession = professionDataManager.getProfessionByName(profession.value?.name ?? '') ?? null
+interface RemoteProfession {
+  id?: string | number
+}
+
+function getProfessionLinkId(remoteProfession: RemoteProfession | null, profession: ProfessionScore | undefined): string {
   if (remoteProfession && remoteProfession.id) {
     return String(remoteProfession.id)
   } else if (profession?.id) {
@@ -142,7 +146,7 @@ const { getCategoryName } = useDiagnosis()
 
 .tw-profession-card {
   width: 100%;
-  max-width:100vw;
+  max-width: 100vw;
   overflow-x: hidden;
   box-sizing: border-box;
   margin-left: 0;
@@ -168,15 +172,15 @@ const { getCategoryName } = useDiagnosis()
 }
 
 .rank-1 .tw-rank-badge {
-  background: linear-gradient(135deg, #ffd700, #ffed4e)
+  background: linear-gradient(135deg, #ffd700, #ffed4e);
 }
 
 .rank-2 .tw-rank-badge {
-  background: linear-gradient(135deg, #c0c0c0, #e5e5e5)
+  background: linear-gradient(135deg, #c0c0c0, #e5e5e5);
 }
 
 .rank-3 .tw-rank-badge {
-  background: linear-gradient(135deg, #e9a660, #f4bc7a)
+  background: linear-gradient(135deg, #e9a660, #f4bc7a);
 }
 
 h3 {

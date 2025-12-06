@@ -23,7 +23,7 @@
 9. Success ページのダウンロードアクション（fetch('/api/download-pdf?session_id=...')）
     API: GET /api/download-pdf?session_id=...（開発用に ?profession= でも可）
 10. Stripe セッションの metadata（professionName または professionId）を参照
-11. タウンロードする pdf を探す
+11. ダウンロードする pdf を探す
     存在すれば Content-Disposition をセットして返却。
 
 フロントエンド

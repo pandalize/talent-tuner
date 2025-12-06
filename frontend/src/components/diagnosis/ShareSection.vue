@@ -213,8 +213,10 @@ p {
 }
 
 .share-grid {
-  gap: var(--space-md);
   display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--space-md);
 }
 
 .action-buttons {

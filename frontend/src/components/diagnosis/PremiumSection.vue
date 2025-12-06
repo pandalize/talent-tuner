@@ -64,7 +64,7 @@ async function loadProfessionReports() {
 }
 
 // 指定された職業の価格を取得する関数
-// profession-reports.json に基づく
+// profession-reports.json に基づいて
 function getProfessionPrice(professionName: string): number {
   const reportConfig = professionReports.value?.[professionName]
   return reportConfig?.price || 300
@@ -153,7 +153,6 @@ h3 {
 }
 
 .purchase-buttons {
-  @include mixins.grid-columns(1);
   gap: var(--space-md);
   display: flex;
   justify-content: center;
@@ -204,14 +203,14 @@ h3 {
 }
 
 // レスポンシブデザイン
-@include mixins.respond-to('tablet') {
+@media (max-width: 768px) {
   .premium-header {
     @include mixins.flex-column(var(--space-md));
     text-align: center;
   }
 }
 
-@include mixins.respond-to('mobile') {
+@media (max-width: 480px) {
   .premium-card {
     @include mixins.card-padding(lg);
   }
