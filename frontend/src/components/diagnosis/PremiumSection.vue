@@ -1,31 +1,29 @@
 <template>
-  <div class="premium-section">
-    <div class="premium-card">
-      <div class="premium-header">
-        <div class="premium-content">
-          <h3 class="premium-title">詳細診断レポート</h3>
-          <p class="premium-subtitle">より深い自己理解とキャリア設計のために</p>
-        </div>
-      </div>
-      <div class="purchase-buttons">
-        <div v-for="(profession, index) in professions.slice(0, 3)" :key="profession.name" class="profession-card">
-          <div class="profession-info">
-            <div class="profession-rank">{{ index + 1 }}位</div>
-            <div class="profession-name">{{ profession.name }}</div>
-            <div class="profession-price">¥{{ getProfessionPrice(profession.name) }}</div>
+  <div class="premium-card">
+    <div class="premium-header">
+      <h3>詳細診断レポート</h3>
+      <p class="premium-text">より深い自己理解とキャリア設計のために</p>
+    </div>
+    <div class="purchase-buttons">
+      <div v-for="(profession, index) in professions.slice(0, 3)" :key="profession.name" class="profession-card">
+        <p class="profession-rank">{{ index + 1 }}位</p>
+        <p class="profession-name">{{ profession.name }}</p>
+        <p class="profession-price">¥{{ getProfessionPrice(profession.name) }}</p>
+        <BaseButton
+          variant="blue"
+          size="md"
+          :disabled="isProcessing[index]"
+          @click="() => purchasePdfReport(index)"
+        >
+          <div v-if="isProcessing[index]">
+            <div class="loading-spinner"></div>
+            処理中...
           </div>
-          <button @click="purchasePdfReport(index)" class="premium-button" :disabled="isProcessing[index]">
-            <svg v-if="!isProcessing[index]" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <circle cx="9" cy="21" r="1"/>
-              <circle cx="20" cy="21" r="1"/>
-              <path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"/>
-            </svg>
-            <div v-if="isProcessing[index]" class="loading-spinner"></div>
-            {{ isProcessing[index] ? '処理中...' : 'レポートを購入' }}
-          </button>
-        </div>
+          <div v-else>
+            レポートを購入
+          </div>
+        </BaseButton>
       </div>
-
     </div>
   </div>
 </template>
@@ -33,6 +31,7 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
+import BaseButton from '@/components/BaseButton.vue'
 import type { ProfessionScore } from '../../utils/diagnosisLoader'
 import type { PurchaseData } from '../../types/PurchaseData'
 import type { ProfessionReports } from '../../types/ProfessionReport'
@@ -65,6 +64,7 @@ async function loadProfessionReports() {
 }
 
 // 指定された職業の価格を取得する関数
+// profession-reports.json に基づいて
 function getProfessionPrice(professionName: string): number {
   const reportConfig = professionReports.value?.[professionName]
   return reportConfig?.price || 300
@@ -122,7 +122,7 @@ async function purchasePdfReport(professionIndex: number = 0) {
   border-radius: 12px;
   @include mixins.card-padding(xl);
   position: relative;
-  overflow: hidden;
+  margin-bottom: var(--space-xl);
 
   &::before {
     content: '';
@@ -137,7 +137,7 @@ async function purchasePdfReport(professionIndex: number = 0) {
   }
 }
 
-.premium-title {
+h3 {
   font-family: var(--font-heading);
   font-size: 1.5rem;
   margin-bottom: var(--space-xs);
@@ -146,69 +146,46 @@ async function purchasePdfReport(professionIndex: number = 0) {
   text-align: left;
 }
 
-.premium-subtitle {
+.premium-text {
   opacity: 0.8;
   font-size: var(--fs-body);
-  margin: 0;
+  margin-bottom: var(--space-md);
 }
 
-.premium-price {
-  text-align: right;
-  flex-shrink: 0;
+.purchase-buttons {
+  gap: var(--space-md);
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
 }
 
-.price-amount {
-  font-family: var(--font-mono);
-  font-size: 2rem;
-  font-weight: 700;
-  line-height: 1;
-  display: block;
+.profession-card {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  padding: var(--space-md);
+  @include mixins.flex-column(var(--space-sm));
+  align-items: center;
+  flex: 0 1 calc(33% - 2rem);
 }
 
-.price-tax {
+.profession-rank {
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  padding: var(--space-xs) var(--space-sm);
+  border-radius: 16px;
   font-size: var(--fs-small);
-  opacity: 0.8;
+  font-weight: 600;
+  min-width: 40px;
+  text-align: center;
 }
 
-.premium-button {
-  @include mixins.button-base;
-  width: 100%;
-  @include mixins.flex-center;
-  gap: var(--space-sm);
-  background: white;
-  color: var(--primary-navy);
+.profession-name,
+.profession-price {
+  flex: 1;
   font-size: 1.125rem;
   font-weight: 600;
-  padding: var(--space-md) var(--space-lg);
-  border: none;
-  position: relative;
-  overflow: hidden;
-
-  &:hover:not(:disabled) {
-    background: var(--bg-secondary);
-    transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
-  }
-  
-  &:disabled {
-    opacity: 0.7;
-    cursor: not-allowed;
-  }
-  
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
-    transition: left 0.6s;
-  }
-  
-  &:hover:not(:disabled)::before {
-    left: 100%;
-  }
+  color: white;
 }
 
 .loading-spinner {
@@ -225,86 +202,15 @@ async function purchasePdfReport(professionIndex: number = 0) {
   }
 }
 
-
-
 // レスポンシブデザイン
-@include mixins.respond-to('tablet') {
+@media (max-width: 768px) {
   .premium-header {
     @include mixins.flex-column(var(--space-md));
     text-align: center;
   }
-
-  .premium-price {
-    text-align: center;
-  }
 }
 
-// 3つの購入ボタンのスタイル
-.purchase-buttons {
-  @include mixins.grid-columns(1);
-  gap: var(--space-md);
-}
-
-.profession-card {
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 8px;
-  padding: var(--space-md);
-  @include mixins.flex-column(var(--space-sm));
-}
-
-.profession-info {
-  @include mixins.flex-row(var(--space-md));
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: var(--space-sm);
-}
-
-.profession-rank {
-  background: rgba(255, 255, 255, 0.2);
-  color: white;
-  padding: var(--space-xs) var(--space-sm);
-  border-radius: 16px;
-  font-size: var(--fs-small);
-  font-weight: 600;
-  min-width: 40px;
-  text-align: center;
-}
-
-.profession-name {
-  flex: 1;
-  font-weight: 600;
-  font-size: 1.125rem;
-  color: white;
-}
-
-.profession-price {
-  font-family: var(--font-mono);
-  font-size: 1.25rem;
-  font-weight: 700;
-  color: white;
-}
-
-// 購入済みボタンのスタイル
-.purchased-button {
-  @include mixins.button-base;
-  @include mixins.flex-center;
-  gap: var(--space-sm);
-  width: 100%;
-  background: rgba(34, 197, 94, 0.2);
-  color: #22c55e;
-  font-size: 1.125rem;
-  font-weight: 600;
-  padding: var(--space-md) var(--space-lg);
-  border: 2px solid rgba(34, 197, 94, 0.3);
-  cursor: default;
-  
-  svg {
-    color: #22c55e;
-  }
-}
-
-@include mixins.respond-to('mobile') {
+@media (max-width: 480px) {
   .premium-card {
     @include mixins.card-padding(lg);
   }
@@ -313,18 +219,9 @@ async function purchasePdfReport(professionIndex: number = 0) {
     gap: var(--space-sm);
   }
   
-  .premium-title {
+  h3 {
     font-size: 1.25rem;
     text-align: left;
-  }
-  
-  .price-amount {
-    font-size: 1.5rem;
-  }
-
-  .profession-info {
-    @include mixins.flex-column(var(--space-xs));
-    text-align: center;
   }
 
   .profession-name {

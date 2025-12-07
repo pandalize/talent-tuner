@@ -1,7 +1,3 @@
-<!--
-  質問ナビゲーションコンポーネント
-  前へ・次へボタンとプログレス表示
--->
 <template>
   <div class="question-navigation tw-nav-container">
     <button

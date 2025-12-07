@@ -1,6 +1,12 @@
 import Stripe from 'stripe'
 
 export default async function handler(req: any, res: any) {
+  // CORS ヘッダ（開発用：Vite の origin を許可）
+  const allowedOrigin = process.env.CORS_ALLOW_ORIGIN || 'http://localhost:5173'
+  res.setHeader('Access-Control-Allow-Origin', allowedOrigin)
+  res.setHeader('Access-Control-Allow-Methods', 'GET,POST,OPTIONS')
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization')
+  if (req.method === 'OPTIONS') return res.status(204).end()
   try {
     const secretKey = process.env.STRIPE_SECRET_KEY
     if (!secretKey) return res.status(500).json({ error: 'Stripe秘密キーが設定されていません' })
@@ -17,11 +23,9 @@ export default async function handler(req: any, res: any) {
 
     // metadataから必要な情報を取得
     const professionName = session.metadata?.professionName || ''
-    const customerName = session.metadata?.customerName || ''
 
     res.status(200).json({
       professionName,
-      customerName
     })
   } catch (error: any) {
     console.error('check-session APIエラー:', error.message)

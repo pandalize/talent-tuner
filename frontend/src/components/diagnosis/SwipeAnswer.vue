@@ -20,11 +20,9 @@
       transition: isSwiping ? 'none' : (isAnimatingNo || isAnimatingYes) ? 'all 0.8s cubic-bezier(0.43, 0.13, 0.23, 0.96)' : isVisible ? 'all 0.3s ease' : 'opacity 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94), transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94)'
     }"
   >
-    <div class="progress-header">
-      <div class="progress-text">質問 {{ currentIndex + 1 }} / {{ totalCount }}</div>
-    </div>
+    <p class="swipe-meta">質問 {{ currentIndex + 1 }} / {{ totalCount }}</p>
     
-    <div class="option-text">{{ option.text }}</div>
+    <p class="swipe-text">{{ option.text }}</p>
       
   </div>
 </template>
@@ -221,13 +219,14 @@ function resetForNextCard() {
   background: white;
   border-radius: 20px;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
-  padding: var(--space-sm);
+  padding: var(--space-lg);
   cursor: grab; // マウスを掴める手の形にする
   touch-action: pan-y; // スクロールを制御
   will-change: transform, opacity; // transform/opacityのアニメーションをすることを事前に伝える
   display: flex;
-  align-items: center;
-  justify-content: center;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: flex-start;
   box-sizing: border-box;
   margin: var(--space-md) auto 0;
   left: 25%;
@@ -255,35 +254,24 @@ function resetForNextCard() {
   }
 }
 
-.progress-header {
-  position: absolute;
-  top: clamp(12px, 3vw, 20px);
-  right: clamp(12px, 3vw, 20px);
-  z-index: 3;
-}
+.swipe-meta,
+.swipe-text {
+   font-weight: 500;
+   line-height: 1.4;
+   letter-spacing: 0.02em;
+ }
 
-.progress-text {
-  font-size: clamp(0.7rem, 2vw, 0.9rem);
-  color: var(--text-secondary);
-  background: var(--bg-tertiary);
-  padding: var(--space-xs, 4px) var(--space-sm, 8px);
-  border-radius: 20px;
-  font-weight: 500;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-}
+.swipe-meta {
+   font-size: clamp(0.7rem, 1.5vw, 0.9rem);
+   color: var(--text-secondary);
+ }
 
-.option-text {
-  font-size: clamp(1.5rem, 2vw, 2rem);
-  line-height: 1.4;
-  color: var(--text-primary);
-  text-align: center;
-  font-weight: 500;
-  letter-spacing: 0.02em;
-  white-space: normal;
-  overflow: visible;
-  overflow-wrap: break-word;
-  padding: 0 var(--space-sm);
-}
+.swipe-text {
+   font-size: clamp(1.5rem, 2vw, 2rem);
+   color: var(--text-primary);
+   margin-top: 50%;
+   text-align: center;
+ }
 
 @media (max-width: 480px) {
   .swipe-card {

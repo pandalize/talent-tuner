@@ -1,7 +1,7 @@
 <template>
   <div 
     class="tutorial-swipe-card"
-    :class="{ 
+    :class="{
       'swiping': isSwiping,
       'swipe-left': swipeDirection === 'left',
       'swipe-right': swipeDirection === 'right',
@@ -20,54 +20,28 @@
       transition: isSwiping ? 'none' : (isAnimatingNo || isAnimatingYes) ? 'all 0.8s cubic-bezier(0.43, 0.13, 0.23, 0.96)' : isVisible ? 'all 0.3s ease' : 'opacity 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94), transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94)'
     }"
   >
-    <div class="tutorial-card-content">
-      <div class="tutorial-header">
-        <h2 class="tutorial-title">使い方</h2>
-        <div class="tutorial-progress">質問 {{ questionIndex + 1 }} / {{ totalQuestions }}</div>
+
+    <p class="tutorial-title">使い方</p>
+
+    <p class="tutorial-instruction-text">
+      このカードを左右にスワイプして回答してください
+    </p>
+
+    <div class="tutorial-swipe-demo">
+      <div class="swipe-left-demo">
+        <span>←</span>
+        <small>当てはまらない</small>
       </div>
-      
-      <div class="tutorial-instructions">
-        <div class="tutorial-main-text">
-          <template v-if="categoryInfo">
-            {{ categoryInfo.description }}
-          </template>
-          <template v-else>
-            {{ mainQuestion }}
-          </template>
-        </div>
-        
-        <div class="tutorial-swipe-demo">
-            <div class="swipe-left-demo">
-              <span>←</span>
-              <small>当てはまらない</small>
-            </div>
-            <div class="swipe-right-demo">
-              <span>→</span>
-              <small>当てはまる</small>
-            </div>
-        </div>
-        
-        <div class="tutorial-instruction-text">
-          このカードを左右にスワイプして回答してください
-        </div>
+      <div class="swipe-right-demo">
+        <span>→</span>
+        <small>当てはまる</small>
       </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, watch, onMounted } from 'vue'
-
-interface Props {
-  mainQuestion: string
-  questionIndex: number
-  totalQuestions: number
-  categoryInfo?: {
-    name: string
-    description: string
-    icon: string
-  } | null
-}
+import { ref, onMounted } from 'vue'
 
 interface Emits {
   'tutorial-completed': []
@@ -75,7 +49,6 @@ interface Emits {
 
 const emit = defineEmits<Emits>()
 
-const props = defineProps<Props>()  // 参照されていないように見えるが必要
 
 // リアクティブデータ
 const tutorialCardRef = ref<HTMLElement>()
@@ -212,17 +185,19 @@ function completeTutorial() {
   background: white;
   border-radius: 20px;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
-  padding: var(--space-sm);
+  padding: var(--space-lg);
   cursor: grab; // マウスを掴める手の形にする
   touch-action: pan-y; // スクロールを制御
   will-change: transform, opacity; // transform/opacityのアニメーションをすることを事前に伝える
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-direction: column;
   box-sizing: border-box;
   margin: var(--space-md) auto 0;
   left: 25%;
   top: 50%;
+  gap: var(--space-lg);
 
   opacity: 0;
   transition: opacity 0.8s ease, 
@@ -246,56 +221,20 @@ function completeTutorial() {
   }
 }
 
-.tutorial-card-content {
-  position: relative;
-  z-index: 2;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  box-sizing: border-box;
-}
-
-.tutorial-header {
+.tutorial-title{
   display: flex;
   justify-content: space-between;
   width: 100%;
+  font-size: clamp(10px, 1.5rem, 40px);
   margin-bottom: var(--space-lg);
 }
 
-.tutorial-title {
-  font-family: var(--font-heading);
-  font-size: clamp(1.2rem, 4vw, 1.6rem);
-  color: var(--primary-navy);
-  font-weight: 600;
-  margin: 0;
-}
-
-.tutorial-progress {
-  font-size: clamp(0.7rem, 2vw, 0.9rem);
-  color: var(--text-secondary);
-  background: var(--bg-tertiary);
-  padding: var(--space-xs) var(--space-sm);
-  border-radius: 20px;
-}
-
-.tutorial-instructions {
-  text-align: center;
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-
-.tutorial-main-text {
-  font-size: clamp(1rem, 3.5vw, 1.4rem);
+.tutorial-instruction-text {
+  font-size: clamp(0.9rem, 2.5vw, 1.1rem);
   color: var(--text-primary);
   font-weight: 500;
-  margin-bottom: var(--space-lg);
+  margin-bottom: var(--space-md);
   line-height: 1.4;
-  padding: 0 var(--space-sm);
 }
 
 .tutorial-swipe-demo {
@@ -303,6 +242,7 @@ function completeTutorial() {
   display: flex;
   justify-content: center;
   align-items: center;
+  gap: var(--space-xl);
 }
 
 .swipe-left-demo, .swipe-right-demo {
@@ -330,27 +270,12 @@ function completeTutorial() {
   color: #51cf66;
 }
 
-.tutorial-instruction-text {
-  font-size: clamp(0.9rem, 2.5vw, 1.1rem);
-  color: var(--text-primary);
-  font-weight: 500;
-  margin: 0;
-  line-height: 1.4;
-  padding: 0 var(--space-sm);
-}
-
 @media (max-width: 480px) {
   .tutorial-swipe-card {
     width: 80vw;
     height: 65vh;
     left: 45%;
     top: 45%;
-  }
-
-  .tutorial-header {
-    padding-top: 10px;
-    padding-left: 8px;
-    padding-right: 8px;
   }
 }
 </style>

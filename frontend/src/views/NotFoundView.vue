@@ -13,15 +13,15 @@
       </div>
       
       <div class="navigation-links">
-        <router-link to="/" class="btn home-button">
+        <BaseButton variant="gold" size="md" @click="$router.push('/')">
           ホームに戻る
-        </router-link>
-        <router-link to="/diagnosis" class="btn diagnosis-button">
+        </BaseButton>
+        <BaseButton variant="gold" size="md" @click="$router.push('/diagnosis')">
           診断を始める
-        </router-link>
-        <router-link to="/about" class="btn about-button">
+        </BaseButton>
+        <BaseButton variant="gold" size="md" @click="$router.push('/about')">
           職業一覧を見る
-        </router-link>
+        </BaseButton>
       </div>
       
       <div class="help-section">
@@ -32,7 +32,7 @@
 </template>
 
 <script setup lang="ts">
-
+import BaseButton from '@/components/BaseButton.vue';
 </script>
 
 <style scoped>
@@ -95,58 +95,6 @@
   align-items: center;
 }
 
-.btn {
-  display: inline-block;
-  padding: 1rem 2rem;
-  border: none;
-  border-radius: 50px;
-  cursor: pointer;
-  font-family: 'Hiragino Sans', sans-serif;
-  font-weight: 600;
-  text-align: center;
-  letter-spacing: 0.05em;
-  transition: all 0.3s ease;
-  text-decoration: none;
-  font-size: clamp(14px, 2.5vw, 18px);
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
-  min-width: 200px;
-}
-
-.home-button {
-  background-color: var(--main-color);
-  color: var(--background-white);
-}
-
-.home-button:hover {
-  background-color: var(--accent-coral);
-  transform: translateY(-2px);
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
-}
-
-.diagnosis-button {
-  background-color: var(--orange-beige);
-  color: var(--text-dark);
-}
-
-.diagnosis-button:hover {
-  background-color: var(--accent-coral);
-  color: var(--background-white);
-  transform: translateY(-2px);
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
-}
-
-.about-button {
-  background-color: var(--light-pink);
-  color: var(--text-dark);
-}
-
-.about-button:hover {
-  background-color: var(--main-color);
-  color: var(--background-white);
-  transform: translateY(-2px);
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
-}
-
 .help-section {
   padding-top: 2rem;
   border-top: 1px solid #e0e0e0;
@@ -172,10 +120,6 @@
     flex-direction: row;
     justify-content: center;
     gap: 1.5rem;
-  }
-  
-  .btn {
-    min-width: 160px;
   }
 }
 

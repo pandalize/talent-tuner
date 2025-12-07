@@ -1,54 +1,43 @@
-<!--
-  診断結果シェア機能コンポーネント
-  LINE, X(Twitter), Instagram での共有機能
--->
 <template>
   <div class="share-section">
     <div class="section-header">
-      <h3 class="section-title">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M4 12v8a2 2 0 002 2h12a2 2 0 002-2v-8"/>
-          <polyline points="16,6 12,2 8,6"/>
-          <line x1="12" y1="2" x2="12" y2="15"/>
-        </svg>
-        診断結果をシェア
-      </h3>
-      <p class="section-subtitle">友人や家族と結果を共有して、キャリアについて話し合ってみましょう</p>
+      <h3>診断結果をシェア</h3>
+      <p>友人や家族と結果を共有して、キャリアについて話し合ってみましょう</p>
     </div>
     <div class="share-grid">
-      <div @click="shareToLine" class="share-card line-card" role="button" tabindex="0" @keydown.enter="shareToLine" @keydown.space="shareToLine">
-        <div class="share-icon">
-          <img src="/image/LINE.png" alt="LINE" class="platform-icon">
-        </div>
-        <div class="share-content">
-          <span class="share-title">LINEでシェア</span>
-          <span class="share-description">友達やグループに結果を送信</span>
-        </div>
-      </div>
-      <div @click="shareToX" class="share-card x-card" role="button" tabindex="0" @keydown.enter="shareToX" @keydown.space="shareToX">
-        <div class="share-icon">
-          <img src="/image/X.png" alt="X (Twitter)" class="platform-icon">
-        </div>
-        <div class="share-content">
-          <span class="share-title">Xでシェア</span>
-          <span class="share-description">フォロワーと診断結果を共有</span>
-        </div>
-      </div>
-      <div @click="shareToInstagram" class="share-card instagram-card" role="button" tabindex="0" @keydown.enter="shareToInstagram" @keydown.space="shareToInstagram">
-        <div class="share-icon">
-          <img src="/image/Instagram.png" alt="Instagram" class="platform-icon">
-        </div>
-        <div class="share-content">
-          <span class="share-title">Instagramでシェア</span>
-          <span class="share-description">ストーリーズで結果を投稿</span>
-        </div>
-      </div>
+      <BaseButton
+        variant="secondary"
+        size="md"
+        class="action-buttons"
+        @click="shareToLine">
+        <img src="/image/LINE.png" alt="LINE">
+        <span>友達やグループに結果を送信</span>
+      </BaseButton>
+
+      <BaseButton
+        variant="secondary"
+        size="md"
+        class="action-buttons"
+        @click="shareToX">
+        <img src="/image/X.png" alt="X (Twitter)">
+        <span>フォロワーと診断結果を共有</span>
+      </BaseButton>
+
+      <BaseButton
+        variant="secondary"
+        size="md"
+        class="action-buttons"
+        @click="shareToInstagram">
+        <img src="/image/Instagram.png" alt="Instagram">
+        <span>ストーリーズで結果を投稿</span>
+      </BaseButton>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import type { ProfessionScore } from '../../utils/diagnosisLoader'
+import BaseButton from '@/components/BaseButton.vue'
 
 // Props
 interface Props {
@@ -205,7 +194,7 @@ async function fallbackInstagramShare(text: string) {
   margin-bottom: var(--space-xl);
 }
 
-.section-title {
+h3 {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -217,81 +206,37 @@ async function fallbackInstagramShare(text: string) {
   font-weight: 600;
 }
 
-.section-subtitle {
+p {
   color: var(--text-secondary);
   font-size: var(--fs-body);
   margin: 0;
 }
 
 .share-grid {
-  @include mixins.grid-auto-fit(250px);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
   gap: var(--space-md);
 }
 
-.share-card {
-  @include mixins.card-base;
-  @include mixins.flex-row(var(--space-md));
-  @include mixins.card-padding(lg);
-  text-align: left;
-  cursor: pointer;
-  border: none;
-  background: var(--bg-primary);
-  transition: all var(--transition-normal);
-  
-  &:hover {
-    @include mixins.card-shadow(md);
-    transform: translateY(-2px);
-  }
+.action-buttons {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.share-icon {
-  @include mixins.flex-center;
-  width: 48px;
-  height: 48px;
-  border-radius: 8px;
-  background: var(--bg-secondary);
-  flex-shrink: 0;
-}
-
-.platform-icon {
+img {
   width: 32px;
   height: 32px;
   object-fit: contain;
+  flex-shrink: 0;
 }
 
-.share-content {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-
-  .share-title {
-    font-size: 1rem;
-    color: var(--primary-navy);
-    margin-bottom: var(--space-xs);
-    font-weight: 600;
-  }
-
-  .share-description {
-    font-size: var(--fs-small);
-    color: var(--text-secondary);
-    line-height: 1.4;
-  }
-}
-
-// プラットフォーム別スタイリング
-.line-card:hover {
-  border-color: #00b900;
-  background: linear-gradient(135deg, rgba(0, 185, 0, 0.05), var(--bg-primary));
-}
-
-.x-card:hover {
-  border-color: #1da1f2;
-  background: linear-gradient(135deg, rgba(29, 161, 242, 0.05), var(--bg-primary));
-}
-
-.instagram-card:hover {
-  border-color: #e4405f;
-  background: linear-gradient(135deg, rgba(228, 64, 95, 0.05), var(--bg-primary));
+span {
+  font-size: var(--fs-small);
+  color: var(--text-secondary);
+  text-align: center;
+  line-height: 1.4;
 }
 
 // レスポンシブデザイン
@@ -320,12 +265,12 @@ async function fallbackInstagramShare(text: string) {
     text-align: center;
   }
 
-  .section-title {
+  h3 {
     font-size: var(--fs-h3);
     margin-bottom: var(--space-xs);
   }
 
-  .section-subtitle {
+  p {
     font-size: var(--fs-small);
     line-height: 1.4;
   }
@@ -333,32 +278,6 @@ async function fallbackInstagramShare(text: string) {
   .share-grid {
     gap: var(--space-xs);
     grid-template-columns: 1fr;
-  }
-
-  .share-card {
-    padding: var(--space-xs);
-    flex-direction: row;
-    align-items: center;
-    text-align: left;
-
-    .share-title {
-      font-size: var(--fs-body);
-      margin-bottom: 2px;
-    }
-
-    .share-description {
-      font-size: var(--fs-small);
-    }
-  }
-
-  .share-icon {
-    margin-right: var(--space-sm);
-    margin-bottom: 0;
-  }
-
-  .platform-icon {
-    width: 32px;
-    height: 32px;
   }
 }
 
@@ -372,12 +291,12 @@ async function fallbackInstagramShare(text: string) {
     margin-bottom: var(--space-sm);
   }
 
-  .section-title {
+  h3 {
     font-size: 1rem;
     margin-bottom: 4px;
   }
 
-  .section-subtitle {
+  p {
     display: none;
   }
 
@@ -386,35 +305,6 @@ async function fallbackInstagramShare(text: string) {
     justify-content: center;
     align-items: center;
     gap: var(--space-lg);
-  }
-
-  .share-card {
-    padding: var(--space-xs);
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    min-width: 60px;
-    background: transparent;
-    border: none;
-    box-shadow: none;
-
-    .share-title {
-      display: none;
-    }
-
-    .share-description {
-      display: none;
-    }
-  }
-
-  .share-icon {
-    margin-right: 0;
-    margin-bottom: 0;
-  }
-
-  .platform-icon {
-    width: 50px;
-    height: 50px;
   }
 }
 </style>

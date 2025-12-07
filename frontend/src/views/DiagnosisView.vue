@@ -12,9 +12,8 @@ import DiagnosisContainer from '../components/diagnosis/DiagnosisContainer.vue'
 .diagnosis-main {
   display: flex;
   justify-content: center;
-  align-items: center;
-  width: 100vw;
-  height: 80vh;
+  align-items: flex-start;
+  width: 100%;
   padding: 0;
   margin: 0;
 }

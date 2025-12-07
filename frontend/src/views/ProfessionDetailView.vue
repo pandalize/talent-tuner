@@ -16,13 +16,6 @@
     <div v-else-if="professionData" class="profession-content">
       <!-- ヘッダーセクション -->
       <header class="profession-header">
-        <div class="breadcrumb">
-          <router-link to="/">ホーム</router-link>
-          <span class="separator">></span>
-          <router-link to="/about">職業一覧</router-link>
-          <span class="separator">></span>
-          <span class="current">{{ professionName }}</span>
-        </div>
         <h1 class="profession-title">{{ professionName }}</h1>
         <div class="profession-overview">
           <div class="annual-income">
@@ -91,37 +84,21 @@
         <p class="education-requirements">{{ professionData.educationRequirements }}</p>
       </section>
 
-      <!-- 関連職業 -->
-      <section class="related-professions-section">
-        <h2>関連職業・転職先候補</h2>
-        <div class="related-professions">
-          <router-link 
-            v-for="relatedProf in relatedProfessionsWithIds" 
-            :key="relatedProf.id"
-            :to="`/profession/${relatedProf.id}`"
-            class="related-profession-card"
-          >
-            {{ relatedProf.name }}
-          </router-link>
-        </div>
-      </section>
-
       <!-- アクションセクション -->
-
       <div class="action-section">
         <BaseButton
           variant="blue"
           size="md"
-          @click="$router.push('/diagnosis')"
+          @click="$router.push('/about')"
           >
-          適性診断を受ける
+          他の職業も見る
         </BaseButton>
         <BaseButton
           variant="gold"
           size="md"
-          @click="$router.push('/about')"
+          @click="$router.push('/diagnosis')"
         >
-          他の職業も見る
+          診断を受ける
         </BaseButton>
       </div>
     </div>
@@ -155,18 +132,6 @@ const professionName = computed(() => {
 const professionData = computed((): ProfessionData | null => {
   if (!professionDatabase.value || !professionName.value) return null;
   return professionDatabase.value.professions[professionName.value];
-});
-
-const relatedProfessionsWithIds = computed(() => {
-  if (!professionData.value || !professionDatabase.value || !professionData.value.relatedProfessions) return [];
-  
-  return professionData.value.relatedProfessions.map(profName => {
-    const data = professionDatabase.value!.professions[profName];
-    return {
-      name: profName,
-      id: data?.id || profName.toLowerCase().replace(/\s+/g, '-')
-    };
-  }).filter(item => item.id !== professionId.value); // 自分自身は除外
 });
 
 async function loadProfessionData() {
@@ -266,32 +231,6 @@ onMounted(loadProfessionData);
   border-radius: 15px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
   overflow: hidden;
-}
-
-/* パンくずナビ */
-.breadcrumb {
-  padding: 1rem 2rem;
-  background: #f8f9fa;
-  font-size: 0.9rem;
-  border-bottom: 1px solid #e9ecef;
-}
-
-.breadcrumb a {
-  color: var(--main-color);
-  text-decoration: none;
-}
-
-.breadcrumb a:hover {
-  text-decoration: underline;
-}
-
-.separator {
-  margin: 0 0.5rem;
-  color: #6c757d;
-}
-
-.current {
-  color: #6c757d;
 }
 
 /* ヘッダー */
@@ -446,31 +385,6 @@ section h3 {
   border: 1px solid #e9ecef;
 }
 
-/* 関連職業 */
-.related-professions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
-}
-
-.related-profession-card {
-  background: var(--light-pink);
-  color: var(--text-dark);
-  padding: 1rem 1.5rem;
-  border-radius: 25px;
-  text-decoration: none;
-  font-weight: 500;
-  transition: all 0.3s ease;
-  border: 2px solid transparent;
-}
-
-.related-profession-card:hover {
-  background: var(--main-color);
-  color: white;
-  transform: translateY(-2px);
-  box-shadow: 0 5px 15px rgba(95, 144, 178, 0.3);
-}
-
 .action-section {
   display: flex;
   gap: 1rem;
@@ -582,10 +496,6 @@ section h3 {
   .career-step {
     flex-direction: column;
     text-align: center;
-  }
-  
-  .related-professions {
-    justify-content: center;
   }
   
   .action-cards {

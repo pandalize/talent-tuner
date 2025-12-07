@@ -1,35 +1,28 @@
 <template>
   <div class="result-container">
-    <div class="result-header">
-      <h1 class="result-title">あなたの適職診断結果</h1>
-      <p class="result-subtitle">
-        {{ totalQuestions }}問の質問から分析した、あなたに最適な職業をランキング形式でご紹介します
-      </p>
-    </div>
+    <h1>あなたの適職診断結果</h1>
+    <p>{{ totalQuestions }}問の質問から分析した、あなたに最適な職業をランキング形式でご紹介します</p>
 
-    <div class="results-grid">
-      <ProfessionCard
-        v-for="(profession, index) in professions"
-        :key="profession.name"
-        :profession="profession"
-        :rank="index + 1"
-        :maxCategoryScore="maxCategoryScore"
-      />
-    </div>
+    <ProfessionCard
+      v-for="(profession, index) in professions"
+      :key="profession.name"
+      :profession="profession"
+      :rank="index + 1"
+      :maxCategoryScore="maxCategoryScore"
+    />
 
     <ShareSection :professions="professions" />
 
     <PremiumSection :professions="professions" />
 
-      <div class="action-buttons">
-        <BaseButton
-            variant="blue"
-            size="md"
-            @click=handleInstantReset
-          >
-            もう一度診断する
-          </BaseButton>
-      </div>
+    <BaseButton
+      class="base-button"
+      variant="blue"
+      size="md"
+      @click=handleInstantReset
+    >
+      もう一度診断する
+    </BaseButton>
   </div>
 </template>
 
@@ -77,69 +70,45 @@ function handleInstantReset() {
 </script>
 
 <style lang="scss" scoped>
-@use '@/assets/scss/mixins.scss' as mixins;
-
-.result-header {
-  padding: calc(var(--space-xxl) / 2) var(--space-lg);
-  text-align: center;
-  background: transparent;
+.result-container {
+  display: grid;
+  justify-items: center;
+  gap: 2rem;
+  width: 100%;
+  position: relative;
+  box-sizing: border-box;
+  padding: 0 var(--space-xl);
 }
 
-.result-title {
+h1 {
   font-family: var(--font-heading);
   font-size: var(--fs-h1);
   color: var(--primary-navy);
-  margin-bottom: var(--space-sm);
+  margin-top: var(--space-lg);
   font-weight: 700;
 }
 
-.result-subtitle {
+p {
   color: var(--text-secondary);
   font-size: var(--fs-body);
   line-height: 1.6;
   margin: 0;
 }
 
-.results-grid {
-  @include mixins.flex-column(var(--space-xxl));
-  width: 100%;
-  overflow-x: hidden;
-  box-sizing: border-box;
-  padding: 0;
-  margin: 0;
-}
-
-.action-buttons {
-  display: flex;
-  justify-content: center;
+.base-button {
   margin-bottom: var(--space-xl, 2rem);
-}
-
-// レスポンシブデザイン
-@include mixins.respond-to('tablet') {
-  .result-header {
-    @include mixins.card-padding(lg);
-  }
 }
 
 // モバイル版のタイトルサイズ調整
 @media (max-width: 768px) {
-  .result-header {
-    padding-top: 16px;
-    padding-bottom: 16px;
-  }
-
-  .result-title {
+  h1 {
     font-size: 2rem;
     line-height: 1.1;
   }
 }
 
 @media (max-width: 480px) {
-  .result-container {
-    overflow-y: auto;
-  }
-  .result-title {
+  h1 {
     font-size: 1.75rem;
     line-height: 1.1;
   }
