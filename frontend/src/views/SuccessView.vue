@@ -14,7 +14,6 @@ const sessionId = route.query.session_id as string
 
 // 画面表示用の変数を定義
 const professionName = ref('')
-const customerName = ref('')
 
 const apiBase = import.meta.env.VITE_API_BASE || 'http://localhost:3000'
 
@@ -27,7 +26,6 @@ onMounted(async () => {
     }
     const data = await res.json()
     professionName.value = data.professionName
-    customerName.value = data.customerName
   } catch (error) {
     // エラー時の処理
   }

@@ -79,8 +79,8 @@ export default async function handler(req: Req, res: Res) {
         currency: currency,
         timestamp: timestamp,
       },
-      success_url: `${process.env.SUCCESS_URL || (process.env.FRONTEND_URL ? process.env.FRONTEND_URL + '/success?session_id={CHECKOUT_SESSION_ID}' : 'http://localhost:5173/success?session_id={CHECKOUT_SESSION_ID}')}`,
-      cancel_url: `${process.env.CANCEL_URL || (process.env.FRONTEND_URL ? process.env.FRONTEND_URL + '/cancel' : 'http://localhost:5173/cancel')}`,
+      success_url: `${process.env.FRONTEND_URL ? process.env.FRONTEND_URL + '/success?session_id={CHECKOUT_SESSION_ID}' : 'http://localhost:5173/success?session_id={CHECKOUT_SESSION_ID}'}`,
+      cancel_url: `${process.env.FRONTEND_URL ? process.env.FRONTEND_URL + '/cancel' : 'http://localhost:5173/cancel'}`,
     })
 
     res.status(200).json({

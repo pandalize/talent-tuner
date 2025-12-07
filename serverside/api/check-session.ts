@@ -23,11 +23,9 @@ export default async function handler(req: any, res: any) {
 
     // metadataから必要な情報を取得
     const professionName = session.metadata?.professionName || ''
-    const customerName = session.metadata?.customerName || ''
 
     res.status(200).json({
       professionName,
-      customerName
     })
   } catch (error: any) {
     console.error('check-session APIエラー:', error.message)
