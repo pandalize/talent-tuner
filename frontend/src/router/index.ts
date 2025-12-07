@@ -71,7 +71,6 @@ const router = createRouter({
     { path: '/terms', name: 'terms', component: () => import('../views/TermsOfServiceView.vue') },
     { path: '/contact', name: 'contact', component: () => import('../views/ContactView.vue') },
     { path: '/payment', name: 'payment', component: () => import('../views/PaymentView.vue') },
-    { path: '/payment-success', name: 'payment-success', component: () => import('../views/PaymentSuccessView.vue') },
     { path: '/success', name: 'Success', component: SuccessView },
     { path: '/:pathMatch(.*)*', component: () => import('../views/NotFoundView.vue') }
   ]
