@@ -191,7 +191,7 @@ const profession = await $fetch(`/api/profession/${professionId}`)
 
 ---
 
-#### ✓ `frontend/pages/[...slug].vue` (新規 - キャッチオール)
+#### ✓ `frontend/pages/[...slug].vue` (新規 - キャッチオール) よくわからず、未変更
 
 **目的**: 404 ページ処理
 
