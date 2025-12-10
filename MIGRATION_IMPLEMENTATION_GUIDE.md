@@ -16,7 +16,7 @@
 cd /Users/fujinoyuki/Documents/talent-tuner/frontend
 
 # 既存の node_modules をバックアップ
-mv node_modules node_modules.bak
+mv node_modules node_modules.bak # ファイルが存在しない
 
 # Nuxt 3 プロジェクト初期化
 npx nuxi init .
@@ -113,10 +113,11 @@ pages/
 cp -r src/components/* components/
 
 # 削除: src/components（不要になったら）
-# rm -rf src/components
+rm -rf src/components
 ```
 
 **components/ の自動スコープ化**:
+stories 内ではコンポーネントを明示的に import する必要あり
 ```vue
 <!-- pages/diagnosis.vue で自動import -->
 <template>
@@ -136,6 +137,8 @@ cp -r src/composables/* composables/
 ```
 
 **useDiagnosis.ts の例**:
+何を変更すべきかわからず、放置
+
 ```typescript
 // composables/useDiagnosis.ts
 import type { DiagnosisResult } from '~/types'
@@ -622,6 +625,9 @@ vercel env add STRIPE_SECRET_KEY
 ```
 
 ### 7.3 package.json スクリプト更新
+
+testはcomponents/__tests__/BaseButton.test.tsが存在するため、現在の構成に変更
+
 
 ```json
 {

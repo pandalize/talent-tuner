@@ -100,7 +100,7 @@ frontend/
 ```
 frontend/
 ├── app/
-│   └── app.vue           # ルートレイアウト
+│   └── app.vue           default.vueに変更し、layouts/に移動
 ├── pages/                # ファイルベースルーティング (旧 views/)
 │   ├── index.vue
 │   ├── diagnosis.vue
@@ -237,6 +237,7 @@ interface ApiResponse<T = any> {
 ### 2.3 Phase 3: デプロイ構成変更 (3-5日)
 
 #### 2.3.1 vercel.json の更新
+Vercel は Nuxt 4 を自動検出して最適化するためvercel.jsonは不要
 
 **現在**:
 ```json
@@ -358,7 +359,7 @@ frontend/
 ```
 frontend/
 ├── nuxt.config.ts          ✅ (Nuxt メイン設定)
-├── app.vue                 ✅ (ルートレイアウト)
+├── app.vue                 ✅ (ルートレイアウト)  default.vueに変更し、layouts/に移動
 ├── pages/                  ✅ (ファイルベースルーティング)
 │   ├── index.vue
 │   ├── about.vue
@@ -568,6 +569,7 @@ STRIPE_SECRET_KEY=sk_live_...
 ```
 
 ### 5.3 package.json (フロントエンド)
+バージョンは修正せず
 
 ```json
 {
@@ -600,7 +602,7 @@ STRIPE_SECRET_KEY=sk_live_...
     "eslint": "^9.22.0",
     "prettier": "^3.5.0",
     "typescript": "^5.8.0",
-    "vue-tsc": "^2.0.0"
+    "vue-tsc": "^2.0.0" // Nuxt4では不要であるため、追加せず
   }
 }
 ```
