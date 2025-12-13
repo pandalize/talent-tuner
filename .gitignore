@@ -39,3 +39,8 @@ coverage
 storybook-static
 
 /serverside/.vercel
+
+
+# Nuxt
+.nuxt
+.output
