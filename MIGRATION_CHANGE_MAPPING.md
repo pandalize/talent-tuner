@@ -191,7 +191,7 @@ const profession = await $fetch(`/api/profession/${professionId}`)
 
 ---
 
-#### ✓ `frontend/pages/[...slug].vue` (新規 - キャッチオール)
+#### ✓ `frontend/pages/[...slug].vue` (新規 - キャッチオール) よくわからず、未変更
 
 **目的**: 404 ページ処理
 
@@ -456,7 +456,7 @@ useHead({
 | `src/views/PrivacyPolicyView.vue` | `pages/privacy-policy.vue` | ファイル名のみ |
 | `src/views/TermsOfServiceView.vue` | `pages/terms-of-service.vue` | ファイル名のみ |
 | `src/views/CareerChatView.vue` | `pages/career-chat.vue` | ファイル名のみ |
-| `src/views/NotFoundView.vue` | `pages/[...slug].vue` | キャッチオール対応 |
+| `src/views/NotFoundView.vue` | `pages/[...slug].vue` | キャッチオール対応 |  よくわからず、未変更
 | `src/components/` | `components/` | そのまま使用可（自動スコープ） |
 | `src/composables/` | `composables/` | そのまま使用可（自動import） |
 | `src/utils/` (クライアント) | `utils/` | そのまま使用可 |
@@ -682,7 +682,7 @@ Project Settings → Environment Variables
 | ファイル | 内容 |
 |---------|------|
 | `frontend/nuxt.config.ts` | Nuxt メイン設定 |
-| `frontend/.nuxtrc` | Nuxt CLI 設定（オプション） |
+| `frontend/.nuxtrc` | Nuxt CLI 設定（オプション） | 未追加
 | `frontend/tsconfig.json` | Nuxt が自動生成 |
 
 ---
@@ -694,22 +694,22 @@ Project Settings → Environment Variables
 ```json
 {
   "scripts": {
-    "dev": "nuxi dev",           // vite → nuxi dev
-    "build": "nuxi build",       // vite build → nuxi build
-    "preview": "nuxi preview",   // vite preview → nuxi preview
-    "postinstall": "nuxi prepare",  // ★ 新規追加
-    "type-check": "nuxi typecheck", // vue-tsc → nuxi typecheck
-    "deploy": "vercel --prod"    // そのまま
+    "dev": "nuxi dev",
+    "build": "nuxi build",
+    "preview": "nuxi preview",
+    "postinstall": "nuxi prepare",
+    "type-check": "nuxi typecheck",
+    "deploy": "vercel --prod"
   },
   "dependencies": {
-    "nuxt": "^3.11.0",          // ★ 新規追加
-    "vue": "^3.5.0"              // そのまま
+    "nuxt": "^3.11.0", // 変更せず
+    "vue": "^3.5.0" // 変更せず
   },
   "devDependencies": {
-    "@nuxt/devtools": "latest",  // ★ 新規追加
-    "vite": "削除",              // Nuxt が代替
-    "@vitejs/plugin-vue": "削除",  // Nuxt が代替
-    "vue-tsc": "保持"            // nuxi typecheck と共存
+    "@nuxt/devtools": "latest", // 変更せず
+    "vite": "削除",
+    "@vitejs/plugin-vue": "削除",
+    "vue-tsc": "保持"　// Nuxt4では不要であるため、追加せず
   }
 }
 ```
@@ -746,6 +746,7 @@ DNS レコード:
 ---
 
 ### 5.2 Vercel デプロイ設定
+Vercel は Nuxt 4 を自動検出して最適化するため、`vercel.json` は不要
 
 #### `vercel.json` 更新
 
