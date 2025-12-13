@@ -289,7 +289,8 @@ STRIPE_SECRET_KEY=sk_test_...
 
 ### 1.3 修正するファイル（重要な API 呼び出し）
 
-#### 📝 `frontend/src/views/NewCareerChatView.vue` → `pages/chat.vue`
+#### 📝 `frontend/src/views/NewCareerChatView.vue` → `pages/new-chat.vue`
+MIGRATION_IMPLEMENTATION_GUIDE.md の 4.1 の変更により不要
 
 **変更個所**:
 

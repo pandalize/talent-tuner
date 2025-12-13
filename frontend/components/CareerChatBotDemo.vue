@@ -142,12 +142,8 @@ defineEmits<{
   close: []
 }>()
 
-// メッセージ型定義
-interface ChatMessage {
-  role: 'user' | 'assistant'
-  content: string
-  timestamp: Date
-}
+import type { ChatMessage } from '~/composables/useChat';
+
 
 // リアクティブデータ
 const messages = ref<ChatMessage[]>([])

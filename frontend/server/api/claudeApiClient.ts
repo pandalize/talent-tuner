@@ -1,13 +1,4 @@
-/**
- * Claude API クライアント
- * 進路相談チャットbotのためのClaude AI連携機能
- */
-
-export interface ChatMessage {
-  role: 'user' | 'assistant';
-  content: string;
-  timestamp: Date;
-}
+import type { ChatMessage } from '~/composables/useChat';
 
 export interface CareerAdviceRequest {
   messages: ChatMessage[];

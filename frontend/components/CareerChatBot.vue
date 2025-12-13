@@ -160,7 +160,8 @@
 <script setup lang="ts">
 
 import { ref, nextTick, onMounted, computed, onUnmounted } from 'vue';
-import type { ChatMessage, CareerAdviceResponse } from '~/server/api/claudeApiClient';
+import type { ChatMessage } from '~/composables/useChat';
+import type { CareerAdviceResponse } from '~/server/api/claudeApiClient';
 import { professionDataManager } from '~/utils/professionDataManager';
 
 // Emits
