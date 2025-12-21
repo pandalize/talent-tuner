@@ -78,7 +78,7 @@ async function loadProfessionData() {
     
     // 最初の職業を選択状態にする
     if (professions.value.length > 0) {
-      selectedProfessionName.value = professions.value[0].name;
+      selectedProfessionName.value = professions.value[0]?.name ?? '';
     }
   } catch (err) {
     console.error('職業データの読み込みに失敗しました:', err);

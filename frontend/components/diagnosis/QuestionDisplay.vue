@@ -10,7 +10,7 @@
     />
   
     <DiagnosisSwipeAnswer
-      v-else-if="shouldShowSwipeOption"
+      v-else-if="shouldShowSwipeOption && currentOption"
       :key="currentOption.label"
       :question-id="question.id"
       :option="currentOption"

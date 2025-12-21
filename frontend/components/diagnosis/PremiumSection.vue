@@ -49,7 +49,7 @@ const professionReports = ref<ProfessionReports | null>(null) // 職業レポー
 // 職業レポート設定を読み込む関数
 async function loadProfessionReports() {
   try {
-    professionReports.value = await $fetch('/data/profession-reports.json')
+    professionReports.value = await $fetch<ProfessionReports>('/data/profession-reports.json')
   } catch (error) {
     console.error('職業レポート設定の読み込みエラー:', error)
   }
@@ -78,7 +78,9 @@ async function purchasePdfReport(professionIndex: number = 0) {
     // 指定されたインデックスの職業データを準備
     const selectedProfession = props.professions[professionIndex]
     const professionName = selectedProfession?.name
-    
+    if (!professionName) {
+      return
+    }
     // 職業レポート設定から価格とレポートIDを取得
     const reportConfig = professionReports.value?.[professionName]
     

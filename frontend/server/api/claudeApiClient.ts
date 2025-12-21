@@ -336,14 +336,14 @@ export class ClaudeApiClient {
     });
     
     // 最初のメッセージの場合、ユーザープロフィール情報を含める
-    if (messages.length === 1 && messages[0].role === 'user') {
+    if (messages.length === 1 && messages[0]?.role === 'user') {
       const profileInfo = userProfile && Object.keys(userProfile).length > 0 
         ? `\n\n[ユーザー情報: ${JSON.stringify(userProfile)}]` 
         : '';
       
       apiMessages[0] = {
         role: 'user',
-        content: messages[0].content + profileInfo
+        content: messages[0]?.content + profileInfo
       };
     }
     

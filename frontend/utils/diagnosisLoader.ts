@@ -200,7 +200,9 @@ export function calculateProfessionScores(
         }
         
         professionScores[profession].score += categoryWeight;
-        professionScores[profession].categories[category] += categoryWeight;
+        if (professionScores[profession].categories[category]) {
+          professionScores[profession].categories[category] += categoryWeight;
+        }
       });
     } else if (typeof answerData === 'object') {
       // 新しい評価形式（各選択肢に1-5の評価）
@@ -223,7 +225,9 @@ export function calculateProfessionScores(
           }
           
           professionScores[profession].score += scoreContribution;
-          professionScores[profession].categories[category] += scoreContribution;
+          if (professionScores[profession].categories[category]) {
+            professionScores[profession].categories[category] += scoreContribution;
+          }
         });
       });
     }
