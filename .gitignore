@@ -44,3 +44,4 @@ storybook-static
 # Nuxt
 .nuxt
 .output
+.env*.local
