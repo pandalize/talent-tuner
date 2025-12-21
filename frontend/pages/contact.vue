@@ -41,7 +41,7 @@
         <div class="privacy-note">
           <p>
             個人情報の取り扱いについては、
-            <NuxtLink to="/privacy">プライバシーポリシー</NuxtLink>
+            <NuxtLink :to="localePath('/privacy-policy')">プライバシーポリシー</NuxtLink>
             をご確認ください。
           </p>
         </div>
@@ -51,7 +51,7 @@
 </template>
 
 <script setup lang="ts">
-
+  const localePath = useLocalePath()
 </script>
 
 <style scoped>

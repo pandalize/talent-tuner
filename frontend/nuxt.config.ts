@@ -8,7 +8,7 @@ export default defineNuxtConfig({
     public: {
       apiBase: process.env.NUXT_PUBLIC_API_BASE || 'https://talent-tuner.vercel.app',
       stripePublicKey: process.env.NUXT_PUBLIC_STRIPE_PUBLIC_KEY,
-      siteUrl: 'https://pandalize.com'
+      siteUrl: 'http://localhost:3000' // 本番環境では適切なURLに変更すること
     }
   },
   
@@ -19,15 +19,23 @@ export default defineNuxtConfig({
   ],
   
   i18n: {
+    locales: [
+      { code: 'ja', iso: 'ja-JP', name: '日本語' },
+      { code: 'en', iso: 'en-US', name: 'English' },
+      { code: 'zh', iso: 'zh-CN', name: '中文' }
+    ],
+    defaultLocale: 'ja',
+    strategy: 'prefix_except_default',
     vueI18n: './i18n/config.ts',
-    defaultLocale: 'ja'
+    detectBrowserLanguage: false
   },
+
 
   image: {
     provider: 'ipx'
   },
   
-  css: ['~/assets/main.scss', '~/style.css'],
+  css: ['~/assets/main.scss'],
   
   vite: {
     build: {
@@ -45,6 +53,13 @@ export default defineNuxtConfig({
   typescript: {
     strict: true,
     typeCheck: 'build'
-  }
+  },
+
+  postcss: {
+    plugins: {
+      tailwindcss: {},
+      autoprefixer: {}
+    }
+  },
 })
 

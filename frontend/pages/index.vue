@@ -3,28 +3,28 @@
     <div class="hero-section">
       <div class="hero-content">
         <h1 class="hero-title">
-          <span class="hero-subtitle">{{ $t('home.hero.subtitle') }}</span>
-          {{ $t('home.hero.title') }}
+          <span class="hero-subtitle">{{ t('home.hero.subtitle') }}</span>
+          {{ t('home.hero.title') }}
         </h1>
         <p class="hero-description">
-          {{ $t('home.hero.description') }}
+          {{ t('home.hero.description') }}
         </p>
 
         <div class="feature-grid">
           <BaseCard variant="home">
             <template #number>01</template>
-            <template #header>{{ $t('home.features.analysis.title') }}</template>
-            {{ $t('home.features.analysis.description') }}
+            <template #header>{{ t('home.features.analysis.title') }}</template>
+            {{ t('home.features.analysis.description') }}
           </BaseCard>
           <BaseCard variant="home">
             <template #number>02</template>
-            <template #header>{{ $t('home.features.evidence.title') }}</template>
-            {{ $t('home.features.evidence.description') }}
+            <template #header>{{ t('home.features.evidence.title') }}</template>
+            {{ t('home.features.evidence.description') }}
           </BaseCard>
           <BaseCard variant="home">
             <template #number>03</template>
-            <template #header>{{ $t('home.features.instant.title') }}</template>
-            {{ $t('home.features.instant.description') }}
+            <template #header>{{ t('home.features.instant.title') }}</template>
+            {{ t('home.features.instant.description') }}
           </BaseCard>
         </div>
 
@@ -34,21 +34,21 @@
             size="md"
             @click="navigateTo('/diagnosis')"
           >
-            {{ $t('home.cta.start_diagnosis') }}
+            {{ t('home.cta.start_diagnosis') }}
           </BaseButton>
           <BaseButton
             variant="gold"
             size="md"
-            @click="navigateTo('/chat')"
+            @click="navigateTo('/new-career-chat')"
           >
-            {{ $t('home.cta.ai_counseling') }}
+            {{ t('home.cta.ai_counseling') }}
           </BaseButton>
           <BaseButton
             variant="secondary"
             size="md"
             @click="navigateTo('/about')"
           >
-            {{ $t('home.cta.view_professions') }}
+            {{ t('home.cta.view_professions') }}
           </BaseButton>
         </div>
       </div>
@@ -57,7 +57,8 @@
 </template>
 
 <script setup lang="ts">
-import { navigateTo } from '#app'
+  const { t } = useI18n()
+  import { navigateTo } from '#app'
 </script>
 
 <style lang="scss" scoped>

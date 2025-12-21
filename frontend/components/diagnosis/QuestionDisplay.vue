@@ -1,6 +1,6 @@
 <template>
   <div class="question-display">
-    <TutorialSwipeCard
+    <DiagnosisTutorialSwipeCard
       v-if="shouldShowTutorial"
       :main-question="question.text"
       :question-index="questionIndex"
@@ -9,7 +9,7 @@
       @tutorial-completed="handleTutorialCompleted"
     />
   
-    <SwipeAnswer
+    <DiagnosisSwipeAnswer
       v-else-if="shouldShowSwipeOption"
       :key="currentOption.label"
       :question-id="question.id"

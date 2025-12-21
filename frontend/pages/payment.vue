@@ -6,7 +6,7 @@
     <div v-if="error" class="error-message">
       <h2>エラー</h2>
       <p>{{ error }}</p>
-      <NuxtLink to="/" class="back-link">診断ページに戻る</NuxtLink>
+      <NuxtLink :to="localePath('/diagnosis')" class="back-link">診断ページに戻る</NuxtLink>
     </div>
     
     <!-- 購入内容の表示 -->
@@ -29,7 +29,8 @@
 
 <script setup lang="ts">
 import type { PurchaseData } from '~/types/PurchaseData'
-import type { ApiResponse } from '~/types/ApiResponse'
+
+const localePath = useLocalePath()
 
 const isLoading = ref(false)
 
@@ -71,9 +72,6 @@ const handlePayment = async () => {
   isLoading.value = true
   try {
     console.log('決済処理開始:', purchaseData.value?.professionName)
-    const apiBase = import.meta.env.VITE_API_BASE ?? ''
-    const url = `${apiBase}/api/create-payment-intent` // NewCareerChatView と同じパターン
-    console.log('fetch url:', url)
     console.log('送信データ:', {
       priceId: purchaseData.value?.priceId,
       professionName: purchaseData.value?.professionName,
@@ -82,10 +80,10 @@ const handlePayment = async () => {
       timestamp: new Date().toISOString(),
     })
  
-    const res = await fetch(url, {
+    const data = await $fetch<{ url: string; error: string }>('/api/create-payment-intent', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
+      body: ({
         priceId: purchaseData.value?.priceId,
         professionName: purchaseData.value?.professionName,
         price: purchaseData.value?.price,
@@ -94,13 +92,9 @@ const handlePayment = async () => {
       })
     })
 
-    const data = await res.json()
-    if (res.ok && data.url) {
+    if (data?.url) {
       window.location.href = data.url
       return
-    } else {
-      console.error('Checkout Session作成エラー:', data)
-      error.value = '決済処理でエラーが発生しました。もう一度お試しください。'
     }
   } catch (err) {
     console.error('決済処理エラー:', err)

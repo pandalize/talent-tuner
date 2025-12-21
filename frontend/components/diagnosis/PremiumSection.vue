@@ -49,12 +49,7 @@ const professionReports = ref<ProfessionReports | null>(null) // 職業レポー
 // 職業レポート設定を読み込む関数
 async function loadProfessionReports() {
   try {
-    const response = await fetch('/data/profession-reports.json')
-    if (response.ok) {
-      professionReports.value = await response.json()
-    } else {
-      console.error('職業レポート設定の読み込みに失敗しました')
-    }
+    professionReports.value = await $fetch('/data/profession-reports.json')
   } catch (error) {
     console.error('職業レポート設定の読み込みエラー:', error)
   }

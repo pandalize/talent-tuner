@@ -15,7 +15,7 @@
     </div>
 
     <!-- 質問表示コンポーネント -->
-    <QuestionDisplay
+    <DiagnosisQuestionDisplay
       v-if="!loading && !error && !showResult && currentQuestion"
       :question="currentQuestion"
       :questionIndex="currentQuestionIndex"
@@ -34,7 +34,7 @@
     />
 
     <!-- 結果表示コンポーネント -->
-    <ResultDisplay
+    <DiagnosisResultDisplay
       v-if="!loading && !error && showResult"
       :professions="displayedProfessions"
       :maxCategoryScore="maxCategoryScore"
@@ -49,6 +49,7 @@
 import { onMounted, ref, computed } from 'vue'
 import { navigateTo } from '#app'
 import { useDiagnosis } from '~/composables/useDiagnosis'
+
 
 // チュートリアル状態管理（DiagnosisContainerで管理）
 const tutorialCompleted = ref(false)

@@ -1,10 +1,20 @@
 export interface ChatMessage {
   role: 'user' | 'assistant'
   content: string
-  timestamp?: string | Date
+  timestamp?: string
 }
 
-import type { ApiResponse } from '~/types/ApiResponse'
+type ApiResponse<T> =
+  | {
+      success: true
+      data: T
+      timestamp?: string
+    }
+  | {
+      success: false
+      error: string
+      timestamp?: string
+    }
 
 export const useChat = () => {
   const messages = ref<ChatMessage[]>([])
@@ -14,7 +24,7 @@ export const useChat = () => {
   const sendMessage = async (userInput: string) => {
     if (!userInput.trim()) return
 
-    messages.value.push({ role: 'user', content: userInput, timestamp: new Date() })
+    messages.value.push({ role: 'user', content: userInput, timestamp: new Date().toISOString() })
     
     error.value = null
     pending.value = true
@@ -33,8 +43,12 @@ export const useChat = () => {
 
       const assistantText = res.data.message
       messages.value.push({ role: 'assistant', content: assistantText, timestamp: res.timestamp})
-    } catch (e: any) {
-      error.value = e.message ?? 'ネットワークエラーが発生しました'
+    } catch (error: any) {
+      console.error('chat error:', error)
+      error.value =
+        error?.data?.statusMessage ??
+        error?.message ??
+        'チャットの取得に失敗しました'
     } finally {
       pending.value = false
     }

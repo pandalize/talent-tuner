@@ -253,7 +253,7 @@ export class ClaudeApiClient {
       console.log('User message:', lastUserMessage);
 
       // PHPプロキシ経由でAPI呼び出し
-      const response = await fetch(apiUrl, {
+      const data = await $fetch<any>(apiUrl, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -264,12 +264,6 @@ export class ClaudeApiClient {
           messageCount: this.sessionStorage.messageCount
         })
       });
-
-      if (!response.ok) {
-        throw new Error(`API error: ${response.status}`);
-      }
-
-      const data = await response.json();
       
       if (!data.success) {
         // レート制限エラーの場合

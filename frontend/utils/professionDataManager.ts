@@ -69,12 +69,8 @@ export class ProfessionDataManager {
    */
   private async loadCategories(): Promise<void> {
     try {
-      const response = await fetch('/data/categories.json');
-      if (!response.ok) {
-        throw new Error(`Failed to load categories: ${response.statusText}`);
-      }
+      const data = await $fetch<CategoryDatabase>('/data/categories.json');
       
-      const data: CategoryDatabase = await response.json();
       this.categories = data.categories;
     } catch (error) {
       console.error('Failed to load categories:', error);
@@ -112,13 +108,7 @@ export class ProfessionDataManager {
 
     const loadPromises = categoryFiles.map(async (filename) => {
       try {
-        const response = await fetch(`/data/professions/${filename}`);
-        if (!response.ok) {
-          console.warn(`Failed to load ${filename}: ${response.statusText}`);
-          return;
-        }
-        
-        const data: { professions: Record<string, ProfessionData> } = await response.json();
+        const data = await $fetch<{ professions: Record<string, ProfessionData> }>(`/data/professions/${filename}`);
         
         // 新しい職業データを統合
         Object.assign(this.professions, data.professions);
@@ -135,13 +125,7 @@ export class ProfessionDataManager {
    */
   private async loadLegacyProfessionData(): Promise<void> {
     try {
-      const response = await fetch('/data/professions.json');
-      if (!response.ok) {
-        console.warn(`Failed to load legacy professions: ${response.statusText}`);
-        return;
-      }
-      
-      const data: { professions: Record<string, unknown> } = await response.json();
+      const data = await $fetch<{ professions: Record<string, unknown> }>('/data/professions.json');
       
       // 既存データを新構造に変換して統合（重複は新データを優先）
       const legacyProfessions = this.convertLegacyProfessions(data.professions);

@@ -86,7 +86,7 @@
           <h4>🎯 より詳しく適性を知りたい方へ</h4>
           <p>科学的な適性診断で、あなたにぴったりの職業を発見しませんか？</p>
           <div class="recommendation-actions">
-            <NuxtLink to="/diagnosis" class="diagnosis-btn">
+            <NuxtLink :to="localePath('/diagnosis')" class="diagnosis-btn">
               適性診断を受ける
             </NuxtLink>
             <button @click="dismissDiagnosisRecommendation" class="dismiss-btn">
@@ -136,6 +136,8 @@
 
 <script setup lang="ts">
 import { ref, nextTick } from 'vue'
+
+const localePath = useLocalePath()
 
 // エミット定義
 defineEmits<{

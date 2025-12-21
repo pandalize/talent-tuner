@@ -25,14 +25,15 @@
       </div>
       
       <div class="help-section">
-        <p>お困りの場合は、<NuxtLink to="/contact">お問い合わせ</NuxtLink>よりご連絡ください。</p>
+        <p>お困りの場合は、<NuxtLink :to="localePath('/contact')">お問い合わせ</NuxtLink>よりご連絡ください。</p>
       </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { navigateTo } from '#app'
+  import { navigateTo } from '#app'
+  const localePath = useLocalePath()
 </script>
 
 <style scoped>

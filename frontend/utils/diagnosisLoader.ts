@@ -99,14 +99,10 @@ export interface ProfessionDatabase {
 export async function loadDiagnosticConfig(): Promise<DiagnosticConfig> {
   try {
     // JSONファイルを取得
-    const response = await fetch('/data/diagnostic_config.json');
-    if (!response.ok) {
-      throw new Error(`設定ファイルの読み込みに失敗しました: ${response.statusText}`);
-    }
+    const response = await $fetch<DiagnosticConfig>('/data/diagnostic_config.json')
 
     // JSONとして読み込み
-    const config = await response.json();
-    return config as DiagnosticConfig;
+    return response
   } catch (error) {
     console.error('診断設定の読み込み中にエラーが発生しました:', error);
     // デフォルト値を返す
@@ -142,12 +138,8 @@ export async function loadProfessionDatabase(): Promise<ProfessionDatabase> {
     
     // フォールバック: 直接JSONファイルを読み込み
     try {
-      const response = await fetch('/data/professions.json');
-      if (!response.ok) {
-        throw new Error(`職業データファイルの読み込みに失敗しました: ${response.statusText}`);
-      }
-      const database = await response.json();
-      return database as ProfessionDatabase;
+      const response = await $fetch('/data/professions.json');
+      return response as ProfessionDatabase;
     } catch (fallbackError) {
       console.error('フォールバック読み込みも失敗しました:', fallbackError);
       return { professions: {} };

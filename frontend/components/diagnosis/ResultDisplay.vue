@@ -3,7 +3,7 @@
     <h1>あなたの適職診断結果</h1>
     <p>{{ totalQuestions }}問の質問から分析した、あなたに最適な職業をランキング形式でご紹介します</p>
 
-    <ProfessionCard
+    <DiagnosisProfessionCard
       v-for="(profession, index) in professions"
       :key="profession.name"
       :profession="profession"
@@ -11,9 +11,9 @@
       :maxCategoryScore="maxCategoryScore"
     />
 
-    <ShareSection :professions="professions" />
+    <DiagnosisShareSection :professions="professions" />
 
-    <PremiumSection :professions="professions" />
+    <DiagnosisPremiumSection :professions="professions" />
 
     <BaseButton
       class="base-button"

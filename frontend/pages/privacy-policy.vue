@@ -36,7 +36,7 @@
       
       <div class="policy-section">
         <h2>5. Google AdSenseについて</h2>
-        <p>当サイトでは、広告配信サービス「Google AdSense」を利用しています。Google AdSenseは、ユーザーの興味に応じた広告を表示するため、Cookieを使用して情報を収集しています。詳細は<a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer">Googleプライバシーポリシー</a>をご確認ください。</p>
+        <p>当サイトでは、広告配信サービス「Google AdSense」を利用しています。Google AdSenseは、ユーザーの興味に応じた広告を表示するため、Cookieを使用して情報を収集しています。詳細は<a href="https://policies.google.com/privacy-policy" target="_blank" rel="noopener noreferrer">Googleプライバシーポリシー</a>をご確認ください。</p>
       </div>
       
       <div class="policy-section">

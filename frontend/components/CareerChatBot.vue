@@ -84,7 +84,7 @@
           <h4>🎯 より詳しく適性を知りたい方へ</h4>
           <p>科学的な適性診断で、あなたにぴったりの職業を発見しませんか？</p>
           <div class="recommendation-actions">
-            <NuxtLink to="/diagnosis" class="diagnosis-btn">
+            <NuxtLink :to="localePath('/diagnosis')" class="diagnosis-btn">
               診断を受ける
             </NuxtLink>
             <button @click="dismissDiagnosisRecommendation" class="dismiss-btn">
@@ -163,6 +163,8 @@ import { ref, nextTick, onMounted, computed, onUnmounted } from 'vue';
 import type { ChatMessage } from '~/composables/useChat';
 import type { CareerAdviceResponse } from '~/server/api/claudeApiClient';
 import { professionDataManager } from '~/utils/professionDataManager';
+
+const localePath = useLocalePath()
 
 // Emits
 const emit = defineEmits<{

@@ -25,12 +25,6 @@
   
   <!-- キャリアガイドページ -->
   <url>
-    <loc>https://pandalize.com/career-guide</loc>
-    <lastmod>2025-08-04</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
     <loc>https://pandalize.com/skills-development</loc>
     <lastmod>2025-08-04</lastmod>
     <changefreq>monthly</changefreq>
@@ -56,12 +50,6 @@
   </url>
   
   <!-- 診断関連ページ -->
-  <url>
-    <loc>https://pandalize.com/diagnosis-method</loc>
-    <lastmod>2025-08-04</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
   <url>
     <loc>https://pandalize.com/result-guide</loc>
     <lastmod>2025-08-04</lastmod>
@@ -139,13 +127,13 @@
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://pandalize.com/privacy</loc>
+    <loc>https://pandalize.com/privacy-policy</loc>
     <lastmod>2025-08-04</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://pandalize.com/terms</loc>
+    <loc>https://pandalize.com/terms-of-service</loc>
     <lastmod>2025-08-04</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.5</priority>
