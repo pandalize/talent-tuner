@@ -129,7 +129,7 @@ const professionName = computed(() => {
 
 const professionData = computed((): ProfessionData | null => {
   if (!professionDatabase.value || !professionName.value) return null;
-  return professionDatabase.value.professions[professionName.value];
+  return professionDatabase.value.professions[professionName.value] ?? null;
 });
 
 async function loadProfessionData() {
