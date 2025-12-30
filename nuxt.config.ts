@@ -14,22 +14,8 @@ export default defineNuxtConfig({
   
   modules: [
     '@nuxtjs/tailwindcss',
-    '@nuxtjs/i18n',
     '@nuxt/image'
   ],
-  
-  i18n: {
-    locales: [
-      { code: 'ja', iso: 'ja-JP', name: '日本語' },
-      { code: 'en', iso: 'en-US', name: 'English' },
-      { code: 'zh', iso: 'zh-CN', name: '中文' }
-    ],
-    defaultLocale: 'ja',
-    strategy: 'prefix_except_default',
-    vueI18n: './i18n/config.ts',
-    detectBrowserLanguage: false
-  },
-
 
   image: {
     provider: 'ipx'

@@ -6,7 +6,7 @@
     <div v-if="error" class="error-message">
       <h2>エラー</h2>
       <p>{{ error }}</p>
-      <NuxtLink :to="localePath('/diagnosis')" class="back-link">診断ページに戻る</NuxtLink>
+      <NuxtLink to="/diagnosis" class="back-link">診断ページに戻る</NuxtLink>
     </div>
     
     <!-- 購入内容の表示 -->
@@ -29,8 +29,6 @@
 
 <script setup lang="ts">
 import type { PurchaseData } from '~/types/PurchaseData'
-
-const localePath = useLocalePath()
 
 const isLoading = ref(false)
 

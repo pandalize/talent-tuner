@@ -41,7 +41,7 @@
         <div class="privacy-note">
           <p>
             個人情報の取り扱いについては、
-            <NuxtLink :to="localePath('/privacy-policy')">プライバシーポリシー</NuxtLink>
+            <NuxtLink to="/privacy-policy">プライバシーポリシー</NuxtLink>
             をご確認ください。
           </p>
         </div>

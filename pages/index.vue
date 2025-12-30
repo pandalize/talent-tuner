@@ -3,28 +3,28 @@
     <div class="hero-section">
       <div class="hero-content">
         <h1 class="hero-title">
-          <span class="hero-subtitle">{{ t('home.hero.subtitle') }}</span>
-          {{ t('home.hero.title') }}
+          <span class="hero-subtitle">日本一ためになる正直な</span>
+          おすすめ職業診断
         </h1>
         <p class="hero-description">
-          {{ t('home.hero.description') }}
+          4つのカテゴリーで多角的に分析し、あなたに最適な職業を提案します
         </p>
 
         <div class="feature-grid">
           <BaseCard variant="home">
             <template #number>01</template>
-            <template #header>{{ t('home.features.analysis.title') }}</template>
-            {{ t('home.features.analysis.description') }}
+            <template #header>多角的分析</template>
+            スキル、興味、価値観、ライフスタイルの4つの観点から、あなたの職業適性を立体的に分析します
           </BaseCard>
           <BaseCard variant="home">
             <template #number>02</template>
-            <template #header>{{ t('home.features.evidence.title') }}</template>
-            {{ t('home.features.evidence.description') }}
+            <template #header>精密マッチング</template>
+            各職業に対する重み付けスコアリングにより、あなたに最も適した職業を科学的に算出します
           </BaseCard>
           <BaseCard variant="home">
             <template #number>03</template>
-            <template #header>{{ t('home.features.instant.title') }}</template>
-            {{ t('home.features.instant.description') }}
+            <template #header>即時フィードバック</template>
+            短時間の回答で即座に結果を生成。詳細な分析レポートをリアルタイムで提供します
           </BaseCard>
         </div>
 
@@ -34,21 +34,21 @@
             size="md"
             @click="navigateTo('/diagnosis')"
           >
-            {{ t('home.cta.start_diagnosis') }}
+            診断を始める
           </BaseButton>
           <BaseButton
             variant="gold"
             size="md"
             @click="navigateTo('/new-career-chat')"
           >
-            {{ t('home.cta.ai_counseling') }}
+            AI進路相談
           </BaseButton>
           <BaseButton
             variant="secondary"
             size="md"
             @click="navigateTo('/about')"
           >
-            {{ t('home.cta.view_professions') }}
+            職業一覧を見る
           </BaseButton>
         </div>
       </div>
@@ -57,7 +57,6 @@
 </template>
 
 <script setup lang="ts">
-  const { t } = useI18n()
   import { navigateTo } from '#app'
 </script>
 

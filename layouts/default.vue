@@ -1,24 +1,22 @@
 <template>
   <div id="app">
     <header class="app-header">
-      <NuxtLink :to="localePath('/')" class="logo">
+      <NuxtLink to="/" class="logo">
         <img src="/favicon.ico" alt="Pandalize" class="logo-icon">
         <div class="logo-text">
-          <span class="logo-main">{{ t('app.tameshoku') }}</span>
+          <span class="logo-main">ため職</span>
         </div>
       </NuxtLink>
 
       <nav class="header-nav">
-        <NuxtLink :to="localePath('/')" class="nav-item">{{ t('nav.home') }}</NuxtLink>
-        <NuxtLink :to="localePath('/diagnosis')" class="nav-item">{{ t('nav.diagnosis') }}</NuxtLink>
-        <NuxtLink :to="localePath('/new-career-chat')" class="nav-item">{{ t('nav.newchat') }}</NuxtLink>
-        <NuxtLink :to="localePath('/about')" class="nav-item">{{ t('nav.about') }}</NuxtLink>
+        <NuxtLink to="/" class="nav-item">ホーム</NuxtLink>
+        <NuxtLink to="/diagnosis" class="nav-item">職業適性診断</NuxtLink>
+        <NuxtLink to="/new-career-chat" class="nav-item">AI進路相談</NuxtLink>
+        <NuxtLink to="/about" class="nav-item">職業一覧</NuxtLink>
       </nav>
 
       <!-- ヘッダーコントロール -->
       <div class="header-controls">
-        <LanguageSwitcher />
-
         <!-- ハンバーガーメニューボタン -->
         <button 
           class="mobile-menu-toggle"
@@ -59,47 +57,47 @@
         <!-- ナビゲーションコンテンツ -->
         <div class="mobile-nav-content">
         <NuxtLink 
-          :to="localePath('/')" 
+          to="/" 
           class="mobile-nav-item" 
           @click="closeMobileMenu"
         >
           <svg class='nav-icon' viewBox="0 0 24 24">
             <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/>
           </svg>
-          {{ t('nav.home') }}
+          ホーム
         </NuxtLink>
         
         <NuxtLink 
-          :to="localePath('/diagnosis')" 
+          to="/diagnosis" 
           class="mobile-nav-item" 
           @click="closeMobileMenu"
         >
           <svg class='nav-icon' viewBox="0 0 24 24">
             <path d="M9 11H7v2h2v-2zm4 0h-2v2h2v-2zm4 0h-2v2h2v-2zm2-7h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V9h14v11z"/>
           </svg>
-          {{ t('nav.diagnosis') }}
+          職業適性診断
         </NuxtLink>
         
         <NuxtLink 
-          :to="localePath('/about')" 
+          to="/about" 
           class="mobile-nav-item" 
           @click="closeMobileMenu"
         >
           <svg class='nav-icon' viewBox="0 0 24 24">
             <path d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
           </svg>
-          {{ t('nav.about') }}
+          職業一覧
         </NuxtLink>
 
         <NuxtLink 
-          :to="localePath('/new-career-chat')"
+          to="/new-career-chat"
           class="mobile-nav-item"
           @click="closeMobileMenu"
         >
           <svg class='nav-icon' viewBox="0 0 24 24">
             <path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/>
           </svg>
-          {{ t('nav.chat') }}
+          AI進路相談
         </NuxtLink>
         </div>
       </nav>
@@ -121,26 +119,26 @@
       <div class="footer-section">
         <h4>サービス</h4>
         <ul>
-          <li><NuxtLink :to="localePath('/diagnosis')">診断ページ</NuxtLink></li>
-          <li><NuxtLink :to="localePath('/new-career-chat')">AI進路相談</NuxtLink></li>
-          <li><NuxtLink :to="localePath('/about')">職業一覧</NuxtLink></li>
+          <li><NuxtLink to="/diagnosis">診断ページ</NuxtLink></li>
+          <li><NuxtLink to="/new-career-chat">AI進路相談</NuxtLink></li>
+          <li><NuxtLink to="/about">職業一覧</NuxtLink></li>
         </ul>
       </div>
       
       <div class="footer-section">
         <h4>サポート</h4>
         <ul>
-          <li><NuxtLink :to="localePath('/contact')">お問い合わせ</NuxtLink></li>
-          <li><NuxtLink :to="localePath('/company-info')">運営者情報</NuxtLink></li>
-          <li><NuxtLink :to="localePath('/sitemap')">サイトマップ</NuxtLink></li>
+          <li><NuxtLink to="/contact">お問い合わせ</NuxtLink></li>
+          <li><NuxtLink to="/company-info">運営者情報</NuxtLink></li>
+          <li><NuxtLink to="/sitemap">サイトマップ</NuxtLink></li>
         </ul>
       </div>
       
       <div class="footer-section">
         <h4>法的情報</h4>
         <ul>
-          <li><NuxtLink :to="localePath('/privacy-policy')">プライバシーポリシー</NuxtLink></li>
-          <li><NuxtLink :to="localePath('/terms-of-service')">利用規約</NuxtLink></li>
+          <li><NuxtLink to="/privacy-policy">プライバシーポリシー</NuxtLink></li>
+          <li><NuxtLink to="/terms-of-service">利用規約</NuxtLink></li>
         </ul>
       </div>
     </div>
@@ -152,10 +150,7 @@
 </template>
 
 <script setup lang="ts">
-const { t } = useI18n()
 import { ref } from 'vue' 
-
-const localePath = useLocalePath()
 
 // ハンバーガーメニューを開閉
 const isMobileMenuOpen = ref(false); // モバイルメニューの開閉状態を管理するリアクティブ変数

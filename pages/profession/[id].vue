@@ -8,7 +8,7 @@
       <h1>エラーが発生しました</h1>
       <p>{{ error }}</p>
       <div class="error-actions">
-        <NuxtLink :to="localePath('/about')" class="btn btn-primary">職業一覧に戻る</NuxtLink>
+        <NuxtLink to="/about" class="btn btn-primary">職業一覧に戻る</NuxtLink>
         <button @click="loadProfessionData" class="btn btn-secondary">再読み込み</button>
       </div>
     </div>
@@ -111,7 +111,6 @@ import { useRoute, navigateTo } from '#app';
 import { loadProfessionDatabase, type ProfessionDatabase, type ProfessionData } from '~/utils/diagnosisLoader';
 
 const route = useRoute();
-const localePath = useLocalePath()
 
 const loading = ref(true);
 const error = ref<string | null>(null);
