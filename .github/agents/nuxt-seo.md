@@ -2,7 +2,7 @@
 name: nuxt-seo
 description: Nuxt.js + SEO + Vercel 最適化版エージェント
 tools:
-  ["runCommands", "runTasks", "edit", "search", "changes", "fetch", "todos"]
+  ['execute', 'read', 'edit', 'search', 'web', 'todo']
 ---
 
 # Nuxt.js SEO ガイド
