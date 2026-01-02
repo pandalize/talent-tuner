@@ -1,5 +1,41 @@
 {
+  "type": "module",
+  "scripts": {
+    "dev": "nuxi dev",
+    "build": "nuxi build",
+    "preview": "nuxi preview",
+    "generate": "nuxi generate",
+    "postinstall": "nuxi prepare",
+    "type-check": "nuxi typecheck",
+    "lint": "eslint . --fix",
+    "format": "prettier --write .",
+    "test": "vitest",
+    "test:run": "vitest run",
+    "test:ui": "vitest --ui",
+    "test:coverage": "vitest --coverage",
+    "deploy": "vercel --prod"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.71.2",
+    "@nuxt/image": "^2.0.0",
+    "@nuxtjs/tailwindcss": "^6.14.0",
+    "@stripe/stripe-js": "^8.5.3",
+    "nuxt": "^4.2.2",
+    "pinia": "^3.0.4",
+    "stripe": "^20.0.0",
+    "vue": "^3.5.25",
+    "vue-router": "^4.6.3"
+  },
   "devDependencies": {
-    "@tailwindcss/postcss": "^4.1.13"
+    "@nuxt/devtools": "^3.1.1",
+    "@nuxtjs/eslint-config": "^12.0.0",
+    "@vitest/ui": "^4.0.15",
+    "@vue/test-utils": "^2.4.6",
+    "happy-dom": "^20.0.11",
+    "prettier": "^3.7.4",
+    "sass": "^1.97.1",
+    "typescript": "^5.9.3",
+    "vitest": "^4.0.15",
+    "vue-tsc": "^3.2.0"
   }
 }

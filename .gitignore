@@ -14,6 +14,11 @@ dist-ssr
 coverage
 *.local
 
+.env
+.env.deploy
+
+.vercel
+
 /cypress/videos/
 /cypress/screenshots/
 
@@ -32,3 +37,11 @@ coverage
 
 *storybook.log
 storybook-static
+
+/serverside/.vercel
+
+
+# Nuxt
+.nuxt
+.output
+.env*.local
