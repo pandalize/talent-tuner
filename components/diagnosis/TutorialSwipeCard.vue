@@ -7,7 +7,6 @@
       'swipe-right': swipeDirection === 'right',
       'visible': isVisible
     }"
-    ref="tutorialCardRef"
     @touchstart="handleTouchStart"
     @touchmove="handleTouchMove"
     @touchend="handleTouchEnd"
@@ -16,11 +15,19 @@
     @mouseup="handleMouseUp"
     @mouseleave="handleMouseUp"
     :style="{
-      transform: isVisible ? `translate(calc(-50% + ${translateX}px), -50%) rotate(${rotation}deg)` : 'translate(-50%, -50%) scale(0.8) translateY(30px)',
-      transition: isSwiping ? 'none' : (isAnimatingNo || isAnimatingYes) ? 'all 0.8s cubic-bezier(0.43, 0.13, 0.23, 0.96)' : isVisible ? 'all 0.3s ease' : 'opacity 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94), transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94)'
+      transform: isVisible
+        ? `translateY(${OFFSET_Y}px) translateX(${translateX}px) rotate(${rotation}deg)`
+        : `translateY(${HIDDEN_TOTAL_Y}px) scale(0.8)`,
+
+      transition: isSwiping
+        ? 'none'
+        : (isAnimatingNo || isAnimatingYes)
+          ? 'all 0.8s cubic-bezier(0.43, 0.13, 0.23, 0.96)'
+          : isVisible
+            ? 'all 0.3s ease'
+            : 'opacity 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94), transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94)'
     }"
   >
-
     <p class="tutorial-title">使い方</p>
 
     <p class="tutorial-instruction-text">
@@ -41,17 +48,17 @@
 </template>
 
 <script setup lang="ts">
+const OFFSET_Y = -250
+const HIDDEN_Y = 30
+const HIDDEN_TOTAL_Y = OFFSET_Y + HIDDEN_Y
+
 import { ref, onMounted } from 'vue'
 
 interface Emits {
   'tutorial-completed': []
 }
-
 const emit = defineEmits<Emits>()
 
-
-// リアクティブデータ
-const tutorialCardRef = ref<HTMLElement>()
 const isSwiping = ref(false)
 const startX = ref(0)
 const translateX = ref(0)
@@ -62,40 +69,47 @@ const isAnimatingNo = ref(false)
 const isAnimatingYes = ref(false)
 const isVisible = ref(false)
 
-// スワイプの閾値
 const SWIPE_THRESHOLD = 100
 const ROTATION_FACTOR = 0.2
 
-// ディゾルブ効果（マウント後に表示）
 onMounted(() => {
-  setTimeout(() => {
-    isVisible.value = true
-  }, 100)
+  setTimeout(() => { isVisible.value = true }, 100)
 })
 
-// タッチイベントハンドラー
 function handleTouchStart(event: TouchEvent) {
+  if (hasAnswered.value) return
   if (event.touches.length !== 1) return
-  startSwipe(event.touches[0].clientX)
+
+  const touch = event.touches.item(0)
+  if (!touch) return
+
+  startSwipe(touch.clientX)
 }
 
 function handleTouchMove(event: TouchEvent) {
-  if (event.touches.length !== 1 || !isSwiping.value) return
+  if (hasAnswered.value) return
+  if (!isSwiping.value) return
+  if (event.touches.length !== 1) return
+
+  const touch = event.touches.item(0)
+  if (!touch) return
+
   event.preventDefault()
-  updateSwipe(event.touches[0].clientX)
+  updateSwipe(touch.clientX)
 }
 
 function handleTouchEnd() {
   endSwipe()
 }
 
-// マウスイベントハンドラー（デスクトップサポート）
 function handleMouseDown(event: MouseEvent) {
+  if (hasAnswered.value) return
   event.preventDefault()
   startSwipe(event.clientX)
 }
 
 function handleMouseMove(event: MouseEvent) {
+  if (hasAnswered.value) return
   if (!isSwiping.value) return
   event.preventDefault()
   updateSwipe(event.clientX)
@@ -105,8 +119,8 @@ function handleMouseUp() {
   endSwipe()
 }
 
-// スワイプ処理
 function startSwipe(x: number) {
+  if (hasAnswered.value) return
   isSwiping.value = true
   startX.value = x
   translateX.value = 0
@@ -117,27 +131,19 @@ function updateSwipe(x: number) {
   const deltaX = x - startX.value
   translateX.value = deltaX
   rotation.value = deltaX * ROTATION_FACTOR
-  
-  // スワイプ方向の判定
-  if (deltaX < -15) {
-    swipeDirection.value = 'left'
-  } else if (deltaX > 15) {
-    swipeDirection.value = 'right'
-  } else {
-    swipeDirection.value = null
-  }
+
+  if (deltaX < -15) swipeDirection.value = 'left'
+  else if (deltaX > 15) swipeDirection.value = 'right'
+  else swipeDirection.value = null
 }
 
 function endSwipe() {
   if (!isSwiping.value) return
-  
   isSwiping.value = false
-  
-  // スワイプ距離が閾値を超えていたらチュートリアル完了
+
   if (Math.abs(translateX.value) > SWIPE_THRESHOLD) {
     completeTutorial()
   } else {
-    // 閾値未満なら元に戻す
     resetCard()
   }
 }
@@ -148,28 +154,23 @@ function resetCard() {
   swipeDirection.value = null
 }
 
-// チュートリアル完了処理
 function completeTutorial() {
+  if (hasAnswered.value) return
   hasAnswered.value = true
-  
-  // 現在の位置と回転を保持
+
   const currentX = translateX.value
   const currentRotation = rotation.value
-  
-  // 色変更とアニメーション開始
+
   if (translateX.value < 0) {
     isAnimatingNo.value = true
-    // 現在位置から左へ飛ばす
     translateX.value = currentX - window.innerWidth * 1.5
     rotation.value = currentRotation - 60
   } else {
     isAnimatingYes.value = true
-    // 現在位置から右へ飛ばす
     translateX.value = currentX + window.innerWidth * 1.5
     rotation.value = currentRotation + 60
   }
-  
-  // アニメーション完了後にイベント発火
+
   setTimeout(() => {
     emit('tutorial-completed')
   }, 800)
@@ -186,35 +187,33 @@ function completeTutorial() {
   border-radius: 20px;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
   padding: var(--space-lg);
-  cursor: grab; // マウスを掴める手の形にする
-  touch-action: pan-y; // スクロールを制御
-  will-change: transform, opacity; // transform/opacityのアニメーションをすることを事前に伝える
+  cursor: grab;
+  touch-action: pan-y;
+  will-change: transform, opacity;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
   box-sizing: border-box;
   margin: var(--space-md) auto 0;
-  left: 25%;
-  top: 50%;
   gap: var(--space-lg);
 
   opacity: 0;
   transition: opacity 0.8s ease, 
               transform 0.8s ease,
               background 0.1s ease;
-  
+
   &.visible {
     opacity: 1;
   }
-  
+
   &.swiping {
-    cursor: grabbing; // 掴んでいる手の形にする
-    
+    cursor: grabbing;
+
     &.swipe-left {
       background: rgba(255, 107, 107, 0.7);
     }
-    
+
     &.swipe-right {
       background: rgba(81, 207, 102, 0.7);
     }
@@ -250,12 +249,12 @@ function completeTutorial() {
   flex-direction: column;
   align-items: center;
   gap: var(--space-xs);
-  
+
   span {
     font-size: clamp(1.2rem, 4vw, 1.8rem);
     font-weight: bold;
   }
-  
+
   small {
     font-size: clamp(0.7rem, 2vw, 0.9rem);
     color: var(--text-secondary);
@@ -274,8 +273,6 @@ function completeTutorial() {
   .tutorial-swipe-card {
     width: 80vw;
     height: 65vh;
-    left: 45%;
-    top: 45%;
   }
 }
 </style>
