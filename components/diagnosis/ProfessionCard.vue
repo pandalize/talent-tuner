@@ -149,6 +149,8 @@ const { getCategoryName } = useDiagnosis()
   max-width: 100vw;
   overflow-x: hidden;
   box-sizing: border-box;
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.10);
   margin-left: 0;
   margin-right: 0;
   padding: 1rem 1.5rem;

@@ -17,21 +17,19 @@
     <!-- 質問表示コンポーネント -->
     <DiagnosisQuestionDisplay
       v-if="!loading && !error && !showResult && currentQuestion"
+      :key="currentQuestion.id"
       :question="currentQuestion"
       :questionIndex="currentQuestionIndex"
       :totalQuestions="questions.length"
       :answers="answers"
       :tutorial-completed="tutorialCompleted"
-      :should-show-category-tutorial="shouldShowCategoryTutorial"
-      :current-category-info="currentCategoryInfo"
       @select-rating="handleSelectRating"
       @next-question="goToNextQuestion"
-      @previous-question="goToPreviousQuestion"
       @calculate-result="calculateResult"
       @swipe-answer-completed="handleSwipeAnswerCompleted"
       @tutorial-completed="handleTutorialCompleted"
-      @category-tutorial-completed="handleCategoryTutorialCompleted"
     />
+
 
     <!-- 結果表示コンポーネント -->
     <DiagnosisResultDisplay
@@ -46,19 +44,13 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref, computed } from 'vue'
+import { onMounted, ref } from 'vue'
 import { navigateTo } from '#app'
 import { useDiagnosis } from '~/composables/useDiagnosis'
 
-
-// チュートリアル状態管理（DiagnosisContainerで管理）
 const tutorialCompleted = ref(false)
-// カテゴリーチュートリアル管理（4問ごとに表示）
-const categoryTutorialShown = ref(new Set<number>())
 
-// 診断状態管理
 const {
-  // 状態
   loading,
   error,
   showResult,
@@ -68,86 +60,38 @@ const {
   answers,
   displayedProfessions,
   maxCategoryScore,
-  
-  // 関数
+
   loadConfig,
-  selectOptionRating,
+  selectQuestionRating,
   goToNextQuestion,
-  goToPreviousQuestion,
   calculateResult,
   resetDiagnosis,
-  
-  // 計算プロパティ
+
   isAllQuestionsAnswered
 } = useDiagnosis()
 
-// カテゴリー情報マッピング（質問1-4で各カテゴリーを紹介）
-const categoryMap = {
-  0: { name: "興味・関心", description: "あなたの興味や関心について質問します", icon: "💭" },
-  1: { name: "スキル・得意分野", description: "あなたのスキルや得意分野について質問します", icon: "🛠️" },
-  2: { name: "価値観・優先度", description: "あなたの価値観や優先度について質問します", icon: "⭐" },
-  3: { name: "ワークライフバランス", description: "働き方やライフスタイルについて質問します", icon: "⚖️" },
-  4: { name: "スキル・得意分野", description: "あなたのスキルや得意分野について質問します", icon: "🛠️" },
-  8: { name: "価値観・優先度", description: "あなたの価値観や優先度について質問します", icon: "⭐" },
-  12: { name: "ワークライフバランス", description: "働き方やライフスタイルについて質問します", icon: "⚖️" }
-}
-
-// 現在の質問でカテゴリーチュートリアルを表示すべきかの判定
-const shouldShowCategoryTutorial = computed(() => {
-  if (!currentQuestion.value) return false
-  
-  const questionIndex = currentQuestionIndex.value
-  const isCategoryStart = questionIndex % 4 === 0
-  const isNotInitialTutorial = questionIndex > 0
-  const notShownYet = !categoryTutorialShown.value.has(questionIndex)
-  
-  // 質問2-4では各質問でチュートリアル、5問目以降は4問ごと
-  const isFirstFourQuestions = questionIndex >= 1 && questionIndex <= 3
-  
-  return (isCategoryStart || isFirstFourQuestions) && isNotInitialTutorial && notShownYet
-})
-
-// 現在のカテゴリー情報
-const currentCategoryInfo = computed(() => {
-  const questionIndex = currentQuestionIndex.value
-  return categoryMap[questionIndex as keyof typeof categoryMap] || null
-})
-
-// === イベントハンドラー ===
-function handleSelectRating(questionId: string, optionLabel: string, rating: number) {
-  selectOptionRating(questionId, optionLabel, rating)
+function handleSelectRating(questionId: string, rating: number) {
+  selectQuestionRating(questionId, rating)
 }
 
 function handleSwipeAnswerCompleted() {
-  // すべての質問が完了したかチェック
-  if (isAllQuestionsAnswered()) {
-    // 結果計算へ
-    calculateResult()
-  } else {
-    // 次の質問へ
-    goToNextQuestion()
-  }
+  if (isAllQuestionsAnswered()) calculateResult()
+  else goToNextQuestion()
 }
 
 function handleTutorialCompleted() {
   tutorialCompleted.value = true
 }
 
-function handleCategoryTutorialCompleted() {
-  categoryTutorialShown.value.add(currentQuestionIndex.value)
-}
-
 function handleResetDiagnosis() {
   resetDiagnosis()
   tutorialCompleted.value = false
-  categoryTutorialShown.value.clear()
 }
 
 function goHome() {
   navigateTo('/')
 }
 
-// === 初期化 ===
 onMounted(() => {
   loadConfig()
 })

@@ -12,7 +12,7 @@
 .diagnosis-main {
   display: flex;
   justify-content: center;
-  align-items: flex-start;
+  align-items: center;
   width: 100%;
   padding: 0;
   margin: 0;
