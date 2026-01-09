@@ -121,7 +121,7 @@ function handleClick(event: MouseEvent) {
   box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
   
   &:hover:not(.btn-disabled) {
-    background: #3fe26d;
+    background: #2550fe;
     color: white;
   }
 }

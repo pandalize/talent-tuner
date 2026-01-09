@@ -14,7 +14,7 @@
           <BaseCard variant="home">
             <template #number>01</template>
             <template #header>多角的分析</template>
-            スキル、興味、価値観、ライフスタイルの4つの観点から、あなたの職業適性を立体的に分析します
+            スキル、興味、価値観、生活様式の4つの観点から、あなたの職業適性を多角的に分析します
           </BaseCard>
           <BaseCard variant="home">
             <template #number>02</template>
