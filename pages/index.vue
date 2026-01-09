@@ -36,13 +36,13 @@
           >
             診断を始める
           </BaseButton>
-          <BaseButton
+          <!-- <BaseButton
             variant="gold"
             size="md"
             @click="navigateTo('/new-career-chat')"
           >
             AI進路相談
-          </BaseButton>
+          </BaseButton> -->
           <BaseButton
             variant="secondary"
             size="md"

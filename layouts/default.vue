@@ -11,7 +11,7 @@
       <nav class="header-nav">
         <NuxtLink to="/" class="nav-item">ホーム</NuxtLink>
         <NuxtLink to="/diagnosis" class="nav-item">職業適性診断</NuxtLink>
-        <NuxtLink to="/new-career-chat" class="nav-item">AI進路相談</NuxtLink>
+        <!-- <NuxtLink to="/new-career-chat" class="nav-item">AI進路相談</NuxtLink> -->
         <NuxtLink to="/about" class="nav-item">職業一覧</NuxtLink>
       </nav>
 
@@ -89,7 +89,7 @@
           職業一覧
         </NuxtLink>
 
-        <NuxtLink 
+        <!-- <NuxtLink 
           to="/new-career-chat"
           class="mobile-nav-item"
           @click="closeMobileMenu"
@@ -98,7 +98,7 @@
             <path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/>
           </svg>
           AI進路相談
-        </NuxtLink>
+        </NuxtLink> -->
         </div>
       </nav>
     </header>
@@ -120,7 +120,7 @@
         <h4>サービス</h4>
         <ul>
           <li><NuxtLink to="/diagnosis">診断ページ</NuxtLink></li>
-          <li><NuxtLink to="/new-career-chat">AI進路相談</NuxtLink></li>
+          <!-- <li><NuxtLink to="/new-career-chat">AI進路相談</NuxtLink></li> -->
           <li><NuxtLink to="/about">職業一覧</NuxtLink></li>
         </ul>
       </div>
@@ -155,7 +155,7 @@ import { ref } from 'vue'
 // ハンバーガーメニューを開閉
 const isMobileMenuOpen = ref(false); // モバイルメニューの開閉状態を管理するリアクティブ変数
 const toggleMobileMenu = () => { // isMobileMenuOpenを反転させる関数
-  isMobileMenuOpen.value = !isMobileMenu.value
+  isMobileMenuOpen.value = !isMobileMenuOpen.value
 }
 const closeMobileMenu = () => { // isMobileMenuOpenをfalseにする関数
   isMobileMenuOpen.value = false
